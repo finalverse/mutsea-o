@@ -30,7 +30,7 @@ using Nwc.XmlRpc;
 using OpenSim.Framework;
 
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class XmlRpcBasicDOSProtector
     {

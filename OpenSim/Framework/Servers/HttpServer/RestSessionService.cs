@@ -34,7 +34,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using log4net;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class RestSessionObject<TRequest>
     {

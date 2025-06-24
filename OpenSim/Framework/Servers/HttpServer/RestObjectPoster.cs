@@ -32,7 +32,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// Makes an asynchronous REST request which doesn't require us to do anything with the response.

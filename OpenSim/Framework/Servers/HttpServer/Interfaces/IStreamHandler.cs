@@ -29,7 +29,7 @@ using System.Collections;
 using System.IO;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public interface IRequestHandler
     {

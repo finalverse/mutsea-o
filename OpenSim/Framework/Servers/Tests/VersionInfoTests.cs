@@ -31,7 +31,7 @@ using System.Text;
 using NUnit.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Framework.Servers.Tests
+namespace MutSea.Framework.Servers.Tests
 {
     [TestFixture]
     public class VersionInfoTests : OpenSimTestCase

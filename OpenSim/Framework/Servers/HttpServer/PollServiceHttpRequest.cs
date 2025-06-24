@@ -35,7 +35,7 @@ using OSHttpServer;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class PollServiceHttpRequest
     {

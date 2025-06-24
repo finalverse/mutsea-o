@@ -28,7 +28,7 @@
 using System;
 using OpenSim.Framework.Monitoring;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public abstract class BaseRequestHandler
     {

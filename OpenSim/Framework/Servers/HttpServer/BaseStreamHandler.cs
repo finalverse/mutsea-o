@@ -30,7 +30,7 @@ using System.IO;
 using System.Net;
 using OpenSim.Framework.ServiceAuth;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// Base streamed request handler.

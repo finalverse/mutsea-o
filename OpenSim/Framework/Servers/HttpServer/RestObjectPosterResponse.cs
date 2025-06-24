@@ -32,7 +32,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate void ReturnResponse<T>(T reponse);
 

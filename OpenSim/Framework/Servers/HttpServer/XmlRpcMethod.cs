@@ -28,7 +28,7 @@
 using System.Net;
 using Nwc.XmlRpc;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate XmlRpcResponse XmlRpcMethod(XmlRpcRequest request, IPEndPoint client);
 }

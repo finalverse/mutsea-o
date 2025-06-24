@@ -31,7 +31,7 @@ using System.Text;
 using OSHttpServer;
 using System.Runtime.CompilerServices;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// OSHttpResponse is the OpenSim representation of an HTTP

@@ -30,7 +30,7 @@ using System.IO;
 using OpenSim.Framework.ServiceAuth;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// simple OSD streamed request handler.

@@ -28,7 +28,7 @@
 using System.IO;
 using System.Text;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class RestStreamHandler : BaseStreamHandler
     {

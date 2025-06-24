@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// simple Base streamed request handler

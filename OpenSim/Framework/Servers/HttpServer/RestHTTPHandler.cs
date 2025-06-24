@@ -27,7 +27,7 @@
 
 using System.Collections;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class RestHTTPHandler : BaseHTTPHandler
     {
