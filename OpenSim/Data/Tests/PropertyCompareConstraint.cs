@@ -38,7 +38,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     public static class Constraints
     {

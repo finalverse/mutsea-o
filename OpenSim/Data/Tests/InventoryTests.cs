@@ -42,7 +42,7 @@ using OpenSim.Data.MySQL;
 using Mono.Data.Sqlite;
 using MutSea.Data.SQLite;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     [TestFixture(Description = "Inventory store tests (MySQL)")]
     public class MySqlInventoryTests : InventoryTests<MySqlConnection, MySQLInventoryData>

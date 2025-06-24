@@ -36,7 +36,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     //This is generic so that the lambda expressions will work right in IDEs.
     public class PropertyScrambler<T>

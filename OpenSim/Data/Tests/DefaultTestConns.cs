@@ -33,7 +33,7 @@ using System.Reflection;
 using System.IO;
 using Nini.Config;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     /// <summary>This static class looks for TestDataConnections.ini file in the /bin directory to obtain
     /// a connection string for testing one of the supported databases.
