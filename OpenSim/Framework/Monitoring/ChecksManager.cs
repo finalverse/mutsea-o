@@ -32,7 +32,7 @@ using System.Reflection;
 using System.Text;
 using log4net;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Static class used to register/deregister checks on runtime conditions.

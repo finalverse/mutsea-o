@@ -30,7 +30,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using log4net;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Manages various work items in the simulator.

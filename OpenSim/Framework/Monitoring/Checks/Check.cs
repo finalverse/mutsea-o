@@ -28,7 +28,7 @@
 using System;
 using System.Text;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     public class Check
     {

@@ -36,7 +36,7 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     public class ServerStatsCollector
     {
