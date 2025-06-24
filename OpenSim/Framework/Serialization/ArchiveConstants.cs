@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Serialization
+namespace MutSea.Framework.Serialization
 {
     /// <summary>
     /// Constants for the archiving module

@@ -37,7 +37,7 @@ using log4net;
 using OpenMetaverse;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Framework.Serialization.External
+namespace MutSea.Framework.Serialization.External
 {
     /// <summary>
     /// Utilities for manipulating external representations of data structures in OpenSim
