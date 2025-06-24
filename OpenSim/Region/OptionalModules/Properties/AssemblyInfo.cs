@@ -6,11 +6,11 @@ using Mono.Addins;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenSim.Region.OptionalModules")]
+[assembly: AssemblyTitle("MutSea.Region.OptionalModules")]
 [assembly: AssemblyDescription("Optional modules for OpenSim")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenSim.Region.OptionalModules.Properties")]
+[assembly: AssemblyCompany("Finalverse Inc.")]
+[assembly: AssemblyProduct("MutSea.Region.OptionalModules.Properties")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTitle("PhysicsManager")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("Finalverse Inc.")]
 [assembly : AssemblyProduct("PhysicsManager")]
 [assembly : AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly : AssemblyTrademark("")]
