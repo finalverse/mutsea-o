@@ -29,7 +29,7 @@ using System;
 using log4net;
 using OpenMetaverse;
 using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.CoreModules.Scripting.WorldComm;
+using MutSea.Region.CoreModules.Scripting.WorldComm;
 using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared;
 using OpenSim.Region.ScriptEngine.Shared.Api;

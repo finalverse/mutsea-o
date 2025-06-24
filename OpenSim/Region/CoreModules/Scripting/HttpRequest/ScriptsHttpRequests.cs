@@ -54,7 +54,7 @@ using System.Net.Http.Headers;
  * This is a non shared module with shared static parts
  * **************************************************/
 
-namespace OpenSim.Region.CoreModules.Scripting.HttpRequest
+namespace MutSea.Region.CoreModules.Scripting.HttpRequest
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HttpRequestModule")]
     public class HttpRequestModule : INonSharedRegionModule, IHttpRequestModule

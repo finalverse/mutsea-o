@@ -29,7 +29,7 @@ using System;
 using System.Drawing;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Scripting.DynamicTexture
+namespace MutSea.Region.CoreModules.Scripting.DynamicTexture
 {
     public class DynamicTexture : IDynamicTexture
     {

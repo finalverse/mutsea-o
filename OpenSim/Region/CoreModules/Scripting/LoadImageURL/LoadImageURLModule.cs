@@ -39,7 +39,7 @@ using log4net;
 using System.Reflection;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Scripting.LoadImageURL
+namespace MutSea.Region.CoreModules.Scripting.LoadImageURL
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LoadImageURLModule")]
     public class LoadImageURLModule : ISharedRegionModule, IDynamicTextureRender
@@ -293,7 +293,7 @@ namespace OpenSim.Region.CoreModules.Scripting.LoadImageURL
 
                         m_textureManager.ReturnData(
                             state.RequestID,
-                            new OpenSim.Region.CoreModules.Scripting.DynamicTexture.DynamicTexture(
+                            new MutSea.Region.CoreModules.Scripting.DynamicTexture.DynamicTexture(
                             request.RequestUri, null, imageJ2000, newSize, false));
                     }
                     response.Close();

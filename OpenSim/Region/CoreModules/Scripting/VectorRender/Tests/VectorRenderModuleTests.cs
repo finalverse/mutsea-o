@@ -35,13 +35,13 @@ using NUnit.Framework;
 using OpenMetaverse;
 using OpenMetaverse.Assets;
 using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Scripting.DynamicTexture;
-using OpenSim.Region.CoreModules.Scripting.VectorRender;
+using MutSea.Region.CoreModules.Scripting.DynamicTexture;
+using MutSea.Region.CoreModules.Scripting.VectorRender;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Scripting.VectorRender.Tests
+namespace MutSea.Region.CoreModules.Scripting.VectorRender.Tests
 {
     [TestFixture]
     public class VectorRenderModuleTests : OpenSimTestCase

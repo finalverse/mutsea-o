@@ -77,7 +77,7 @@ using System.Net.Http;
  *
  * **************************************************/
 
-namespace OpenSim.Region.CoreModules.Scripting.XMLRPC
+namespace MutSea.Region.CoreModules.Scripting.XMLRPC
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XMLRPCModule")]
     public class XMLRPCModule : ISharedRegionModule, IXMLRPC
