@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Agent.Xfer
+namespace MutSea.Region.CoreModules.Agent.Xfer
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XferModule")]
     public class XferModule : INonSharedRegionModule, IXfer
