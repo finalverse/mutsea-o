@@ -35,7 +35,7 @@ using OpenSim.Region.CoreModules.Asset;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Avatar.AvatarFactory
+namespace MutSea.Region.CoreModules.Avatar.AvatarFactory
 {
     [TestFixture]
     public class AvatarFactoryModuleTests : OpenSimTestCase

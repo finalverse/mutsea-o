@@ -40,7 +40,7 @@ using OpenSim.Services.Connectors.Hypergrid;
 
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.Avatar.Lure
+namespace MutSea.Region.CoreModules.Avatar.Lure
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HGLureModule")]
     public class HGLureModule : ISharedRegionModule

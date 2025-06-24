@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Avatar.Groups
+namespace MutSea.Region.CoreModules.Avatar.Groups
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GroupsModule")]
     public class GroupsModule : ISharedRegionModule

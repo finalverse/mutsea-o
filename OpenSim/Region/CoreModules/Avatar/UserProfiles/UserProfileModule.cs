@@ -47,7 +47,7 @@ using OpenSim.Services.UserProfilesService;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenSim.Region.CoreModules.Avatar.Friends;
 
-namespace OpenSim.Region.CoreModules.Avatar.UserProfiles
+namespace MutSea.Region.CoreModules.Avatar.UserProfiles
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UserProfilesModule")]
     public class UserProfileModule : IProfileModule, INonSharedRegionModule

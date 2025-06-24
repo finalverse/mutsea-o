@@ -46,7 +46,7 @@ using OpenSim.Services.Connectors.InstantMessage;
 using OpenSim.Services.Connectors.Hypergrid;
 using OpenSim.Server.Handlers.Hypergrid;
 
-namespace OpenSim.Region.CoreModules.Avatar.InstantMessage
+namespace MutSea.Region.CoreModules.Avatar.InstantMessage
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HGMessageTransferModule")]
     public class HGMessageTransferModule : ISharedRegionModule, IMessageTransferModule, IInstantMessageSimConnector

@@ -43,7 +43,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 using System.Threading;
 
-namespace OpenSim.Region.CoreModules.Avatar.Chat.Tests
+namespace MutSea.Region.CoreModules.Avatar.Chat.Tests
 {
     [TestFixture]
     public class ChatModuleTests : OpenSimTestCase

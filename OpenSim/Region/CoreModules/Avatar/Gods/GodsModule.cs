@@ -41,7 +41,7 @@ using Caps = OpenSim.Framework.Capabilities.Caps;
 using OSDArray = OpenMetaverse.StructuredData.OSDArray;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.CoreModules.Avatar.Gods
+namespace MutSea.Region.CoreModules.Avatar.Gods
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GodsModule")]
     public class GodsModule : INonSharedRegionModule, IGodsModule
