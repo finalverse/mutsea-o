@@ -34,7 +34,7 @@ using System.Text;
 using System.Threading;
 using OSHttpServer;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     // Sealed class.  If you're going to unseal it, implement IDisposable.
     /// <summary>

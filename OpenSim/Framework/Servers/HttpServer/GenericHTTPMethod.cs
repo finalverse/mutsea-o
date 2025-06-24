@@ -27,7 +27,7 @@
 
 using System.Collections;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate Hashtable GenericHTTPMethod(Hashtable request);
 }

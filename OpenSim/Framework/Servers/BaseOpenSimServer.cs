@@ -38,12 +38,12 @@ using log4net;
 using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Framework.Monitoring;
-using OpenSim.Framework.Servers.HttpServer;
+using MutSea.Framework.Servers.HttpServer;
 using Timer=System.Timers.Timer;
 using Nini.Config;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Framework.Servers
+namespace MutSea.Framework.Servers
 {
     /// <summary>
     /// Common base for the main OpenSimServers (user, grid, inventory, region, etc)

@@ -43,7 +43,7 @@ using Nini.Config;
 using OpenSim.Framework.Console;
 using OpenSim.Framework.Monitoring;
 
-namespace OpenSim.Framework.Servers
+namespace MutSea.Framework.Servers
 {
     public class ServerBase
     {

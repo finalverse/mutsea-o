@@ -28,7 +28,7 @@
 using System.IO;
 using System.Text;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate string BinaryMethod(byte[] data, string path, string param);
 

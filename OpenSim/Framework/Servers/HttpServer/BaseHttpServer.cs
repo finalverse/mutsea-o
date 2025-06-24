@@ -48,7 +48,7 @@ using OpenSim.Framework.Monitoring;
 using OpenMetaverse.StructuredData;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class BaseHttpServer : IHttpServer
     {

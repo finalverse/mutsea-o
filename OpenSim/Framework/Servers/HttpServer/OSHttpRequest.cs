@@ -38,7 +38,7 @@ using log4net;
 
 using System.Runtime.CompilerServices;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class OSHttpRequest : IOSHttpRequest
     {

@@ -35,7 +35,7 @@ using Amib.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public class PollServiceRequestManager
     {

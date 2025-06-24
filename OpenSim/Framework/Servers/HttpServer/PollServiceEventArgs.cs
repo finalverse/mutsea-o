@@ -29,7 +29,7 @@ using System;
 using System.Collections;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate OSHttpResponse RequestMethod(UUID ID, OSHttpRequest request);
     public delegate bool HasEventsMethod(UUID requestID, UUID pId);

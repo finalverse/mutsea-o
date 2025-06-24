@@ -27,7 +27,7 @@
 
 using System.IO;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// Base handler for writing to an output stream

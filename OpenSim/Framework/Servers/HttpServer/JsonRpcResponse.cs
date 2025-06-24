@@ -28,7 +28,7 @@ using System;
 using System.Net;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public sealed class ErrorCode
     {

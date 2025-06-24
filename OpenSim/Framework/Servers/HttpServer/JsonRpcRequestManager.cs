@@ -35,7 +35,7 @@ using OpenMetaverse.StructuredData;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
     /// Json rpc request manager.

@@ -29,7 +29,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace OpenSim.Framework.Servers.HttpServer
+namespace MutSea.Framework.Servers.HttpServer
 {
     public delegate TResponse RestDeserialiseMethod<TRequest, TResponse>(TRequest request);
 
