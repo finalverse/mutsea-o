@@ -33,7 +33,7 @@ using log4net;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Framework.InterfaceCommander
+namespace MutSea.Region.CoreModules.Framework.InterfaceCommander
 {
     /// <summary>
     /// A class to enable modules to register console and script commands, which enforces typing and valid input.

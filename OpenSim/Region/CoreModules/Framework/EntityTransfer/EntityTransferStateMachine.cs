@@ -42,7 +42,7 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.Framework.EntityTransfer
+namespace MutSea.Region.CoreModules.Framework.EntityTransfer
 {
     /// <summary>
     /// The possible states that an agent can be in when its being transferred between regions.

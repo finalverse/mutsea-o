@@ -39,7 +39,7 @@ using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Scenes;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.Framework
+namespace MutSea.Region.CoreModules.Framework
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GridServiceThrottleModule")]
     public class ServiceThrottleModule : ISharedRegionModule, IServiceThrottleModule

@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace OpenSim.Region.CoreModules.Framework.Monitoring
+namespace MutSea.Region.CoreModules.Framework.Monitoring
 {
     interface IMonitor
     {

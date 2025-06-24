@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenSim.Region.Framework.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.Framework.InterfaceCommander
+namespace MutSea.Region.CoreModules.Framework.InterfaceCommander
 {
     /// <summary>
     /// A single function call encapsulated in a class which enforces arguments when passing around as Object[]'s.

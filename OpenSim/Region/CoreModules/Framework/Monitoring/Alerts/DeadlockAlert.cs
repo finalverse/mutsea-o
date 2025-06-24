@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using OpenSim.Region.CoreModules.Framework.Monitoring.Monitors;
+using MutSea.Region.CoreModules.Framework.Monitoring.Monitors;
 
-namespace OpenSim.Region.CoreModules.Framework.Monitoring.Alerts
+namespace MutSea.Region.CoreModules.Framework.Monitoring.Alerts
 {
     class DeadlockAlert : IAlert
     {

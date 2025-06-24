@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.CoreModules.Framework.Monitoring.Monitors
+namespace MutSea.Region.CoreModules.Framework.Monitoring.Monitors
 {
     class PWSMemoryMonitor : IMonitor
     {

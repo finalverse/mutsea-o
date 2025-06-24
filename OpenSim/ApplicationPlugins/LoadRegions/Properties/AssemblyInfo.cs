@@ -33,7 +33,7 @@ using Mono.Addins;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly : AssemblyTitle("OpenSim.ApplicationPlugins.LoadRegions")]
+[assembly : AssemblyTitle("MutSea.ApplicationPlugins.LoadRegions")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("Finalverse Inc.")]

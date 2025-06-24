@@ -36,11 +36,11 @@ using OpenMetaverse.Packets;
 using OpenMetaverse.StructuredData;
 using OpenSim.Framework;
 using OpenSim.Region.Framework;
-using OpenSim.Region.CoreModules.Framework.DynamicAttributes.DAExampleModule;
+using MutSea.Region.CoreModules.Framework.DynamicAttributes.DAExampleModule;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.DynamicAttributes.DOExampleModule
+namespace MutSea.Region.Framework.DynamicAttributes.DOExampleModule
 {
     /// <summary>
     /// Example module for experimenting with and demonstrating dynamic object ideas.

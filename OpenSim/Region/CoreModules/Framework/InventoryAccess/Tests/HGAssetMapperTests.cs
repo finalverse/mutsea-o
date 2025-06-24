@@ -32,13 +32,13 @@ using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
 using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Framework.InventoryAccess;
+using MutSea.Region.CoreModules.Framework.InventoryAccess;
 using OpenSim.Region.Framework.Scenes;
 //using OpenSim.Region.ScriptEngine.XEngine;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Framework.InventoryAccess.Tests
+namespace MutSea.Region.CoreModules.Framework.InventoryAccess.Tests
 {
     [TestFixture]
     public class HGAssetMapperTests : OpenSimTestCase

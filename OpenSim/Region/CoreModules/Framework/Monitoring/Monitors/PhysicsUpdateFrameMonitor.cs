@@ -27,7 +27,7 @@
 
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Framework.Monitoring.Monitors
+namespace MutSea.Region.CoreModules.Framework.Monitoring.Monitors
 {
     class PhysicsUpdateFrameMonitor : IMonitor
     {

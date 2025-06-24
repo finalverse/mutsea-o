@@ -40,7 +40,7 @@ using log4net;
 using Nini.Config;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Framework.InventoryAccess
+namespace MutSea.Region.CoreModules.Framework.InventoryAccess
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HGInventoryAccessModule")]
     public class HGInventoryAccessModule : BasicInventoryAccessModule, INonSharedRegionModule, IInventoryAccessModule
