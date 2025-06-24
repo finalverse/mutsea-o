@@ -32,9 +32,9 @@ using OpenMetaverse.StructuredData;
 using System;
 using System.Globalization;
 using System.Threading;
-using OpenSim.Tests.Common;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class MundaneFrameworkTests : OpenSimTestCase
