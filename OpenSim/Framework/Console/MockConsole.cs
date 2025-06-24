@@ -32,7 +32,7 @@ using System.Text;
 using System.Xml;
 using Nini.Config;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     /// <summary>
     /// This is a Fake console that's used when setting up the Scene in Unit Tests

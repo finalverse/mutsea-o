@@ -36,7 +36,7 @@ using System.IO;
 using Nini.Config;
 using log4net;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     /// <summary>
     /// A console that uses cursor control and color

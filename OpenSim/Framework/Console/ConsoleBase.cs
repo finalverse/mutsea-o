@@ -33,7 +33,7 @@ using System.Text;
 using System.Threading;
 using log4net;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     public class ConsoleLevel
     {

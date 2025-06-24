@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     public delegate void ConsoleCommand(string[] comParams);
 

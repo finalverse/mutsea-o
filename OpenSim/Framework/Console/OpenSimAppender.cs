@@ -29,7 +29,7 @@ using System;
 using log4net.Appender;
 using log4net.Core;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     /// <summary>
     /// Writes log information out onto the console
