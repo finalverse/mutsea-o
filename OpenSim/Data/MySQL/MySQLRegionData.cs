@@ -36,7 +36,7 @@ using OpenSim.Framework;
 using OpenSim.Data;
 using RegionFlags = OpenSim.Framework.RegionFlags;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySqlRegionData : MySqlFramework, IRegionData
     {

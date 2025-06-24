@@ -29,7 +29,7 @@ using System;
 using OpenMetaverse;
 using MySql.Data.MySqlClient;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySqlFriendsData : MySQLGenericTableHandler<FriendsData>, IFriendsData
     {

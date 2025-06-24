@@ -35,7 +35,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Data;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     /// <summary>
     /// A MySQL Interface for the Asset Server
