@@ -40,7 +40,7 @@ using log4net;
 using System.Reflection;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Scripting.DynamicTexture
+namespace MutSea.Region.CoreModules.Scripting.DynamicTexture
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "DynamicTextureModule")]
     public class DynamicTextureModule : ISharedRegionModule, IDynamicTextureManager

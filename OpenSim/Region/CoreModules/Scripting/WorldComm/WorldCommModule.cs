@@ -88,7 +88,7 @@ using OpenSim.Region.Framework.Scenes;
  *
  * **************************************************/
 
-namespace OpenSim.Region.CoreModules.Scripting.WorldComm
+namespace MutSea.Region.CoreModules.Scripting.WorldComm
 {
     [Mono.Addins.Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "WorldCommModule")]
     public class WorldCommModule : IWorldComm, INonSharedRegionModule

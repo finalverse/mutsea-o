@@ -34,9 +34,9 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Region.CoreModules.Agent.AssetTransaction;
 using OpenSim.Region.CoreModules.Avatar.InstantMessage;
-using OpenSim.Region.CoreModules.Scripting.DynamicTexture;
-using OpenSim.Region.CoreModules.Scripting.LoadImageURL;
-using OpenSim.Region.CoreModules.Scripting.XMLRPC;
+using MutSea.Region.CoreModules.Scripting.DynamicTexture;
+using MutSea.Region.CoreModules.Scripting.LoadImageURL;
+using MutSea.Region.CoreModules.Scripting.XMLRPC;
 using OpenSim.Services.Interfaces;
 using Mono.Addins;
 

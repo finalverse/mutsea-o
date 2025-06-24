@@ -38,11 +38,11 @@ using NUnit.Framework;
 using OpenMetaverse;
 using OpenMetaverse.Assets;
 using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Scripting.HttpRequest;
+using MutSea.Region.CoreModules.Scripting.HttpRequest;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Scripting.HttpRequest.Tests
+namespace MutSea.Region.CoreModules.Scripting.HttpRequest.Tests
 {
     class TestWebRequestCreate : IWebRequestCreate
     {

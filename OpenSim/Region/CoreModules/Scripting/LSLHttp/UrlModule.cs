@@ -44,7 +44,7 @@ using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Scripting.LSLHttp
+namespace MutSea.Region.CoreModules.Scripting.LSLHttp
 {
     public class UrlData
     {

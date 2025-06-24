@@ -35,7 +35,7 @@ using System.Net;
 using Nini.Config;
 using OpenMetaverse;
 using OpenMetaverse.Imaging;
-using OpenSim.Region.CoreModules.Scripting.DynamicTexture;
+using MutSea.Region.CoreModules.Scripting.DynamicTexture;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using log4net;
@@ -44,7 +44,7 @@ using Mono.Addins;
 
 //using Cairo;
 
-namespace OpenSim.Region.CoreModules.Scripting.VectorRender
+namespace MutSea.Region.CoreModules.Scripting.VectorRender
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "VectorRenderModule")]
     public class VectorRenderModule : ISharedRegionModule, IDynamicTextureRender
@@ -403,7 +403,7 @@ namespace OpenSim.Region.CoreModules.Scripting.VectorRender
                         e.Message, e.StackTrace);
                 }
 
-                return new OpenSim.Region.CoreModules.Scripting.DynamicTexture.DynamicTexture(
+                return new MutSea.Region.CoreModules.Scripting.DynamicTexture.DynamicTexture(
                     data, extraParams, imageJ2000, new Size(width, height), reuseable);
             }
             finally
