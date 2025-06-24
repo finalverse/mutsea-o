@@ -41,7 +41,7 @@ using OpenSim.Server.Handlers.Login;
 using OpenSim.Services.Interfaces;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Login
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Login
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LLLoginServiceInConnectorModule")]
     public class LLLoginServiceInConnectorModule : ISharedRegionModule

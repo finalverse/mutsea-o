@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Services.Connectors;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Inventory
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Inventory
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HGInventoryBroker")]
     public class HGInventoryBroker : ISharedRegionModule, IInventoryService

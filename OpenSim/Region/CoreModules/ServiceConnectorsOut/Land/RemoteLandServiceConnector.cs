@@ -40,7 +40,7 @@ using OpenSim.Server.Base;
 using OpenMetaverse;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Land
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Land
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteLandServicesConnector")]
     public class RemoteLandServicesConnector :

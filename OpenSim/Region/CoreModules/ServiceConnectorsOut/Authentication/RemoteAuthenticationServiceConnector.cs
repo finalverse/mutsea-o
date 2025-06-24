@@ -35,7 +35,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Connectors;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Authentication
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Authentication
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteAuthenticationServicesConnector")]
     public class RemoteAuthenticationServicesConnector : AuthenticationServicesConnector,

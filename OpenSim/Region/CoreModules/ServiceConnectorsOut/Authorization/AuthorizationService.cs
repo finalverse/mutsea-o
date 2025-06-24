@@ -39,7 +39,7 @@ using OpenMetaverse;
 
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Authorization
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Authorization
 {
     public class AuthorizationService : IAuthorizationService
     {

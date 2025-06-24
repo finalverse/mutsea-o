@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.CoreModules.ServiceConnectorsOut.Asset;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Asset.Tests
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Asset.Tests
 {
     [TestFixture]
     public class AssetConnectorTests : OpenSimTestCase

@@ -35,7 +35,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Connectors;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Avatar
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Avatar
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteAvatarServicesConnector")]
     public class RemoteAvatarServicesConnector : AvatarServicesConnector,

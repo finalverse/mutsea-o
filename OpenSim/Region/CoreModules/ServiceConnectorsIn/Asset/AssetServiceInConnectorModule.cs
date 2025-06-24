@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Server.Base;
 using OpenSim.Server.Handlers.Base;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Asset
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Asset
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "AssetServiceInConnectorModule")]
     public class AssetServiceInConnectorModule : ISharedRegionModule

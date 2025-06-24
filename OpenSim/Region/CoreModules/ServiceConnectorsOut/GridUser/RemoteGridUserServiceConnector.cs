@@ -39,7 +39,7 @@ using log4net;
 using Mono.Addins;
 using Nini.Config;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.GridUser
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.GridUser
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteGridUserServicesConnector")]
     public class RemoteGridUserServicesConnector : ISharedRegionModule, IGridUserService

@@ -41,7 +41,7 @@ using OpenSim.Server.Handlers.Hypergrid;
 using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Hypergrid
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Hypergrid
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "HypergridServiceInConnectorModule")]
     public class HypergridServiceInConnectorModule : ISharedRegionModule

@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Scenes;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Grid.Tests
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Grid.Tests
 {
     [TestFixture]
     public class GridConnectorsTests : OpenSimTestCase

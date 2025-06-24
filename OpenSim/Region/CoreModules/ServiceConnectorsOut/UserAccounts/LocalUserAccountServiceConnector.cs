@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.UserAccounts
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.UserAccounts
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalUserAccountServicesConnector")]
     public class LocalUserAccountServicesConnector : ISharedRegionModule, IUserAccountService

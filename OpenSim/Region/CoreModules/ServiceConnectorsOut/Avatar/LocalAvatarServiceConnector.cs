@@ -39,7 +39,7 @@ using OpenSim.Services.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Avatar
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Avatar
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalAvatarServicesConnector")]
     public class LocalAvatarServicesConnector : ISharedRegionModule, IAvatarService

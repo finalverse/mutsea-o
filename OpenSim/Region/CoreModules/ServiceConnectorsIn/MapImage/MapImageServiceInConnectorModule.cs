@@ -40,7 +40,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenSim.Server.Handlers.MapImage;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.MapImage
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.MapImage
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MapImageServiceInConnectorModule")]
     public class MapImageServiceInConnectorModule : ISharedRegionModule

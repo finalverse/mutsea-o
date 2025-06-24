@@ -38,7 +38,7 @@ using OpenSim.Server.Base;
 using OpenSim.Services.Interfaces;
 using PresenceInfo = OpenSim.Services.Interfaces.PresenceInfo;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Presence
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence
 {
     public class BasePresenceServiceConnector : IPresenceService
     {

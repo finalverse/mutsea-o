@@ -39,7 +39,7 @@ using OpenSim.Server.Base;
 using OpenSim.Server.Handlers.Base;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Simulation
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Simulation
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "SimulationServiceInConnectorModule")]
     public class SimulationServiceInConnectorModule : ISharedRegionModule

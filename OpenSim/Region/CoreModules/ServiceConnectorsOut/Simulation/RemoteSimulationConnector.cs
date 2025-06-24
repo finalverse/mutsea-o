@@ -45,7 +45,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Services.Connectors.Simulation;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteSimulationConnectorModule")]
     public class RemoteSimulationConnectorModule : ISharedRegionModule, ISimulationService

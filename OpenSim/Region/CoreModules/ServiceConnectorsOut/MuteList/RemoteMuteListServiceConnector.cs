@@ -39,7 +39,7 @@ using log4net;
 using Mono.Addins;
 using Nini.Config;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.MuteList
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.MuteList
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteMuteListServicesConnector")]
     public class RemoteMuteListServicesConnector : ISharedRegionModule, IMuteListService

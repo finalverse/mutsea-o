@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Authorization
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Authorization
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalAuthorizationServicesConnector")]
     public class LocalAuthorizationServicesConnector : INonSharedRegionModule, IAuthorizationService

@@ -40,7 +40,7 @@ using log4net;
 using Mono.Addins;
 using Nini.Config;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Presence
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemotePresenceServicesConnector")]
     public class RemotePresenceServicesConnector : BasePresenceServiceConnector, ISharedRegionModule

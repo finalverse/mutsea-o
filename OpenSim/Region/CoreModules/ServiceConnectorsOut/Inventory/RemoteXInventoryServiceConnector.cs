@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Inventory
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Inventory
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteXInventoryServicesConnector")]
     public class RemoteXInventoryServicesConnector : ISharedRegionModule, IInventoryService

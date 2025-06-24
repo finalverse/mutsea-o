@@ -44,7 +44,7 @@ using OpenSim.Server.Base;
 using OpenSim.Services.Interfaces;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Asset
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Asset
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RegionAssetConnector")]
     public class RegionAssetConnector : ISharedRegionModule, IAssetService
