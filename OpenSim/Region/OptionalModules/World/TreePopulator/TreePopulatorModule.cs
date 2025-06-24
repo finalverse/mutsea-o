@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using Timer= System.Timers.Timer;
 
-namespace OpenSim.Region.OptionalModules.World.TreePopulator
+namespace MutSea.Region.OptionalModules.World.TreePopulator
 {
     /// <summary>
     /// Version 2.02 - Still hacky

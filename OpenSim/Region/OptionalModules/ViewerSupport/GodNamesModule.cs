@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.ViewerSupport
+namespace MutSea.Region.OptionalModules.ViewerSupport
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GodNamesModule")]
     public class GodNamesModule : ISharedRegionModule

@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
+namespace MutSea.Region.OptionalModules.Agent.InternetRelayClientView.Server
 {
     public delegate void OnNewIRCUserDelegate(IRCClientView user);
 

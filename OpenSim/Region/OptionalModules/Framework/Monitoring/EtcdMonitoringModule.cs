@@ -42,7 +42,7 @@ using netcd.Serialization;
 using netcd.Advanced;
 using netcd.Advanced.Requests;
 
-namespace OpenSim.Region.OptionalModules.Framework.Monitoring
+namespace MutSea.Region.OptionalModules.Framework.Monitoring
 {
     /// <summary>
     /// Allows to store monitoring data in etcd, a high availability

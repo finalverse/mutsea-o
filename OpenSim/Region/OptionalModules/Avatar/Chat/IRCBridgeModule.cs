@@ -39,7 +39,7 @@ using OpenSim.Framework.Servers;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Chat
+namespace MutSea.Region.OptionalModules.Avatar.Chat
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "IRCBridgeModule")]
     public class IRCBridgeModule : INonSharedRegionModule

@@ -44,7 +44,7 @@ using OpenSim.Server.Base;
 using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.OptionalModules.World.WorldView
+namespace MutSea.Region.OptionalModules.World.WorldView
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "WorldViewModule")]
     public class WorldViewModule : INonSharedRegionModule

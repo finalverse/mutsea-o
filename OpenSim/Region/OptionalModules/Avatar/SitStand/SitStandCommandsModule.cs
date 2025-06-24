@@ -41,7 +41,7 @@ using OpenSim.Framework.Console;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.SitStand
+namespace MutSea.Region.OptionalModules.Avatar.SitStand
 {
     /// <summary>
     /// A module that just holds commands for changing avatar sitting and standing states.

@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Chat
+namespace MutSea.Region.OptionalModules.Avatar.Chat
 {
     //    An instance of this class exists for every active region
 

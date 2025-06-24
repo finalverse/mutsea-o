@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Region.OptionalModules.World.WorldView
+namespace MutSea.Region.OptionalModules.World.WorldView
 {
     public class WorldViewRequestHandler : BaseStreamHandler
     {

@@ -39,7 +39,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.World.AutoBackup
+namespace MutSea.Region.OptionalModules.World.AutoBackup
 {
     /// <summary>
     /// Choose between ways of naming the backup files that are generated.

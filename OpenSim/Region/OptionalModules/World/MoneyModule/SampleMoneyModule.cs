@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.OptionalModules.World.MoneyModule
+namespace MutSea.Region.OptionalModules.World.MoneyModule
 {
     /// <summary>
     /// This is only the functionality required to make the functionality associated with money work

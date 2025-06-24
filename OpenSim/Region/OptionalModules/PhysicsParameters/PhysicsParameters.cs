@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.OptionalModules.PhysicsParameters
+namespace MutSea.Region.OptionalModules.PhysicsParameters
 {
     /// <summary>
     /// </summary>

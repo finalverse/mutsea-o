@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Scenes;
 //[assembly: Addin("MyModule", "1.0")]
 //[assembly: AddinDependency("OpenSim", "0.8.1")]
 
-namespace OpenSim.Region.OptionalModules.Example.BareBonesNonShared
+namespace MutSea.Region.OptionalModules.Example.BareBonesNonShared
 {
     /// <summary>
     /// Simplest possible example of a non-shared region module.

@@ -42,7 +42,7 @@ using OpenSim.Region.Framework.Scenes;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
+namespace MutSea.Region.OptionalModules.Scripting.JsonStore
 {
     public class JsonStore
     {

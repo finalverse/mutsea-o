@@ -48,7 +48,7 @@ using Mono.Addins;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 using TeleportFlags = OpenSim.Framework.Constants.TeleportFlags;
 
-namespace OpenSim.Region.OptionalModules.ViewerSupport
+namespace MutSea.Region.OptionalModules.ViewerSupport
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "SpecialUI")]
     public class SpecialUIModule : INonSharedRegionModule

@@ -41,7 +41,7 @@ using OpenSim.Region.ClientStack.LindenUDP;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Appearance
+namespace MutSea.Region.OptionalModules.Avatar.Appearance
 {
     /// <summary>
     /// A module that just holds commands for inspecting avatar appearance.

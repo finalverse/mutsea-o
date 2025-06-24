@@ -47,7 +47,7 @@ using log4net;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 using TeleportFlags = OpenSim.Framework.Constants.TeleportFlags;
 
-namespace OpenSim.Region.OptionalModules.ViewerSupport
+namespace MutSea.Region.OptionalModules.ViewerSupport
 {
     public class SimulatorFeaturesHelper
     {

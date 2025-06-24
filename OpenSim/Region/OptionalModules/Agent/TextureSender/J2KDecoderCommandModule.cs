@@ -40,7 +40,7 @@ using OpenSim.Framework.Console;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Agent.TextureSender
+namespace MutSea.Region.OptionalModules.Agent.TextureSender
 {
     /// <summary>
     /// Commands for the J2KDecoder module.  For debugging purposes.

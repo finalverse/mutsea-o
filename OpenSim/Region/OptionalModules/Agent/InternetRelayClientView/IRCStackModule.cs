@@ -36,7 +36,7 @@ using OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server;
 
 using Mono.Addins;
 
-namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView
+namespace MutSea.Region.OptionalModules.Agent.InternetRelayClientView
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "IRCStackModule")]
     public class IRCStackModule : INonSharedRegionModule

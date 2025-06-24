@@ -44,7 +44,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
+namespace MutSea.Region.OptionalModules.Scripting.JsonStore
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "JsonStoreScriptModule")]
 

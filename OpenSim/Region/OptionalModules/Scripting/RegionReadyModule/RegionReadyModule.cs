@@ -44,7 +44,7 @@ using OpenSim.Services.Interfaces;
 using System.Net.Http;
 using System.Threading;
 
-namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
+namespace MutSea.Region.OptionalModules.Scripting.RegionReady
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RegionReadyModule")]
     public class RegionReadyModule : IRegionReadyModule, INonSharedRegionModule

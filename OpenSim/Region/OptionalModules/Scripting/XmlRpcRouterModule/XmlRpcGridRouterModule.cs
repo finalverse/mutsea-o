@@ -41,7 +41,7 @@ using OpenSim.Framework.Client;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Scripting.XmlRpcGridRouterModule
+namespace MutSea.Region.OptionalModules.Scripting.XmlRpcGridRouterModule
 {
     public class XmlRpcInfo
     {

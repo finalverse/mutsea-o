@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Voice.VivoxVoice
+namespace MutSea.Region.OptionalModules.Avatar.Voice.VivoxVoice
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "VivoxVoiceModule")]
     public class VivoxVoiceModule : ISharedRegionModule

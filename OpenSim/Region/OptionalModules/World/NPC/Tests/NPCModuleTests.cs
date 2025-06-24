@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.AvatarService;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.OptionalModules.World.NPC.Tests
+namespace MutSea.Region.OptionalModules.World.NPC.Tests
 {
     [TestFixture]
     public class NPCModuleTests : OpenSimTestCase
