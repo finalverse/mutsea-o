@@ -48,7 +48,7 @@ using OpenSim.Data.MySQL;
 using Mono.Data.Sqlite;
 using OpenSim.Data.SQLite;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     [TestFixture(Description = "Region store tests (SQLite)")]
     public class SQLiteRegionTests : RegionTests<SqliteConnection, SQLiteSimulationData>

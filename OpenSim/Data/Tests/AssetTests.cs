@@ -43,7 +43,7 @@ using OpenSim.Data.MySQL;
 using Mono.Data.Sqlite;
 using OpenSim.Data.SQLite;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     [TestFixture(Description = "Asset store tests (SQLite)")]
     public class SQLiteAssetTests :  AssetTests<SqliteConnection, SQLiteAssetData>

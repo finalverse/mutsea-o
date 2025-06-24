@@ -39,7 +39,7 @@ using System.Data;
 using System.Data.Common;
 using System.Reflection;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     /// <summary>This is a base class for testing any Data service for any DBMS.
     /// Requires NUnit 2.5 or better (to support the generics).

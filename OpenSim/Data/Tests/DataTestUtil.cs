@@ -31,7 +31,7 @@ using System.Text;
 using OpenMetaverse;
 using NUnit.Framework;
 
-namespace OpenSim.Data.Tests
+namespace MutSea.OpenSim.Data.Tests
 {
     /// <summary>
     /// Shared constants and methods for database unit tests.
