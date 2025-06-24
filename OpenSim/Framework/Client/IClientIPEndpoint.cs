@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace OpenSim.Framework.Client
+namespace MutSea.Framework.Client
 {
     public interface IClientIPEndpoint
     {
