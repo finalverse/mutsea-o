@@ -33,7 +33,7 @@ using System.Reflection;
 
 using log4net;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     // The terrain is stored in the database as a blob with a 'revision' field.
     // Some implementations of terrain storage would fill the revision field with

@@ -38,7 +38,7 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 //using OpenSim.Framework.Console;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
 
     public class RegionInfo

@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Avatar returned by the Avatar Picker request

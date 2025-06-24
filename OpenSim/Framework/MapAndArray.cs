@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Stores two synchronized collections: a mutable dictionary and an

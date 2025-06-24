@@ -34,7 +34,7 @@ using System.Globalization;
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public static class LLSDxmlEncode
     {

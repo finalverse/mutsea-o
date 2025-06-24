@@ -39,7 +39,7 @@ using Mono.Addins.Description;
 using OpenSim.Framework;
 
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Manager for registries and plugins

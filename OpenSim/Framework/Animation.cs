@@ -29,7 +29,7 @@ using System;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Information about an Animation

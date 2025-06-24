@@ -58,7 +58,7 @@ using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     [Flags]
     public enum PermissionMask : uint

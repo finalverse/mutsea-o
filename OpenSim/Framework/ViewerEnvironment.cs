@@ -31,7 +31,7 @@ using System.Runtime.CompilerServices;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     // legacy lightshare
     public class RegionLightShareData

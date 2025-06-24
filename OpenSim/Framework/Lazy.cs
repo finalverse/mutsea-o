@@ -34,7 +34,7 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Diagnostics;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public enum LazyThreadSafetyMode
     {

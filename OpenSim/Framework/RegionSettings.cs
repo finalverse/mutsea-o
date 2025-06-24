@@ -31,7 +31,7 @@ using System.IO;
 using OpenMetaverse;
 using System.Runtime.Serialization;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public struct SpawnPoint
     {

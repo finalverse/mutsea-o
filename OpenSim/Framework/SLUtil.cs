@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public static class SLUtil
     {

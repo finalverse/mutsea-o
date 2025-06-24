@@ -33,7 +33,7 @@ using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     // Soon to be dismissed
     [Serializable]

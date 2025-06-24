@@ -34,7 +34,7 @@ using log4net;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Contains the Avatar's Appearance and methods to manipulate the appearance.

@@ -27,7 +27,7 @@
 
 using OpenSim.Framework;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public interface IAssetCache
     {

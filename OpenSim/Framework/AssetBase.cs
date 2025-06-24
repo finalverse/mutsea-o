@@ -29,7 +29,7 @@ using System;
 using System.Xml.Serialization;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     [Flags]
     // this enum is stuck, can not be changed or will break compatibilty with any version older than that change

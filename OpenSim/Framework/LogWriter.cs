@@ -30,7 +30,7 @@ using System.IO;
 using System.Text;
 using log4net;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Class for writing a high performance, high volume log file.

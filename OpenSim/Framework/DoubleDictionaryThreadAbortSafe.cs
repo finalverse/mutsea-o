@@ -28,7 +28,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// A double dictionary that is thread abort safe.

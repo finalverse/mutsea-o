@@ -31,7 +31,7 @@ using System.Net;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     #region Client API Delegate definitions
 

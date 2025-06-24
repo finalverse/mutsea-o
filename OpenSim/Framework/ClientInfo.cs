@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class ClientInfo
     {

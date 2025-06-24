@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Utility class that is used to find small prime numbers and test is number prime number.

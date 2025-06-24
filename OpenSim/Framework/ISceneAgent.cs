@@ -28,7 +28,7 @@
 using System;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// An agent in the scene.

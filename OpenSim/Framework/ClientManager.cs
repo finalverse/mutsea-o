@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Maps from client AgentID and RemoteEndPoint values to IClientAPI

@@ -32,7 +32,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class PhysicsInertiaData
     {

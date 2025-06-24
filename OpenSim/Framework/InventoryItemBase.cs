@@ -30,7 +30,7 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Inventory Item - contains all the properties associated with an individual inventory piece.

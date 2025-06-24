@@ -31,7 +31,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public static class MultipartForm
     {

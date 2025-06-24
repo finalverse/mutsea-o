@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class ConfigurationOption
     {

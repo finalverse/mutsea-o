@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Naive pool implementation.

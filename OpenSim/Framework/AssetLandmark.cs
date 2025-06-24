@@ -28,7 +28,7 @@
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class AssetLandmark : AssetBase
     {

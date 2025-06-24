@@ -21,7 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class CircularBuffer<T> : ICollection<T>, IEnumerable<T>, ICollection, IEnumerable
     {

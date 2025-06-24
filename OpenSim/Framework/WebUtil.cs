@@ -50,7 +50,7 @@ using System.Security.Authentication;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Miscellaneous static methods and extension methods related to the web

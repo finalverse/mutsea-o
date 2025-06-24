@@ -36,7 +36,7 @@ using Nini.Config;
 using IPNetwork = LukeSkywalker.IPNetwork.IPNetwork;
 
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class OutboundUrlFilter
     {

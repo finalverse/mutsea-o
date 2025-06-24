@@ -27,7 +27,7 @@
 using System;
 using System.Threading;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class LocklessQueue<T>
     {

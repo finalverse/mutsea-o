@@ -28,7 +28,7 @@
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public delegate int overrideParcelMaxPrimCountDelegate(ILandObject obj);
     public delegate int overrideSimulatorMaxPrimCountDelegate(ILandObject obj);

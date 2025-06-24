@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public delegate void ObjectPaid(UUID objectID, UUID agentID, int amount);
     public interface IMoneyModule

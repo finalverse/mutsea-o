@@ -29,7 +29,7 @@ using System.Threading;
 using System.Collections.Generic;
 using Timer = System.Threading.Timer ;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public sealed class ExpiringKey<Tkey1> : IDisposable
     {
