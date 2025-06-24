@@ -30,7 +30,7 @@ using System.Timers;
 
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Asset service statistics collection

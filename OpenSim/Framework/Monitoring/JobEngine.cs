@@ -32,7 +32,7 @@ using System.Threading;
 using log4net;
 using OpenSim.Framework;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     public class JobEngine
     {

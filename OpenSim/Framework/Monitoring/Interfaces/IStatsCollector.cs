@@ -27,7 +27,7 @@
 
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Implemented by classes which collect up non-viewer statistical information

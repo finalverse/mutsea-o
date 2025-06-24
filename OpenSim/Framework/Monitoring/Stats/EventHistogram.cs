@@ -32,7 +32,7 @@ using System.Text;
 
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
 // Create a time histogram of events. The histogram is built in a wrap-around
 //   array of equally distributed buckets.

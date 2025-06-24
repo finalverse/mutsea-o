@@ -35,7 +35,7 @@ using System.Text;
 using OpenSim.Framework;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Static class used to register/deregister/fetch statistics

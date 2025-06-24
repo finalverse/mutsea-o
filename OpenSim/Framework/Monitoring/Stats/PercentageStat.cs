@@ -31,7 +31,7 @@ using System.Text;
 
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     public class PercentageStat : Stat
     {

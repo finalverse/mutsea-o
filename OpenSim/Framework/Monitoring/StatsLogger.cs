@@ -33,7 +33,7 @@ using System.Text;
 using System.Timers;
 using log4net;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Provides a means to continuously log stats for debugging purposes.

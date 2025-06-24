@@ -31,7 +31,7 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Statistics which all collectors are interested in reporting

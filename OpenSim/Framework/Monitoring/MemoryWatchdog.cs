@@ -32,7 +32,7 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 
-namespace OpenSim.Framework.Monitoring
+namespace MutSea
 {
     /// <summary>
     /// Experimental watchdog for memory usage.
