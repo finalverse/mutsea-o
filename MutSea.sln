@@ -1,0 +1,400 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 22
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea", "MutSea/Region/Application/MutSea.csproj", "{8870CE1A-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Addons.Groups", "MutSea/Addons/Groups/MutSea.Addons.Groups.csproj", "{777487E3-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Addons.OfflineIM", "MutSea/Addons/OfflineIM/MutSea.Addons.OfflineIM.csproj", "{1C32294C-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.ApplicationPlugins.LoadRegions", "MutSea/ApplicationPlugins/LoadRegions/MutSea.ApplicationPlugins.LoadRegions.csproj", "{2F1BEBE9-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.ApplicationPlugins.RegionModulesController", "MutSea/ApplicationPlugins/RegionModulesController/MutSea.ApplicationPlugins.RegionModulesController.csproj", "{EEA3802E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.ApplicationPlugins.RemoteController", "MutSea/ApplicationPlugins/RemoteController/MutSea.ApplicationPlugins.RemoteController.csproj", "{5B986AB8-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Capabilities", "MutSea/Capabilities/MutSea.Capabilities.csproj", "{FF2D5B39-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Capabilities.Handlers", "MutSea/Capabilities/Handlers/MutSea.Capabilities.Handlers.csproj", "{AD7E5DC8-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.ConsoleClient", "MutSea/ConsoleClient/MutSea.ConsoleClient.csproj", "{2D9A0793-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Data", "MutSea/Data/MutSea.Data.csproj", "{A4684C88-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Data.MySQL", "MutSea/Data/MySQL/MutSea.Data.MySQL.csproj", "{A43EBE9B-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Data.Null", "MutSea/Data/Null/MutSea.Data.Null.csproj", "{92D8CA03-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Data.PGSQL", "MutSea/Data/PGSQL/MutSea.Data.PGSQL.csproj", "{36E81F57-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Data.SQLite", "MutSea/Data/SQLite/MutSea.Data.SQLite.csproj", "{7521F6CB-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework", "MutSea/Framework/MutSea.Framework.csproj", "{43401DF9-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.AssetLoader.Filesystem", "MutSea/Framework/AssetLoader/Filesystem/MutSea.Framework.AssetLoader.Filesystem.csproj", "{BB5470D7-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.Console", "MutSea/Framework/Console/MutSea.Framework.Console.csproj", "{1467B726-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.Monitoring", "MutSea/Framework/Monitoring/MutSea.Framework.Monitoring.csproj", "{CC3DCAEF-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.Serialization", "MutSea/Framework/Serialization/MutSea.Framework.Serialization.csproj", "{855C3746-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.Servers", "MutSea/Framework/Servers/MutSea.Framework.Servers.csproj", "{7CF65A33-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Framework.Servers.HttpServer", "MutSea/Framework/Servers/HttpServer/MutSea.Framework.Servers.HttpServer.csproj", "{5AB98B2E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ClientStack.LindenCaps", "MutSea/Region/ClientStack/Linden/Caps/MutSea.Region.ClientStack.LindenCaps.csproj", "{8745A734-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ClientStack.LindenUDP", "MutSea/Region/ClientStack/Linden/UDP/MutSea.Region.ClientStack.LindenUDP.csproj", "{21704B9E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.CoreModules", "MutSea/Region/CoreModules/MutSea.Region.CoreModules.csproj", "{E44B4B9D-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.Framework", "MutSea/Region/Framework/MutSea.Region.Framework.csproj", "{ADAEB2DE-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.OptionalModules", "MutSea/Region/OptionalModules/MutSea.Region.OptionalModules.csproj", "{249D5B17-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.BasicPhysics", "MutSea/Region/PhysicsModules/BasicPhysics/MutSea.Region.PhysicsModule.BasicPhysics.csproj", "{41F9F70E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.BulletS", "MutSea/Region/PhysicsModules/BulletS/MutSea.Region.PhysicsModule.BulletS.csproj", "{9CAAA331-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.Meshing", "MutSea/Region/PhysicsModules/Meshing/MutSea.Region.PhysicsModule.Meshing.csproj", "{337FC72C-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.POS", "MutSea/Region/PhysicsModules/POS/MutSea.Region.PhysicsModule.POS.csproj", "{2CDABDE1-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.ubOde", "MutSea/Region/PhysicsModules/ubOde/MutSea.Region.PhysicsModule.ubOde.csproj", "{58ACFA30-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModule.ubOdeMeshing", "MutSea/Region/PhysicsModules/ubOdeMeshing/MutSea.Region.PhysicsModule.ubOdeMeshing.csproj", "{B3492A85-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModules.ConvexDecompositionDotNet", "MutSea/Region/PhysicsModules/ConvexDecompositionDotNet/MutSea.Region.PhysicsModules.ConvexDecompositionDotNet.csproj", "{AFEA8295-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.PhysicsModules.SharedBase", "MutSea/Region/PhysicsModules/SharedBase/MutSea.Region.PhysicsModules.SharedBase.csproj", "{BE25B69A-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ScriptEngine.Shared", "MutSea/Region/ScriptEngine/Shared/MutSea.Region.ScriptEngine.Shared.csproj", "{62BBCA5A-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ScriptEngine.Shared.Api", "MutSea/Region/ScriptEngine/Shared/Api/Implementation/MutSea.Region.ScriptEngine.Shared.Api.csproj", "{C08ED780-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ScriptEngine.Shared.Api.Runtime", "MutSea/Region/ScriptEngine/Shared/Api/Runtime/MutSea.Region.ScriptEngine.Shared.Api.Runtime.csproj", "{0B616053-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Region.ScriptEngine.YEngine", "MutSea/Region/ScriptEngine/YEngine/MutSea.Region.ScriptEngine.YEngine.csproj", "{99053CC0-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Server.Base", "MutSea/Server/Base/MutSea.Server.Base.csproj", "{AC9B0B5D-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Server.Handlers", "MutSea/Server/Handlers/MutSea.Server.Handlers.csproj", "{187075C0-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.AssetService", "MutSea/Services/AssetService/MutSea.Services.AssetService.csproj", "{7C1A667E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.AuthenticationService", "MutSea/Services/AuthenticationService/MutSea.Services.AuthenticationService.csproj", "{92E1EF6E-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.AuthorizationService", "MutSea/Services/AuthorizationService/MutSea.Services.AuthorizationService.csproj", "{B2C00D55-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.AvatarService", "MutSea/Services/AvatarService/MutSea.Services.AvatarService.csproj", "{2437964D-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.Base", "MutSea/Services/Base/MutSea.Services.Base.csproj", "{C02ACC2A-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.Connectors", "MutSea/Services/Connectors/MutSea.Services.Connectors.csproj", "{E419064B-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.EstateService", "MutSea/Services/EstateService/MutSea.Services.EstateService.csproj", "{0723EA07-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.FreeswitchService", "MutSea/Services/FreeswitchService/MutSea.Services.FreeswitchService.csproj", "{03E1BFC2-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.FriendsService", "MutSea/Services/Friends/MutSea.Services.FriendsService.csproj", "{7A9F5F22-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.FSAssetService", "MutSea/Services/FSAssetService/MutSea.Services.FSAssetService.csproj", "{A7CE366D-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.GridService", "MutSea/Services/GridService/MutSea.Services.GridService.csproj", "{46151D25-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.HypergridService", "MutSea/Services/HypergridService/MutSea.Services.HypergridService.csproj", "{8D6F7C4C-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.Interfaces", "MutSea/Services/Interfaces/MutSea.Services.Interfaces.csproj", "{07EF5AC0-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.InventoryService", "MutSea/Services/InventoryService/MutSea.Services.InventoryService.csproj", "{ECD08A33-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.LLLoginService", "MutSea/Services/LLLoginService/MutSea.Services.LLLoginService.csproj", "{F42F8AAD-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.MapImageService", "MutSea/Services/MapImageService/MutSea.Services.MapImageService.csproj", "{5221FC6B-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.MuteListService", "MutSea/Services/MuteListService/MutSea.Services.MuteListService.csproj", "{7AE2A5AA-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.PresenceService", "MutSea/Services/PresenceService/MutSea.Services.PresenceService.csproj", "{ED793CC0-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.SimulationService", "MutSea/Services/SimulationService/MutSea.Services.SimulationService.csproj", "{051C3BDE-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.UserAccountService", "MutSea/Services/UserAccountService/MutSea.Services.UserAccountService.csproj", "{C53A32B5-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Services.UserProfilesService", "MutSea/Services/UserProfilesService/MutSea.Services.UserProfilesService.csproj", "{016C9EAE-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutSea.Tools.Configger", "MutSea/Tools/Configger/MutSea.Tools.Configger.csproj", "{CCBD78DA-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pCampBot", "MutSea/Tools/pCampBot/pCampBot.csproj", "{5122AD7D-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robust", "MutSea/Server/Robust.csproj", "{D6C72D9B-0000-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartThreadPool", "ThirdParty/SmartThreadPool/SmartThreadPool.csproj", "{04282E74-0000-0000-0000-000000000000}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8870CE1A-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8870CE1A-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8870CE1A-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8870CE1A-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{777487E3-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777487E3-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777487E3-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777487E3-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C32294C-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C32294C-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C32294C-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C32294C-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1BEBE9-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1BEBE9-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1BEBE9-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1BEBE9-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEA3802E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA3802E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA3802E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA3802E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B986AB8-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B986AB8-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B986AB8-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B986AB8-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF2D5B39-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF2D5B39-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF2D5B39-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF2D5B39-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD7E5DC8-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD7E5DC8-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD7E5DC8-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD7E5DC8-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D9A0793-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D9A0793-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D9A0793-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D9A0793-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4684C88-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4684C88-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4684C88-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4684C88-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43EBE9B-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43EBE9B-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43EBE9B-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43EBE9B-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D8CA03-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D8CA03-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D8CA03-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D8CA03-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36E81F57-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36E81F57-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36E81F57-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36E81F57-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7521F6CB-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7521F6CB-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7521F6CB-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7521F6CB-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43401DF9-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43401DF9-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43401DF9-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43401DF9-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB5470D7-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB5470D7-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB5470D7-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB5470D7-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1467B726-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1467B726-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1467B726-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1467B726-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC3DCAEF-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC3DCAEF-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC3DCAEF-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC3DCAEF-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{855C3746-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{855C3746-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{855C3746-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{855C3746-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CF65A33-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF65A33-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF65A33-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF65A33-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AB98B2E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AB98B2E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AB98B2E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AB98B2E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8745A734-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8745A734-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8745A734-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8745A734-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21704B9E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21704B9E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21704B9E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21704B9E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44B4B9D-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44B4B9D-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44B4B9D-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44B4B9D-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADAEB2DE-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADAEB2DE-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADAEB2DE-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADAEB2DE-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{249D5B17-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{249D5B17-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{249D5B17-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{249D5B17-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41F9F70E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41F9F70E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41F9F70E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41F9F70E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CAAA331-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CAAA331-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CAAA331-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CAAA331-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{337FC72C-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{337FC72C-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{337FC72C-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{337FC72C-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CDABDE1-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CDABDE1-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CDABDE1-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CDABDE1-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58ACFA30-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58ACFA30-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58ACFA30-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58ACFA30-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3492A85-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3492A85-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3492A85-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3492A85-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFEA8295-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFEA8295-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFEA8295-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEA8295-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE25B69A-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE25B69A-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE25B69A-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE25B69A-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62BBCA5A-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62BBCA5A-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62BBCA5A-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62BBCA5A-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C08ED780-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C08ED780-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C08ED780-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C08ED780-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B616053-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B616053-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B616053-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B616053-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99053CC0-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99053CC0-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99053CC0-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99053CC0-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9B0B5D-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9B0B5D-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9B0B5D-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9B0B5D-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{187075C0-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187075C0-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187075C0-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187075C0-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C1A667E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C1A667E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C1A667E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C1A667E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E1EF6E-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E1EF6E-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E1EF6E-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E1EF6E-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C00D55-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C00D55-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C00D55-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C00D55-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2437964D-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2437964D-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2437964D-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2437964D-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02ACC2A-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02ACC2A-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02ACC2A-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02ACC2A-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E419064B-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E419064B-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E419064B-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E419064B-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0723EA07-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0723EA07-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0723EA07-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0723EA07-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E1BFC2-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E1BFC2-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E1BFC2-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E1BFC2-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9F5F22-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9F5F22-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9F5F22-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9F5F22-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CE366D-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CE366D-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CE366D-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CE366D-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46151D25-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46151D25-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46151D25-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46151D25-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D6F7C4C-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D6F7C4C-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D6F7C4C-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D6F7C4C-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07EF5AC0-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07EF5AC0-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07EF5AC0-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07EF5AC0-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD08A33-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD08A33-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD08A33-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD08A33-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42F8AAD-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42F8AAD-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42F8AAD-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42F8AAD-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5221FC6B-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5221FC6B-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5221FC6B-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5221FC6B-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE2A5AA-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE2A5AA-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE2A5AA-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE2A5AA-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED793CC0-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED793CC0-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED793CC0-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED793CC0-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051C3BDE-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051C3BDE-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051C3BDE-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051C3BDE-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C53A32B5-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53A32B5-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53A32B5-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53A32B5-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{016C9EAE-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016C9EAE-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016C9EAE-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016C9EAE-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCBD78DA-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCBD78DA-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCBD78DA-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCBD78DA-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5122AD7D-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5122AD7D-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5122AD7D-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5122AD7D-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6C72D9B-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6C72D9B-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6C72D9B-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6C72D9B-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04282E74-0000-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04282E74-0000-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04282E74-0000-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04282E74-0000-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

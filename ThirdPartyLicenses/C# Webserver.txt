@@ -1,6 +1,6 @@
 Embedded http lister uses some code derived from Gauffin Telecom AB HttpServer
 
-Files: HttpServer_OpenSim.dll
+Files: HttpServer_MutSea.dll
 
 Apache License
 Version 2.0, January 2004

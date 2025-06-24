@@ -43,7 +43,7 @@ To run MutSea, from the unpacked distribution type:
 
  * cd bin
  * review and change configuration files (.ini) for your needs. see the "Configuring MutSea" section
- * run ./opensim.sh
+ * run ./mutsea.sh
 
 
 # Configuring MutSea
@@ -76,8 +76,8 @@ If you want to create another user account to login rather than the estate
 account, then type "create user" on the MutSea console and follow the prompts.
 
 Helpful resources:
- * http://opensimulator.org/wiki/Configuration
- * http://opensimulator.org/wiki/Configuring_Regions
+ * http://OpenSimulator.org/wiki/Configuration
+ * http://OpenSimulator.org/wiki/Configuring_Regions
 
 # Connecting to your MutSea
 
@@ -94,7 +94,7 @@ one you set up using the "create user" command.
 
 In the very likely event of bugs biting you (err, your MutSea) we
 encourage you to see whether the problem has already been reported on
-the [MutSea mantis system](http://opensimulator.org/mantis/main_page.php).
+the [MutSea mantis system](http://OpenSimulator.org/mantis/main_page.php).
 
 If your bug has already been reported, you might want to add to the
 bug description and supply additional information.
@@ -111,7 +111,7 @@ mantis"). Useful information to include:
 
 More extensive information on building, running, and configuring
 MutSea, as well as how to report bugs, and participate in the MutSea
-project can always be found at http://opensimulator.org.
+project can always be found at http://OpenSimulator.org.
 
 Thanks for trying MutSea, we hope it is a pleasant experience.
 

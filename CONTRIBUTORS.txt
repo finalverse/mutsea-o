@@ -1,8 +1,8 @@
-The following people have contributed to OpenSim (Thank you for your effort!) 
+The following people have contributed to MutSea (Thank you for your effort!) 
 
-= Current OpenSim Developers (in very rough order of appearance) =
-These folks represent the current core team for OpenSim, and are the
-people that make the day to day of OpenSim happen.
+= Current MutSea Developers (in very rough order of appearance) =
+These folks represent the current core team for MutSea, and are the
+people that make the day to day of MutSea happen.
 
 * Melanie Thielker
 * Diva (Crista Lopes, University of California, Irvine)
@@ -19,7 +19,7 @@ been that active lately, so their voting rights are awaiting their come back.
 * Alicia Raven
 
 = Past Open Sim Developers =
-These folks are alumns of the OpenSim core group, but are now
+These folks are alumns of the MutSea core group, but are now
 currently not active.  Their great contributions helped get us to
 where we are today.
 
@@ -59,8 +59,8 @@ where we are today.
 * Snoopy Pfeffer
 * Teravus (w3z)
 
-= Additional OpenSim Contributors =
-These folks have contributed code patches or content to OpenSimulator to help make it
+= Additional MutSea Contributors =
+These folks have contributed code patches or content to MutSeaulator to help make it
 what it is today.  
 
 * A_Biondi
@@ -246,7 +246,7 @@ This software uses components from the following developers:
 
 Some plugins are based on Cable Beach
 Cable Beach is Copyright (c) 2008 Intel Corporation
-see http://forge.opensimulator.org/gf/project/assetserver/
+see http://forge.OpenSimulator.org/gf/project/assetserver/
 
 In addition, we would like to thank:
 * The Mono Project
