@@ -40,7 +40,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenSim.Server.Handlers.Authentication;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Authentication
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Authentication
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "AuthenticationServiceInConnectorModule")]
     public class AuthenticationServiceInConnectorModule : ISharedRegionModule

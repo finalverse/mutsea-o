@@ -45,7 +45,7 @@ using OpenSim.Server.Base;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.MapImage
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.MapImage
 {
     /// <summary>
     /// </summary>

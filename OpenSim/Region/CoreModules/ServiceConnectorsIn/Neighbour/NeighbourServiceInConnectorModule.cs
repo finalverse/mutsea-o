@@ -40,7 +40,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenSim.Services.Interfaces;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Neighbour
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Neighbour
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "NeighbourServiceInConnectorModule")]
     public class NeighbourServiceInConnectorModule : ISharedRegionModule, INeighbourService

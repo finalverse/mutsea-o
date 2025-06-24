@@ -35,7 +35,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using Timer = System.Threading.Timer;
 using ReaderWriterLockSlim = System.Threading.ReaderWriterLockSlim;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Grid
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Grid
 {
     public class RegionInfoCache
     {

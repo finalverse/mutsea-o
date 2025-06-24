@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.AgentPreferences
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.AgentPreferences
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalAgentPreferencesServicesConnector")]
     public class LocalAgentPreferencesServicesConnector : ISharedRegionModule, IAgentPreferencesService

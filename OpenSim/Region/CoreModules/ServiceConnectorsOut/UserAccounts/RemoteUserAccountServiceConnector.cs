@@ -40,7 +40,7 @@ using OpenSim.Framework;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.UserAccounts
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.UserAccounts
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RemoteUserAccountServicesConnector")]
     public class RemoteUserAccountServicesConnector : UserAccountServicesConnector,

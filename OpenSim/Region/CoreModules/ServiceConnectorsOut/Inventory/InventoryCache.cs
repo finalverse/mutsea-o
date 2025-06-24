@@ -31,7 +31,7 @@ using System.Threading;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Inventory
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Inventory
 {
     /// <summary>
     /// Cache root and system inventory folders to reduce number of potentially remote inventory calls and associated holdups.

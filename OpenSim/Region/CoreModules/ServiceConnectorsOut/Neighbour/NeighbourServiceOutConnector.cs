@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Neighbour
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Neighbour
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "NeighbourServicesOutConnector")]
     public class NeighbourServicesOutConnector :

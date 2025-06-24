@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using PresenceInfo = OpenSim.Services.Interfaces.PresenceInfo;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Presence.Tests
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence.Tests
 {
     [TestFixture]
     public class PresenceConnectorsTests : OpenSimTestCase

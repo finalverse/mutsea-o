@@ -35,7 +35,7 @@ using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.GridUser
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.GridUser
 {
     public class ActivityDetector
     {

@@ -40,7 +40,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenSim.Server.Handlers.Grid;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Grid
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Grid
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GridInfoServiceInConnectorModule")]
     public class GridInfoServiceInConnectorModule : ISharedRegionModule

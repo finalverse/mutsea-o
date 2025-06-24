@@ -32,7 +32,7 @@ using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.UserAccounts
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.UserAccounts
 {
     public class UserAccountCache : IUserAccountCacheModule
     {

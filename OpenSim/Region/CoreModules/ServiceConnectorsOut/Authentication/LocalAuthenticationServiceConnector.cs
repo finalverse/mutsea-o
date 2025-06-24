@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Authentication
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Authentication
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalAuthenticationServicesConnector")]
     public class LocalAuthenticationServicesConnector : ISharedRegionModule, IAuthenticationService

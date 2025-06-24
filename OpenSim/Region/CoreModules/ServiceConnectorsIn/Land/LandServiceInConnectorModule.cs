@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Land
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Land
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LandServiceInConnectorModule")]
     public class LandServiceInConnectorModule : ISharedRegionModule, ILandService

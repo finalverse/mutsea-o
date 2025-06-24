@@ -44,7 +44,7 @@ using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Profile
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Profile
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalUserProfilesServicesConnector")]
     public class LocalUserProfilesServicesConnector : ISharedRegionModule

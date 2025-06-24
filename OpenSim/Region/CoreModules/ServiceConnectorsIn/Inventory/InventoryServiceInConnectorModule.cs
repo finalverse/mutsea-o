@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Server.Base;
 using OpenSim.Server.Handlers.Base;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsIn.Inventory
+namespace MutSea.Region.CoreModules.ServiceConnectorsIn.Inventory
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "InventoryServiceInConnectorModule")]
     public class InventoryServiceInConnectorModule : ISharedRegionModule

@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.Presence
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence
 {
     public class PresenceDetector
     {

@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.ServiceConnectorsOut.MuteList
+namespace MutSea.Region.CoreModules.ServiceConnectorsOut.MuteList
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LocalMuteListServicesConnector")]
     public class LocalMuteListServicesConnector : ISharedRegionModule, IMuteListService
