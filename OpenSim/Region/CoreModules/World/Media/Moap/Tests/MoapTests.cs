@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.World.Media.Moap.Tests
+namespace MutSea.Region.CoreModules.World.Media.Moap.Tests
 {
     [TestFixture]
     public class MoapTests : OpenSimTestCase

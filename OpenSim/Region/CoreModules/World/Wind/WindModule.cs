@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using OpenSim.Region.CoreModules.World.Wind;
 
-namespace OpenSim.Region.CoreModules
+namespace MutSea.Region.CoreModules
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "WindModule")]
     public class WindModule : IWindModule

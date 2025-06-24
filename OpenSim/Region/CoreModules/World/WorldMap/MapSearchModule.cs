@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.World.WorldMap
+namespace MutSea.Region.CoreModules.World.WorldMap
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MapSearchModule")]
     public class MapSearchModule : ISharedRegionModule

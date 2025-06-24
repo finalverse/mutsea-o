@@ -32,7 +32,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.World.Land.Tests
+namespace MutSea.Region.CoreModules.World.Land.Tests
 {
     public class LandManagementModuleTests : OpenSimTestCase
     {

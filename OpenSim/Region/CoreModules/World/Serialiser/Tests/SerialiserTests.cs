@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Tests.Common;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.CoreModules.World.Serialiser.Tests
+namespace MutSea.Region.CoreModules.World.Serialiser.Tests
 {
     [TestFixture]
     public class SerialiserTests : OpenSimTestCase

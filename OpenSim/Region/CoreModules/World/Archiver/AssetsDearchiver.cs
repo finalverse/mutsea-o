@@ -36,7 +36,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Serialization;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Dearchives assets

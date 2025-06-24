@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World
+namespace MutSea.Region.CoreModules.World
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "AccessModule")]
     public class AccessModule : ISharedRegionModule

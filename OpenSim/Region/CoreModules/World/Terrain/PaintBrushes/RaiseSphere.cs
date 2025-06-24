@@ -28,7 +28,7 @@
 using System;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.PaintBrushes
+namespace MutSea.Region.CoreModules.World.Terrain.PaintBrushes
 {
     public class RaiseSphere : ITerrainPaintableEffect
     {

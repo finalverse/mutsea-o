@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 
-namespace OpenSim.Region.CoreModules.World.Serialiser
+namespace MutSea.Region.CoreModules.World.Serialiser
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "SerialiserModule")]
     public class SerialiserModule : ISharedRegionModule, IRegionSerialiserModule

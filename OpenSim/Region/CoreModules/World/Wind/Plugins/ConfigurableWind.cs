@@ -36,7 +36,7 @@ using Mono.Addins;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.CoreModules.World.Wind;
 
-namespace OpenSim.Region.CoreModules.World.Wind.Plugins
+namespace MutSea.Region.CoreModules.World.Wind.Plugins
 {
     [Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "ConfigurableWind")]
     class ConfigurableWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin

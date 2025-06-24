@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Scenes;
 using Timer=System.Timers.Timer;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.World.Region
+namespace MutSea.Region.CoreModules.World.Region
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "RestartModule")]
     public class RestartModule : INonSharedRegionModule, IRestartModule

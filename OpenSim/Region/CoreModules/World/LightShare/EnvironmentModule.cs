@@ -46,7 +46,7 @@ using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
 using MethodImplOptions = System.Runtime.CompilerServices.MethodImplOptions;
 
-namespace OpenSim.Region.CoreModules.World.LightShare
+namespace MutSea.Region.CoreModules.World.LightShare
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "EnvironmentModule")]
 

@@ -32,7 +32,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Framework;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FileLoaders
+namespace MutSea.Region.CoreModules.World.Terrain.FileLoaders
 {
     /// <summary>
     /// Terragen File Format Loader

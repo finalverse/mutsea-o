@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.CoreModules.World.Media.Moap
+namespace MutSea.Region.CoreModules.World.Media.Moap
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MoapModule")]
     public class MoapModule : INonSharedRegionModule, IMoapModule

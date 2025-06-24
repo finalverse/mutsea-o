@@ -28,7 +28,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.Effects
+namespace MutSea.Region.CoreModules.World.Terrain.Effects
 {
     public class DefaultTerrainGenerator : ITerrainEffect
     {

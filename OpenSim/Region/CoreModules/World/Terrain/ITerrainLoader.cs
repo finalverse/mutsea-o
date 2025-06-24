@@ -28,7 +28,7 @@
 using System.IO;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain
+namespace MutSea.Region.CoreModules.World.Terrain
 {
     public interface ITerrainLoader
     {

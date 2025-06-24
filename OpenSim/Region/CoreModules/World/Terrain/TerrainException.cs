@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.CoreModules.World.Terrain
+namespace MutSea.Region.CoreModules.World.Terrain
 {
     public class TerrainException : Exception
     {

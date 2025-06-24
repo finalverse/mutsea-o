@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
     /// <summary>
     /// Estate management console commands.

@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using log4net;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
     public class TelehubManager
     {

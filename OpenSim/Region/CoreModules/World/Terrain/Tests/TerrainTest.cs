@@ -32,7 +32,7 @@ using OpenSim.Region.CoreModules.World.Terrain.PaintBrushes;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.Tests
+namespace MutSea.Region.CoreModules.World.Terrain.Tests
 {
     [TestFixture]
     public class TerrainTest : OpenSimTestCase

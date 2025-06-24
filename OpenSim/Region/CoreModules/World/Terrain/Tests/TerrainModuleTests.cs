@@ -32,7 +32,7 @@ using OpenSim.Region.CoreModules.World.Terrain;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Terrain.Tests
+namespace MutSea.Region.CoreModules.Terrain.Tests
 {
     public class TerrainModuleTests : OpenSimTestCase
     {

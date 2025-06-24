@@ -34,7 +34,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Framework.Serialization;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Archives assets

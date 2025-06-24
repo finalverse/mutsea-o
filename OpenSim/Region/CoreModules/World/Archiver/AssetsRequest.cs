@@ -38,7 +38,7 @@ using OpenSim.Framework.Serialization;
 using OpenSim.Framework.Serialization.External;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Encapsulate the asynchronous requests for the assets required for an archive operation

@@ -47,7 +47,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Services.Interfaces;
 using System.Threading;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Handles an individual archive read request

@@ -51,7 +51,7 @@ using OpenMetaverse.StructuredData;
 
 using WarpRenderer = Warp3D.Warp3D;
 
-namespace OpenSim.Region.CoreModules.World.Warp3DMap
+namespace MutSea.Region.CoreModules.World.Warp3DMap
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "Warp3DImageModule")]
     public class Warp3DImageModule : IMapImageGenerator, INonSharedRegionModule
