@@ -34,7 +34,7 @@ using System.Xml;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Serialization.External
+namespace MutSea.Framework.Serialization.External
 {
     /// <summary>
     /// Serialize and deserialize LandData as an external format.

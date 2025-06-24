@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using log4net;
 using System.Reflection;
 
-namespace OpenSim.Framework.Serialization.External
+namespace MutSea.Framework.Serialization.External
 {
     /// <summary>
     /// Serialize and deserialize region settings as an external format.

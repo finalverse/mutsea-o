@@ -31,10 +31,10 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using NUnit.Framework;
 using OpenSim.Framework;
-using OpenSim.Framework.Serialization.External;
+using MutSea.Framework.Serialization.External;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Framework.Serialization.Tests
+namespace MutSea.Framework.Serialization.Tests
 {
     [TestFixture]
     public class LandDataSerializerTest : OpenSimTestCase

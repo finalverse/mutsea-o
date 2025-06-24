@@ -30,7 +30,7 @@ using System.Xml;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Framework.Serialization.External
+namespace MutSea.Framework.Serialization.External
 {
     /// <summary>
     /// Serialize and deserialize user profiles as an external format.

@@ -38,7 +38,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Framework.Serialization.External
+namespace MutSea.Framework.Serialization.External
 {
     /// <summary>
     /// Serialize and deserialize user inventory items as an external format.
