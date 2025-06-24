@@ -44,7 +44,7 @@ using OpenSim.Framework.Monitoring;
 
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     /// <summary>
     /// This module implements both WebFetchInventoryDescendents and FetchInventoryDescendents2 capabilities.

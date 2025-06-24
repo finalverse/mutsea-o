@@ -55,7 +55,7 @@ using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 using Timer = System.Threading.Timer;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     public delegate void UpLoadedAsset(
         string assetName, string description, UUID assetID, UUID inventoryItem, UUID parentFolder,

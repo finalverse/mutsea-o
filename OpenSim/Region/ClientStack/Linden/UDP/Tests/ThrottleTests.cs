@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ClientStack.LindenUDP.Tests
+namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     /*
     [TestFixture]

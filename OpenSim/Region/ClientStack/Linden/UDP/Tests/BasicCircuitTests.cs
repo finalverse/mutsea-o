@@ -37,7 +37,7 @@ using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ClientStack.LindenUDP.Tests
+namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     /// <summary>
     /// This will contain basic tests for the LindenUDP client stack

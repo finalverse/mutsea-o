@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Console;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public class LLUDPServerCommands
     {

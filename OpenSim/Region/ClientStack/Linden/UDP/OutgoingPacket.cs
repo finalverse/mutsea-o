@@ -29,7 +29,7 @@ using System;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
 
     public delegate void UnackedPacketMethod(OutgoingPacket oPacket);

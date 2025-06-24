@@ -34,7 +34,7 @@ using OpenMetaverse;
 //using System.Reflection;
 //using log4net;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// Special collection that is optimized for tracking unacknowledged packets

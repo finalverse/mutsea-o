@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// A circular buffer and hashset for tracking incoming packet sequence

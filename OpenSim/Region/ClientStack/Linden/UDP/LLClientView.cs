@@ -53,7 +53,7 @@ using PermissionMask = OpenSim.Framework.PermissionMask;
 using RegionFlags = OpenMetaverse.RegionFlags;
 using System.Linq;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public delegate void PacketMethod(Packet packet);
 

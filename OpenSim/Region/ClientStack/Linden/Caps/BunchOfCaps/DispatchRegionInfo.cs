@@ -16,7 +16,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Framework.Servers.HttpServer;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
  
     public partial class BunchOfCaps

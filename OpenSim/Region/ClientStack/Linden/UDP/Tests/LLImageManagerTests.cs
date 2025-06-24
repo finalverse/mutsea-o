@@ -40,7 +40,7 @@ using OpenSim.Region.CoreModules.Agent.TextureSender;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ClientStack.LindenUDP.Tests
+namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     [TestFixture]
     public class LLImageManagerTests : OpenSimTestCase
@@ -59,7 +59,7 @@ namespace OpenSim.Region.ClientStack.LindenUDP.Tests
             using (
                 Stream resource
                     = GetType().Assembly.GetManifestResourceStream(
-                        "OpenSim.Region.ClientStack.LindenUDP.Tests.Resources.4-tile2.jp2"))
+                        "MutSea.Region.ClientStack.LindenUDP.Tests.Resources.4-tile2.jp2"))
             {
                 using (BinaryReader br = new BinaryReader(resource))
                 {

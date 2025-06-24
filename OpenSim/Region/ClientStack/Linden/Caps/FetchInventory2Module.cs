@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 using System;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     /// <summary>
     /// This module implements both WebFetchInventoryDescendents and FetchInventoryDescendents2 capabilities.

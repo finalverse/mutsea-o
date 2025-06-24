@@ -33,7 +33,7 @@ using OpenMetaverse.StructuredData;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     public partial class EventQueueGetModule : IEventQueue, INonSharedRegionModule
     {
