@@ -50,7 +50,7 @@ using OpenSim.Services.Base;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.UserAccountService;
 
-namespace OpenSim
+namespace MutSea
 {
     /// <summary>
     /// Common OpenSimulator simulator code

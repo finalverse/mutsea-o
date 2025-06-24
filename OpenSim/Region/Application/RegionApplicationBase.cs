@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim
+namespace MutSea
 {
     public abstract class RegionApplicationBase : BaseOpenSimServer
     {
