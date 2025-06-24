@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using OpenSim.Data;
 using OpenMetaverse;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     public class OfflineIMData
     {

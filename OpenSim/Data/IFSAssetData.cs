@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     public delegate string FSStoreDelegate(AssetBase asset, bool force);
 

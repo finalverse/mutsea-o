@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     /// <summary>
     /// An interface for accessing inventory data from a storage server
