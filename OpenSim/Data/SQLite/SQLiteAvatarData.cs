@@ -39,7 +39,7 @@ using OpenSim.Framework;
     using Mono.Data.Sqlite;
 #endif
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// A SQLite Interface for Avatar Data

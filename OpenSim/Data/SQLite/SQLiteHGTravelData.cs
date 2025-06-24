@@ -35,7 +35,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using Mono.Data.Sqlite;
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// A SQL Interface for user grid data
