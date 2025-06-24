@@ -37,7 +37,7 @@ using OpenMetaverse;
 /// <summary>
 /// Loads assets from the filesystem location.  Not yet a plugin, though it should be.
 /// </summary>
-namespace OpenSim.Framework.AssetLoader.Filesystem
+namespace MutSea.Framework.AssetLoader.Filesystem
 {
     public class AssetLoaderFileSystem : IAssetLoader
     {
