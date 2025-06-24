@@ -31,7 +31,7 @@ using System.Security;
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     // Constraint type values as defined by Bullet
     public enum ConstraintType : int

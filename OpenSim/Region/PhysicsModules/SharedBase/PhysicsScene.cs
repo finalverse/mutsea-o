@@ -32,7 +32,7 @@ using System.Runtime.CompilerServices;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModules.SharedBase
+namespace MutSea.Region.PhysicsModules.SharedBase
 {
     public delegate void physicsCrash();
 

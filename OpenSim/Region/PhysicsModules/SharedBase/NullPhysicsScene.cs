@@ -32,7 +32,7 @@ using Nini.Config;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModules.SharedBase
+namespace MutSea.Region.PhysicsModules.SharedBase
 {
     class NullPhysicsScene : PhysicsScene
     {

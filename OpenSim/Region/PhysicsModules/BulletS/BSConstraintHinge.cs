@@ -26,7 +26,7 @@
  */
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     public sealed class BSConstraintHinge : BSConstraint
     {

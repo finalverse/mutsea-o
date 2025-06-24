@@ -35,7 +35,7 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.PhysicsModule.POS
+namespace MutSea.Region.PhysicsModule.POS
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "POSPhysicsScene")]
     public class POSScene : PhysicsScene, INonSharedRegionModule

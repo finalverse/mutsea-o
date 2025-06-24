@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS.Tests
+namespace MutSea.Region.PhysicsModule.BulletS.Tests
 {
     // Utility functions for building up and tearing down the sample physics environments
     public static class BulletSimTestsUtil

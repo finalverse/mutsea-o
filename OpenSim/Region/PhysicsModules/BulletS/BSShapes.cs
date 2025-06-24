@@ -36,7 +36,7 @@ using OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet;
 
 using OMV = OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     // Information class that holds stats for the shape. Which values mean
     //     something depends on the type of shape.

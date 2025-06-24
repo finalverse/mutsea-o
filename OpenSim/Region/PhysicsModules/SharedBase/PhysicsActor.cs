@@ -32,7 +32,7 @@ using System.Runtime.InteropServices;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModules.SharedBase
+namespace MutSea.Region.PhysicsModules.SharedBase
 {
     public delegate void PositionUpdate(Vector3 position);
     public delegate void VelocityUpdate(Vector3 velocity);

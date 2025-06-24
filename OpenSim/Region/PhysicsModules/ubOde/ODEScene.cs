@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.ubOde
+namespace MutSea.Region.PhysicsModule.ubOde
 {
      // colision flags of things others can colide with
     // rays, sensors, probes removed since can't  be colided with

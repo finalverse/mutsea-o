@@ -32,7 +32,7 @@ using System.Text;
 
 using OMV = OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     public class BSActorLockAxis : BSActor
     {

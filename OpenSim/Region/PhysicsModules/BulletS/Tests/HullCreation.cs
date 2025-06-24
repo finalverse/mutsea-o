@@ -40,7 +40,7 @@ using OpenSim.Tests.Common;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS.Tests
+namespace MutSea.Region.PhysicsModule.BulletS.Tests
 {
     [TestFixture]
     public class HullCreation : OpenSimTestCase

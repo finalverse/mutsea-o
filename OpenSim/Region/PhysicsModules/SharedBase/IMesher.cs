@@ -31,7 +31,7 @@ using System.Runtime.InteropServices;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModules.SharedBase
+namespace MutSea.Region.PhysicsModules.SharedBase
 {
     public interface IMesher
     {

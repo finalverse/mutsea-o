@@ -33,7 +33,7 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 using PrimMesher;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.Meshing
+namespace MutSea.Region.PhysicsModule.Meshing
 {
     public class Mesh : IMesh
     {

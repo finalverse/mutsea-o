@@ -32,7 +32,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.PhysicsModule.POS
+namespace MutSea.Region.PhysicsModule.POS
 {
     public class POSPrim : PhysicsActor
     {

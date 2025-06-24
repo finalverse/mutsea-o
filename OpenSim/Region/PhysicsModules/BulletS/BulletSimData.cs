@@ -30,7 +30,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using OMV = OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     // Classes to allow some type checking for the API
     // These hold pointers to allocated objects in the unmanaged space.
