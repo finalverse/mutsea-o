@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http.Headers;
 
-namespace OpenSim.Framework.ServiceAuth
+namespace MutSea.Framework.ServiceAuth
 {
     public delegate void AddHeaderDelegate(string key, string value);
 

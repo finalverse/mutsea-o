@@ -31,7 +31,7 @@ using System.Reflection;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Framework.ServiceAuth
+namespace MutSea.Framework.ServiceAuth
 {
     public class ServiceAuth
     {
