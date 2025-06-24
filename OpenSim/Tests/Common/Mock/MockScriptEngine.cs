@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class MockScriptEngine : INonSharedRegionModule, IScriptModule, IScriptEngine
     {

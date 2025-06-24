@@ -34,7 +34,7 @@ using System.Xml;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Tools.Configger
+namespace MutSea.Tools.Configger
 {
     /// <summary>
     /// Loads the Configuration files into nIni

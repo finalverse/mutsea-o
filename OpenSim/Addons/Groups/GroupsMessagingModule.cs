@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using PresenceInfo = OpenSim.Services.Interfaces.PresenceInfo;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GroupsMessagingModule")]
     public class GroupsMessagingModule : ISharedRegionModule, IGroupsMessagingModule

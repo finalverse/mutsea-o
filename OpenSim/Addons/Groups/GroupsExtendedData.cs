@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class ExtendedGroupRecord : GroupRecord
     {

@@ -39,7 +39,7 @@ using OpenMetaverse;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class GroupsServiceRemoteConnector
     {

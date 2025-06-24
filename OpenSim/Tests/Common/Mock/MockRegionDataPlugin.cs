@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     public class NullDataService : ISimulationDataService
     {

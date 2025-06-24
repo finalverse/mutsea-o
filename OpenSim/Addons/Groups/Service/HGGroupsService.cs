@@ -37,7 +37,7 @@ using OpenSim.Data;
 using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class HGGroupsService : GroupsService
     {

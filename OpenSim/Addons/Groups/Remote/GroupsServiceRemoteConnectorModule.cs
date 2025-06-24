@@ -43,7 +43,7 @@ using Mono.Addins;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GroupsServiceRemoteConnectorModule")]
     public class GroupsServiceRemoteConnectorModule : ISharedRegionModule, IGroupsServicesConnector

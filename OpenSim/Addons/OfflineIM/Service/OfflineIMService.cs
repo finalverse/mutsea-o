@@ -40,7 +40,7 @@ using OpenSim.Framework;
 using OpenSim.Services.Base;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.OfflineIM
+namespace MutSea.OfflineIM
 {
     public class OfflineIMService : ServiceBase, IOfflineIMService
     {

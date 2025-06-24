@@ -40,7 +40,7 @@ using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenSim.Services.Connectors;
 
-namespace OpenSim.Tests.Clients.GridClient
+namespace MutSea.Tests.Clients.GridClient
 {
     public class GridClient
     {

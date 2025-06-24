@@ -34,7 +34,7 @@ using Nini.Config;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.ApplicationPlugins.LoadRegions
+namespace MutSea.ApplicationPlugins.LoadRegions
 {
     public class EstateLoaderFileSystem : IEstateLoader
     {

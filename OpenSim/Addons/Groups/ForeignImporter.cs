@@ -32,7 +32,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class ForeignImporter
     {

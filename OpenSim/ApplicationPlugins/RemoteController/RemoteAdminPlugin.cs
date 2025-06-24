@@ -54,7 +54,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 using RegionInfo = OpenSim.Framework.RegionInfo;
 
-namespace OpenSim.ApplicationPlugins.RemoteController
+namespace MutSea.ApplicationPlugins.RemoteController
 {
     [Extension(Path = "/OpenSim/Startup", Id = "LoadRegions", NodeName = "Plugin")]
     public class RemoteAdminPlugin : IApplicationPlugin

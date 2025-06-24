@@ -39,7 +39,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Tests.Permissions
+namespace MutSea.Tests.Permissions
 {
     [SetUpFixture]
     public class Common : OpenSimTestCase

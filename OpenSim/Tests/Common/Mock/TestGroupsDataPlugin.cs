@@ -6,7 +6,7 @@ using System.Text;
 using OpenMetaverse;
 using OpenSim.Data;
 
-namespace OpenSim.Tests.Common.Mock
+namespace MutSea.Tests.Common.Mock
 {
     public class TestGroupsDataPlugin : IGroupsData
     {

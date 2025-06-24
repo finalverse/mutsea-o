@@ -28,7 +28,7 @@
 using Nini.Config;
 using System;
 
-namespace OpenSim.Tools.Configger
+namespace MutSea.Tools.Configger
 {
     public class Configger
     {

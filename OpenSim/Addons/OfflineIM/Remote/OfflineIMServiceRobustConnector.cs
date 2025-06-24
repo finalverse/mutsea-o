@@ -41,7 +41,7 @@ using OpenSim.Server.Handlers.Base;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.OfflineIM
+namespace MutSea.OfflineIM
 {
     public class OfflineIMServiceRobustConnector : ServiceConnector
     {

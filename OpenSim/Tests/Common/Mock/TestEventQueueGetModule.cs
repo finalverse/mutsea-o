@@ -43,7 +43,7 @@ using OpenSim.Region.ClientStack.Linden;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class TestEventQueueGetModule : IEventQueue, INonSharedRegionModule
     {

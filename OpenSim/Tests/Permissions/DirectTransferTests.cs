@@ -32,7 +32,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Tests.Permissions
+namespace MutSea.Tests.Permissions
 {
     /// <summary>
     /// Basic scene object tests (create, read and delete but not update).

@@ -35,7 +35,7 @@ using System.Text;
 using System.Web;
 using OpenSim.Framework.Servers.HttpServer;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class TestOSHttpRequest : IOSHttpRequest
     {

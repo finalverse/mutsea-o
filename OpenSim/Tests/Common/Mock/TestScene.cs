@@ -36,7 +36,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class TestScene : Scene
     {

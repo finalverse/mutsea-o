@@ -34,7 +34,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using log4net;
 
-namespace OpenSim.ConsoleClient
+namespace MutSea.ConsoleClient
 {
     public delegate void ReplyDelegate(string requestUrl, string requestData, string replyData);
 

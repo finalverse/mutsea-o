@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Console;
 using OpenMetaverse;
 
-namespace OpenSim.ConsoleClient
+namespace MutSea.ConsoleClient
 {
     public class OpenSimConsoleClient
     {

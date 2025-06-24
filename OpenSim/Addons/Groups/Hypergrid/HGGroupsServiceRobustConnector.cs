@@ -40,7 +40,7 @@ using OpenSim.Server.Handlers.Base;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class HGGroupsServiceRobustConnector : ServiceConnector
     {

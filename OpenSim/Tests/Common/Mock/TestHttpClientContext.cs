@@ -34,7 +34,7 @@ using System.Text;
 using OSHttpServer;
 using OpenSim.Framework;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
 /*
     public class TestHttpClientContext: IHttpClientContext
