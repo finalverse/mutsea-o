@@ -32,13 +32,13 @@ using System.Threading;
 using OpenMetaverse;
 using log4net;
 using Nini.Config;
-using OpenSim.Framework;
-using OpenSim.Framework.Console;
+using MutSea.Framework;
+using MutSea.Framework.Console;
 
-using OpenSim.Region.Framework.Interfaces;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
+using MutSea.Region.Framework.Interfaces;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public abstract class SceneBase : IScene
     {
@@ -263,7 +263,7 @@ namespace OpenSim.Region.Framework.Scenes
 
         public virtual string GetSimulatorVersion()
         {
-            return "OpenSimulator Server";
+            return "MutSea Server";
         }
 
         #endregion

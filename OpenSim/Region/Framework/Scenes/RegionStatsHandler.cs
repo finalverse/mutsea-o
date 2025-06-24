@@ -34,16 +34,16 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
-using OpenSim.Framework.Console;
-using OpenSim.Framework.Servers;
-using OpenSim.Framework.Servers.HttpServer;
-using OpenSim.Framework.Monitoring;
-using OpenSim.Region.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Framework;
+using MutSea.Framework.Console;
+using MutSea.Framework.Servers;
+using MutSea.Framework.Servers.HttpServer;
+using MutSea.Framework.Monitoring;
+using MutSea.Region.Framework;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class RegionStatsSimpleHandler : SimpleStreamHandler
     {
@@ -51,7 +51,7 @@ namespace OpenSim.Region.Framework.Scenes
 
         private string osXStatsURI = String.Empty;
         //private string osSecret = String.Empty;
-        private OpenSim.Framework.RegionInfo regionInfo;
+        private MutSea.Framework.RegionInfo regionInfo;
         public string localZone = TimeZoneInfo.Local.StandardName;
         public TimeSpan utcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
 
@@ -102,7 +102,7 @@ namespace OpenSim.Region.Framework.Scenes
 
         private string osXStatsURI = String.Empty;
         //private string osSecret = String.Empty;
-        private OpenSim.Framework.RegionInfo regionInfo;
+        private MutSea.Framework.RegionInfo regionInfo;
         public string localZone = TimeZoneInfo.Local.StandardName;
         public TimeSpan utcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
 

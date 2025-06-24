@@ -33,27 +33,27 @@ using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-using OpenSim.Framework;
+using MutSea.Framework;
 
-using Animation = OpenSim.Framework.Animation;
+using Animation = MutSea.Framework.Animation;
 
-namespace OpenSim.Region.Framework.Scenes.Animation
+namespace MutSea.Region.Framework.Scenes.Animation
 {
     [Serializable]
     public class AnimationSet
     {
         //private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private OpenSim.Framework.Animation m_implicitDefaultAnimation = new OpenSim.Framework.Animation();
-        private OpenSim.Framework.Animation m_defaultAnimation = new OpenSim.Framework.Animation();
-        private readonly List<OpenSim.Framework.Animation> m_animations = new List<OpenSim.Framework.Animation>();
+        private MutSea.Framework.Animation m_implicitDefaultAnimation = new MutSea.Framework.Animation();
+        private MutSea.Framework.Animation m_defaultAnimation = new MutSea.Framework.Animation();
+        private readonly List<MutSea.Framework.Animation> m_animations = new List<MutSea.Framework.Animation>();
 
-        public OpenSim.Framework.Animation DefaultAnimation
+        public MutSea.Framework.Animation DefaultAnimation
         {
             get { return m_defaultAnimation; }
         }
 
-        public OpenSim.Framework.Animation ImplicitDefaultAnimation
+        public MutSea.Framework.Animation ImplicitDefaultAnimation
         {
             get { return m_implicitDefaultAnimation; }
         }
@@ -89,7 +89,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
             {
                 if (!HasAnimation(animID))
                 {
-                    m_animations.Add(new OpenSim.Framework.Animation(animID, sequenceNum, objectID));
+                    m_animations.Add(new MutSea.Framework.Animation(animID, sequenceNum, objectID));
                     return true;
                 }
             }
@@ -111,7 +111,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
                 if (m_defaultAnimation.AnimID.Equals(animID))
                 {
                     if (allowNoDefault)
-                        m_defaultAnimation = new OpenSim.Framework.Animation(UUID.Zero, 1, UUID.Zero);
+                        m_defaultAnimation = new MutSea.Framework.Animation(UUID.Zero, 1, UUID.Zero);
                     else
                         ResetDefaultAnimation();
                 }
@@ -144,7 +144,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
         {
             if (m_defaultAnimation.AnimID.NotEqual(animID))
             {
-                m_defaultAnimation = new OpenSim.Framework.Animation(animID, sequenceNum, objectID);
+                m_defaultAnimation = new MutSea.Framework.Animation(animID, sequenceNum, objectID);
                 m_implicitDefaultAnimation = m_defaultAnimation;
                 //return true;
             }
@@ -155,7 +155,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
         // Called from serialization only
         public void SetImplicitDefaultAnimation(UUID animID, int sequenceNum, UUID objectID)
         {
-            m_implicitDefaultAnimation = new OpenSim.Framework.Animation(animID, sequenceNum, objectID);
+            m_implicitDefaultAnimation = new MutSea.Framework.Animation(animID, sequenceNum, objectID);
         }
 
         protected bool ResetDefaultAnimation()
@@ -227,25 +227,25 @@ namespace OpenSim.Region.Framework.Scenes.Animation
             }
         }
 
-        public OpenSim.Framework.Animation[] ToArray()
+        public MutSea.Framework.Animation[] ToArray()
         {
-            OpenSim.Framework.Animation[] theArray = null;
+            MutSea.Framework.Animation[] theArray = null;
             try
             {
                 theArray = m_animations.ToArray();
             }
             catch
             {
-                return new OpenSim.Framework.Animation[0];
+                return new MutSea.Framework.Animation[0];
             }
 
             return theArray;
         }
 
-        public int FromArray(OpenSim.Framework.Animation[] theArray)
+        public int FromArray(MutSea.Framework.Animation[] theArray)
         {
             int ret = 0;
-            foreach (OpenSim.Framework.Animation anim in theArray)
+            foreach (MutSea.Framework.Animation anim in theArray)
             { 
                 m_animations.Add(anim);
                 if(anim.SequenceNum > ret)
@@ -263,7 +263,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
             ret.Add(DefaultAnimation.PackUpdateMessage());
             ret.Add(ImplicitDefaultAnimation.PackUpdateMessage());
 
-            foreach (OpenSim.Framework.Animation anim in m_animations)
+            foreach (MutSea.Framework.Animation anim in m_animations)
                 ret.Add(anim.PackUpdateMessage());
 
             return ret;
@@ -275,15 +275,15 @@ namespace OpenSim.Region.Framework.Scenes.Animation
 
             if (pArray.Count >= 1)
             {
-                m_defaultAnimation = new OpenSim.Framework.Animation((OSDMap)pArray[0]);
+                m_defaultAnimation = new MutSea.Framework.Animation((OSDMap)pArray[0]);
             }
             if (pArray.Count >= 2)
             {
-                m_implicitDefaultAnimation = new OpenSim.Framework.Animation((OSDMap)pArray[1]);
+                m_implicitDefaultAnimation = new MutSea.Framework.Animation((OSDMap)pArray[1]);
             }
             for (int ii = 2; ii < pArray.Count; ii++)
             {
-                m_animations.Add(new OpenSim.Framework.Animation((OSDMap)pArray[ii]));
+                m_animations.Add(new MutSea.Framework.Animation((OSDMap)pArray[ii]));
             }
         }
 
@@ -298,17 +298,17 @@ namespace OpenSim.Region.Framework.Scenes.Animation
                     && this.ImplicitDefaultAnimation.Equals(other.ImplicitDefaultAnimation))
                 {
                     // The defaults are the same. Is the list of animations the same?
-                    OpenSim.Framework.Animation[] thisAnims = this.ToArray();
-                    OpenSim.Framework.Animation[] otherAnims = other.ToArray();
+                    MutSea.Framework.Animation[] thisAnims = this.ToArray();
+                    MutSea.Framework.Animation[] otherAnims = other.ToArray();
                     if (thisAnims.Length == 0 && otherAnims.Length == 0)
                         return true;    // the common case
                     if (thisAnims.Length == otherAnims.Length)
                     {
                         // Do this the hard way but since the list is usually short this won't take long.
-                        foreach (OpenSim.Framework.Animation thisAnim in thisAnims)
+                        foreach (MutSea.Framework.Animation thisAnim in thisAnims)
                         {
                             bool found = false;
-                            foreach (OpenSim.Framework.Animation otherAnim in otherAnims)
+                            foreach (MutSea.Framework.Animation otherAnim in otherAnims)
                             {
                                 if (thisAnim.Equals(otherAnim))
                                 {
@@ -351,7 +351,7 @@ namespace OpenSim.Region.Framework.Scenes.Animation
             {
                 buff.Append(",anims=");
                 bool firstTime = true;
-                foreach (OpenSim.Framework.Animation anim in m_animations)
+                foreach (MutSea.Framework.Animation anim in m_animations)
                 {
                     if (!firstTime)
                         buff.Append(",");

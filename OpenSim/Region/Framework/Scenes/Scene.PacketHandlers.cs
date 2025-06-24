@@ -31,10 +31,10 @@ using System.Collections.Concurrent;
 using System.Threading;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
-using OpenSim.Framework;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Services.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public partial class Scene
     {

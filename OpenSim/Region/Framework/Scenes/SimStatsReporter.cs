@@ -30,11 +30,11 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Threading;
 using OpenMetaverse.Packets;
-using OpenSim.Framework;
-using OpenSim.Framework.Monitoring;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Framework.Monitoring;
+using MutSea.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// Collect statistics from the scene to send to the client and for access by other monitoring tools.

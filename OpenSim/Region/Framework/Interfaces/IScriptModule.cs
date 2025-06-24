@@ -30,7 +30,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate void ScriptRemoved(UUID script);
     public delegate void ObjectRemoved(UUID prim);

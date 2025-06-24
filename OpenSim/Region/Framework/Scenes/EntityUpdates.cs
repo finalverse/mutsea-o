@@ -27,9 +27,9 @@
 
 using System;
 using System.Collections.Generic;
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// Specifies the fields that have been changed when sending a prim or

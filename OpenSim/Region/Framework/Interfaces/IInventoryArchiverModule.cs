@@ -28,10 +28,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using OpenSim.Services.Interfaces;
+using MutSea.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     /// <summary>
     /// Used for the OnInventoryArchiveSaved event.

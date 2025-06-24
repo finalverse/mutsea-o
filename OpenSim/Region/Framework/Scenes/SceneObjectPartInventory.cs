@@ -33,11 +33,11 @@ using System.Collections;
 using System.Reflection;
 using OpenMetaverse;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class SceneObjectPartInventory : IEntityInventory , IDisposable
     {

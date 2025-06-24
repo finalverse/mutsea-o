@@ -30,13 +30,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Client;
-using OpenSim.Region.Framework.Interfaces;
-using Caps = OpenSim.Framework.Capabilities.Caps;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
+using MutSea.Framework;
+using MutSea.Framework.Client;
+using MutSea.Region.Framework.Interfaces;
+using Caps = MutSea.Framework.Capabilities.Caps;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// A class for triggering remote scene events.
@@ -49,7 +49,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered on each sim frame.
         /// </summary>
         /// <remarks>
-        /// This gets triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.Update"/>
+        /// This gets triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.Update"/>
         /// Core uses it for things like Sun, Wind & Clouds
         /// The MRM module also uses it.
         /// </remarks>
@@ -60,8 +60,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Trigerred when an agent moves.
         /// </summary>
         /// <remarks>
-        /// This gets triggered in <see cref="OpenSim.Region.Framework.Scenes.ScenePresence.HandleAgentUpdate"/>
-        /// prior to <see cref="OpenSim.Region.Framework.Scenes.ScenePresence.TriggerScenePresenceUpdated"/>
+        /// This gets triggered in <see cref="MutSea.Region.Framework.Scenes.ScenePresence.HandleAgentUpdate"/>
+        /// prior to <see cref="MutSea.Region.Framework.Scenes.ScenePresence.TriggerScenePresenceUpdated"/>
         /// </remarks>
         public delegate void ClientMovement(ScenePresence client);
         public event ClientMovement OnClientMovement;
@@ -70,7 +70,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered if the terrain has been edited
         /// </summary>
         /// <remarks>
-        /// This gets triggered in <see cref="OpenSim.Region.CoreModules.World.Terrain.CheckForTerrainUpdates"/>
+        /// This gets triggered in <see cref="MutSea.Region.CoreModules.World.Terrain.CheckForTerrainUpdates"/>
         /// after it determines that an update has been made.
         /// </remarks>
         public delegate void OnTerrainTaintedDelegate();
@@ -80,7 +80,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered if the terrain has been edited
         /// </summary>
         /// <remarks>
-        /// This gets triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.UpdateTerrain"/>
+        /// This gets triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.UpdateTerrain"/>
         /// but is used by core solely to update the physics engine.
         /// </remarks>
         public delegate void OnTerrainTickDelegate();
@@ -96,7 +96,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when a region is backed up/persisted to storage
         /// </summary>
         /// <remarks>
-        /// This gets triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.Backup"/>
+        /// This gets triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.Backup"/>
         /// and is fired before the persistence occurs.
         /// </remarks>
         public delegate void OnBackupDelegate(ISimulationDataService datastore, bool forceBackup);
@@ -107,9 +107,9 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// This gets triggered in <see cref="TriggerOnNewClient"/>,
-        /// which checks if an instance of <see cref="OpenSim.Framework.IClientAPI"/>
-        /// also implements <see cref="OpenSim.Framework.Client.IClientCore"/> and as such,
-        /// is not triggered by <see cref="OpenSim.Region.OptionalModules.World.NPC">NPCs</see>.
+        /// which checks if an instance of <see cref="MutSea.Framework.IClientAPI"/>
+        /// also implements <see cref="MutSea.Framework.Client.IClientCore"/> and as such,
+        /// is not triggered by <see cref="MutSea.Region.OptionalModules.World.NPC">NPCs</see>.
         /// </remarks>
         public delegate void OnClientConnectCoreDelegate(IClientCore client);
         public event OnClientConnectCoreDelegate OnClientConnect;
@@ -141,8 +141,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when a new presence is added to the scene
         /// </summary>
         /// <remarks>
-        /// Triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.AddNewAgent"/> which is used by both
-        /// <see cref="OpenSim.Framework.PresenceType.User">users</see> and <see cref="OpenSim.Framework.PresenceType.Npc">NPCs</see>
+        /// Triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.AddNewAgent"/> which is used by both
+        /// <see cref="MutSea.Framework.PresenceType.User">users</see> and <see cref="MutSea.Framework.PresenceType.Npc">NPCs</see>
         /// </remarks>
         public delegate void OnNewPresenceDelegate(ScenePresence presence);
         public event OnNewPresenceDelegate OnNewPresence;
@@ -151,8 +151,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when a presence is removed from the scene
         /// </summary>
         /// <remarks>
-        /// Triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.AddNewAgent"/> which is used by both
-        /// <see cref="OpenSim.Framework.PresenceType.User">users</see> and <see cref="OpenSim.Framework.PresenceType.Npc">NPCs</see>
+        /// Triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.AddNewAgent"/> which is used by both
+        /// <see cref="MutSea.Framework.PresenceType.User">users</see> and <see cref="MutSea.Framework.PresenceType.Npc">NPCs</see>
         ///
         /// Triggered under per-agent lock.  So if you want to perform any long-running operations, please
         /// do this on a separate thread.
@@ -167,12 +167,12 @@ namespace OpenSim.Region.Framework.Scenes
         /// <remarks>
         /// Triggered by <see cref="TriggerParcelPrimCountUpdate"/> in
         /// <see cref="OpenSim.OpenSimBase.CreateRegion"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandManagementModule.EventManagerOnRequestParcelPrimCountUpdate"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandManagementModule.ClientOnParcelObjectOwnerRequest"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandObject.GetPrimsFree"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandObject.UpdateLandSold"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandObject.DeedToGroup"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandObject.SendLandUpdateToClient"/>
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.EventManagerOnRequestParcelPrimCountUpdate"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.ClientOnParcelObjectOwnerRequest"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandObject.GetPrimsFree"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandObject.UpdateLandSold"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandObject.DeedToGroup"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandObject.SendLandUpdateToClient"/>
         /// </remarks>
         public delegate void OnParcelPrimCountUpdateDelegate();
         public event OnParcelPrimCountUpdateDelegate OnParcelPrimCountUpdate;
@@ -183,7 +183,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerParcelPrimCountAdd"/> in
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandManagementModule.EventManagerOnParcelPrimCountUpdate"/>
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.EventManagerOnParcelPrimCountUpdate"/>
         /// </remarks>
         public delegate void OnParcelPrimCountAddDelegate(SceneObjectGroup obj);
         public event OnParcelPrimCountAddDelegate OnParcelPrimCountAdd;
@@ -194,7 +194,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// loaded via <see cref="OpenSim.OpenSimBase.LoadPlugins"/>.
         /// Handlers for this event are typically used to parse the arguments
         /// from <see cref="OnPluginConsoleDelegate"/> in order to process or
-        /// filter the arguments and pass them onto <see cref="OpenSim.Region.CoreModules.Framework.InterfaceCommander.Commander.ProcessConsoleCommand"/>
+        /// filter the arguments and pass them onto <see cref="MutSea.Region.CoreModules.Framework.InterfaceCommander.Commander.ProcessConsoleCommand"/>
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerOnPluginConsole"/> in
@@ -232,8 +232,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerOnParcelPropertiesUpdateRequest"/> in
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandManagementModule.ClientOnParcelPropertiesUpdateRequest"/>,
-        /// <see cref="OpenSim.Region.CoreModules.World.Land.LandManagementModule.ProcessPropertiesUpdate"/>
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.ClientOnParcelPropertiesUpdateRequest"/>,
+        /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.ProcessPropertiesUpdate"/>
         /// </remarks>
         public event ParcelPropertiesUpdateRequest OnParcelPropertiesUpdateRequest;
 
@@ -252,7 +252,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// <remarks>
         /// The originalID is the local ID of the part that was actually touched.  The localID itself is always that of
         /// the root part.
-        /// Triggerd in response to <see cref="OpenSim.Framework.IClientAPI.OnGrabObject"/>
+        /// Triggerd in response to <see cref="MutSea.Framework.IClientAPI.OnGrabObject"/>
         /// via <see cref="TriggerObjectGrab"/>
         /// in <see cref="Scene.ProcessObjectGrab"/>
         /// </remarks>
@@ -263,7 +263,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when an object is being touched/grabbed continuously.
         /// </summary>
         /// <remarks>
-        /// Triggered in response to <see cref="OpenSim.Framework.IClientAPI.OnGrabUpdate"/>
+        /// Triggered in response to <see cref="MutSea.Framework.IClientAPI.OnGrabUpdate"/>
         /// via <see cref="TriggerObjectGrabbing"/>
         /// in <see cref="Scene.ProcessObjectGrabUpdate"/>
         /// </remarks>
@@ -273,7 +273,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when an object stops being touched/grabbed.
         /// </summary>
         /// <remarks>
-        /// Triggered in response to <see cref="OpenSim.Framework.IClientAPI.OnDeGrabObject"/>
+        /// Triggered in response to <see cref="MutSea.Framework.IClientAPI.OnDeGrabObject"/>
         /// via <see cref="TriggerObjectDeGrab"/>
         /// in <see cref="Scene.ProcessObjectDeGrab"/>
         /// </remarks>
@@ -289,8 +289,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// <remarks>
         /// Triggered by <see cref="TriggerScriptReset"/>
         /// in <see cref="Scene.ProcessScriptReset"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnScriptReset"/>
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.LLClientView.HandleScriptReset"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnScriptReset"/>
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.LLClientView.HandleScriptReset"/>
         /// </remarks>
         public delegate void ScriptResetDelegate(uint localID, UUID itemID);
         public event ScriptResetDelegate OnScriptReset;
@@ -325,8 +325,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// <remarks>
         /// Triggered by <see cref="TriggerStartScript"/>
         /// in <see cref="Scene.SetScriptRunning"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnSetScriptRunning"/>,
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.HandleSetScriptRunning"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnSetScriptRunning"/>,
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.HandleSetScriptRunning"/>
         /// </remarks>
         public delegate void StartScript(uint localID, UUID itemID);
         public event StartScript OnStartScript;
@@ -362,8 +362,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// in <see cref="SceneObjectGroup.OnGrabGroup"/>
         /// via <see cref="SceneObjectGroup.ObjectGrabHandler"/>
         /// via <see cref="Scene.ProcessObjectGrab"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnGrabObject"/>
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.LLClientView.HandleObjectGrab"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnGrabObject"/>
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.LLClientView.HandleObjectGrab"/>
         /// </remarks>
         public delegate void SceneGroupGrabed(UUID groupID, Vector3 offset, UUID userID);
         public event SceneGroupGrabed OnSceneGroupGrab;
@@ -375,8 +375,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerGroupSpinStart"/>
         /// in <see cref="SceneObjectGroup.SpinStart"/>
         /// via <see cref="SceneGraph.SpinStart"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnSpinStart"/>
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.LLClientView.HandleObjectSpinStart"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnSpinStart"/>
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.LLClientView.HandleObjectSpinStart"/>
         /// </remarks>
         public delegate bool SceneGroupSpinStarted(UUID groupID);
         public event SceneGroupSpinStarted OnSceneGroupSpinStart;
@@ -388,8 +388,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerGroupSpin"/>
         /// in <see cref="SceneObjectGroup.SpinMovement"/>
         /// via <see cref="SceneGraph.SpinObject"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnSpinUpdate"/>
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.LLClientView.HandleObjectSpinUpdate"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnSpinUpdate"/>
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.LLClientView.HandleObjectSpinUpdate"/>
         /// </remarks>
         public delegate bool SceneGroupSpun(UUID groupID, Quaternion rotation);
         public event SceneGroupSpun OnSceneGroupSpin;
@@ -467,9 +467,9 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerUpdateScript"/>
         /// in <see cref="Scene.CapsUpdateTaskInventoryScriptAsset"/>
         /// via <see cref="Scene.CapsUpdateTaskInventoryScriptAsset"/>
-        /// via <see cref="OpenSim.Region.ClientStack.Linden.BunchOfCaps.TaskScriptUpdated"/>
-        /// via <see cref="OpenSim.Region.ClientStack.Linden.TaskInventoryScriptUpdater.OnUpLoad"/>
-        /// via <see cref="OpenSim.Region.ClientStack.Linden.TaskInventoryScriptUpdater.uploaderCaps"/>
+        /// via <see cref="MutSea.Region.ClientStack.Linden.BunchOfCaps.TaskScriptUpdated"/>
+        /// via <see cref="MutSea.Region.ClientStack.Linden.TaskInventoryScriptUpdater.OnUpLoad"/>
+        /// via <see cref="MutSea.Region.ClientStack.Linden.TaskInventoryScriptUpdater.uploaderCaps"/>
         /// </remarks>
         public delegate void UpdateScript(UUID clientID, UUID itemId, UUID primId, bool isScriptRunning, UUID newAssetID);
         public event UpdateScript OnUpdateScript;
@@ -504,7 +504,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// This event is sent to a script to tell it that some property changed on
         /// the object the script is in. See http://lslwiki.net/lslwiki/wakka.php?wakka=changed .
         /// Triggered by <see cref="TriggerOnScriptChangedEvent"/>
-        /// in <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.TeleportAgentWithinRegion"/>,
+        /// in <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.TeleportAgentWithinRegion"/>,
         /// <see cref="SceneObjectPart.TriggerScriptChangedEvent"/>
         /// </remarks>
         public delegate void ScriptChangedEvent(uint localID, uint change, object data);
@@ -518,8 +518,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerControlEvent"/>
         /// in <see cref="ScenePresence.SendControlsToScripts"/>
         /// via <see cref="ScenePresence.HandleAgentUpdate"/>
-        /// via <see cref="OpenSim.Framework.IClientAPI.OnAgentUpdate"/>
-        /// via <see cref="OpenSim.Region.ClientStack.LindenUDP.LLClientView.HandleAgentUpdate"/>
+        /// via <see cref="MutSea.Framework.IClientAPI.OnAgentUpdate"/>
+        /// via <see cref="MutSea.Region.ClientStack.LindenUDP.LLClientView.HandleAgentUpdate"/>
         /// </remarks>
         public delegate void ScriptControlEvent(UUID item, UUID avatarID, uint held, uint changed);
         public event ScriptControlEvent OnScriptControlEvent;
@@ -599,8 +599,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptCollidingStart"/>
         /// in <see cref="SceneObjectPart.SendCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptColliderStart;
 
@@ -613,8 +613,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptColliding"/>
         /// in <see cref="SceneObjectPart.SendCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptColliding;
 
@@ -626,8 +626,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptCollidingEnd"/>
         /// in <see cref="SceneObjectPart.SendCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptCollidingEnd;
 
@@ -639,8 +639,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptLandCollidingStart"/>
         /// in <see cref="SceneObjectPart.SendLandCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptLandColliderStart;
 
@@ -652,8 +652,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptLandColliding"/>
         /// in <see cref="SceneObjectPart.SendLandCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptLandColliding;
 
@@ -665,8 +665,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerScriptLandCollidingEnd"/>
         /// in <see cref="SceneObjectPart.SendLandCollisionEvent"/>
         /// via <see cref="SceneObjectPart.PhysicsCollision"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
-        /// via <see cref="OpenSim.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.OnCollisionUpdate"/>
+        /// via <see cref="MutSea.Region.PhysicsModule.SharedBase.PhysicsActor.SendCollisionUpdate"/>
         /// </remarks>
         public event ScriptColliding OnScriptLandColliderEnd;
 
@@ -676,9 +676,9 @@ namespace OpenSim.Region.Framework.Scenes
         /// <remarks>
         /// Triggered by <see cref="TriggerOnMakeChildAgent"/>
         /// in <see cref="ScenePresence.MakeChildAgent"/>
-        /// via <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.CrossAgentToNewRegionAsync"/>,
-        /// <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>,
-        /// <see cref="OpenSim.Region.CoreModules.InterGrid.KillAUser.ShutdownNoLogout"/>
+        /// via <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.CrossAgentToNewRegionAsync"/>,
+        /// <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>,
+        /// <see cref="MutSea.Region.CoreModules.InterGrid.KillAUser.ShutdownNoLogout"/>
         /// </remarks>
         public delegate void OnMakeChildAgentDelegate(ScenePresence presence);
         public event OnMakeChildAgentDelegate OnMakeChildAgent;
@@ -796,8 +796,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerParcelPrimCountTainted"/> in
-        /// <see cref="OpenSim.Region.CoreModules.Avatar.Attachments.AttachmentsModule.DetachSingleAttachmentToGround"/>,
-        /// <see cref="OpenSim.Region.CoreModules.Avatar.Attachments.AttachmentsModule.AttachToAgent"/>,
+        /// <see cref="MutSea.Region.CoreModules.Avatar.Attachments.AttachmentsModule.DetachSingleAttachmentToGround"/>,
+        /// <see cref="MutSea.Region.CoreModules.Avatar.Attachments.AttachmentsModule.AttachToAgent"/>,
         /// <see cref="Scene.DeleteSceneObject"/>,
         /// <see cref="Scene.SelectPrim"/>,
         /// <see cref="Scene.DeselectPrim"/>,
@@ -910,7 +910,7 @@ namespace OpenSim.Region.Framework.Scenes
         /// <param name="original"></param>
         /// <param name="userExposed">True if the duplicate will immediately be in the scene, false otherwise</param>
         /// <remarks>
-        /// Triggered in <see cref="OpenSim.Region.Framework.Scenes.SceneObjectPart.Copy"/>
+        /// Triggered in <see cref="MutSea.Region.Framework.Scenes.SceneObjectPart.Copy"/>
         /// </remarks>
         public delegate void SceneObjectPartCopyDelegate(SceneObjectPart copy, SceneObjectPart original, bool userExposed);
         public event SceneObjectPartCopyDelegate OnSceneObjectPartCopy;
@@ -960,9 +960,9 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerTeleportStart"/>
-        /// in <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.CreateAgent"/>
-        /// and <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.HGEntityTransferModule.CreateAgent"/>
-        /// via <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>
+        /// in <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.CreateAgent"/>
+        /// and <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.HGEntityTransferModule.CreateAgent"/>
+        /// via <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>
         /// </remarks>
         public delegate void TeleportStart(IClientAPI client, GridRegion destination, GridRegion finalDestination, uint teleportFlags, bool gridLogout);
         public event TeleportStart OnTeleportStart;
@@ -972,8 +972,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerTeleportFail"/>
-        /// in <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.Fail"/>
-        /// via <see cref="OpenSim.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>
+        /// in <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.Fail"/>
+        /// via <see cref="MutSea.Region.CoreModules.Framework.EntityTransfer.EntityTransferModule.DoTeleport"/>
         /// </remarks>
         public delegate void TeleportFail(IClientAPI client, bool gridLogout);
         public event TeleportFail OnTeleportFail;
@@ -1002,10 +1002,10 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered when an attempt to transfer grid currency occurs
         /// </summary>
         /// <remarks>
-        /// Triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.ProcessMoneyTransferRequest"/>
-        /// via <see cref="OpenSim.Region.Framework.Scenes.Scene.SubscribeToClientGridEvents"/>
-        /// via <see cref="OpenSim.Region.Framework.Scenes.Scene.SubscribeToClientEvents"/>
-        /// via <see cref="OpenSim.Region.Framework.Scenes.Scene.AddNewAgent"/>
+        /// Triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.ProcessMoneyTransferRequest"/>
+        /// via <see cref="MutSea.Region.Framework.Scenes.Scene.SubscribeToClientGridEvents"/>
+        /// via <see cref="MutSea.Region.Framework.Scenes.Scene.SubscribeToClientEvents"/>
+        /// via <see cref="MutSea.Region.Framework.Scenes.Scene.AddNewAgent"/>
         /// </remarks>
         public delegate void MoneyTransferEvent(Object sender, MoneyTransferArgs e);
         public event MoneyTransferEvent OnMoneyTransfer;
@@ -1053,8 +1053,8 @@ namespace OpenSim.Region.Framework.Scenes
         /// Triggered to allow or prevent a real estate transaction
         /// </summary>
         /// <remarks>
-        /// Triggered in <see cref="OpenSim.Region.Framework.Scenes.Scene.ProcessParcelBuy"/>
-        /// <seealso cref="OpenSim.Region.OptionalModules.World.MoneyModule.SampleMoneyModule.ValidateLandBuy"/>
+        /// Triggered in <see cref="MutSea.Region.Framework.Scenes.Scene.ProcessParcelBuy"/>
+        /// <seealso cref="MutSea.Region.OptionalModules.World.MoneyModule.SampleMoneyModule.ValidateLandBuy"/>
         /// </remarks>
         public event LandBuy OnValidateLandBuy;
 

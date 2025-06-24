@@ -29,11 +29,11 @@ using System;
 using System.Collections.Generic;
 using log4net;
 using Nini.Config;
-using OpenSim.Framework;
+using MutSea.Framework;
 using OpenMetaverse;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public enum UpdatePrioritizationSchemes
     {

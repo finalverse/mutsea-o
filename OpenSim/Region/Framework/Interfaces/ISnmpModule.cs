@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Region.Framework.Scenes;
 
 public interface ISnmpModule
 {

@@ -29,7 +29,7 @@
 using System.IO;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IVoiceModule
     {

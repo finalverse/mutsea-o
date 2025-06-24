@@ -32,19 +32,19 @@ using System.Threading;
 using OpenMetaverse;
 using log4net;
 using Nini.Config;
-using OpenSim.Framework;
-using OpenSim.Framework.Client;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Animation;
-using OpenSim.Region.Framework.Scenes.Types;
-using OpenSim.Region.PhysicsModules.SharedBase;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
-using OpenSim.Services.Interfaces;
-using TeleportFlags = OpenSim.Framework.Constants.TeleportFlags;
+using MutSea.Framework;
+using MutSea.Framework.Client;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Animation;
+using MutSea.Region.Framework.Scenes.Types;
+using MutSea.Region.PhysicsModules.SharedBase;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
+using MutSea.Services.Interfaces;
+using TeleportFlags = MutSea.Framework.Constants.TeleportFlags;
 
 using ACFlags = OpenMetaverse.AgentManager.ControlFlags;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     [Flags]
     enum ScriptControlled : uint
@@ -6348,7 +6348,7 @@ namespace OpenSim.Region.Framework.Scenes
                 posVector = av.AbsolutePosition,
                 rotQuat = av.Rotation,
                 velVector = av.Velocity,
-                colliderType = av.IsNPC ? 0x20 : 0x1, // OpenSim\Region\ScriptEngine\Shared\Helpers.cs
+                colliderType = av.IsNPC ? 0x20 : 0x1, // MutSea.Region.ScriptEngine\Shared\Helpers.cs
                 groupUUID = av.ControllingClient.ActiveGroupId,
                 linkNumber = 0
             };

@@ -33,13 +33,13 @@ using System.Text;
 using System.Xml;
 using OpenMetaverse;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Framework.Serialization.External;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Serialization;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using MutSea.Framework;
+using MutSea.Framework.Serialization.External;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Serialization;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public partial class Scene
     {

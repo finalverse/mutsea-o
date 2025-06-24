@@ -32,12 +32,12 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.Framework.Scenes.Animation
+namespace MutSea.Region.Framework.Scenes.Animation
 {
     /// <summary>
     /// Handle all animation duties for a scene presence

@@ -38,13 +38,13 @@ using System.Xml.Serialization;
 using log4net;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Serialization;
-using OpenSim.Region.PhysicsModules.SharedBase;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Serialization;
+using MutSea.Region.PhysicsModules.SharedBase;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     #region Enumerations
 
@@ -2678,7 +2678,7 @@ namespace OpenSim.Region.Framework.Scenes
                 posVector = av.AbsolutePosition,
                 rotQuat = av.Rotation,
                 velVector = av.Velocity,
-                colliderType = av.IsNPC ? 0x20 : 0x1, // OpenSim\Region\ScriptEngine\Shared\Helpers.cs
+                colliderType = av.IsNPC ? 0x20 : 0x1, // MutSea.Region.ScriptEngine\Shared\Helpers.cs
                 groupUUID = av.ControllingClient.ActiveGroupId,
                 linkNumber = LinkNum
             };

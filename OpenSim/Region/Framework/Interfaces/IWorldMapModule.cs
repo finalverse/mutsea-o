@@ -25,10 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 using System.Collections.Generic;
-using OpenSim.Framework;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Services.Interfaces;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IWorldMapModule
     {

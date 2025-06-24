@@ -30,7 +30,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate void ScriptCommand(UUID script, string id, string module, string command, string k);
 
@@ -38,7 +38,7 @@ namespace OpenSim.Region.Framework.Interfaces
     /// Interface for communication between OpenSim modules and in-world scripts
     /// </summary>
     ///
-    /// See OpenSim.Region.ScriptEngine.Shared.Api.MOD_Api.modSendCommand() for information on receiving messages
+    /// See MutSea.Region.ScriptEngine.Shared.Api.MOD_Api.modSendCommand() for information on receiving messages
     /// from scripts in OpenSim modules.
     public interface IScriptModuleComms
     {
@@ -115,7 +115,7 @@ namespace OpenSim.Region.Framework.Interfaces
         /// </param>
         /// <param name="value">
         /// The value of the constant. Should be of a type that can be
-        /// converted to one of <see cref="OpenSim.Region.ScriptEngine.Shared.LSL_Types"/>
+        /// converted to one of <see cref="MutSea.Region.ScriptEngine.Shared.LSL_Types"/>
         /// </param>
         void RegisterConstant(string cname, object value);
 

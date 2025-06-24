@@ -30,16 +30,16 @@ using System.Collections.Generic;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Framework;
-using OpenSim.Region.CoreModules.Framework.EntityTransfer;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Region.CoreModules.World.Land;
-using OpenSim.Region.OptionalModules;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.CoreModules.Framework;
+using MutSea.Region.CoreModules.Framework.EntityTransfer;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Region.CoreModules.World.Land;
+using MutSea.Region.OptionalModules;
+using MutSea.Tests.Common;
 using System.Threading;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     public class SceneObjectCrossingTests : OpenSimTestCase
     {

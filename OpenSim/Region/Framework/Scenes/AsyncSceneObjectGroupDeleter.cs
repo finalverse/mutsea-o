@@ -32,10 +32,10 @@ using System.Collections.Concurrent;
 using System.Threading;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     class DeleteToInventoryHolder
     {

@@ -29,7 +29,7 @@ using System;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate void SimulatorFeaturesRequestDelegate(UUID agentID, ref OSDMap features);
 

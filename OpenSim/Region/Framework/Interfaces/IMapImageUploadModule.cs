@@ -26,10 +26,10 @@
  */
 
 using OpenMetaverse;
-using OpenSim.Framework;
+using MutSea.Framework;
 using System.Drawing;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IMapImageUploadModule
     {

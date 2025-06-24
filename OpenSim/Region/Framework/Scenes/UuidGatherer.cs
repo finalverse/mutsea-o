@@ -33,10 +33,10 @@ using System.Text;
 using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Services.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// Gather uuids for a given entity.
@@ -256,7 +256,7 @@ namespace OpenSim.Region.Framework.Scenes
         protected Queue<UUID> m_assetUuidsToInspect;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenSim.Region.Framework.Scenes.UuidGatherer"/> class.
+        /// Initializes a new instance of the <see cref="MutSea.Region.Framework.Scenes.UuidGatherer"/> class.
         /// </summary>
         /// <remarks>In this case the collection of gathered assets will start out blank.</remarks>
         /// <param name="assetService">
@@ -268,7 +268,7 @@ namespace OpenSim.Region.Framework.Scenes
             new HashSet <UUID>(), new HashSet <UUID>()) {}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenSim.Region.Framework.Scenes.UuidGatherer"/> class.
+        /// Initializes a new instance of the <see cref="MutSea.Region.Framework.Scenes.UuidGatherer"/> class.
         /// </summary>
         /// <param name="assetService">
         /// Asset service.

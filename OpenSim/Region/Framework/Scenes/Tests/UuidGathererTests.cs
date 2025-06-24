@@ -29,12 +29,12 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Services.Interfaces;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Services.Interfaces;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
     public class UuidGathererTests : OpenSimTestCase

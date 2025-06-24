@@ -34,15 +34,15 @@ using System.Reflection;
 using System.Xml;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Serialization.External;
+using MutSea.Framework;
+using MutSea.Framework.Serialization.External;
 
-namespace OpenSim.Region.Framework.Scenes.Serialization
+namespace MutSea.Region.Framework.Scenes.Serialization
 {
     /// <summary>
     /// Serialize and deserialize scene objects.
     /// </summary>
-    /// This should really be in OpenSim.Framework.Serialization but this would mean circular dependency problems
+    /// This should really be in MutSea.Framework.Serialization but this would mean circular dependency problems
     /// right now - hopefully this isn't forever.
     public class SceneObjectSerializer
     {

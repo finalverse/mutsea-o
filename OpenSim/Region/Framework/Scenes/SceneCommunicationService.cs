@@ -33,15 +33,15 @@ using System.Threading;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Framework.Client;
-using OpenSim.Framework.Capabilities;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Framework.Client;
+using MutSea.Framework.Capabilities;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Services.Interfaces;
 using OSD = OpenMetaverse.StructuredData.OSD;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public delegate void RemoveKnownRegionsFromAvatarList(UUID avatarID, List<ulong> regionlst);
 
@@ -86,7 +86,7 @@ namespace OpenSim.Region.Framework.Scenes
                 // make a separate RegionFlags call but this would involve a network call for each neighbour.
                 if (n.RegionFlags != null)
                 {
-                    if ((n.RegionFlags & OpenSim.Framework.RegionFlags.RegionOnline) != 0)
+                    if ((n.RegionFlags & MutSea.Framework.RegionFlags.RegionOnline) != 0)
                         onlineNeighbours.Add(n.RegionHandle);
                 }
                 else

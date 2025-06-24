@@ -30,10 +30,10 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using OpenMetaverse;
-using OpenSim.Framework;
+using MutSea.Framework;
 using log4net;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public struct CollisionForSoundInfo
     {

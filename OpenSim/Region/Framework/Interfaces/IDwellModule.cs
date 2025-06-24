@@ -26,9 +26,9 @@
  */
 
 using OpenMetaverse;
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IDwellModule
     {

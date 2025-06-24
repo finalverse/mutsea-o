@@ -36,16 +36,16 @@ using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
 using OpenMetaverse.Assets;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
-using OpenSim.Region.CoreModules.World.Serialiser;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Services.Interfaces;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.CoreModules.Avatar.Inventory.Archiver;
+using MutSea.Region.CoreModules.World.Serialiser;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Services.Interfaces;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Tests
+namespace MutSea.Region.Framework.Tests
 {
     [TestFixture]
     public class TaskInventoryTests : OpenSimTestCase

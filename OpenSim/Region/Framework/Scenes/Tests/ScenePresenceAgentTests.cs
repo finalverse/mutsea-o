@@ -35,18 +35,18 @@ using Timer = System.Timers.Timer;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.ClientStack.Linden;
-using OpenSim.Region.CoreModules.Framework.EntityTransfer;
-using OpenSim.Region.CoreModules.World.Serialiser;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Tests.Common;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.ClientStack.Linden;
+using MutSea.Region.CoreModules.Framework.EntityTransfer;
+using MutSea.Region.CoreModules.World.Serialiser;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Tests.Common;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
+using MutSea.Services.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     /// <summary>
     /// Scene presence tests

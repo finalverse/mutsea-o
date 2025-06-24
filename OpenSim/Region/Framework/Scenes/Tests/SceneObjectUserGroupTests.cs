@@ -31,15 +31,15 @@ using System.Reflection;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Avatar.InstantMessage;
-using OpenSim.Region.CoreModules.World.Permissions;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.CoreModules.Avatar.InstantMessage;
+using MutSea.Region.CoreModules.World.Permissions;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.OptionalModules.Avatar.XmlRpcGroups;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
     public class SceneObjectUserGroupTests

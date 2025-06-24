@@ -33,11 +33,11 @@ using System.Runtime.CompilerServices;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Framework;
+using MutSea.Region.PhysicsModules.SharedBase;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public delegate void PhysicsCrash();
     public delegate void AttachToBackupDelegate(SceneObjectGroup sog);
@@ -915,7 +915,7 @@ namespace OpenSim.Region.Framework.Scenes
         ///
         /// FIXME: The only user of the method right now is Caps.cs, in order to resolve a client API since it can't
         /// use the ScenePresence.  This could be better solved in a number of ways - we could establish an
-        /// OpenSim.Framework.IScenePresence, or move the caps code into a region package (which might be the more
+        /// MutSea.Framework.IScenePresence, or move the caps code into a region package (which might be the more
         /// suitable solution).
         /// </summary>
         /// <param name="agentId"></param>

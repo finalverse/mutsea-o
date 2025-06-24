@@ -27,11 +27,11 @@
 
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Services.Interfaces;
 using System.Collections.Generic;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate void ChangeDelegate(UUID regionID);
     public delegate void MessageDelegate(UUID regionID, UUID fromID, string fromName, string message);

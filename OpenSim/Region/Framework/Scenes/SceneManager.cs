@@ -31,10 +31,10 @@ using System.Net;
 using System.Reflection;
 using OpenMetaverse;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public delegate void RestartSim(RegionInfo thisregion);
 

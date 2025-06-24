@@ -33,14 +33,14 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using OpenSim.Data;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
 
 using OpenMetaverse;
 
 using log4net;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// A new version of the old Channel class, simplified
