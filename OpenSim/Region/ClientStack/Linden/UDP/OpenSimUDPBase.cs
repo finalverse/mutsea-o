@@ -35,7 +35,7 @@ using OpenMetaverse.Packets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public readonly struct IncomingPacket(LLClientView client, Packet packet)
     {

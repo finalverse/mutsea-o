@@ -15,7 +15,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Framework.Servers.HttpServer;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     public delegate UUID UpdateItem(UUID itemID, UUID objectID, byte[] data);
     public delegate UUID ItemUpdatedCallback(UUID userID, UUID itemID, UUID objectID, byte[] data);

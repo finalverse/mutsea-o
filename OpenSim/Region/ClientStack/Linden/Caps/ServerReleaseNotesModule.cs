@@ -42,7 +42,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.ClientStack.LindenCaps
+namespace MutSea.Region.ClientStack.LindenCaps
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "ServerReleaseNotesModule")]
     class ServerReleaseNotesModule : ISharedRegionModule

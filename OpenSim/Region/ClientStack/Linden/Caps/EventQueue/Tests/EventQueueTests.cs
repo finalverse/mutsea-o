@@ -39,13 +39,13 @@ using OpenMetaverse.StructuredData;
 using OpenSim.Framework;
 using OpenSim.Framework.Servers;
 using OpenSim.Framework.Servers.HttpServer;
-using OpenSim.Region.ClientStack.Linden;
+using MutSea.Region.ClientStack.Linden;
 using OpenSim.Region.CoreModules.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.OptionalModules.World.NPC;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ClientStack.Linden.Tests
+namespace MutSea.Region.ClientStack.Linden.Tests
 {
     [TestFixture]
     public class EventQueueTests : OpenSimTestCase

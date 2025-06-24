@@ -32,7 +32,7 @@ using OpenMetaverse.Packets;
 using OpenSim.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ClientStack.LindenUDP.Tests
+namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     /// <summary>
     /// Tests for the LL packet handler

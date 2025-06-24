@@ -31,7 +31,7 @@ using OpenSim.Framework;
 using OpenMetaverse;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public class LLUDPZeroEncoder
     {

@@ -35,7 +35,7 @@ using OpenMetaverse.Messages.Linden;
 
 using OpenSim.Framework;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     public class EventQueueHelper
     {

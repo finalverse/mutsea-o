@@ -40,7 +40,7 @@ using Caps = OpenSim.Framework.Capabilities.Caps;
 
 [assembly: Addin("LindenCaps", OpenSim.VersionInfo.VersionNumber)]
 [assembly: AddinDependency("OpenSim.Region.Framework", OpenSim.VersionInfo.VersionNumber)]
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     public class BunchOfCapsConfigOptions
     {

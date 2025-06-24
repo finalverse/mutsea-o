@@ -42,7 +42,7 @@ using OSD = OpenMetaverse.StructuredData.OSD;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 using ExtraParamType = OpenMetaverse.ExtraParamType;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UploadObjectAssetModule")]
     public class UploadObjectAssetModule : INonSharedRegionModule

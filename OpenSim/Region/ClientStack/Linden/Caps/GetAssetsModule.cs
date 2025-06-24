@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GetAssetsModule")]
     public class GetAssetsModule : INonSharedRegionModule

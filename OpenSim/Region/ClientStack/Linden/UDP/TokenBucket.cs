@@ -33,7 +33,7 @@ using OpenSim.Framework;
 
 using log4net;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// A hierarchical token bucket for bandwidth throttling. See

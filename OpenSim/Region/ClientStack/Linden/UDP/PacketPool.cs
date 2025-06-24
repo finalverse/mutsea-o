@@ -33,7 +33,7 @@ using OpenMetaverse.Packets;
 using log4net;
 using OpenSim.Framework.Monitoring;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public sealed class PacketPool
     {

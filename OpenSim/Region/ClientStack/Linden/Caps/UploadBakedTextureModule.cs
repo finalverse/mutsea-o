@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Framework.Capabilities;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UploadBakedTextureModule")]
     public class UploadBakedTextureModule : ISharedRegionModule

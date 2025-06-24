@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Services.Interfaces;
 using log4net;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// This class handles UDP texture requests.

@@ -44,7 +44,7 @@ using OpenSim.Region.Framework.Scenes;
 // using OpenSim.Services.Interfaces;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.ClientStack.Linden
+namespace MutSea.Region.ClientStack.Linden
 {
     /// <summary>
     /// SimulatorFeatures capability.

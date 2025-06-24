@@ -44,7 +44,7 @@ using OpenMetaverse;
 using Mono.Addins;
 
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// A shim around LLUDPServer that implements the IClientNetworkServer interface

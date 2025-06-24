@@ -35,7 +35,7 @@ using OpenSim.Services.Interfaces;
 using log4net;
 using System.Reflection;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// Stores information about a current texture download and a reference to the texture asset

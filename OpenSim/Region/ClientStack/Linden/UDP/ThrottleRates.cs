@@ -29,7 +29,7 @@ using System;
 using OpenSim.Framework;
 using Nini.Config;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     /// <summary>
     /// Holds drip rates and maximum burst rates for throttling with hierarchical
