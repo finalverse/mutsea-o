@@ -28,7 +28,7 @@
 using OpenSim.Framework;
 using Mono.Addins;
 
-namespace OpenSim
+namespace MutSea
 {
     /// <summary>
     /// OpenSimulator Application Plugin framework interface
