@@ -35,10 +35,10 @@ using Mono.Addins;
 // change them to the information which is associated with the assembly
 // you compile.
 
-[assembly : AssemblyTitle("OpenSim.Region.PhysicsModule.ubOde")]
+[assembly : AssemblyTitle("MutSea.Region.PhysicsModule.ubOde")]
 [assembly : AssemblyDescription("Ubit Variation of ODE")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("Finalverse Inc.")]
 [assembly : AssemblyProduct("ubOde")]
 [assembly : AssemblyCopyright("Copyright (c) OpenSimulator.org Developers 2007-2009")]
 [assembly : AssemblyTrademark("")]
