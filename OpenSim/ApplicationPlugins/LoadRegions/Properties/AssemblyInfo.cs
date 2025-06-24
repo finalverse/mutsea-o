@@ -36,9 +36,9 @@ using Mono.Addins;
 [assembly : AssemblyTitle("OpenSim.ApplicationPlugins.LoadRegions")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
-[assembly : AssemblyProduct("OpenSim")]
-[assembly : AssemblyCopyright("Copyright © OpenSimulator.org Developers 2007-2009")]
+[assembly : AssemblyCompany("Finalverse Inc.")]
+[assembly : AssemblyProduct("MutSea")]
+[assembly : AssemblyCopyright("Copyright Â© OpenSimulator.org Developers 2007-2009")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
