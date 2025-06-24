@@ -32,7 +32,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Data;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     public class NullAuthenticationData : IAuthenticationData
     {

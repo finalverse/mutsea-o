@@ -31,7 +31,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     /// <summary>
     /// NULL DataStore, do not store anything

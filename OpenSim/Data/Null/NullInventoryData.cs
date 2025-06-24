@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     /// <summary>
     /// This class is completely null.
