@@ -29,9 +29,9 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using NUnit.Framework;
-using OpenSim.Tests.Common;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class AgentCircuitDataTest : OpenSimTestCase

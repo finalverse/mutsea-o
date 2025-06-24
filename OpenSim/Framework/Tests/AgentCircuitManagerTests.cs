@@ -29,7 +29,7 @@ using OpenMetaverse;
 using NUnit.Framework;
 using System;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class AgentCircuitManagerTests

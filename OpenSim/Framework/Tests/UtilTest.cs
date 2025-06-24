@@ -28,9 +28,9 @@
 using System;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Tests.Common;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class UtilTests : OpenSimTestCase

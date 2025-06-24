@@ -30,9 +30,9 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Tests.Common;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class AssetBaseTest : OpenSimTestCase

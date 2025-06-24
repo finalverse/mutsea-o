@@ -31,10 +31,10 @@ using NUnit.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using OpenSim.Framework;
-using OpenSim.Tests.Common;
+using MutSea.Tests.Common;
 using Animation = OpenSim.Framework.Animation;
 
-namespace OpenSim.Framework.Tests
+namespace MutSea.Framework.Tests
 {
     [TestFixture]
     public class AnimationTests : OpenSimTestCase
