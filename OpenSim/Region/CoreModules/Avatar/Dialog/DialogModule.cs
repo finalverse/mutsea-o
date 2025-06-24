@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Avatar.Dialog
+namespace MutSea.Region.CoreModules.Avatar.Dialog
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "DialogModule")]
     public class DialogModule : IDialogModule, INonSharedRegionModule

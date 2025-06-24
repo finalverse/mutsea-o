@@ -13,7 +13,7 @@ using OpenMetaverse;
 
 using log4net;
 
-namespace OpenSim.Region.CoreModules.Avatar.Friends
+namespace MutSea.Region.CoreModules.Avatar.Friends
 {
     public class HGStatusNotifier
     {

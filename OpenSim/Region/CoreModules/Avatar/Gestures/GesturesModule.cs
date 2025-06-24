@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Avatar.Gestures
+namespace MutSea.Region.CoreModules.Avatar.Gestures
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GesturesModule")]
     public class GesturesModule : INonSharedRegionModule

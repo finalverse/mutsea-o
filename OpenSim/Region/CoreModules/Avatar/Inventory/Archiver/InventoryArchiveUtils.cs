@@ -34,7 +34,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
 {
     /// <summary>
     /// Utility methods for inventory archiving

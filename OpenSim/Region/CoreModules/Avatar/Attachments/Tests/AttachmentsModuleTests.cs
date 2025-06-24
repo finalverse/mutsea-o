@@ -53,7 +53,7 @@ using OpenSim.Region.ScriptEngine.XEngine;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Avatar.Attachments.Tests
+namespace MutSea.Region.CoreModules.Avatar.Attachments.Tests
 {
 /*
     /// <summary>

@@ -36,7 +36,7 @@ using OpenSim.Region.CoreModules.Avatar.Friends;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Avatar.Friends.Tests
+namespace MutSea.Region.CoreModules.Avatar.Friends.Tests
 {
     [TestFixture]
     public class FriendsModuleTests : OpenSimTestCase

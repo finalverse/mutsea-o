@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Avatar.Profile
+namespace MutSea.Region.CoreModules.Avatar.Profile
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "BasicProfileModule")]
     public class BasicProfileModule : IProfileModule, ISharedRegionModule

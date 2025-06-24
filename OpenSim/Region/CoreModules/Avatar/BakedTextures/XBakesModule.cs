@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Avatar.BakedTextures
+namespace MutSea.Region.CoreModules.Avatar.BakedTextures
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XBakes.Module")]
     public class XBakesModule : INonSharedRegionModule, IBakedTextureModule

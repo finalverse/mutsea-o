@@ -44,7 +44,7 @@ using OpenSim.Services.Interfaces;
 using Mono.Addins;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Avatar.AvatarFactory
+namespace MutSea.Region.CoreModules.Avatar.AvatarFactory
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "AvatarFactoryModule")]
     public class AvatarFactoryModule : IAvatarFactoryModule, INonSharedRegionModule
