@@ -39,7 +39,7 @@ using log4net;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// An asset storage interface for the SQLite database system

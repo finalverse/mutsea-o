@@ -38,7 +38,7 @@ using log4net;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// A SQLite Interface for the Asset Server

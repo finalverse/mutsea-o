@@ -33,7 +33,7 @@ using System.Data;
     using Mono.Data.Sqlite;
 #endif
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// A base class for methods needed by all SQLite database classes

@@ -37,7 +37,7 @@ using OpenSim.Framework;
   using Mono.Data.Sqlite;
 #endif
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     public class SQLiteAgentPreferencesData : SQLiteGenericTableHandler<AgentPreferencesData>, IAgentPreferencesData
     {

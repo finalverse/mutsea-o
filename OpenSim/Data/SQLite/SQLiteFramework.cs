@@ -37,7 +37,7 @@ using OpenSim.Framework;
     using Mono.Data.Sqlite;
 #endif
 
-namespace OpenSim.Data.SQLite
+namespace MutSea.Data.SQLite
 {
     /// <summary>
     /// A database interface class to a user profile storage system

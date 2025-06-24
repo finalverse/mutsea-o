@@ -41,7 +41,7 @@ using MySql.Data.MySqlClient;
 using OpenSim.Data.MySQL;
 
 using Mono.Data.Sqlite;
-using OpenSim.Data.SQLite;
+using MutSea.Data.SQLite;
 
 namespace OpenSim.Data.Tests
 {
