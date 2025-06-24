@@ -31,7 +31,7 @@ using System.Linq;
 using System.Threading;
 using log4net;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Manages launching threads and keeping watch over them for timeouts

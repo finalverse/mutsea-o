@@ -32,8 +32,9 @@ using System.Reflection;
 using System.Text;
 using System.Timers;
 using log4net;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Provides a means to continuously log stats for debugging purposes.

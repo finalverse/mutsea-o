@@ -29,8 +29,9 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using log4net;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Manages various work items in the simulator.

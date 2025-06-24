@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace MutSea.Interfaces
+namespace MutSea.Framework.Monitoring.Interfaces
 {
     /// <summary>
     /// Implemented by objects which allow statistical information to be pulled from them.

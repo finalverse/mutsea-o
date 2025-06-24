@@ -2,7 +2,7 @@ Welcome to The Class of Mountain and Seas Server (MutSea for short)!
 
 # Overview
 
-MutSea is a BSD Licensed Open Source project to develop a functioning
+MutSea is a BSD Licensed Open Source project forked from http://opensimulator.org to develop a functioning
 virtual worlds server platform capable of supporting multiple clients
 and servers in a heterogeneous grid structure. MutSea is written in
 C#, and can run under Mono or the Microsoft .NET runtimes.

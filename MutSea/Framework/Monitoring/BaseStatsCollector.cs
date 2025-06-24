@@ -30,8 +30,9 @@ using System.Diagnostics;
 using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Statistics which all collectors are interested in reporting

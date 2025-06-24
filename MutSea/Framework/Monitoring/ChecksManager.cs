@@ -31,8 +31,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using log4net;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Static class used to register/deregister checks on runtime conditions.

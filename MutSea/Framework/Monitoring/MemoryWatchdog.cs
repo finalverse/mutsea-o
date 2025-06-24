@@ -31,8 +31,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using log4net;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Experimental watchdog for memory usage.

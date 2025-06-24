@@ -33,10 +33,9 @@ using System.Linq;
 using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using MutSea.Interfaces;
+using MutSea.Framework.Monitoring.Interfaces;
 
-
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Collects sim statistics which aren't already being collected for the linden viewer's statistics pane

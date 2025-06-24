@@ -32,7 +32,7 @@ using System.Threading;
 using log4net;
 using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     public class JobEngine
     {

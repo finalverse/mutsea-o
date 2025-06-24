@@ -32,7 +32,7 @@ using System.Text;
 
 using OpenMetaverse.StructuredData;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
 // A statistic that wraps a counter.
 // Built this way mostly so histograms and history can be created.

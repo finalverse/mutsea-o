@@ -29,10 +29,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MutSea.Framework;
 
 using OpenMetaverse.StructuredData;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
 // Create a time histogram of events. The histogram is built in a wrap-around
 //   array of equally distributed buckets.

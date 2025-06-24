@@ -29,7 +29,7 @@ using System.Timers;
 
 using OpenMetaverse.StructuredData;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Collects user service statistics

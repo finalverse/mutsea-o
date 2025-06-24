@@ -28,7 +28,7 @@
 using System;
 using System.Text;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     public class Check
     {

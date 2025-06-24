@@ -35,8 +35,9 @@ using System.Threading;
 using log4net;
 using Nini.Config;
 using OpenMetaverse.StructuredData;
+using MutSea.Framework;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     public class ServerStatsCollector
     {

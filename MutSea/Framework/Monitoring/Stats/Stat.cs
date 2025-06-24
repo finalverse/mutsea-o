@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse.StructuredData;
 
-namespace MutSea
+namespace MutSea.Framework.Monitoring
 {
     /// <summary>
     /// Holds individual statistic details
