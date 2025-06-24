@@ -44,7 +44,7 @@ using OpenSim.Region.ScriptEngine.Shared.Api;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Tests
+namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     /// <summary>
     /// Tests for OSSL_Api

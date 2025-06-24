@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using Nini.Config;
 
-namespace OpenSim.Region.ScriptEngine.Interfaces
+namespace MutSea.Region.ScriptEngine.Interfaces
 {
     public interface ICompiler
     {

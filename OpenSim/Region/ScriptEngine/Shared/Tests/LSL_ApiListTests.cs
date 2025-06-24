@@ -42,7 +42,7 @@ using LSL_Integer = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 using LSL_List = OpenSim.Region.ScriptEngine.Shared.LSL_Types.list;
 using LSL_String = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Tests
+namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
     public class LSL_ApiListTests : OpenSimTestCase

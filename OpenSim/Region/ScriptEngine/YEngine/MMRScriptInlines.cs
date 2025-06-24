@@ -42,7 +42,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 /**
  * @brief Generate code for the backend API calls.
  */
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public abstract class TokenDeclInline: TokenDeclVar
     {

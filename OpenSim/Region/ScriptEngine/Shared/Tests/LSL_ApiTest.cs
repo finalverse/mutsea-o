@@ -37,7 +37,7 @@ using OpenSim.Region.ScriptEngine.Shared.ScriptBase;
 using OpenMetaverse;
 using System;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Tests
+namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     /// <summary>
     /// Tests for LSL_Api

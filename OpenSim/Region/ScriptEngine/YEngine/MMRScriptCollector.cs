@@ -41,7 +41,7 @@ using System.Text;
  *        Second is it removes unnecessary back-to-back stloc/ldloc's.
  */
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     /**
      * @brief This is a list that keeps track of types pushed on the evaluation stack.

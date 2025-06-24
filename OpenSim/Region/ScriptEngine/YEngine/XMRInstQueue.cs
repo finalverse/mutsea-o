@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     /**
      * @brief Implements a queue of XMRInstance's.

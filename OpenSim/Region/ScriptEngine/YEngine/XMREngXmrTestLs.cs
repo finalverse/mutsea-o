@@ -44,7 +44,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 using SharedEventParams = OpenSim.Region.ScriptEngine.Shared.EventParams;
 using SharedScriptBaseClass = OpenSim.Region.ScriptEngine.Shared.ScriptBase.ScriptBaseClass;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public partial class Yengine
     {

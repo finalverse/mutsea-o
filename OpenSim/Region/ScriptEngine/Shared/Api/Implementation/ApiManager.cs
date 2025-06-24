@@ -32,7 +32,7 @@ using System.Reflection;
 using log4net;
 using OpenSim.Region.ScriptEngine.Interfaces;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api
+namespace MutSea.Region.ScriptEngine.Shared.Api
 {
     public class ApiManager
     {

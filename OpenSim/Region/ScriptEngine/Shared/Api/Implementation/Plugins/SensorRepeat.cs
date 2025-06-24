@@ -34,7 +34,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Plugins
+namespace MutSea.Region.ScriptEngine.Shared.Api.Plugins
 {
     public class SensorRepeat
     {

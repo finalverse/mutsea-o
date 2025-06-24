@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.ScriptEngine.Shared
+namespace MutSea.Region.ScriptEngine.Shared
 {
     [Serializable]
     public class EventAbortException : Exception

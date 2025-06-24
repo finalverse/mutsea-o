@@ -46,7 +46,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Tests
+namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     /// <summary>
     /// Tests for inventory functions in LSL

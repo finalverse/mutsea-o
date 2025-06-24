@@ -40,7 +40,7 @@ using ScriptTimer=OpenSim.Region.ScriptEngine.Shared.Api.Plugins.ScriptTimer;
 using System.Reflection;
 using log4net;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api
+namespace MutSea.Region.ScriptEngine.Shared.Api
 {
     /// <summary>
     /// Handles LSL commands that takes long time and returns an event, for example timers, HTTP requests, etc.

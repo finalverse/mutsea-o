@@ -30,7 +30,7 @@ using NUnit.Framework;
 using OpenSim.Tests.Common;
 using OpenSim.Region.ScriptEngine.Shared;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Tests
+namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
     public class LSL_TypesTestLSLInteger : OpenSimTestCase

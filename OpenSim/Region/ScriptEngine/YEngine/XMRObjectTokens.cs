@@ -46,7 +46,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
  * See xmrengcomp.cx utility program.
  */
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     /*
      * Encapsulate object code for a method.

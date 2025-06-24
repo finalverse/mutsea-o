@@ -42,7 +42,7 @@ using LSL_Integer = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 
 #pragma warning disable IDE1006
 
-namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
+namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
 {
     public partial class ScriptBaseClass
     {

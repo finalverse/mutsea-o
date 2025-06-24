@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Plugins
+namespace MutSea.Region.ScriptEngine.Shared.Api.Plugins
 {
     public class ScriptTimer
     {

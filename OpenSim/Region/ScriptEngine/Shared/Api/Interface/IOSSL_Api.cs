@@ -38,7 +38,7 @@ using LSL_Rotation = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Quaternion;
 using LSL_Key = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Interfaces
+namespace MutSea.Region.ScriptEngine.Shared.Api.Interfaces
 {
     /// <summary>
     /// To permit region owners to enable the extended scripting functionality

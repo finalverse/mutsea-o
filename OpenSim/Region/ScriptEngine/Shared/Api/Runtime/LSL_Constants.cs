@@ -30,7 +30,7 @@ using vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 using rotation = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Quaternion;
 using LSLInteger = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 
-namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
+namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
 {
     public partial class ScriptBaseClass
     {

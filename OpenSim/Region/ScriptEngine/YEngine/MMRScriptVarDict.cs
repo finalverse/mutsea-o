@@ -33,7 +33,7 @@ using System.Collections.Generic;
  * @brief Collection of variable/function/method definitions
  */
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public class VarDict: IEnumerable
     {

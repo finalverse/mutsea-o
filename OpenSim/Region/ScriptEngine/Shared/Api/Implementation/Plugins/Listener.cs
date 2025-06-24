@@ -34,7 +34,7 @@ using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared;
 using OpenSim.Region.ScriptEngine.Shared.Api;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Plugins
+namespace MutSea.Region.ScriptEngine.Shared.Api.Plugins
 {
     public class Listener
     {

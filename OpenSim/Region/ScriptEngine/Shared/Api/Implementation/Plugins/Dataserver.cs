@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Plugins
+namespace MutSea.Region.ScriptEngine.Shared.Api.Plugins
 {
     public class Dataserver
     {

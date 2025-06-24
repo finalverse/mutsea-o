@@ -64,7 +64,7 @@ using SceneScriptEvents = OpenSim.Region.Framework.Scenes.scriptEvents;
 [assembly: Addin("YEngine", OpenSim.VersionInfo.VersionNumber)]
 [assembly: AddinDependency("OpenSim.Region.Framework", OpenSim.VersionInfo.VersionNumber)]
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     [Mono.Addins.Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "YEngine")]
     public partial class Yengine: INonSharedRegionModule, IScriptEngine, IScriptModule

@@ -46,7 +46,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
  *        It writes the object code to a file and can then make real ILGenerator calls
  *        based on the file's contents.
  */
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public enum ScriptObjWriterCode: byte
     {

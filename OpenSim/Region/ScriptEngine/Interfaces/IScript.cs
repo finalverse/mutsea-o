@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using OpenSim.Region.ScriptEngine.Interfaces;
 
-namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
+namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
 {
     public interface IScript
     {

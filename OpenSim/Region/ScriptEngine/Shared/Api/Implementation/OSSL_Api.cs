@@ -60,7 +60,7 @@ using TPFlags = OpenSim.Framework.Constants.TeleportFlags;
 
 #pragma warning disable IDE1006
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api
+namespace MutSea.Region.ScriptEngine.Shared.Api
 {
     //////////////////////////////////////////////////////////////
     //
