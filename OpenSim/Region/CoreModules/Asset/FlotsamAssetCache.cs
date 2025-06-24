@@ -46,7 +46,7 @@ using OpenSim.Services.Interfaces;
 using System.Runtime.InteropServices;
 
 
-namespace OpenSim.Region.CoreModules.Asset
+namespace MutSea.Region.CoreModules.Asset
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "FlotsamAssetCache")]
     public class FlotsamAssetCache : ISharedRegionModule, IAssetCache, IAssetService
