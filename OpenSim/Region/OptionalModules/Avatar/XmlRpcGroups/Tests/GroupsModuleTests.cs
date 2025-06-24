@@ -46,7 +46,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups.Tests
+namespace MutSea.Region.OptionalModules.Avatar.XmlRpcGroups.Tests
 {
     /// <summary>
     /// Basic groups module tests

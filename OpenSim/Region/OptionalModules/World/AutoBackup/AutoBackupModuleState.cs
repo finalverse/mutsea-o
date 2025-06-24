@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace OpenSim.Region.OptionalModules.World.AutoBackup
+namespace MutSea.Region.OptionalModules.World.AutoBackup
 {
     /// <summary>AutoBackupModuleState: Auto-Backup state for one region (scene).
     /// If you use this class in any way outside of AutoBackupModule, you should treat the class as opaque.

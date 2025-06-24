@@ -44,7 +44,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups
+namespace MutSea.Region.OptionalModules.Avatar.XmlRpcGroups
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XmlRpcGroupsServicesConnectorModule")]
     public class XmlRpcGroupsServicesConnectorModule : ISharedRegionModule, IGroupsServicesConnector

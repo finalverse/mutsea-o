@@ -55,7 +55,7 @@ using OpenSim.Server.Base;
 using OpenSim.Services.Interfaces;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
+namespace MutSea.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "FreeSwitchVoiceModule")]
     public class FreeSwitchVoiceModule : ISharedRegionModule, IVoiceModule

@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups
+namespace MutSea.Region.OptionalModules.Avatar.XmlRpcGroups
 {
     public interface IGroupsServicesConnector
     {

@@ -41,7 +41,7 @@ using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Chat
+namespace MutSea.Region.OptionalModules.Avatar.Chat
 {
     public class IRCConnector
     {

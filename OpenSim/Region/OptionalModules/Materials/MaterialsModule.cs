@@ -47,7 +47,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using Ionic.Zlib;
 
-namespace OpenSim.Region.OptionalModules.Materials
+namespace MutSea.Region.OptionalModules.Materials
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MaterialsModule")]
     public class MaterialsModule : INonSharedRegionModule, IMaterialsModule

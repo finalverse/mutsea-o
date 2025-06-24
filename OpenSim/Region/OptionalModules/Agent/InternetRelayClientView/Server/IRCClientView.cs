@@ -41,7 +41,7 @@ using OpenSim.Framework.Client;
 using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
+namespace MutSea.Region.OptionalModules.Agent.InternetRelayClientView.Server
 {
     public delegate void OnIRCClientReadyDelegate(IRCClientView cv);
 

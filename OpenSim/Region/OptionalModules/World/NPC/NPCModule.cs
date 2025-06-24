@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.OptionalModules.World.NPC
+namespace MutSea.Region.OptionalModules.World.NPC
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "NPCModule")]
     public class NPCModule : INPCModule, ISharedRegionModule

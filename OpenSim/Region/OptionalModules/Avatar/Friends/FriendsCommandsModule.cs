@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Friends
+namespace MutSea.Region.OptionalModules.Avatar.Friends
 {
     /// <summary>
     /// A module that just holds commands for inspecting avatar appearance.

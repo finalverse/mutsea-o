@@ -38,7 +38,7 @@ using log4net;
 using System.Reflection;
 using System.Xml;
 
-namespace OpenSim.Region.OptionalModules.World.NPC
+namespace MutSea.Region.OptionalModules.World.NPC
 {
     public class NPCAvatar : IClientAPI, INPC
     {

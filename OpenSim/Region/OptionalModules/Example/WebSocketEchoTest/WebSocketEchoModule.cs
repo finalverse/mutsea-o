@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Framework.Servers.HttpServer;
 
 
-namespace OpenSim.Region.OptionalModules.WebSocketEchoModule
+namespace MutSea.Region.OptionalModules.WebSocketEchoModule
 {
 
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "WebSocketEchoModule")]

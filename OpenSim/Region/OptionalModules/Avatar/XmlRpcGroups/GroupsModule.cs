@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using System.Text;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.OptionalModules.Avatar.XmlRpcGroups
+namespace MutSea.Region.OptionalModules.Avatar.XmlRpcGroups
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "GroupsModule")]
     public class GroupsModule : ISharedRegionModule, IGroupsModule

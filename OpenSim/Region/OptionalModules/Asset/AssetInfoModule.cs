@@ -39,7 +39,7 @@ using OpenSim.Framework.Console;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Asset
+namespace MutSea.Region.OptionalModules.Asset
 {
     /// <summary>
     /// A module that just holds commands for inspecting assets.

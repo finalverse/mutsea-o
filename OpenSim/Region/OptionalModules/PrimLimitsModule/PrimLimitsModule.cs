@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules
+namespace MutSea.Region.OptionalModules
 {
     /// <summary>
     /// Enables Prim limits for parcel.

@@ -46,7 +46,7 @@ using Mono.Addins;
 using Caps = OpenSim.Framework.Capabilities.Caps;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Region.OptionalModules.ViewerSupport
+namespace MutSea.Region.OptionalModules.ViewerSupport
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "DynamicFloater")]
     public class DynamicFloaterModule : INonSharedRegionModule, IDynamicFloaterModule

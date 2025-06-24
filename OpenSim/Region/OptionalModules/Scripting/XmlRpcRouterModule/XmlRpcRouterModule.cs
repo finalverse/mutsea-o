@@ -38,7 +38,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
 
-namespace OpenSim.Region.OptionalModules.Scripting.XmlRpcRouterModule
+namespace MutSea.Region.OptionalModules.Scripting.XmlRpcRouterModule
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XmlRpcRouter")]
     public class XmlRpcRouter : INonSharedRegionModule, IXmlRpcRouter

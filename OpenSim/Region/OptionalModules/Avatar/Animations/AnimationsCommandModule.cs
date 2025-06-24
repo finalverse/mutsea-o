@@ -44,7 +44,7 @@ using OpenSim.Region.Framework.Scenes.Animation;
 using OpenSim.Services.Interfaces;
 using AnimationSet = OpenSim.Region.Framework.Scenes.Animation.AnimationSet;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Animations
+namespace MutSea.Region.OptionalModules.Avatar.Animations
 {
     /// <summary>
     /// A module that just holds commands for inspecting avatar animations.

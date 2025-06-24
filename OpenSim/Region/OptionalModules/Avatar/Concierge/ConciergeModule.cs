@@ -46,7 +46,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.CoreModules.Avatar.Chat;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Concierge
+namespace MutSea.Region.OptionalModules.Avatar.Concierge
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "ConciergeModule")]
     public class ConciergeModule : ChatModule, ISharedRegionModule

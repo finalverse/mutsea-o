@@ -41,7 +41,7 @@ using OpenSim.Region.ScriptEngine.Shared.Api;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.OptionalModules.Scripting.JsonStore.Tests
+namespace MutSea.Region.OptionalModules.Scripting.JsonStore.Tests
 {
     /// <summary>
     /// Tests for inventory functions in LSL

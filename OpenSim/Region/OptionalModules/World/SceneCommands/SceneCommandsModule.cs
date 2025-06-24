@@ -41,7 +41,7 @@ using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.OptionalModules.Avatar.Attachments
+namespace MutSea.Region.OptionalModules.Avatar.Attachments
 {
     /// <summary>
     /// A module that just holds commands for inspecting avatar appearance.
