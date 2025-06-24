@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenMetaverse;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLOfflineIMData : PGSQLGenericTableHandler<OfflineIMData>, IOfflineIMData
     {

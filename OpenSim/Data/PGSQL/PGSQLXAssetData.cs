@@ -39,7 +39,7 @@ using OpenSim.Framework;
 using OpenSim.Data;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLXAssetData : IXAssetDataPlugin
     {

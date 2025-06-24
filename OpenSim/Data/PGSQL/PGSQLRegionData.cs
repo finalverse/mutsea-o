@@ -37,7 +37,7 @@ using OpenSim.Data;
 using RegionFlags = OpenSim.Framework.RegionFlags;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     /// <summary>
     /// A PGSQL Interface for the Region Server.

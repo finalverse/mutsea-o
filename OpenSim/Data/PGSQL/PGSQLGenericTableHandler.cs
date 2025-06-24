@@ -36,7 +36,7 @@ using OpenSim.Region.Framework.Interfaces;
 using System.Text;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLGenericTableHandler<T> : PGSqlFramework where T : class, new()
     {

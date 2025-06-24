@@ -35,7 +35,7 @@ using System.Reflection;
 using System.Text;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLFriendsData : PGSQLGenericTableHandler<FriendsData>, IFriendsData
     {

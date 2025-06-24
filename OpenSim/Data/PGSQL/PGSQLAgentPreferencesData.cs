@@ -33,7 +33,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLAgentPreferencesData : PGSQLGenericTableHandler<AgentPreferencesData>, IAgentPreferencesData
     {

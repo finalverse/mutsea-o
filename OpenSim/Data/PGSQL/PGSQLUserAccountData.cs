@@ -36,7 +36,7 @@ using Npgsql;
 using log4net;
 using System.Reflection;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLUserAccountData : PGSQLGenericTableHandler<UserAccountData>,IUserAccountData
     {
