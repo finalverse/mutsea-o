@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Asset.Tests
+namespace MutSea.Region.CoreModules.Asset.Tests
 {
     /// <summary>
     /// At the moment we're only test the in-memory part of the FlotsamAssetCache.  This is a considerable weakness.

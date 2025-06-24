@@ -31,7 +31,7 @@ using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
 using OpenSim.Framework;
-using OpenSim.Region.CoreModules.Asset;
+using MutSea.Region.CoreModules.Asset;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
