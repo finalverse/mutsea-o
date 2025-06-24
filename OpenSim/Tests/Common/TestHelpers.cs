@@ -32,7 +32,7 @@ using System.Text;
 using NUnit.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class TestHelpers
     {

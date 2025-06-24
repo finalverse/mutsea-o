@@ -33,7 +33,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public class GroupsServiceBase : ServiceBase
     {

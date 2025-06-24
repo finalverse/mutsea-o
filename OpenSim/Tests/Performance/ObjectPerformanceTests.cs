@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests.Performance
+namespace MutSea.Tests.Performance
 {
     /// <summary>
     /// Object performance tests

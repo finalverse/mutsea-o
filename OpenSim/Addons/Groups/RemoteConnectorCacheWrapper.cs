@@ -36,7 +36,7 @@ using OpenSim.Services.Interfaces;
 
 using OpenMetaverse;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public delegate ExtendedGroupRecord GroupRecordDelegate();
     public delegate GroupMembershipData GroupMembershipDelegate();

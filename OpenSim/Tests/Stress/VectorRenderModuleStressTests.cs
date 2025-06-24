@@ -42,7 +42,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests.Stress
+namespace MutSea.Tests.Stress
 {
     [TestFixture]
     public class VectorRenderModuleStressTests : OpenSimTestCase

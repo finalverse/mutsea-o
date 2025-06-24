@@ -46,7 +46,7 @@ using OpenSim.Region.OptionalModules.World.NPC;
 using OpenSim.Services.AvatarService;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests.Performance
+namespace MutSea.Tests.Performance
 {
     /// <summary>
     /// NPC performance tests

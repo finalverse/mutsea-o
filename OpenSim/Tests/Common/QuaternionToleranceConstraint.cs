@@ -30,7 +30,7 @@ using OpenMetaverse;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public class QuaternionToleranceConstraint : ANumericalToleranceConstraint
     {

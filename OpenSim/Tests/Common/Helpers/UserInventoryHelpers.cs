@@ -33,7 +33,7 @@ using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     /// <summary>
     /// Utility functions for carrying out user inventory tests.

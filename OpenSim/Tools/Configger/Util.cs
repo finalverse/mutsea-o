@@ -40,7 +40,7 @@ using System.Threading;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Tools.Configger
+namespace MutSea.Tools.Configger
 {
     public static class Util
     {

@@ -49,7 +49,7 @@ using OpenSim.Services.Interfaces;
 
 using BaseServerUtils = OpenSim.Server.Base.ServerUtils;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     /// <summary>
     /// Helpers for setting up scenes.

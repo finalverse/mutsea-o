@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.ScriptEngine.XEngine;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests.Performance
+namespace MutSea.Tests.Performance
 {
     /// <summary>
     /// Script performance tests

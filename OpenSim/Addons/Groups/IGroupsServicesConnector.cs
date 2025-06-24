@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Groups
+namespace MutSea.Groups
 {
     public interface IGroupsServicesConnector
     {

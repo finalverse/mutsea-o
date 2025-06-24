@@ -40,7 +40,7 @@ using OpenSim.Region.CoreModules.Scripting.XMLRPC;
 using OpenSim.Services.Interfaces;
 using Mono.Addins;
 
-namespace OpenSim.ApplicationPlugins.LoadRegions
+namespace MutSea.ApplicationPlugins.LoadRegions
 {
     [Extension(Path="/OpenSim/Startup", Id="LoadRegions", NodeName="Plugin")]
     public class LoadRegionsPlugin : IApplicationPlugin, IRegionCreator

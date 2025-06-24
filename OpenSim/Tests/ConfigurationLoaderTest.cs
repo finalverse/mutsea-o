@@ -31,7 +31,7 @@ using NUnit.Framework;
 using OpenSim.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests
+namespace MutSea.Tests
 {
     [TestFixture]
     public class ConfigurationLoaderTests : OpenSimTestCase

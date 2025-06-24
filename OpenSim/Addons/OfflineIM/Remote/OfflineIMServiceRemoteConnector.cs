@@ -40,7 +40,7 @@ using OpenMetaverse;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.OfflineIM
+namespace MutSea.OfflineIM
 {
     public class OfflineIMServiceRemoteConnector : IOfflineIMService
     {

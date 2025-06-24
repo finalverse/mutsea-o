@@ -28,7 +28,7 @@
 using System;
 using NUnit.Framework.Constraints;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public abstract class ANumericalToleranceConstraint : Constraint
     {

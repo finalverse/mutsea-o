@@ -44,7 +44,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.CoreModules.Framework;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Tests.Common
+namespace MutSea.Tests.Common
 {
     public static class EntityTransferHelpers
     {
