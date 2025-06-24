@@ -29,7 +29,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     /// <summary>
     /// This interface exists to distinguish between the normal IAssetDataPlugin and the one used by XAssetService

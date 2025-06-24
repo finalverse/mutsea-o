@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
 
     public static class DBGuid

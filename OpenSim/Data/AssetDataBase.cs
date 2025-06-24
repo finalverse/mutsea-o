@@ -32,7 +32,7 @@ using System.Text.RegularExpressions;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     public abstract class AssetDataBase : IAssetDataPlugin
     {

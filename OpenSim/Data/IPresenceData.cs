@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Data
+namespace MutSea.Data
 {
     // This MUST be a ref type!
     public class PresenceData
