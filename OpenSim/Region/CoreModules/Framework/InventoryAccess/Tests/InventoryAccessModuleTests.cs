@@ -38,13 +38,13 @@ using OpenSim.Framework;
 using OpenSim.Framework.Serialization;
 using OpenSim.Framework.Serialization.External;
 using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
-using OpenSim.Region.CoreModules.Framework.InventoryAccess;
+using MutSea.Region.CoreModules.Framework.InventoryAccess;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Framework.InventoryAccess.Tests
+namespace MutSea.Region.CoreModules.Framework.InventoryAccess.Tests
 {
     [TestFixture]
     public class InventoryAccessModuleTests : OpenSimTestCase

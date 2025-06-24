@@ -38,7 +38,7 @@ using OpenSim.Framework.Serialization.External;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Framework.InventoryAccess
+namespace MutSea.Region.CoreModules.Framework.InventoryAccess
 {
     public class HGAssetMapper
     {

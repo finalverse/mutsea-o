@@ -37,13 +37,13 @@ using OpenSim.Framework;
 using OpenSim.Framework.Monitoring;
 using OpenSim.Framework.Servers;
 using OpenSim.Framework.Servers.HttpServer;
-using OpenSim.Region.CoreModules.Framework.Monitoring.Alerts;
-using OpenSim.Region.CoreModules.Framework.Monitoring.Monitors;
+using MutSea.Region.CoreModules.Framework.Monitoring.Alerts;
+using MutSea.Region.CoreModules.Framework.Monitoring.Monitors;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Framework.Monitoring
+namespace MutSea.Region.CoreModules.Framework.Monitoring
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MonitorModule")]
     public class MonitorModule : INonSharedRegionModule

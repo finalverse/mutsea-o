@@ -44,7 +44,7 @@ using Nini.Config;
 using Mono.Addins;
 
 
-namespace OpenSim.Region.CoreModules.Framework.UserManagement
+namespace MutSea.Region.CoreModules.Framework.UserManagement
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "UserManagementModule")]
     public class UserManagementModule : ISharedRegionModule, IUserManagement, IPeople

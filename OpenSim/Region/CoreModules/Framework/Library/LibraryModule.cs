@@ -44,7 +44,7 @@ using Mono.Addins;
 using Nini.Config;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Framework.Library
+namespace MutSea.Region.CoreModules.Framework.Library
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "LibraryModule")]
     public class LibraryModule : ISharedRegionModule

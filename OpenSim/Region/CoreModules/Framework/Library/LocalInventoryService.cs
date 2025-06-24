@@ -35,7 +35,7 @@ using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Region.CoreModules.Framework.Library
+namespace MutSea.Region.CoreModules.Framework.Library
 {
     public class LocalInventoryService : IInventoryService
     {

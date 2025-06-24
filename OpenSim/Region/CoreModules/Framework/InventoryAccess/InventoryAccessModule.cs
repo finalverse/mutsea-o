@@ -42,7 +42,7 @@ using Nini.Config;
 using Mono.Addins;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Framework.InventoryAccess
+namespace MutSea.Region.CoreModules.Framework.InventoryAccess
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "BasicInventoryAccessModule")]
     public class BasicInventoryAccessModule : INonSharedRegionModule, IInventoryAccessModule
