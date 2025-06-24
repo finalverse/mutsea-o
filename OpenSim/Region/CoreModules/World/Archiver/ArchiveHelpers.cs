@@ -32,7 +32,7 @@ using OpenMetaverse;
 using OpenSim.Framework.Serialization;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Helper methods for archive manipulation

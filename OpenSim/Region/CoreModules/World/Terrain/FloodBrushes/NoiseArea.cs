@@ -29,7 +29,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FloodBrushes
+namespace MutSea.Region.CoreModules.World.Terrain.FloodBrushes
 {
     public class NoiseArea : ITerrainFloodEffect
     {

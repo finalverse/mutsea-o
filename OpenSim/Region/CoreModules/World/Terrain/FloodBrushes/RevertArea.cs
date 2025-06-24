@@ -27,7 +27,7 @@
 
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FloodBrushes
+namespace MutSea.Region.CoreModules.World.Terrain.FloodBrushes
 {
     public class RevertArea : ITerrainFloodEffect
     {

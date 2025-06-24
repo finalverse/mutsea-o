@@ -28,7 +28,7 @@ using System;
 using OpenSim.Region.CoreModules.World.Terrain;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.Modifiers
+namespace MutSea.Region.CoreModules.World.Terrain.Modifiers
 {
     public class RaiseModifier : TerrainModifier
     {

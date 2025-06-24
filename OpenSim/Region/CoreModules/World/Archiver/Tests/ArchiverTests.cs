@@ -51,7 +51,7 @@ using TarArchiveWriter = OpenSim.Framework.Serialization.TarArchiveWriter;
 using RegionSettings = OpenSim.Framework.RegionSettings;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Archiver.Tests
+namespace MutSea.Region.CoreModules.World.Archiver.Tests
 {
     [TestFixture]
     public class ArchiverTests : OpenSimTestCase

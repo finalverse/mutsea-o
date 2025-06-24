@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.World.Land.Tests
+namespace MutSea.Region.CoreModules.World.Land.Tests
 {
     [TestFixture]
     public class PrimCountModuleTests : OpenSimTestCase

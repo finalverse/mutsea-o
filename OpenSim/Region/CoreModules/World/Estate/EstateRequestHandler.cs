@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
     public class EstateSimpleRequestHandler :SimpleStreamHandler
     {

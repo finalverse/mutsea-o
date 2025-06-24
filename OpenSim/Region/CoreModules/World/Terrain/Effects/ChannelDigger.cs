@@ -30,7 +30,7 @@ using OpenSim.Region.CoreModules.World.Terrain;
 using OpenSim.Region.CoreModules.World.Terrain.FloodBrushes;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.Effects
+namespace MutSea.Region.CoreModules.World.Terrain.Effects
 {
     public class ChannelDigger : ITerrainEffect
     {

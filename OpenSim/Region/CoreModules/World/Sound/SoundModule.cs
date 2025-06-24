@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Sound
+namespace MutSea.Region.CoreModules.World.Sound
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "SoundModule")]
     public class SoundModule : INonSharedRegionModule, ISoundModule

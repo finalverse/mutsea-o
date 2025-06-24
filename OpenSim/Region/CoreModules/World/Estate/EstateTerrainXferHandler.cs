@@ -29,7 +29,7 @@ using System;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
 
     public class EstateTerrainXferHandler

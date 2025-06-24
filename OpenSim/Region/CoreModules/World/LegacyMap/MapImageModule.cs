@@ -38,7 +38,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.LegacyMap
+namespace MutSea.Region.CoreModules.World.LegacyMap
 {
     public enum DrawRoutine
     {

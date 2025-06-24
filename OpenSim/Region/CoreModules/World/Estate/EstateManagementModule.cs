@@ -46,7 +46,7 @@ using OpenSim.Services.Interfaces;
 using RegionFlags = OpenMetaverse.RegionFlags;
 using Timer = System.Timers.Timer;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "EstateManagementModule")]
     public class EstateManagementModule : IEstateModule, INonSharedRegionModule

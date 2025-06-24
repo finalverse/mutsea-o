@@ -28,7 +28,7 @@
 using System;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain
+namespace MutSea.Region.CoreModules.World.Terrain
 {
     public interface ITerrainFloodEffect
     {

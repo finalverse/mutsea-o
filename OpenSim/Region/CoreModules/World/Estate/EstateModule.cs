@@ -42,7 +42,7 @@ using OpenSim.Framework.Servers;
 using OpenSim.Framework.Servers.HttpServer;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.World.Estate
+namespace MutSea.Region.CoreModules.World.Estate
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "EstateModule")]
     public class EstateModule : ISharedRegionModule

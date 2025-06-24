@@ -49,7 +49,7 @@ using CompressionLevel = Ionic.Zlib.CompressionLevel;
 using OpenSim.Framework.Serialization.External;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// Prepare to write out an archive.

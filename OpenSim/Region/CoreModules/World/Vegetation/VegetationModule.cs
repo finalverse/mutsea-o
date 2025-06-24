@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Vegetation
+namespace MutSea.Region.CoreModules.World.Vegetation
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "VegetationModule")]
     public class VegetationModule : INonSharedRegionModule, IVegetationModule

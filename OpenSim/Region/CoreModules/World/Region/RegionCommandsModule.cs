@@ -42,7 +42,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.World.Objects.Commands
+namespace MutSea.Region.CoreModules.World.Objects.Commands
 {
     /// <summary>
     /// A module that holds commands for manipulating objects in the scene.

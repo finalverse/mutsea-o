@@ -30,7 +30,7 @@ using log4net;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.CoreModules.World.Terrain
+namespace MutSea.Region.CoreModules.World.Terrain
 {
     public abstract class TerrainModifier : ITerrainModifier
     {

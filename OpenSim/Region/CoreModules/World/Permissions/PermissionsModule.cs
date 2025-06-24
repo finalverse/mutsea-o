@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using Mono.Addins;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.World.Permissions
+namespace MutSea.Region.CoreModules.World.Permissions
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "DefaultPermissionsModule")]
     public class DefaultPermissionsModule : INonSharedRegionModule, IPermissionsModule

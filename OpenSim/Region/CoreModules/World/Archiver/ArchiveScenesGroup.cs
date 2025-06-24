@@ -33,7 +33,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenMetaverse;
 using System.Drawing;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// A group of regions arranged in a rectangle, possibly with holes.

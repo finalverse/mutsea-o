@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Scenes;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.CoreModules.World.Archiver
+namespace MutSea.Region.CoreModules.World.Archiver
 {
     /// <summary>
     /// This module loads and saves OpenSimulator region archives

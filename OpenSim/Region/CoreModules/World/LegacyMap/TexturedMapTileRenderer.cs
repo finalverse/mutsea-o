@@ -38,7 +38,7 @@ using OpenSim.Region.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.LegacyMap
+namespace MutSea.Region.CoreModules.World.LegacyMap
 {
     // Hue, Saturation, Value; used for color-interpolation
     struct HSV {

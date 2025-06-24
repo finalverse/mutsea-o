@@ -32,7 +32,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FileLoaders
+namespace MutSea.Region.CoreModules.World.Terrain.FileLoaders
 {
     public class RAW32 : ITerrainLoader
     {

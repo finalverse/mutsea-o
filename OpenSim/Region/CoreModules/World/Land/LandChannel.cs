@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Land
+namespace MutSea.Region.CoreModules.World.Land
 {
     public class LandChannel : ILandChannel
     {

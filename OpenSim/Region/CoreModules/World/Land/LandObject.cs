@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using RegionFlags = OpenMetaverse.RegionFlags;
 
-namespace OpenSim.Region.CoreModules.World.Land
+namespace MutSea.Region.CoreModules.World.Land
 {
     /// <summary>
     /// Keeps track of a specific piece of land's information

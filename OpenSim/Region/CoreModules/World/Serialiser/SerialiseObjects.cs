@@ -33,7 +33,7 @@ using System.Xml;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Serialization;
 
-namespace OpenSim.Region.CoreModules.World.Serialiser
+namespace MutSea.Region.CoreModules.World.Serialiser
 {
     internal class SerialiseObjects : IFileSerialiser
     {

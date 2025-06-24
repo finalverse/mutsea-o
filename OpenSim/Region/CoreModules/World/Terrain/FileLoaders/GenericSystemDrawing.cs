@@ -32,7 +32,7 @@ using System.IO;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FileLoaders
+namespace MutSea.Region.CoreModules.World.Terrain.FileLoaders
 {
     /// <summary>
     /// A virtual class designed to have methods overloaded,

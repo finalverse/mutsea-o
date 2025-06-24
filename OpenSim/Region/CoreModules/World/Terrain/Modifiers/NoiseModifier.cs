@@ -29,7 +29,7 @@ using OpenSim.Region.CoreModules.World.Terrain;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.World.Terrain.Modifiers
+namespace MutSea.Region.CoreModules.World.Terrain.Modifiers
 {
     public class NoiseModifier : TerrainModifier
     {

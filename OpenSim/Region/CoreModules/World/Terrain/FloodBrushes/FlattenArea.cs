@@ -29,7 +29,7 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Framework;
 
 
-namespace OpenSim.Region.CoreModules.World.Terrain.FloodBrushes
+namespace MutSea.Region.CoreModules.World.Terrain.FloodBrushes
 {
     public class FlattenArea : ITerrainFloodEffect
     {
