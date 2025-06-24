@@ -38,7 +38,7 @@ using log4net;
 using OpenSim.Framework;
 using Nini.Config;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     public class Commands : ICommands
     {

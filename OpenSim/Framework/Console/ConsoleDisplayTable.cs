@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     /// <summary>
     /// Used to generated a formatted table for the console.

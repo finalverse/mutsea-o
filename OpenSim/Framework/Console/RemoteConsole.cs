@@ -37,7 +37,7 @@ using Nini.Config;
 using OpenSim.Framework.Servers.HttpServer;
 using log4net;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     // A console that uses REST interfaces
     //

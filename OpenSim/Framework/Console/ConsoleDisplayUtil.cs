@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     /// <summary>
     /// This will be a set of typical column sizes to allow greater consistency between console commands.

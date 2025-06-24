@@ -33,7 +33,7 @@ using System.Reflection;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Console
+namespace MutSea.Framework.Console
 {
     public class ConsoleUtil
     {
