@@ -35,7 +35,7 @@ using Nini.Config;
 using log4net;
 using System.Net.Http.Headers;
 
-namespace OpenSim.Framework.ServiceAuth
+namespace MutSea.Framework.ServiceAuth
 {
     public class BasicHttpAuthentication : IServiceAuth
     {

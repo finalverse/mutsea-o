@@ -32,7 +32,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 
-namespace OpenSim.Framework.ServiceAuth
+namespace MutSea.Framework.ServiceAuth
 {
     public class CompoundAuthentication : IServiceAuth
     {
