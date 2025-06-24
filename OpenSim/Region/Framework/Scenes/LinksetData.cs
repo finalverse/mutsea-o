@@ -36,7 +36,7 @@ using System.Xml;
 
 //using log4net;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class LinksetData
     {

@@ -26,9 +26,9 @@
  */
 
 using System;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IRegionModulesController
     {

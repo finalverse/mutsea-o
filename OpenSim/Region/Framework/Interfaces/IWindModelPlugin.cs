@@ -29,13 +29,13 @@ using System;
 using System.Collections.Generic;
 
 using Nini.Config;
-using OpenSim.Framework;
+using MutSea.Framework;
 using OpenMetaverse;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Region.Framework.Scenes;
 
 using Mono.Addins;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     [TypeExtensionPoint(Path = "/OpenSim/WindModule", NodeName = "WindModel")]
     public interface IWindModelPlugin : IPlugin

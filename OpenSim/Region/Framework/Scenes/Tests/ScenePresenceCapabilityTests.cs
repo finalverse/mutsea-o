@@ -35,20 +35,20 @@ using Timer = System.Timers.Timer;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Servers;
-using OpenSim.Framework.Servers.HttpServer;
-using OpenSim.Region.ClientStack.Linden;
-using OpenSim.Region.CoreModules.Framework;
-using OpenSim.Region.CoreModules.Framework.EntityTransfer;
-using OpenSim.Region.CoreModules.World.Serialiser;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Tests.Common;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
+using MutSea.Framework;
+using MutSea.Framework.Servers;
+using MutSea.Framework.Servers.HttpServer;
+using MutSea.Region.ClientStack.Linden;
+using MutSea.Region.CoreModules.Framework;
+using MutSea.Region.CoreModules.Framework.EntityTransfer;
+using MutSea.Region.CoreModules.World.Serialiser;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Tests.Common;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
     public class ScenePresenceCapabilityTests : OpenSimTestCase

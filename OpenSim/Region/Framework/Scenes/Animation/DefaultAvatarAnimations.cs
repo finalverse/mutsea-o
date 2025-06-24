@@ -31,7 +31,7 @@ using System.Xml;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Scenes.Animation
+namespace MutSea.Region.Framework.Scenes.Animation
 {
     public class DefaultAvatarAnimations
     {

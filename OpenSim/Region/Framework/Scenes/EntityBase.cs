@@ -30,11 +30,11 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using log4net;
-using OpenSim.Framework;
+using MutSea.Framework;
 using OpenMetaverse;
 using System.Runtime.CompilerServices;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public abstract class EntityBase : ISceneEntity
     {

@@ -29,9 +29,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class PriorityQueue
     {

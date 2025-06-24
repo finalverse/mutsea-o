@@ -26,14 +26,14 @@ using System;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.CoreModules.World.Estate;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Services.Interfaces;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.CoreModules.World.Estate;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Services.Interfaces;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     /// <summary>
     /// Scene telehub tests

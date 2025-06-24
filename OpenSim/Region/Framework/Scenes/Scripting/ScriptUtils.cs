@@ -26,9 +26,9 @@
  */
 
 using OpenMetaverse;
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Region.Framework.Scenes.Scripting
+namespace MutSea.Region.Framework.Scenes.Scripting
 {
     /// <summary>
     /// Utility functions for use by scripts manipulating the scene.

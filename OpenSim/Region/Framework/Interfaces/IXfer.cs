@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IXfer
     {

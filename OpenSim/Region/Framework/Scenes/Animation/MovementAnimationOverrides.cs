@@ -35,16 +35,16 @@ using Timer = System.Timers.Timer;
 using OpenMetaverse;
 using log4net;
 using Nini.Config;
-using OpenSim.Framework;
-using OpenSim.Framework.Client;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Animation;
-using OpenSim.Region.Framework.Scenes.Types;
-using OpenSim.Region.PhysicsModules.SharedBase;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
-using OpenSim.Services.Interfaces;
+using MutSea.Framework;
+using MutSea.Framework.Client;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Animation;
+using MutSea.Region.Framework.Scenes.Types;
+using MutSea.Region.PhysicsModules.SharedBase;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
+using MutSea.Services.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class MovementAnimationOverrides
     {

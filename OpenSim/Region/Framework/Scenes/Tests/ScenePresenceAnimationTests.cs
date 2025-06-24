@@ -34,16 +34,16 @@ using System.Timers;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.CoreModules.Framework.EntityTransfer;
-using OpenSim.Region.CoreModules.World.Serialiser;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Region.PhysicsModules.SharedBase;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.CoreModules.Framework.EntityTransfer;
+using MutSea.Region.CoreModules.World.Serialiser;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Region.PhysicsModules.SharedBase;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     /// <summary>
     /// Scene presence animation tests

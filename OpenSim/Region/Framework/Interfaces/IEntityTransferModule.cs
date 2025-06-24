@@ -26,13 +26,13 @@
  */
 
 using System.Collections.Generic;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
 
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate ScenePresence CrossAgentToNewRegionDelegate(ScenePresence agent, Vector3 pos, GridRegion neighbourRegion, bool isFlying, EntityTransferContext ctx);
     public delegate ScenePresence CrossAsyncDelegate(ScenePresence agent, bool isFlying);

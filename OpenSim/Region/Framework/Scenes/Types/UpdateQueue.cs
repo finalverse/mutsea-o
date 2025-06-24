@@ -30,9 +30,9 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using OpenMetaverse;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Scenes.Types
+namespace MutSea.Region.Framework.Scenes.Types
 {
     public class UpdateQueue
     {

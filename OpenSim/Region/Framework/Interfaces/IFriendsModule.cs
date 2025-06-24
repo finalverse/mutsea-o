@@ -27,11 +27,11 @@
 
 using System.Collections.Generic;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using FriendInfo = MutSea.Services.Interfaces.FriendInfo;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface IFriendsModule
     {

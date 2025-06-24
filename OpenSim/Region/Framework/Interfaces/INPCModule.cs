@@ -26,10 +26,10 @@
  */
 
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     // option flags for NPCs
     public enum NPCOptionsFlags : int

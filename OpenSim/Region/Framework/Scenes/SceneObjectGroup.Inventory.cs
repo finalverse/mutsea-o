@@ -29,13 +29,13 @@ using System;
 using System.Reflection;
 using OpenMetaverse;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
 using System.Collections.Generic;
 using System.Xml;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public partial class SceneObjectGroup : EntityBase
     {

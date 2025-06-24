@@ -37,12 +37,12 @@ using System.Collections.Generic;
 
 using log4net;
 
-using OpenSim.Framework;
+using MutSea.Framework;
 
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 
-namespace OpenSim.Region.ClientStack.LindenUDP
+namespace MutSea.Region.ClientStack.LindenUDP
 {
     public static class OpenSimTerrainCompressor
     {

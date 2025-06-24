@@ -34,12 +34,12 @@ using NUnit.Framework;
 using OpenMetaverse;
 using OpenSim;
 using OpenSim.ApplicationPlugins.RegionModulesController;
-using OpenSim.Framework;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Grid;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Grid;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     public class SharedRegionModuleTests : OpenSimTestCase
     {
@@ -67,8 +67,8 @@ namespace OpenSim.Region.Framework.Scenes.Tests
             // For grid servic
             configSource.AddConfig("GridService");
             configSource.Configs["Modules"].Set("GridServices", "RegionGridServicesConnector");
-            configSource.Configs["GridService"].Set("StorageProvider", "OpenSim.Data.Null.dll:NullRegionData");
-            configSource.Configs["GridService"].Set("LocalServiceModule", "OpenSim.Services.GridService.dll:GridService");
+            configSource.Configs["GridService"].Set("StorageProvider", "MutSea.Data.Null.dll:NullRegionData");
+            configSource.Configs["GridService"].Set("LocalServiceModule", "MutSea.Services.GridService.dll:GridService");
             configSource.Configs["GridService"].Set("ConnectionString", "!static");
 
             RegionGridServicesConnector gridService = new RegionGridServicesConnector();

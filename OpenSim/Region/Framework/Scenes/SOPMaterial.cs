@@ -29,11 +29,11 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography; // for computing md5 hash
-using OpenSim.Framework;
+using MutSea.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public static class SOPMaterialData
     {

@@ -27,10 +27,10 @@
 
 using OpenMetaverse;
 using OpenMetaverse.Packets;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Serialization;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Serialization;
+using MutSea.Region.PhysicsModules.SharedBase;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -38,9 +38,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Xml;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     // this is not the right place for this
     // for now it must match similar enums duplicated on scritp engines
@@ -777,7 +777,7 @@ namespace OpenSim.Region.Framework.Scenes
                 return sog;
 
             Vector3 newpos = Vector3.Zero;
-            OpenSim.Services.Interfaces.GridRegion destination = null;
+            MutSea.Services.Interfaces.GridRegion destination = null;
 
             destination = entityTransfer.GetObjectDestination(sog, val, out newpos);
             if (destination is null)

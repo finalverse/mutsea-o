@@ -27,7 +27,7 @@
 
 using System.Collections.Generic;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public enum CommandIntentions
     {

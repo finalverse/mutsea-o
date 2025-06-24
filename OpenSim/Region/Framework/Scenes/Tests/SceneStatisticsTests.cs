@@ -30,11 +30,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
     public class SceneStatisticsTests : OpenSimTestCase

@@ -29,7 +29,7 @@ using System;
 using System.Reflection;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     // these could be expanded at some point to provide more type information
     // for now value accounts for all base types

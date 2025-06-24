@@ -34,14 +34,14 @@ using System.Linq;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Serialization.External;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Scenes.Serialization;
-using OpenSim.Services.Interfaces;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Framework.Serialization.External;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.Framework.Scenes.Serialization;
+using MutSea.Services.Interfaces;
+using MutSea.Tests.Common;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     /// <summary>
     /// Basic scene object serialization tests.

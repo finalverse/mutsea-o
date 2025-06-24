@@ -34,11 +34,11 @@ using System.Text;
 using System.Xml;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes;
 
-namespace OpenSim.Region.Framework.Scenes.Serialization
+namespace MutSea.Region.Framework.Scenes.Serialization
 {
     /// <summary>
     /// Serialize and deserialize coalesced scene objects.

@@ -27,10 +27,10 @@
 
 using System.Collections.Generic;
 using OpenMetaverse;
-using OpenSim.Framework;
-using Caps=OpenSim.Framework.Capabilities.Caps;
+using MutSea.Framework;
+using Caps=MutSea.Framework.Capabilities.Caps;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public interface ICapabilitiesModule
     {

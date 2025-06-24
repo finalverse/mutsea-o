@@ -29,7 +29,7 @@ using System.Drawing;
 using OpenMetaverse;
 using OpenMetaverse.Imaging;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public delegate void DecodedCallback(UUID AssetId, OpenJPEG.J2KLayerInfo[] layers);
 

@@ -31,10 +31,10 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Framework;
+using MutSea.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     #region Delegates
     public delegate uint GenerateClientFlagsHandler(SceneObjectPart part, ScenePresence sp, uint curEffectivePerms);

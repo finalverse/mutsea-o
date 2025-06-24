@@ -32,11 +32,11 @@ using System.Reflection;
 using System.Xml;
 using OpenMetaverse;
 using log4net;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Framework;
+using MutSea.Region.Framework.Scenes;
+using MutSea.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.Framework.Scenes.Serialization
+namespace MutSea.Region.Framework.Scenes.Serialization
 {
     /// <summary>
     /// Static methods to serialize and deserialize scene objects to and from XML

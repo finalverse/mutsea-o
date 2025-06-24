@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// Represents a coalescene of scene objects.  A coalescence occurs when objects that are not in the same linkset

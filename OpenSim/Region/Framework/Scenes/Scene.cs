@@ -37,18 +37,18 @@ using System.Timers;
 using Nini.Config;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
-using OpenSim.Framework.Monitoring;
-using OpenSim.Services.Interfaces;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes.Serialization;
-using OpenSim.Region.PhysicsModules.SharedBase;
+using MutSea.Framework;
+using MutSea.Framework.Monitoring;
+using MutSea.Services.Interfaces;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Scenes.Serialization;
+using MutSea.Region.PhysicsModules.SharedBase;
 using Timer = System.Timers.Timer;
-using TPFlags = OpenSim.Framework.Constants.TeleportFlags;
-using GridRegion = OpenSim.Services.Interfaces.GridRegion;
-using PermissionMask = OpenSim.Framework.PermissionMask;
+using TPFlags = MutSea.Framework.Constants.TeleportFlags;
+using GridRegion = MutSea.Services.Interfaces.GridRegion;
+using PermissionMask = MutSea.Framework.PermissionMask;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public delegate bool FilterAvatarList(ScenePresence avatar);
 
@@ -295,7 +295,7 @@ namespace OpenSim.Region.Framework.Scenes
         protected Timer m_timerWatchdog = new();
         protected List<RegionInfo> m_regionRestartNotifyList = new();
         protected List<RegionInfo> m_neighbours = new();
-        protected string m_simulatorVersion = "OpenSimulator Server";
+        protected string m_simulatorVersion = "MutSea Server";
         protected AgentCircuitManager m_authenticateHandler;
         protected SceneCommunicationService m_sceneGridService;
         protected ISnmpModule m_snmpService = null;
@@ -4341,7 +4341,7 @@ namespace OpenSim.Region.Framework.Scenes
                 return false;
             }
 
-            OpenSim.Services.Interfaces.PresenceInfo pinfo = presencesvc.GetAgent(agent.SessionID);
+            MutSea.Services.Interfaces.PresenceInfo pinfo = presencesvc.GetAgent(agent.SessionID);
 
             if (pinfo is null)
             {

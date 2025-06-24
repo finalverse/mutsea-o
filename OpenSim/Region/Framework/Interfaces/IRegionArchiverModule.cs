@@ -31,7 +31,7 @@ using System.IO;
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     /// <summary>
     /// Interface to region archive functionality

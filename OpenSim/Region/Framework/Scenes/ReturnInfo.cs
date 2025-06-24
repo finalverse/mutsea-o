@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public struct ReturnInfo
     {

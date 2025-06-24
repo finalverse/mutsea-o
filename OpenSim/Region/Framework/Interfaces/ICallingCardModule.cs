@@ -29,9 +29,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public interface ICallingCardModule
     {

@@ -31,14 +31,14 @@ using System.Reflection;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Servers;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.CoreModules.ServiceConnectorsOut.Simulation;
-using OpenSim.Tests.Common;
+using MutSea.Framework;
+using MutSea.Framework.Servers;
+using MutSea.Region.Framework.Interfaces;
+using MutSea.Region.CoreModules.ServiceConnectorsOut.Simulation;
+using MutSea.Tests.Common;
 using System.Threading;
 
-namespace OpenSim.Region.Framework.Scenes.Tests
+namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
     public class ScenePresenceSitTests : OpenSimTestCase

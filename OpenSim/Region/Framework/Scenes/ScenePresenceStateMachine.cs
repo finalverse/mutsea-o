@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     /// <summary>
     /// The possible states that a scene presence can be in.  This is currently orthagonal to whether a scene presence

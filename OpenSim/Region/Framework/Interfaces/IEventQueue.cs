@@ -32,9 +32,9 @@ using OpenMetaverse;
 using OpenMetaverse.Packets;
 using OpenMetaverse.Messages.Linden;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
+using MutSea.Framework;
 
-namespace OpenSim.Region.Framework.Interfaces
+namespace MutSea.Region.Framework.Interfaces
 {
     public struct GroupChatListAgentUpdateData
     {

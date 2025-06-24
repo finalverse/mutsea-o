@@ -30,10 +30,10 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 //using log4net;
 using Nini.Config;
-using OpenSim.Framework;
+using MutSea.Framework;
 
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public class GodController
     {

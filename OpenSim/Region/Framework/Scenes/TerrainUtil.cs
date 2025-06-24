@@ -26,9 +26,9 @@
  */
 
 using System;
-using OpenSim.Region.Framework.Interfaces;
+using MutSea.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.Framework.Scenes
+namespace MutSea.Region.Framework.Scenes
 {
     public static class TerrainUtil
     {
