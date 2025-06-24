@@ -120,3 +120,28 @@ doc/doxygen.error.log
 bin/OpenSim.ini
 
 *.patch
+# Additional ignore rules for C# projects (GitHub VisualStudio template)
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+.vscode/
+*.userprefs
+*.userosscache
+*.sln.docstates
+*.exe
+*.app
+*.cache
+[Tt]humbs.db
+[Dd]esktop.ini
+*.psess
+*.vsp
+*.vspx
+*.coverage
+*.coveragexml
+_ReSharper*/
+*.DotSettings.user
+*.nupkg
+packages/
+
+# Explicitly track IDE directory
+!.ide/
