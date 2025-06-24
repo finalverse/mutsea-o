@@ -29,7 +29,7 @@ using System;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Framework.Client
+namespace MutSea.Framework.Client
 {
     public interface IClientInventory
     {

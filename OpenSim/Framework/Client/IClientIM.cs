@@ -28,7 +28,7 @@
 using System;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Client
+namespace MutSea.Framework.Client
 {
     public class ClientInstantMessageArgs : EventArgs
     {
