@@ -35,7 +35,7 @@ using log4net;
 using OpenSim.Framework;
 using System.Net.Http;
 
-namespace OpenSim.Services.Connectors.InstantMessage
+namespace MutSea.Services.Connectors.InstantMessage
 {
     public class InstantMessageServiceConnector
     {

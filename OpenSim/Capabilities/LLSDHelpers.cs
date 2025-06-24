@@ -32,7 +32,7 @@ using System.Reflection;
 using System.Xml;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     public class LLSDHelpers
     {

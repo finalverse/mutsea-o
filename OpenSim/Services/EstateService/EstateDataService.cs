@@ -36,7 +36,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Data;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.EstateService
+namespace MutSea.Services.EstateService
 {
     public class EstateDataService : ServiceBase, IEstateDataService
     {

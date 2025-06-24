@@ -36,7 +36,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Services.AssetService
+namespace MutSea.Services.AssetService
 {
     public class AssetService : AssetServiceBase, IAssetService
     {

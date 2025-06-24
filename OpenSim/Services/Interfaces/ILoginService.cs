@@ -33,7 +33,7 @@ using System.Net;
 using OpenMetaverse.StructuredData;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public abstract class LoginResponse
     {

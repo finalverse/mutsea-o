@@ -40,7 +40,7 @@ using Nwc.XmlRpc;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using System.Net.Http;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class LandServicesConnector : ILandService
     {

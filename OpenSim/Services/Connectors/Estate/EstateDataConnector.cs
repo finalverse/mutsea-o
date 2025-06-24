@@ -39,7 +39,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Server.Base;
 using System.Net.Http;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class EstateDataRemoteConnector : BaseServiceConnector, IEstateDataService
     {

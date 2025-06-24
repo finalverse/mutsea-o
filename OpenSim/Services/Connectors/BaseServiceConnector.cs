@@ -4,7 +4,7 @@ using OpenSim.Framework.ServiceAuth;
 
 using Nini.Config;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class BaseServiceConnector
     {

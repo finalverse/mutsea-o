@@ -37,7 +37,7 @@ using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
 using log4net;
 
-namespace OpenSim.Capabilities.Handlers
+namespace MutSea.Capabilities.Handlers
 {
     public class FetchInventory2Handler
     {

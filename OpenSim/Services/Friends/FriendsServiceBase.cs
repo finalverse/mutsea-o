@@ -34,7 +34,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.Friends
+namespace MutSea.Services.Friends
 {
     public class FriendsServiceBase : ServiceBase
     {

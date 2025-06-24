@@ -35,7 +35,7 @@ using OpenSim.Data;
 using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Services.UserAccountService
+namespace MutSea.Services.UserAccountService
 {
     public class AgentPreferencesService : AgentPreferencesServiceBase, IAgentPreferencesService
     {

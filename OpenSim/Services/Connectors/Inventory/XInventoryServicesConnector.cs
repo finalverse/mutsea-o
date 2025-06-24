@@ -43,7 +43,7 @@ using OpenMetaverse;
 using System.Text;
 using System.Threading;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class XInventoryServicesConnector : BaseServiceConnector, IInventoryService
     {

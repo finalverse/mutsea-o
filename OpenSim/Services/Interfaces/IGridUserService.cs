@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     /// <summary>
     /// Records user information specific to a grid but which is not part of a user's account.

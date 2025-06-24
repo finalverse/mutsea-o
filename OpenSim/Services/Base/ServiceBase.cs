@@ -32,7 +32,7 @@ using System.Reflection;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Services.Base
+namespace MutSea.Services.Base
 {
     public class ServiceBase
     {

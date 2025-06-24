@@ -36,7 +36,7 @@ using OpenSim.Data;
 using OpenSim.Framework;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.AuthenticationService
+namespace MutSea.Services.AuthenticationService
 {
     // Generic Authentication service used for identifying
     // and authenticating principals.

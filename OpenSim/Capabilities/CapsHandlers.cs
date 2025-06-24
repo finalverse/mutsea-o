@@ -33,7 +33,7 @@ using OpenSim.Framework.Servers.HttpServer;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     /// <summary>
     /// CapsHandlers is a cap handler container but also takes

@@ -33,7 +33,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.PresenceService
+namespace MutSea.Services.PresenceService
 {
     public class PresenceServiceBase : ServiceBase
     {

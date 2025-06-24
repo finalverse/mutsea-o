@@ -30,7 +30,7 @@ using OpenSim.Framework;
 using OpenMetaverse;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public interface INeighbourService
     {

@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class LLSDType : Attribute

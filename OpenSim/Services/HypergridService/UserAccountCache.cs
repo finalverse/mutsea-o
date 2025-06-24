@@ -7,7 +7,7 @@ using OpenMetaverse;
 
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     public class UserAccountCache : IUserAccountService
     {

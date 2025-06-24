@@ -36,7 +36,7 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
 
-namespace OpenSim.Capabilities.Handlers
+namespace MutSea.Capabilities.Handlers
 {
     public class FetchInvDescServerConnector : ServiceConnector
     {

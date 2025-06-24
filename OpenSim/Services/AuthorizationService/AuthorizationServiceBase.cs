@@ -33,7 +33,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.AuthorizationService
+namespace MutSea.Services.AuthorizationService
 {
     public class AuthorizationServiceBase : ServiceBase
     {

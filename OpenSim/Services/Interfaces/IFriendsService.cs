@@ -30,7 +30,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using System.Collections.Generic;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public class FriendInfo
     {

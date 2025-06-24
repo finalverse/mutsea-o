@@ -39,7 +39,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Tests.Common;
 
 /*
-namespace OpenSim.Capabilities.Handlers.GetTexture.Tests
+namespace MutSea.Capabilities.Handlers.GetTexture.Tests
 {
     [TestFixture]
     public class GetTextureHandlerTests : OpenSimTestCase

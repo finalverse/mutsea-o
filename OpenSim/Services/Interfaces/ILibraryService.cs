@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using OpenSim.Framework;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public interface ILibraryService
     {

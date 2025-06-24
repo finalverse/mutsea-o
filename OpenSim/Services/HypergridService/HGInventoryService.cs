@@ -38,7 +38,7 @@ using OpenSim.Data;
 using OpenSim.Framework;
 using OpenSim.Server.Base;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     /// <summary>
     /// Hypergrid inventory service. It serves the IInventoryService interface,

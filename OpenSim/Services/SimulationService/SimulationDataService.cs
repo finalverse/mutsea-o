@@ -38,7 +38,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Services.SimulationService
+namespace MutSea.Services.SimulationService
 {
     public class SimulationDataService : ServiceBase, ISimulationDataService
     {

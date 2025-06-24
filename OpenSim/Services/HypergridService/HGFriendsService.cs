@@ -42,7 +42,7 @@ using OpenMetaverse;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     /// <summary>
     /// W2W social networking

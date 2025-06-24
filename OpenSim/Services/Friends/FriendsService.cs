@@ -35,7 +35,7 @@ using Nini.Config;
 using log4net;
 using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 
-namespace OpenSim.Services.Friends
+namespace MutSea.Services.Friends
 {
     public class FriendsService : FriendsServiceBase, IFriendsService
     {

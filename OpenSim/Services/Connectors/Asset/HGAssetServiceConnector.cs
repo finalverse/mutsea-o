@@ -33,7 +33,7 @@ using OpenSim.Framework;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class HGAssetServiceConnector : IAssetService
     {

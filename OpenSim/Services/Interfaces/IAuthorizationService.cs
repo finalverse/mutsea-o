@@ -28,7 +28,7 @@
 using System;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     // Generic Authorization service used for authorizing principals in a particular region
 

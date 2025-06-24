@@ -30,7 +30,7 @@ using OpenSim.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public interface IUserProfilesService
     {

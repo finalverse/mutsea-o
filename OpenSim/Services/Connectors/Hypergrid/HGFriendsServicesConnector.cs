@@ -38,7 +38,7 @@ using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 using OpenSim.Server.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors.Hypergrid
+namespace MutSea.Services.Connectors.Hypergrid
 {
     public class HGFriendsServicesConnector : FriendsSimConnector
     {

@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Services.AssetService;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     /// <summary>
     /// Hypergrid asset service. It serves the IAssetService interface,

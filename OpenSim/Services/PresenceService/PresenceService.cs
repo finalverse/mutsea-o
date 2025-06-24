@@ -37,7 +37,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Services.PresenceService
+namespace MutSea.Services.PresenceService
 {
     public class PresenceService : PresenceServiceBase, IPresenceService
     {

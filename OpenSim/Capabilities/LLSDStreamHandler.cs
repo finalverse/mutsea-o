@@ -30,7 +30,7 @@ using System.Collections;
 using System.IO;
 using OpenSim.Framework.Servers.HttpServer;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     public class LLSDStreamhandler<TRequest, TResponse> : BaseStreamHandler
         where TRequest : new()

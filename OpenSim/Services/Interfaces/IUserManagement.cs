@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using OpenMetaverse;
 
 //namespace OpenSim.Services.Interfaces
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// This maintains the relationship between a UUID and a user name.

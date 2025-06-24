@@ -44,7 +44,7 @@ using log4net;
 using OpenSim.Services.Connectors.Simulation;
 using System.Net.Http;
 
-namespace OpenSim.Services.Connectors.Hypergrid
+namespace MutSea.Services.Connectors.Hypergrid
 {
     public class GatekeeperServiceConnector : SimulationServiceConnector
     {

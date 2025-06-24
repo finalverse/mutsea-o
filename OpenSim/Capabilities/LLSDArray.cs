@@ -27,7 +27,7 @@
 
 using System.Collections;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     [LLSDType("ARRAY")]
     public class OSDArray

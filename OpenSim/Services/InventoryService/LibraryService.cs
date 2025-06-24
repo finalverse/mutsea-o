@@ -40,7 +40,7 @@ using Nini.Config;
 using OpenMetaverse;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Services.InventoryService
+namespace MutSea.Services.InventoryService
 {
     /// <summary>
     /// Basically a hack to give us a Inventory library while we don't have a inventory server

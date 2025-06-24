@@ -39,7 +39,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenSim.Server.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class PresenceServicesConnector : BaseServiceConnector, IPresenceService
     {

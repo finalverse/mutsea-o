@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Services.Connectors.Friends
+namespace MutSea.Services.Connectors.Friends
 {
     public class FriendsSimConnector
     {

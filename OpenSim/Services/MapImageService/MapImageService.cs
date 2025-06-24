@@ -43,7 +43,7 @@ using System.Reflection;
 using System.Threading;
 
 
-namespace OpenSim.Services.MapImageService
+namespace MutSea.Services.MapImageService
 {
     public class MapImageService : IMapImageService
     {

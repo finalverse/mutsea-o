@@ -37,7 +37,7 @@ using log4net;
 using OpenMetaverse;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.UserProfilesService
+namespace MutSea.Services.UserProfilesService
 {
     /// <summary>
     /// A client for accessing a profile server using the OpenProfile protocol.

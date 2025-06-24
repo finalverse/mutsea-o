@@ -37,7 +37,7 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using System.Collections;
 
-namespace OpenSim.Services.FreeswitchService
+namespace MutSea.Services.FreeswitchService
 {
     public class FreeswitchService : FreeswitchServiceBase, IFreeswitchService
     {

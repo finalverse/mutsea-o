@@ -39,7 +39,7 @@ using OpenSim.Framework.Servers.HttpServer;
 
 // using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     /// <summary>
     /// XXX Probably not a particularly nice way of allow us to get the scene presence from the scene (chiefly so that

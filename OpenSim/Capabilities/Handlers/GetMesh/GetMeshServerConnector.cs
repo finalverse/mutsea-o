@@ -33,7 +33,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenSim.Services.Interfaces;
 using System;
 
-namespace OpenSim.Capabilities.Handlers
+namespace MutSea.Capabilities.Handlers
 {
     public class GetMeshServerConnector : ServiceConnector
     {

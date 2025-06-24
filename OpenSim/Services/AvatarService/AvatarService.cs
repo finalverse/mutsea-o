@@ -37,7 +37,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Services.AvatarService
+namespace MutSea.Services.AvatarService
 {
     public class AvatarService : AvatarServiceBase, IAvatarService
     {
