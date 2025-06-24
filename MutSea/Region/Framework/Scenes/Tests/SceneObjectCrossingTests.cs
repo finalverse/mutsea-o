@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -258,7 +258,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
             SceneHelpers.SetupSceneModules(
                 sceneB, config, etmB, lmmB, new PrimLimitsModule(), new PrimCountModule());
 
-            // We must set up the parcel for this to work.  Normally this is taken care of by MutSeaulator startup
+            // We must set up the parcel for this to work.  Normally this is taken care of by OpenSimulator startup
             // code which is not yet easily invoked by tests.
             lmmA.EventManagerOnNoLandDataFromStorage();
             lmmB.EventManagerOnNoLandDataFromStorage();

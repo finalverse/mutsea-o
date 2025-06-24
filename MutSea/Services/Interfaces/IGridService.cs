@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -113,10 +113,10 @@ namespace MutSea.Services.Interfaces
         List<GridRegion> GetOnlineRegions(UUID scopeID, int x, int y, int maxCount);
 
         /// <summary>
-        /// Get internal MutSeaulator region flags.
+        /// Get internal OpenSimulator region flags.
         /// </summary>
         /// <remarks>
-        /// See MutSeaulator.Framework.RegionFlags.  These are not returned in the GridRegion structure -
+        /// See OpenSimulator.Framework.RegionFlags.  These are not returned in the GridRegion structure -
         /// they currently need to be requested separately.  Possibly this should change to avoid multiple service calls
         /// in some situations.
         /// </remarks>

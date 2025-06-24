@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -122,7 +122,7 @@ namespace MutSea.Framework.Servers
         }
 
         /// <summary>
-        /// Log information about the circumstances in which we're running (MutSeaulator version number, CLR details,
+        /// Log information about the circumstances in which we're running (OpenSimulator version number, CLR details,
         /// etc.).
         /// </summary>
         public void LogEnvironmentInformation()
@@ -131,7 +131,7 @@ namespace MutSea.Framework.Servers
             // XmlConfigurator calls first accross servers.
             m_log.Info($"[SERVER BASE]: Starting in {m_startupDirectory}");
 
-            m_log.Info($"[SERVER BASE]: MutSeaulator version: {m_version}");
+            m_log.Info($"[SERVER BASE]: OpenSimulator version: {m_version}");
 
             // clr version potentially is more confusing than helpful, since it doesn't tell us if we're running under Mono/MS .NET and
             // the clr version number doesn't match the project version number under Mono.

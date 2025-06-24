@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -60,7 +60,7 @@ namespace MutSea
         public const int VERSIONINFO_VERSION_LENGTH = 27;
 
         /// <value>
-        /// This is the external interface version.  It is separate from the MutSeaulator project version.
+        /// This is the external interface version.  It is separate from the OpenSimulator project version.
         ///
         /// </value>
         /// Commented because it's not used anymore, see below for new
@@ -86,7 +86,7 @@ namespace MutSea
         ///   - A source simulator which only implements "SIMULATION/0.1" can still teleport here
         ///   - this protocol is more efficient than "SIMULATION/0.1"
         /// "SIMULATION/0.1"
-        ///   - this is an older teleport protocol used in MutSeaulator 0.7.5 and before.
+        ///   - this is an older teleport protocol used in OpenSimulator 0.7.5 and before.
         /// </remarks>
         public readonly static float SimulationServiceVersionAcceptedMin = 0.3f;
         public readonly static float SimulationServiceVersionAcceptedMax = 0.8f;

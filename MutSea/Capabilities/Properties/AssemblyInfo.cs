@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Finalverse Inc.")]
 [assembly: AssemblyProduct("MutSea")]
-[assembly: AssemblyCopyright("MutSeaulator developers")]
+[assembly: AssemblyCopyright("OpenSimulator developers")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

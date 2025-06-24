@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -278,7 +278,7 @@ namespace MutSea.Region.CoreModules.World.Objects.Commands
             float totalPrims              = stats[6];
             float activePrims             = stats[7];
             float totalFrameTime          = stats[8];
-//            float netFrameTime            = stats.StatsBlock[9].StatValue; // Ignored - not used by MutSeaulator
+//            float netFrameTime            = stats.StatsBlock[9].StatValue; // Ignored - not used by OpenSimulator
             float physicsFrameTime        = stats[10];
             float otherFrameTime          = stats[12];
 //            float imageFrameTime          = stats.StatsBlock[11].StatValue; // Ignored

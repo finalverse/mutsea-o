@@ -60,7 +60,7 @@ where we are today.
 * Teravus (w3z)
 
 = Additional MutSea Contributors =
-These folks have contributed code patches or content to MutSeaulator to help make it
+These folks have contributed code patches or content to OpenSimulator to help make it
 what it is today.  
 
 * A_Biondi

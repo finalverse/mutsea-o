@@ -11,7 +11,7 @@ using Mono.Addins;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Finalverse Inc.")]
 [assembly: AssemblyProduct("MutSea")]
-[assembly: AssemblyCopyright("Copyright MutSeaulator developers ©  2012")]
+[assembly: AssemblyCopyright("Copyright OpenSimulator developers ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

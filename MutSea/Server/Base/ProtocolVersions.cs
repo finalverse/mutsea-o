@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -30,11 +30,11 @@ namespace MutSea.Server.Base
     public class ProtocolVersions
     {
         /// <value>
-        /// This is the external protocol versions.  It is separate from the MutSeaulator project version.
+        /// This is the external protocol versions.  It is separate from the OpenSimulator project version.
         ///
         /// These version numbers should be increased by 1 every time a code
         /// change in the Service.Connectors and Server.Handlers, espectively,
-        /// makes the previous MutSeaulator revision incompatible
+        /// makes the previous OpenSimulator revision incompatible
         /// with the new revision.
         ///
         /// Changes which are compatible with an older revision (e.g. older revisions experience degraded functionality

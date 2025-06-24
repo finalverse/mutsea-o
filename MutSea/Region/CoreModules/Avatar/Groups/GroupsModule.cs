@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -101,7 +101,7 @@ namespace MutSea.Region.CoreModules.Avatar.Groups
                     if (m_SceneList.Count == 0)
                     {
                         osGroup.GroupID = OpenSimulatorGroupID;
-                        osGroup.GroupName = "MutSeaulator Testing";
+                        osGroup.GroupName = "OpenSimulator Testing";
                         osGroup.GroupPowers =
                                 (uint)(GroupPowers.AllowLandmark |
                                        GroupPowers.AllowSetHome);

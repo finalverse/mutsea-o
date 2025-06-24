@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the MutSeaulator Project nor the
+ *     * Neither the name of the OpenSimulator Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -38,7 +38,7 @@ using MutSea.Framework.Console;
 namespace MutSea
 {
     /// <summary>
-    /// Starting class for the MutSeaulator Region
+    /// Starting class for the OpenSimulator Region
     /// </summary>
     public class Application
     {
@@ -187,16 +187,16 @@ namespace MutSea
                 m_log.Warn("[OPENSIM MAIN]: Threadpool reconfiguration failed, runtime defaults still in effect.");
             }
 
-            // Check if the system is compatible with MutSeaulator.
+            // Check if the system is compatible with OpenSimulator.
             // Ensures that the minimum system requirements are met
             string error = string.Empty;
             if (Util.IsEnvironmentSupported(ref error))
             {
-                m_log.Info("[OPENSIM MAIN]: Environment is supported by MutSeaulator.");
+                m_log.Info("[OPENSIM MAIN]: Environment is supported by OpenSimulator.");
             }
             else
             {
-                m_log.Warn($"[OPENSIM MAIN]: Environment is not supported by MutSeaulator: {error}\n");
+                m_log.Warn($"[OPENSIM MAIN]: Environment is not supported by OpenSimulator: {error}\n");
             }
 
             m_log.Info($"Default culture changed to {Culture.GetDefaultCurrentCulture().DisplayName}");
@@ -233,7 +233,7 @@ namespace MutSea
             {
                 MainConsole.Instance = new LocalConsole("Region");
                 string resp = MainConsole.Instance.CmdPrompt(
-                                        "\n\n*************Required Configuration files not found.*************\n\n   MutSeaulator will not run without these files.\n\nRemember, these file names are Case Sensitive in Linux and Proper Cased.\n1. ./MutSea.ini\nand\n2. ./config-include/StandaloneCommon.ini \nor\n3. ./config-include/GridCommon.ini\n\nAlso, you will want to examine these files in great detail because only the basic system will load by default. MutSeaulator can do a LOT more if you spend a little time going through these files.\n\n" + ": " + "Do you want to copy the most basic Defaults from standalone?",
+                                        "\n\n*************Required Configuration files not found.*************\n\n   OpenSimulator will not run without these files.\n\nRemember, these file names are Case Sensitive in Linux and Proper Cased.\n1. ./MutSea.ini\nand\n2. ./config-include/StandaloneCommon.ini \nor\n3. ./config-include/GridCommon.ini\n\nAlso, you will want to examine these files in great detail because only the basic system will load by default. OpenSimulator can do a LOT more if you spend a little time going through these files.\n\n" + ": " + "Do you want to copy the most basic Defaults from standalone?",
                                         "yes");
                 if (resp == "yes")
                 {
