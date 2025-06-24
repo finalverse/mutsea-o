@@ -34,7 +34,7 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using log4net;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class UserProfilesData: IProfilesData
     {

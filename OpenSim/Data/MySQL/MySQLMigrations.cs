@@ -35,7 +35,7 @@ using System.Text.RegularExpressions;
 using log4net;
 using MySql.Data.MySqlClient;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     /// <summary>This is a MySQL-customized migration processor.  The only difference is in how
     /// it executes SQL scripts (using MySqlScript instead of MyCommand)

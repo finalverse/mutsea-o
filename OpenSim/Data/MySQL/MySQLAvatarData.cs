@@ -31,7 +31,7 @@ using log4net;
 using OpenMetaverse;
 using MySql.Data.MySqlClient;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     /// <summary>
     /// A MySQL Interface for the Grid Server

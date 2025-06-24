@@ -36,7 +36,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Data;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySQLEstateStore : IEstateDataStore
     {

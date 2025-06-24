@@ -38,7 +38,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     /// <summary>
     /// A MySQL Interface for the Region Server

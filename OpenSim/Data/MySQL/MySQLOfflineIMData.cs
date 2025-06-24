@@ -31,12 +31,12 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using OpenSim.Framework;
-using OpenSim.Data.MySQL;
+using MutSea.Data.MySQL;
 
 using OpenMetaverse;
 using MySql.Data.MySqlClient;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySQLOfflineIMData : MySQLGenericTableHandler<OfflineIMData>, IOfflineIMData
     {

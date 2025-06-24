@@ -33,7 +33,7 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using OpenMetaverse;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySQLGenericTableHandler<T> : MySqlFramework where T: class, new()
     {

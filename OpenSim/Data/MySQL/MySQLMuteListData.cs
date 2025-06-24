@@ -33,7 +33,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using MySql.Data.MySqlClient;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySqlMuteListData : MySQLGenericTableHandler<MuteData>, IMuteListData
     {

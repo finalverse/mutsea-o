@@ -35,7 +35,7 @@ using log4net;
 using MySql.Data.MySqlClient;
 using OpenMetaverse;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     public class MySQLFSAssetData : IFSAssetDataPlugin
     {

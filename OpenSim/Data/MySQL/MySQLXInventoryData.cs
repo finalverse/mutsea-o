@@ -32,7 +32,7 @@ using log4net;
 using MySql.Data.MySqlClient;
 using OpenMetaverse;
 
-namespace OpenSim.Data.MySQL
+namespace MutSea.Data.MySQL
 {
     /// <summary>
     /// A MySQL Interface for the Inventory Server
