@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
 
     /**

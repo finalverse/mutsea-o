@@ -29,7 +29,7 @@ using System;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public interface ScriptMyILGen
     {

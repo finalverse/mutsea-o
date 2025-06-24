@@ -37,7 +37,7 @@ using OpenSim.Region.ScriptEngine.Shared.Api;
 using OpenSim.Region.ScriptEngine.Shared.ScriptBase;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public partial class XMRInstance
     {

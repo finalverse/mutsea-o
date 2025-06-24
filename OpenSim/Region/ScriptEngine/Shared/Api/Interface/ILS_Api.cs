@@ -36,7 +36,7 @@ using LSL_String = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 using LSL_Integer = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 using LSL_Float = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLFloat;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Interfaces
+namespace MutSea.Region.ScriptEngine.Shared.Api.Interfaces
 {
     public interface ILS_Api
     {

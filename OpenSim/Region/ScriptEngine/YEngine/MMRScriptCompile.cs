@@ -32,7 +32,7 @@
 using System;
 using System.IO;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public partial class XMRInstance
     {

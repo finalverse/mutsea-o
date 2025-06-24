@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
 
     public partial class XMRInstance

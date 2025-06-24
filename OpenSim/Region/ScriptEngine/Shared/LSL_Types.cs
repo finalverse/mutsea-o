@@ -39,7 +39,7 @@ using OMV_Vector3d = OpenMetaverse.Vector3d;
 using OMV_Quaternion = OpenMetaverse.Quaternion;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Region.ScriptEngine.Shared
+namespace MutSea.Region.ScriptEngine.Shared
 {
     public partial class LSL_Types
     {

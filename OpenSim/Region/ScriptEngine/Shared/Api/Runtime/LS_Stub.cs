@@ -43,7 +43,7 @@ using LSL_String = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 using LSL_Float = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLFloat;
 using LSL_Integer = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 
-namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
+namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
 {
     public partial class ScriptBaseClass
     {

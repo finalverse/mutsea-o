@@ -37,7 +37,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 
 #pragma warning disable IDE1006
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api.Interfaces
+namespace MutSea.Region.ScriptEngine.Shared.Api.Interfaces
 {
     public interface ILSL_Api
     {

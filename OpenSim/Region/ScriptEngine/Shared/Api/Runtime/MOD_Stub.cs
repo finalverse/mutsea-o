@@ -47,7 +47,7 @@ using LSL_Rotation = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Quaternion;
 using LSL_String = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 
-namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
+namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
 {
     public partial class ScriptBaseClass
     {

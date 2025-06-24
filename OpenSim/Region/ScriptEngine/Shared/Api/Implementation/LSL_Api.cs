@@ -75,7 +75,7 @@ using System.Runtime.CompilerServices;
 
 #pragma warning disable IDE1006
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api
+namespace MutSea.Region.ScriptEngine.Shared.Api
 {
     /// <summary>
     /// Contains all LSL ll-functions. This class will be in Default AppDomain.

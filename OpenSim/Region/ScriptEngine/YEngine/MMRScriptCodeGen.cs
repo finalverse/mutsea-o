@@ -48,7 +48,7 @@ using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
  * The single script token contains a tokenized and textured version of the whole script file.
  */
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public interface IScriptCodeGen
     {

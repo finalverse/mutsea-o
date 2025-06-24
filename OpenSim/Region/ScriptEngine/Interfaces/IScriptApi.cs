@@ -32,7 +32,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.ScriptEngine.Shared;
 
-namespace OpenSim.Region.ScriptEngine.Interfaces
+namespace MutSea.Region.ScriptEngine.Interfaces
 {
     public interface IScriptApi
     {

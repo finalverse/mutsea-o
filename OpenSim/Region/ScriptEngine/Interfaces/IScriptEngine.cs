@@ -37,7 +37,7 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse;
 
-namespace OpenSim.Region.ScriptEngine.Interfaces
+namespace MutSea.Region.ScriptEngine.Interfaces
 {
     /// <summary>
     /// An interface for a script API module to communicate with

@@ -28,7 +28,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace OpenSim.Region.ScriptEngine.Shared
+namespace MutSea.Region.ScriptEngine.Shared
 {
     [Serializable]
     public class ScriptException : Exception

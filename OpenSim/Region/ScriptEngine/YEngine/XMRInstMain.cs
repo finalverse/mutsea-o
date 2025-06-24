@@ -39,7 +39,7 @@ using log4net;
 
 // This class exists in the main app domain
 //
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     /**
      * @brief Which queue it is in as far as running is concerned,

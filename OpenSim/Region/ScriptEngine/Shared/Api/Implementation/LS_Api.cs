@@ -51,7 +51,7 @@ using LSL_Rotation = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Quaternion;
 using LSL_String = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 using LSL_Vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 
-namespace OpenSim.Region.ScriptEngine.Shared.Api
+namespace MutSea.Region.ScriptEngine.Shared.Api
 {
     [Serializable]
     public class LS_Api : ILS_Api, IScriptApi

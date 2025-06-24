@@ -32,7 +32,7 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace OpenSim.Region.ScriptEngine.Yengine
+namespace MutSea.Region.ScriptEngine.Yengine
 {
     public delegate void ScriptEventHandler(XMRInstAbstract instance);
 
