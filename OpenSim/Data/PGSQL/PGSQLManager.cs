@@ -36,7 +36,7 @@ using OpenMetaverse;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     /// <summary>
     /// A management class for the MS SQL Storage Engine

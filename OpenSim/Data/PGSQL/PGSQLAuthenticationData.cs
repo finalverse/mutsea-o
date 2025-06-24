@@ -36,7 +36,7 @@ using System.Data;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLAuthenticationData : IAuthenticationData
     {

@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     /// <summary>
     /// A PGSQL Interface for the Asset server

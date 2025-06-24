@@ -37,7 +37,7 @@ using log4net;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLXInventoryData : IXInventoryData
     {

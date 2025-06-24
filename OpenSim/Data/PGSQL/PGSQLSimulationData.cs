@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Data;
 using Npgsql;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     /// <summary>
     /// A PGSQL Interface for the Region Server.

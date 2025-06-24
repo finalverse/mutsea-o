@@ -31,7 +31,7 @@ using System.Data;
 using System.Data.Common;
 using System.Reflection;
 
-namespace OpenSim.Data.PGSQL
+namespace MutSea.Data.PGSQL
 {
     public class PGSQLMigration : Migration
     {
