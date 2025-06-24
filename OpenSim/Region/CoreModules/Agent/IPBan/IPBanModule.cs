@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Agent.IPBan
+namespace MutSea.Region.CoreModules.Agent.IPBan
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "IPBanModule")]
     public class IPBanModule : ISharedRegionModule

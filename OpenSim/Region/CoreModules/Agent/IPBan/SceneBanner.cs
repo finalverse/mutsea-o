@@ -30,7 +30,7 @@ using System.Net;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Agent.IPBan
+namespace MutSea.Region.CoreModules.Agent.IPBan
 {
     internal class SceneBanner
     {

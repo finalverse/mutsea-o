@@ -37,7 +37,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Agent.AssetTransaction
+namespace MutSea.Region.CoreModules.Agent.AssetTransaction
 {
     public class AssetXferUploader
     {
