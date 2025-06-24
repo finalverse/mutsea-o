@@ -34,7 +34,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.PhysicsModule.ubOde
+namespace MutSea.Region.PhysicsModule.ubOde
 {
     public class OdePrim : PhysicsActor
     {

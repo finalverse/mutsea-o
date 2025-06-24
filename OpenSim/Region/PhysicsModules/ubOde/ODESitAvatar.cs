@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.ubOde
+namespace MutSea.Region.PhysicsModule.ubOde
 {
     /// <summary>
     /// </summary>

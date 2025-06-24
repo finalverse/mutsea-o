@@ -47,7 +47,7 @@ using System.IO;
 using Mono.Addins;
 using System.Buffers;
 
-namespace OpenSim.Region.PhysicsModule.ubODEMeshing
+namespace MutSea.Region.PhysicsModule.ubODEMeshing
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "ubODEMeshmerizer")]
     public class ubMeshmerizer : IMesher, INonSharedRegionModule

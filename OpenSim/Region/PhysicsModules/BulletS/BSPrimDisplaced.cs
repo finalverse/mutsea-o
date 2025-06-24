@@ -35,7 +35,7 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 
 using OMV = OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     public class BSPrimDisplaced : BSPrim
     {

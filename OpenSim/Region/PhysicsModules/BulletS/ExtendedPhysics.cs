@@ -42,7 +42,7 @@ using Nini.Config;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule")]
     public class ExtendedPhysics : INonSharedRegionModule

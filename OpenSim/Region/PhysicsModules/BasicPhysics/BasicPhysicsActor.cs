@@ -32,7 +32,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Region.PhysicsModules.SharedBase;
 
-namespace OpenSim.Region.PhysicsModule.BasicPhysics
+namespace MutSea.Region.PhysicsModule.BasicPhysics
 {
     public class BasicActor : PhysicsActor
     {

@@ -35,7 +35,7 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Region.PhysicsModule.BasicPhysics
+namespace MutSea.Region.PhysicsModule.BasicPhysics
 {
     /// <summary>
     /// This is an incomplete extremely basic physics implementation

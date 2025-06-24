@@ -35,7 +35,7 @@ using OpenSim.Framework;
 using OpenSim.Region.PhysicsModules.SharedBase;
 using OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet;
 
-namespace OpenSim.Region.PhysicsModule.BulletS
+namespace MutSea.Region.PhysicsModule.BulletS
 {
 
     [Serializable]

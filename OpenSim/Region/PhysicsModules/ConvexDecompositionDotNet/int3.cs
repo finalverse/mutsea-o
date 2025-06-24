@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet
+namespace MutSea.Region.PhysicsModules.ConvexDecompositionDotNet
 {
     public class int3
     {

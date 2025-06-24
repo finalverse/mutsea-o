@@ -29,7 +29,7 @@ using System;
 using System.Timers;
 using OpenMetaverse;
 
-namespace OpenSim.Region.PhysicsModules.SharedBase
+namespace MutSea.Region.PhysicsModules.SharedBase
 {
     [Flags]
     public enum SenseType : uint
