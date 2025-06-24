@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// User inventory folder

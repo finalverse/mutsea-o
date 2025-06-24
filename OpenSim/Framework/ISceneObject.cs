@@ -28,7 +28,7 @@
 using System.Xml;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public interface ISceneObject
     {

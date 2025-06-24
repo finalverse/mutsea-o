@@ -29,7 +29,7 @@ using OpenMetaverse;
 //using OpenSim.Framework.Console;
 using Nini.Config;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public delegate void restart(RegionInfo thisRegion);
 

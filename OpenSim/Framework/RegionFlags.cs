@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Region flags used internally by OpenSimulator to store installation specific information about regions.

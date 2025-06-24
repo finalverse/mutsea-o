@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// This class was created to refactor OutPacket out of AssetCache

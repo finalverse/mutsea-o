@@ -39,7 +39,7 @@ using log4net;
 
 using OpenSim.Framework.ServiceAuth;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Implementation of a generic REST client

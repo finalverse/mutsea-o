@@ -36,7 +36,7 @@ using System.Xml.Serialization;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// A dictionary containing task inventory items.  Indexed by item UUID.

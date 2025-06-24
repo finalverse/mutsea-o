@@ -32,7 +32,7 @@ using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Circuit data for an agent.  Connection information shared between

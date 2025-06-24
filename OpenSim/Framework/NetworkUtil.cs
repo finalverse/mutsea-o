@@ -34,7 +34,7 @@ using System.Reflection;
 using System.Text;
 using log4net;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Handles NAT translation in a 'manner of speaking'

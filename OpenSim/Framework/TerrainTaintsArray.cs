@@ -28,7 +28,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class TerrainTaintsArray
     {

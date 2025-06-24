@@ -31,7 +31,7 @@ using System.Reflection;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class InventoryFolderImpl : InventoryFolderBase
     {

@@ -35,7 +35,7 @@ using log4net;
 using OpenMetaverse;
 //using OpenSim.Framework.Console;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class ConfigurationMember
     {

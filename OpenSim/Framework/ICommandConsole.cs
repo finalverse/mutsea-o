@@ -30,7 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public delegate void CommandDelegate(string module, string[] cmd);
 

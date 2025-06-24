@@ -29,7 +29,7 @@
 
 using System;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// A thread-safe Random since the .NET version is not.

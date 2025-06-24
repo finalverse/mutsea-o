@@ -30,7 +30,7 @@ using System.Reflection;
 using log4net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Represents an item in a task inventory

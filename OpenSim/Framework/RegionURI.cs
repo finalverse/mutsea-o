@@ -28,7 +28,7 @@ using System;
 using System.Net;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class RegionURI
     {

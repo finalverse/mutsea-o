@@ -32,7 +32,7 @@ using System.Reflection;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public enum OSHTTPURIFlags : byte
     {

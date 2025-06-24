@@ -36,7 +36,7 @@ using System.Xml.Serialization;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// This class stores and retrieves dynamic objects.

@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
 //    public delegate bool AnimationSetValidator(UUID animID);
     public delegate uint AnimationSetValidator(UUID animID);

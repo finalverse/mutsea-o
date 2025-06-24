@@ -28,7 +28,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     // this is more generic than openmetaverse CRC32
 

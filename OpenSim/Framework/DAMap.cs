@@ -38,7 +38,7 @@ using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// This class stores and retrieves dynamic attributes.

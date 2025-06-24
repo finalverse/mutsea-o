@@ -28,7 +28,7 @@
 using OpenMetaverse;
 using System.Runtime.CompilerServices;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Capabilities utility methods

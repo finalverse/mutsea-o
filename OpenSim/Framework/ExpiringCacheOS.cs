@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using Timer = System.Threading.Timer;
 using System.Runtime.InteropServices;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public sealed class ExpiringCacheOS<TKey1, TValue1> : IDisposable
     {

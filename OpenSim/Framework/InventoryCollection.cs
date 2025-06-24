@@ -28,7 +28,7 @@
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Used to serialize a whole inventory for transfer over the network.

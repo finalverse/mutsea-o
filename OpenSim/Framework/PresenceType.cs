@@ -26,7 +26,7 @@
  */
 using System;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// Indicate the type of ScenePresence.

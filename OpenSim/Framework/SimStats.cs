@@ -28,7 +28,7 @@
 using OpenMetaverse;
 using System.Collections.Generic;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// These are the IDs of stats required by viewers protocol 

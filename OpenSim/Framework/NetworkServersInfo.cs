@@ -28,7 +28,7 @@
 using System;
 using Nini.Config;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class NetworkServersInfo
     {

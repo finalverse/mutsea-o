@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     /// <summary>
     /// A MetricsCollector for 'long' values.

@@ -35,7 +35,7 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public class ObjectJobEngine : IDisposable
     {

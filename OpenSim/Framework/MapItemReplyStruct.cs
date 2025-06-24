@@ -28,7 +28,7 @@
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Framework
+namespace MutSea.Framework
 {
     public struct mapItemReply
     {
