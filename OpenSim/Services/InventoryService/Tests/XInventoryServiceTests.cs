@@ -34,7 +34,7 @@ using OpenSim.Server.Base;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Services.InventoryService.Tests
+namespace MutSea.Services.InventoryService.Tests
 {
     /// <summary>
     /// Tests for the XInventoryService

@@ -33,7 +33,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 using log4net;
 
-namespace OpenSim.Services.FreeswitchService
+namespace MutSea.Services.FreeswitchService
 {
     public class FreeswitchServiceBase : ServiceBase
     {

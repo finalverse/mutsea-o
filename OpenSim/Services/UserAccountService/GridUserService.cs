@@ -38,7 +38,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenMetaverse;
 using log4net;
 
-namespace OpenSim.Services.UserAccountService
+namespace MutSea.Services.UserAccountService
 {
     public class GridUserService : GridUserServiceBase, IGridUserService
     {

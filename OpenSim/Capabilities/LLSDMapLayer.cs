@@ -27,7 +27,7 @@
 
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     [LLSDType("MAP")]
     public class OSDMapLayer

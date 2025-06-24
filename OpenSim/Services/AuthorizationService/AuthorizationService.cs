@@ -35,7 +35,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 
-namespace OpenSim.Services.AuthorizationService
+namespace MutSea.Services.AuthorizationService
 {
     public class AuthorizationService : AuthorizationServiceBase, IAuthorizationService
     {

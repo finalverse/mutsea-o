@@ -32,7 +32,7 @@ using log4net;
 using OpenSim.Services.Base;
 using OpenSim.Data;
 
-namespace OpenSim.Services.ProfilesService
+namespace MutSea.Services.ProfilesService
 {
     public class UserProfilesServiceBase: ServiceBase
     {

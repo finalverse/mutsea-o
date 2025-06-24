@@ -41,7 +41,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading;
 
-namespace OpenSim.Services.FSAssetService
+namespace MutSea.Services.FSAssetService
 {
     public class FSAssetConnector : ServiceBase, IAssetService
     {

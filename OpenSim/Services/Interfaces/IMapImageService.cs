@@ -29,7 +29,7 @@ using OpenSim.Framework;
 using System.Collections.Generic;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public interface IMapImageService
     {

@@ -28,7 +28,7 @@
 using System;
 using OpenMetaverse;
 
-namespace OpenSim.Framework.Capabilities
+namespace MutSea.Framework.Capabilities
 {
     [OSDMap]
     public class LLSDAssetUploadError

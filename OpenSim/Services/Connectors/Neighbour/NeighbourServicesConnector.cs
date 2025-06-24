@@ -44,7 +44,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using System.Net.Http;
 using System.Threading;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class NeighbourServicesConnector : INeighbourService
     {

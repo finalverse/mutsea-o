@@ -37,7 +37,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Server.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class RemoteFreeswitchConnector : IFreeswitchService
     {

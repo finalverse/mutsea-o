@@ -33,7 +33,7 @@ using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Server.Handlers.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Capabilities.Handlers
+namespace MutSea.Capabilities.Handlers
 {
     public class FetchInventory2ServerConnector : ServiceConnector
     {

@@ -39,7 +39,7 @@ using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Services.UserAccountService
+namespace MutSea.Services.UserAccountService
 {
     public class UserAccountService : UserAccountServiceBase, IUserAccountService
     {

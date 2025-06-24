@@ -42,7 +42,7 @@ using OpenMetaverse.StructuredData;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Services.Connectors.Simulation
+namespace MutSea.Services.Connectors.Simulation
 {
     public class SimulationServiceConnector : ISimulationService
     {

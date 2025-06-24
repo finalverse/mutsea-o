@@ -39,7 +39,7 @@ using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 using OpenSim.Server.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors.Friends
+namespace MutSea.Services.Connectors.Friends
 {
     public class FriendsServicesConnector : BaseServiceConnector, IFriendsService
     {

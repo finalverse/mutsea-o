@@ -40,7 +40,7 @@ using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenMetaverse;
 
-namespace OpenSim.Services.GridService
+namespace MutSea.Services.GridService
 {
     public class GridService : GridServiceBase, IGridService
     {

@@ -42,7 +42,7 @@ using OpenMetaverse.StructuredData;
 using OSDArray = OpenMetaverse.StructuredData.OSDArray;
 using OSDMap = OpenMetaverse.StructuredData.OSDMap;
 
-namespace OpenSim.Services.LLLoginService
+namespace MutSea.Services.LLLoginService
 {
     public class LLFailedLoginResponse : OpenSim.Services.Interfaces.FailedLoginResponse
     {

@@ -33,7 +33,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.AvatarService
+namespace MutSea.Services.AvatarService
 {
     public class AvatarServiceBase : ServiceBase
     {

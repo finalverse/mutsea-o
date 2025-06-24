@@ -42,7 +42,7 @@ using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class MapImageServicesConnector : BaseServiceConnector, IMapImageService
     {

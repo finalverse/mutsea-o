@@ -28,7 +28,7 @@
 using System;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public delegate void AssetRetrieved(string id, object sender, AssetBase asset);
     public delegate void SimpleAssetRetrieved(AssetBase asset);

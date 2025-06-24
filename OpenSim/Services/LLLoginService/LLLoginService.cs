@@ -45,7 +45,7 @@ using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 using OpenSim.Services.Connectors.Hypergrid;
 
-namespace OpenSim.Services.LLLoginService
+namespace MutSea.Services.LLLoginService
 {
     public class LLLoginService : ILoginService
     {

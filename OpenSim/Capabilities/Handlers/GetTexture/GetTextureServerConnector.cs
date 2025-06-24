@@ -34,7 +34,7 @@ using OpenSim.Server.Handlers.Base;
 using OpenMetaverse;
 
 
-namespace OpenSim.Capabilities.Handlers
+namespace MutSea.Capabilities.Handlers
 {
     public class GetTextureServerConnector : ServiceConnector
     {

@@ -41,7 +41,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Capabilities.Handlers.FetchInventory.Tests
+namespace MutSea.Capabilities.Handlers.FetchInventory.Tests
 {
     [TestFixture]
     public class FetchInventory2HandlerTests : OpenSimTestCase

@@ -30,7 +30,7 @@ using Nini.Config;
 using OpenSim.Data;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     public class UserAgentServiceBase : ServiceBase
     {

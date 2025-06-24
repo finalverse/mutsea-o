@@ -36,7 +36,7 @@ using OpenSim.Services.Interfaces;
 using OpenSim.Data;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.InventoryService
+namespace MutSea.Services.InventoryService
 {
     public class XInventoryService : ServiceBase, IInventoryService
     {

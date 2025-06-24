@@ -45,7 +45,7 @@ using OpenSim.Services.Connectors.Hypergrid;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using OpenMetaverse;
 
-namespace OpenSim.Services.GridService
+namespace MutSea.Services.GridService
 {
     public class HypergridLinker : IHypergridLinker
     {

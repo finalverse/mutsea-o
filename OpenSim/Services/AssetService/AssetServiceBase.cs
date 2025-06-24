@@ -33,7 +33,7 @@ using OpenSim.Data;
 using OpenSim.Services.Interfaces;
 using OpenSim.Services.Base;
 
-namespace OpenSim.Services.AssetService
+namespace MutSea.Services.AssetService
 {
     public class AssetServiceBase : ServiceBase
     {

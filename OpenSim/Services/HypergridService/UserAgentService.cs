@@ -43,7 +43,7 @@ using OpenMetaverse;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     /// <summary>
     /// This service is for HG1.5 only, to make up for the fact that clients don't

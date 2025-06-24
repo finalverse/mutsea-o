@@ -43,7 +43,7 @@ using Nwc.XmlRpc;
 using Nini.Config;
 using System.Net.Http;
 
-namespace OpenSim.Services.Connectors.Hypergrid
+namespace MutSea.Services.Connectors.Hypergrid
 {
     public class UserAgentServiceConnector : SimulationServiceConnector, IUserAgentService
     {

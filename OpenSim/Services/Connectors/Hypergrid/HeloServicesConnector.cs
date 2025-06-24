@@ -33,7 +33,7 @@ using Nini.Config;
 using System.Net.Http;
 using OpenSim.Framework;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class HeloServicesConnector
     {

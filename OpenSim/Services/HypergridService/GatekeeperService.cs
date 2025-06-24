@@ -42,7 +42,7 @@ using OpenMetaverse;
 using Nini.Config;
 using log4net;
 
-namespace OpenSim.Services.HypergridService
+namespace MutSea.Services.HypergridService
 {
     public class GatekeeperService : IGatekeeperService
     {

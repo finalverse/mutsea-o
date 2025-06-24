@@ -39,7 +39,7 @@ using IAvatarService = OpenSim.Services.Interfaces.IAvatarService;
 using OpenSim.Server.Base;
 using OpenMetaverse;
 
-namespace OpenSim.Services.Connectors
+namespace MutSea.Services.Connectors
 {
     public class AvatarServicesConnector : BaseServiceConnector, IAvatarService
     {

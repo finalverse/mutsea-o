@@ -28,7 +28,7 @@
 using System;
 using Nini.Config;
 
-namespace OpenSim.Services.Interfaces
+namespace MutSea.Services.Interfaces
 {
     public interface IAttachmentsService
     {

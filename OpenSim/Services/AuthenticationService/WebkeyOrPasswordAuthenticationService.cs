@@ -37,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Console;
 using OpenSim.Server.Base;
 
-namespace OpenSim.Services.AuthenticationService
+namespace MutSea.Services.AuthenticationService
 {
     public class WebkeyOrPasswordAuthenticationService : AuthenticationServiceBase, IAuthenticationService
     {
