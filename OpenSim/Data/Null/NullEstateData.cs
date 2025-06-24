@@ -34,7 +34,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework;
 using OpenSim.Region.Framework.Interfaces;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     public class NullEstateStore : IEstateDataStore
     {

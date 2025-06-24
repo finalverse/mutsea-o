@@ -34,7 +34,7 @@ using OpenMetaverse;
 using OpenSim.Framework;
 using OpenSim.Data;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     /// <summary>
     /// Not a proper generic data handler yet - probably needs to actually store the data as well instead of relying

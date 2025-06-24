@@ -35,7 +35,7 @@ using System.Reflection;
 using log4net;
 using RegionFlags = OpenSim.Framework.RegionFlags;
 
-namespace OpenSim.Data.Null
+namespace MutSea.Data.Null
 {
     public class NullRegionData : IRegionData
     {
