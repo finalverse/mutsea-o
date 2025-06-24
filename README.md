@@ -1,4 +1,4 @@
-Welcome to MutSeaulator (MutSea for short)!
+Welcome to The Class of Mountain and Seas Server (MutSea for short)!
 
 # Overview
 
@@ -90,28 +90,12 @@ http://192.168.1.2:9000)
 To login, use the avatar details that you gave for your estate ownership or the
 one you set up using the "create user" command.
 
-# Bug reports
-
-In the very likely event of bugs biting you (err, your MutSea) we
-encourage you to see whether the problem has already been reported on
-the [MutSea mantis system](http://OpenSimulator.org/mantis/main_page.php).
-
-If your bug has already been reported, you might want to add to the
-bug description and supply additional information.
-
-If your bug has not been reported yet, file a bug report ("opening a
-mantis"). Useful information to include:
- * description of what went wrong
- * stack trace
- * MutSea.log (attach as file)
- * MutSea.ini (attach as file)
-
 
 # More Information on MutSea
 
 More extensive information on building, running, and configuring
 MutSea, as well as how to report bugs, and participate in the MutSea
-project can always be found at http://OpenSimulator.org.
+project can always be found at http://finalverse.com/mutsea.
 
 Thanks for trying MutSea, we hope it is a pleasant experience.
 
