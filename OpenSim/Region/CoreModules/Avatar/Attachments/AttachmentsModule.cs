@@ -44,7 +44,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Services.Interfaces;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Avatar.Attachments
+namespace MutSea.Region.CoreModules.Avatar.Attachments
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "AttachmentsModule")]
     public class AttachmentsModule : IAttachmentsModule, INonSharedRegionModule

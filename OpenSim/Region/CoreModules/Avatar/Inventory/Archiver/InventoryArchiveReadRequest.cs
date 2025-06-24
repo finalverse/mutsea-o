@@ -45,7 +45,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
 {
     public class InventoryArchiveReadRequest
     {

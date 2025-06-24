@@ -38,7 +38,7 @@ using OpenSim.Services.Interfaces;
 using Mono.Addins;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Avatar.Friends
+namespace MutSea.Region.CoreModules.Avatar.Friends
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "XCallingCard")]
     public class CallingCardModule : ISharedRegionModule, ICallingCardModule

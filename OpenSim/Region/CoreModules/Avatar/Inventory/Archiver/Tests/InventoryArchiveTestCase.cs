@@ -43,7 +43,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver.Tests
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver.Tests
 {
     [TestFixture]
     public class InventoryArchiveTestCase : OpenSimTestCase

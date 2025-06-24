@@ -41,7 +41,7 @@ using Mono.Addins;
 using OpenSim.Server.Base;
 using OpenSim.Services.Interfaces;
 
-namespace OpenSim.Region.CoreModules.Avatar.InstantMessage
+namespace MutSea.Region.CoreModules.Avatar.InstantMessage
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MuteListModule")]
     public class MuteListModule : ISharedRegionModule

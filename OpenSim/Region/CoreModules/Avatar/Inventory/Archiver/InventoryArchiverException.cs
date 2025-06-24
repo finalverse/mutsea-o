@@ -27,7 +27,7 @@
 
 using System;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
 {
     /// <summary>
     /// Signals an inventory archiving problem

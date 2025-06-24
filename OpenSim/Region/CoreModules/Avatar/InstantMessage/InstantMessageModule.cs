@@ -36,7 +36,7 @@ using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Avatar.InstantMessage
+namespace MutSea.Region.CoreModules.Avatar.InstantMessage
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "InstantMessageModule")]
     public class InstantMessageModule : ISharedRegionModule

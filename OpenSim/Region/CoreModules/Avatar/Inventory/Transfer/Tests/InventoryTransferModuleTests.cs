@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using OpenSim.Tests.Common;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Transfer.Tests
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Transfer.Tests
 {
     [TestFixture]
     public class InventoryTransferModuleTests : OpenSimTestCase

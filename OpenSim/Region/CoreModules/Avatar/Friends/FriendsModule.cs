@@ -44,7 +44,7 @@ using FriendInfo = OpenSim.Services.Interfaces.FriendInfo;
 using PresenceInfo = OpenSim.Services.Interfaces.PresenceInfo;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 
-namespace OpenSim.Region.CoreModules.Avatar.Friends
+namespace MutSea.Region.CoreModules.Avatar.Friends
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "FriendsModule")]
     public class FriendsModule : ISharedRegionModule, IFriendsModule

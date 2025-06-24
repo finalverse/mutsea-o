@@ -46,7 +46,7 @@ using CompressionMode = Ionic.Zlib.CompressionMode;
 using CompressionLevel = Ionic.Zlib.CompressionLevel;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
 {
     public class InventoryArchiveWriteRequest
     {

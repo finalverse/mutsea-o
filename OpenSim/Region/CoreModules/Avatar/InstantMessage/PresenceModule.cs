@@ -41,7 +41,7 @@ using OpenSim.Services.Interfaces;
 using GridRegion = OpenSim.Services.Interfaces.GridRegion;
 using PresenceInfo = OpenSim.Services.Interfaces.PresenceInfo;
 
-namespace OpenSim.Region.CoreModules.Avatar.InstantMessage
+namespace MutSea.Region.CoreModules.Avatar.InstantMessage
 {
     [Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "PresenceModule")]
     public class PresenceModule : ISharedRegionModule, IPresenceModule

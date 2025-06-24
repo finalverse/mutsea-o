@@ -41,7 +41,7 @@ using OpenSim.Framework.Monitoring;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-namespace OpenSim.Region.CoreModules.Avatars.Commands
+namespace MutSea.Region.CoreModules.Avatars.Commands
 {
     /// <summary>
     /// A module that holds commands for manipulating objects in the scene.

@@ -40,7 +40,7 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 using Mono.Addins;
 
-namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver
+namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
 {
     /// <summary>
     /// This module loads and saves OpenSimulator inventory archives
