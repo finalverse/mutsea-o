@@ -4150,20 +4150,29 @@ namespace MutSea.Region.Framework.Scenes
             int count = 0;
             m_scene.ForEachRootScenePresence(delegate(ScenePresence p)
             {
-                // only send information about other root agents
-                if (p.UUID.Equals(UUID))
+                if (p == this || p.UUID.Equals(UUID))
                     return;
 
-                // get the avatar, then a kill if can't see it
-                p.SendInitialAvatarDataToAgent(this);
+                try
+                {
+                    m_log.DebugFormat("[DEBUG] sending avatar to {0}", p.Name);
+                    p.SendInitialAvatarDataToAgent(this);
 
-                if (p.ParcelHideThisAvatar && currentParcelUUID.NotEqual(p.currentParcelUUID) && !IsViewerUIGod)
-                    return;
+                    if (p.ParcelHideThisAvatar && currentParcelUUID.NotEqual(p.currentParcelUUID) && !IsViewerUIGod)
+                        return;
 
-                p.SendAppearanceToAgentNF(this);
-                p.SendAnimPackToAgentNF(this);
-                p.SendAttachmentsToAgentNF(this);
-                count++;
+                    m_log.DebugFormat("[DEBUG] -> SendAppearanceToAgentNF");
+                    p.SendAppearanceToAgentNF(this);
+                    m_log.DebugFormat("[DEBUG] -> SendAnimPackToAgentNF");
+                    p.SendAnimPackToAgentNF(this);
+                    m_log.DebugFormat("[DEBUG] -> SendAttachmentsToAgentNF");
+                    p.SendAttachmentsToAgentNF(this);
+                    count++;
+                }
+                catch (Exception ex)
+                {
+                    m_log.Error($"[ScenePresence]: Error sending avatar info from {p.Name} to {Name}: {ex.Message}");
+                }
             });
 
             m_scene.StatsReporter.AddAgentUpdates(count);

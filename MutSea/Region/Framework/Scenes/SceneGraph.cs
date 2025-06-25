@@ -959,26 +959,35 @@ namespace MutSea.Region.Framework.Scenes
         protected internal List<ScenePresence> GetScenePresences()
         {
             bool entered = false;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
             try
             {
-                try{ }
-                finally
+                if (!m_scenePresencesLock.TryEnterWriteLock(1000))
                 {
-                    m_scenePresencesLock.EnterWriteLock();
-                    entered = true;
+                    m_log.Error("[SCENEGRAPH]: Failed to acquire write lock in GetScenePresences()");
+                    return new List<ScenePresence>();
+                }
+
+                entered = true;
+
+                sw.Stop();
+                if (sw.ElapsedMilliseconds > 100)
+                {
+                    m_log.Warn($"[SCENEGRAPH]: Write lock wait time in GetScenePresences(): {sw.ElapsedMilliseconds} ms");
                 }
 
                 m_scenePresenceList ??= new List<ScenePresence>(m_scenePresenceMap.Values);
-
                 return m_scenePresenceList;
             }
-            catch
+            catch (Exception ex)
             {
+                m_log.Error($"[SCENEGRAPH]: Exception in GetScenePresences(): {ex.Message}");
                 return new List<ScenePresence>();
             }
             finally
             {
-                if(entered)
+                if (entered)
                     m_scenePresencesLock.ExitWriteLock();
             }
         }
