@@ -16,6 +16,7 @@ namespace MutSea.Tests
             try
             {
                 Environment.SetEnvironmentVariable("MUTSEA_TRACE", "1");
+                TestLogging.LogToConsole();
 
                 using StringWriter sw = new StringWriter();
                 TextWriter oldOut = Console.Out;

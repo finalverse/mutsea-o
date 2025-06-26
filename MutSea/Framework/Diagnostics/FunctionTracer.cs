@@ -27,6 +27,8 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
+using log4net;
 
 namespace MutSea.Framework.Diagnostics
 {
@@ -35,6 +37,8 @@ namespace MutSea.Framework.Diagnostics
     /// </summary>
     public sealed class FunctionTracer : IDisposable
     {
+        private static readonly ILog m_log =
+            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string m_name;
         private readonly Stopwatch m_timer;
 
@@ -65,13 +69,13 @@ namespace MutSea.Framework.Diagnostics
         {
             m_name = name;
             m_timer = Stopwatch.StartNew();
-            Console.WriteLine($"{DateTime.UtcNow:O} [TRACE ENTER] {name}");
+            m_log.Debug($"[TRACE ENTER] {name}");
         }
 
         public void Dispose()
         {
             m_timer.Stop();
-            Console.WriteLine($"{DateTime.UtcNow:O} [TRACE EXIT] {m_name} after {m_timer.Elapsed.TotalMilliseconds:F0} ms");
+            m_log.Debug($"[TRACE EXIT] {m_name} after {m_timer.Elapsed.TotalMilliseconds:F0} ms");
             GC.SuppressFinalize(this);
         }
     }
