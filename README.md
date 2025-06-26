@@ -95,8 +95,10 @@ one you set up using the "create user" command.
 
 MutSea provides a small helper called `FunctionTracer` for debugging. When
 enabled it logs when a function is entered and when it exits along with the
-elapsed time. Tracing is off by default. To turn it on, set the environment
-variable `MUTSEA_TRACE=1` before starting MutSea. You can then trace code by
+elapsed time. Messages are written using log4net, so they appear in
+`MutSea.log` alongside other server logs. Tracing is off by default. To turn it
+on, set the environment variable `MUTSEA_TRACE=1` before starting MutSea. You
+can then trace code by
 wrapping it with
 
 ```csharp
