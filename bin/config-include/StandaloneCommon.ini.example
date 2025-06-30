@@ -1,4 +1,4 @@
-; This is the main configuration file for an instance of OpenSim running in standalone mode
+; This is the main configuration file for an instance of MutSea running in standalone mode
 
 [DatabaseService]
     ;
@@ -15,7 +15,7 @@
     ; In most cases ssl is just a pure waste of resources, specially when MySQL is on same machine, and closed to outside
     ; If using MySQL 8.0.4 or later, check that default-authentication-plugin=mysql_native_password
     ;   rather than caching_sha2_password is set in /etc/mysql/mysql.conf.d/mysqld.cnf (not applicable to MariaDB).
-    ;StorageProvider = "OpenSim.Data.MySQL.dll"
+    ;StorageProvider = "MutSea.Data.MySQL.dll"
     ;ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=***;Old Guids=true;SslMode=None;"
 
     ; Uncomment this line if you are using MySQL and want to use a different database for estates.
@@ -28,13 +28,13 @@
     ; Change the connection string to your db details
     ; The value for server property is shown in your SQL Server Management Studio login dialog.
     ; (This sample is the default of express edition)
-    ;StorageProvider = "OpenSim.Data.MSSQL.dll"
+    ;StorageProvider = "MutSea.Data.MSSQL.dll"
     ;ConnectionString = "Server=localhost\SQLEXPRESS;Database=opensim;User Id=opensim; password=***;"
 
     ; PGSQL
     ; Uncomment these lines if you want to use PGSQL storage
     ; Change the connection string to your db details
-    ;StorageProvider = "OpenSim.Data.PGSQL.dll"
+    ;StorageProvider = "MutSea.Data.PGSQL.dll"
     ;ConnectionString = "Server=localhost;Database=opensim;User Id=opensim; password=***;SSL Mode = Disable"
 
 [Hypergrid]
@@ -79,14 +79,14 @@
     ;AuthorizationServices = "LocalAuthorizationServicesConnector"
 
 [AssetService]
-    DefaultAssetLoader = "OpenSim.Framework.AssetLoader.Filesystem.dll"
+    DefaultAssetLoader = "MutSea.Framework.AssetLoader.Filesystem.dll"
     AssetLoaderArgs = "assets/AssetSets.xml"
 
 [GridService]
     ;; For in-memory region storage (default)
-    StorageProvider = "OpenSim.Data.Null.dll:NullRegionData"
+    StorageProvider = "MutSea.Data.Null.dll:NullRegionData"
     ;;--- For MySql region storage (alternative)
-    ;StorageProvider = "OpenSim.Data.MySQL.dll:MySqlRegionData"
+    ;StorageProvider = "MutSea.Data.MySQL.dll:MySqlRegionData"
 
     ;; Directory for map tile images of remote regions
     ; MapTileDirectory = "./maptiles"
@@ -119,7 +119,7 @@
 
 
 [LibraryModule]
-    ; Set this if you want to change the name of the OpenSim Library
+    ; Set this if you want to change the name of the MutSea Library
     ;LibraryName = "My World's Library"
 
 [LoginService]
@@ -180,7 +180,7 @@
 [FreeswitchService]
     ;; If FreeSWITCH is not being used then you don't need to set any of these parameters
     ;;
-    ;; The IP address of your FreeSWITCH server.  The common case is for this to be the same as the server running the OpenSim standalone
+    ;; The IP address of your FreeSWITCH server.  The common case is for this to be the same as the server running the MutSea standalone
     ;; This has to be set for the FreeSWITCH service to work
     ;; This address must be reachable by viewers.
     ;ServerAddress = 127.0.0.1
@@ -392,11 +392,11 @@
 [UserProfilesService]
     ;; To use, set Enabled to true then configure for your site...
     Enabled = false
-    LocalServiceModule = "OpenSim.Services.UserProfilesService.dll:UserProfilesService"
+    LocalServiceModule = "MutSea.Services.UserProfilesService.dll:UserProfilesService"
 
     ;; Configure this for separate databse
     ; ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=***;Old Guids=true;"
     ; Realm = UserProfiles
 
-    UserAccountService = OpenSim.Services.UserAccountService.dll:UserAccountService
-    AuthenticationServiceModule = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    UserAccountService = MutSea.Services.UserAccountService.dll:UserAccountService
+    AuthenticationServiceModule = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"

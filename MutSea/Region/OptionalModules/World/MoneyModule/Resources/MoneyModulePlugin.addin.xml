@@ -1,0 +1,8 @@
+<Addin id="MutSea.Region.ReplaceableModules.MoneyModule" version="0.2">
+    <Runtime>
+        <Import assembly="MutSea.Region.ReplaceableModules.MoneyModule.dll"/>
+    </Runtime>
+    <Dependencies>
+        <Addin id="MutSea" version="0.5" />
+    </Dependencies>
+</Addin>

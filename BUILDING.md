@@ -26,11 +26,11 @@ optionally also
 run 
   `compile.bat`
 
-Or load the generated OpenSim.sln into Visual Studio and build the solution.
+Or load the generated MutSea.sln into Visual Studio and build the solution.
 
 Configure, see below
 
-Now just run `OpenSim.exe` from the `bin` folder, and set up the region.
+Now just run `MutSea.exe` from the `bin` folder, and set up the region.
 
 # Building on Linux / Mac
 
@@ -52,30 +52,30 @@ Now just run `OpenSim.exe` from the `bin` folder, and set up the region.
 
   then run
 
- `dotnet build --configuration Release OpenSim.sln`
+ `dotnet build --configuration Release MutSea.sln`
   
 
 Configure. See below
 
-run `./opensim.sh` from the `bin` folder, and set up the region
+run `./MutSea.sh` from the `bin` folder, and set up the region
 
 
 
 # Configure #
 ## Standalone mode ##
-Copy `OpenSim.ini.example` to `OpenSim.ini` in the `bin/` directory, and verify the `[Const]` section, correcting for your case.
+Copy `MutSea.ini.example` to `MutSea.ini` in the `bin/` directory, and verify the `[Const]` section, correcting for your case.
 
 On `[Architecture]` section uncomment only the line with Standalone.ini if you do now want HG, or the line with StandaloneHypergrid.ini if you do
 
 copy the `StandaloneCommon.ini.example` to `StandaloneCommon.ini` in the `bin/config-include` directory.
 
-The StandaloneCommon.ini file describes the database and backend services that OpenSim will use, and is set to use sqlite by default, which requires no setup.
+The StandaloneCommon.ini file describes the database and backend services that MutSea will use, and is set to use sqlite by default, which requires no setup.
 
 
 ## Grid mode ##
 Each grid may have its own requirements, so FOLLOW your Grid instructions!
 in general:
-Copy `OpenSim.ini.example` to `OpenSim.ini` in the `bin/` directory, and verify the `[Const]` section, correcting for your case
+Copy `MutSea.ini.example` to `MutSea.ini` in the `bin/` directory, and verify the `[Const]` section, correcting for your case
  
 On `[Architecture]` section uncomment only the line with Grid.ini if you do now want HG, or the line with GridHypergrid.ini if you do
 

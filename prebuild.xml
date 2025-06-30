@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <Prebuild version="1.10" xmlns="http://dnpb.sourceforge.net/schemas/prebuild-1.10.xsd">
-  <!-- <Solution activeConfig="Debug" name="OpenSim" path="./" version="0.5.0-$Rev$" forceFrameworkVersion="v4_6"> -->
-  <Solution activeConfig="Release" name="OpenSim" path="./" version="0.5.0-$Rev$" frameworkVersion="net8_0">
+  <!-- <Solution activeConfig="Debug" name="MutSea" path="./" version="0.5.0-$Rev$" forceFrameworkVersion="v4_6"> -->
+  <Solution activeConfig="Release" name="MutSea" path="./" version="0.5.0-$Rev$" frameworkVersion="net8_0">
   <Configuration name="Debug" >
       <Options>
         <CompilerDefines>TRACE</CompilerDefines>
@@ -53,7 +53,7 @@
       </Configuration>
     </Project>
 
-    <Project name="OpenSim.Framework" path="OpenSim/Framework" type="Library">
+    <Project name="MutSea.Framework" path="MutSea/Framework" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -88,7 +88,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Services.Interfaces" path="OpenSim/Services/Interfaces" type="Library">
+    <Project name="MutSea.Services.Interfaces" path="MutSea/Services/Interfaces" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -104,14 +104,14 @@
       <Reference name="OpenMetaverseTypes" path ="../../../bin"/>
       <Reference name="OpenMetaverse" path ="../../../bin"/>
       <Reference name="OpenMetaverse.StructuredData" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework.Console" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer" path ="../../../bin"/>
+      <Reference name="MutSea.Framework" path ="../../../bin"/>
+      <Reference name="MutSea.Framework.Console" path ="../../../bin"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer" path ="../../../bin"/>
       <Reference name="Nini" path ="../../../bin"/>
       <Reference name="log4net" path ="../../../bin"/>
     </Project>
 
-    <Project name="OpenSim.Framework.Monitoring" path="OpenSim/Framework/Monitoring" type="Library">
+    <Project name="MutSea.Framework.Monitoring" path="MutSea/Framework/Monitoring" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -129,10 +129,10 @@
       <Reference name="OpenMetaverseTypes" path ="../../../bin"/>
       <Reference name="OpenMetaverse" path ="../../../bin"/>
       <Reference name="OpenMetaverse.StructuredData" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework" path ="../../../bin"/>
+      <Reference name="MutSea.Framework" path ="../../../bin"/>
     </Project>
 
-    <Project name="OpenSim.Framework.Servers.HttpServer" path="OpenSim/Framework/Servers/HttpServer" type="Library">
+    <Project name="MutSea.Framework.Servers.HttpServer" path="MutSea/Framework/Servers/HttpServer" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -145,8 +145,8 @@
       </Configuration>
 
       <ReferencePath>../../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework" path ="../../../../bin"/>
-      <Reference name="OpenSim.Framework.Monitoring" path ="../../../../bin"/>
+      <Reference name="MutSea.Framework" path ="../../../../bin"/>
+      <Reference name="MutSea.Framework.Monitoring" path ="../../../../bin"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="XMLRPC" path="../../../../bin/"/>
@@ -155,7 +155,7 @@
 
     </Project>
 
-    <Project name="OpenSim.Framework.Console" path="OpenSim/Framework/Console" type="Library">
+    <Project name="MutSea.Framework.Console" path="MutSea/Framework/Console" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -170,12 +170,12 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="log4net" path ="../../../bin"/>
       <Reference name="Nini" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework" path ="../../../bin"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer" path ="../../../bin"/>
+      <Reference name="MutSea.Framework" path ="../../../bin"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer" path ="../../../bin"/>
       <Reference name="OpenMetaverseTypes" path ="../../../bin"/>
     </Project>
 
-    <Project name="OpenSim.Framework.Serialization" path="OpenSim/Framework/Serialization" type="Library">
+    <Project name="MutSea.Framework.Serialization" path="MutSea/Framework/Serialization" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -191,8 +191,8 @@
       <Reference name="log4net"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
 
       <Files>
         <Match pattern="*.cs" recurse="true">
@@ -202,7 +202,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Data" path="OpenSim/Data" type="Library">
+    <Project name="MutSea.Data" path="MutSea/Data" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -219,7 +219,7 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Framework"/>
+      <Reference name="MutSea.Framework"/>
       <Reference name="log4net"/>
       <Reference name="Mono.Addins"/>
       <Files>
@@ -229,7 +229,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Framework.AssetLoader.Filesystem" path="OpenSim/Framework/AssetLoader/Filesystem" type="Library">
+    <Project name="MutSea.Framework.AssetLoader.Filesystem" path="MutSea/Framework/AssetLoader/Filesystem" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -242,14 +242,14 @@
       </Configuration>
 
       <ReferencePath>../../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
     </Project>
 
-    <Project name="OpenSim.Framework.Servers" path="OpenSim/Framework/Servers" type="Library">
+    <Project name="MutSea.Framework.Servers" path="MutSea/Framework/Servers" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -262,11 +262,11 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="XMLRPC"/>
@@ -279,7 +279,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Capabilities" path="OpenSim/Capabilities" type="Library">
+    <Project name="MutSea.Capabilities" path="MutSea/Capabilities" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -292,11 +292,11 @@
       </Configuration>
 
       <ReferencePath>../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverseTypes"/>
@@ -313,7 +313,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Region.PhysicsModules.SharedBase" path="OpenSim/Region/PhysicsModules/SharedBase" type="Library">
+    <Project name="MutSea.Region.PhysicsModules.SharedBase" path="MutSea/Region/PhysicsModules/SharedBase" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -327,14 +327,14 @@
 
       <ReferencePath>../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
       <Reference name="nunit.framework" path="../../../../bin/"/>
       <Reference name="Nini"/>
       <Reference name="log4net" path="../../../../bin/"/>
     </Project>
 
-    <Project name="OpenSim.Region.Framework" path="OpenSim/Region/Framework" type="Library">
+    <Project name="MutSea.Region.Framework" path="MutSea/Region/Framework" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -350,16 +350,16 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
       <Reference name="XMLRPC"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
@@ -376,7 +376,7 @@
     <!-- OGS projects -->
 
 
-    <Project name="OpenSim.Server.Base" path="OpenSim/Server/Base" type="Library">
+    <Project name="MutSea.Server.Base" path="MutSea/Server/Base" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -394,17 +394,17 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="Mono.Addins"/>
       <Reference name="Mono.Addins.Setup"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.Base" path="OpenSim/Services/Base" type="Library">
+    <Project name="MutSea.Services.Base" path="MutSea/Services/Base" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -419,15 +419,15 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.UserAccountService" path="OpenSim/Services/UserAccountService" type="Library">
+    <Project name="MutSea.Services.UserAccountService" path="MutSea/Services/UserAccountService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -442,18 +442,18 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.FriendsService" path="OpenSim/Services/Friends" type="Library">
+    <Project name="MutSea.Services.FriendsService" path="MutSea/Services/Friends" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -468,18 +468,18 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.Connectors" path="OpenSim/Services/Connectors" type="Library">
+    <Project name="MutSea.Services.Connectors" path="MutSea/Services/Connectors" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -497,23 +497,23 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="Mono.Addins"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="XMLRPC"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.SimulationService" path="OpenSim/Services/SimulationService" type="Library">
+    <Project name="MutSea.Services.SimulationService" path="MutSea/Services/SimulationService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -529,18 +529,18 @@
       <Reference name="System.Drawing.Common"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="XMLRPC"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.AssetService" path="OpenSim/Services/AssetService" type="Library">
+    <Project name="MutSea.Services.AssetService" path="MutSea/Services/AssetService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -555,20 +555,20 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.FSAssetService" path="OpenSim/Services/FSAssetService" type="Library">
+    <Project name="MutSea.Services.FSAssetService" path="MutSea/Services/FSAssetService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -583,21 +583,21 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.AuthorizationService" path="OpenSim/Services/AuthorizationService" type="Library">
+    <Project name="MutSea.Services.AuthorizationService" path="MutSea/Services/AuthorizationService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -612,19 +612,19 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.FreeswitchService" path="OpenSim/Services/FreeswitchService" type="Library">
+    <Project name="MutSea.Services.FreeswitchService" path="MutSea/Services/FreeswitchService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -640,19 +640,19 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.AuthenticationService" path="OpenSim/Services/AuthenticationService" type="Library">
+    <Project name="MutSea.Services.AuthenticationService" path="MutSea/Services/AuthenticationService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -667,21 +667,21 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.GridService" path="OpenSim/Services/GridService" type="Library">
+    <Project name="MutSea.Services.GridService" path="MutSea/Services/GridService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -696,20 +696,20 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Server.Base"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Server.Base"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.EstateService" path="OpenSim/Services/EstateService" type="Library">
+    <Project name="MutSea.Services.EstateService" path="MutSea/Services/EstateService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -724,16 +724,16 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.PresenceService" path="OpenSim/Services/PresenceService" type="Library">
+    <Project name="MutSea.Services.PresenceService" path="MutSea/Services/PresenceService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -748,19 +748,19 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.AvatarService" path="OpenSim/Services/AvatarService" type="Library">
+    <Project name="MutSea.Services.AvatarService" path="MutSea/Services/AvatarService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -775,19 +775,19 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.InventoryService" path="OpenSim/Services/InventoryService" type="Library">
+    <Project name="MutSea.Services.InventoryService" path="MutSea/Services/InventoryService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -802,13 +802,13 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
@@ -821,7 +821,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Services.LLLoginService" path="OpenSim/Services/LLLoginService" type="Library">
+    <Project name="MutSea.Services.LLLoginService" path="MutSea/Services/LLLoginService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -834,13 +834,13 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Server.Base"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Server.Base"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
@@ -854,7 +854,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Services.HypergridService" path="OpenSim/Services/HypergridService" type="Library">
+    <Project name="MutSea.Services.HypergridService" path="MutSea/Services/HypergridService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -869,25 +869,25 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.AssetService"/>
-      <Reference name="OpenSim.Services.FSAssetService"/>
-      <Reference name="OpenSim.Services.FriendsService"/>
-      <Reference name="OpenSim.Services.InventoryService"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Server.Base"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.AssetService"/>
+      <Reference name="MutSea.Services.FSAssetService"/>
+      <Reference name="MutSea.Services.FriendsService"/>
+      <Reference name="MutSea.Services.InventoryService"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Server.Base"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.MapImageService" path="OpenSim/Services/MapImageService" type="Library">
+    <Project name="MutSea.Services.MapImageService" path="MutSea/Services/MapImageService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -902,18 +902,18 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="System.Drawing.Common"/>
 
     </Project>
 
-    <Project name="OpenSim.Services.MuteListService" path="OpenSim/Services/MuteListService" type="Library">
+    <Project name="MutSea.Services.MuteListService" path="MutSea/Services/MuteListService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -926,10 +926,10 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>	  
       <Reference name="Nini"/>
@@ -937,7 +937,7 @@
 
     </Project>
 
-    <Project name="OpenSim.Services.UserProfilesService" path="OpenSim/Services/UserProfilesService" type="Library">
+    <Project name="MutSea.Services.UserProfilesService" path="MutSea/Services/UserProfilesService" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -950,15 +950,15 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.UserAccountService"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.UserAccountService"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
@@ -967,7 +967,7 @@
 
     </Project>
  
-    <Project name="OpenSim.Server.Handlers" path="OpenSim/Server/Handlers" type="Library">
+    <Project name="MutSea.Server.Handlers" path="MutSea/Server/Handlers" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -983,13 +983,13 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.UserAccountService"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.UserAccountService"/>
       <Reference name="XMLRPC"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
@@ -1005,7 +1005,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Capabilities.Handlers" path="OpenSim/Capabilities/Handlers" type="Library">
+    <Project name="MutSea.Capabilities.Handlers" path="MutSea/Capabilities/Handlers" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1022,14 +1022,14 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="DotNetOpenId"/>
@@ -1043,7 +1043,7 @@
     </Project>
 
 
-    <Project name="Robust" path="OpenSim/Server" type="Exe">
+    <Project name="Robust" path="MutSea/Server" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -1059,12 +1059,12 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="Mono.Addins"/>
@@ -1078,7 +1078,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.ConsoleClient" path="OpenSim/ConsoleClient" type="Exe">
+    <Project name="MutSea.ConsoleClient" path="MutSea/ConsoleClient" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -1094,11 +1094,11 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
@@ -1111,7 +1111,7 @@
     </Project>
 
     <!-- ClientStack Plugins -->
-    <Project name="OpenSim.Region.ClientStack.LindenUDP" path="OpenSim/Region/ClientStack/Linden/UDP" type="Library">
+    <Project name="MutSea.Region.ClientStack.LindenUDP" path="MutSea/Region/ClientStack/Linden/UDP" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -1129,15 +1129,15 @@
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../../bin/"/>
       <Reference name="OpenMetaverse" path="../../../../../bin/"/>
-      <Reference name="OpenSim.Data"/>
-	  <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+	  <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini" path="../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../bin/"/>
       <Reference name="C5" path="../../../../../bin/"/>
@@ -1151,7 +1151,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ClientStack.LindenCaps" path="OpenSim/Region/ClientStack/Linden/Caps" type="Library">
+    <Project name="MutSea.Region.ClientStack.LindenCaps" path="MutSea/Region/ClientStack/Linden/Caps" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -1168,16 +1168,16 @@
       <Reference name="OpenMetaverse" path="../../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../../bin/"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Capabilities.Handlers"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Capabilities.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Mono.Addins" path="../../../../../bin/"/>
       <Reference name="Nini" path="../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../bin/"/>
@@ -1193,7 +1193,7 @@
 
 	
     <!-- Data Base Modules -->
-    <Project name="OpenSim.Data.MySQL" path="OpenSim/Data/MySQL" type="Library">
+    <Project name="MutSea.Data.MySQL" path="MutSea/Data/MySQL" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1207,14 +1207,14 @@
 
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="System.Drawing.Common"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="MySql.Data"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="log4net"/>
       <Reference name="Mono.Addins"/>
 
@@ -1229,7 +1229,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Data.PGSQL" path="OpenSim/Data/PGSQL" type="Library">
+    <Project name="MutSea.Data.PGSQL" path="MutSea/Data/PGSQL" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1243,10 +1243,10 @@
 
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="System.Drawing.Common"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
 	  <Reference name="OpenMetaverse.StructuredData"/>
@@ -1263,7 +1263,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Data.SQLite" path="OpenSim/Data/SQLite" type="Library">
+    <Project name="MutSea.Data.SQLite" path="MutSea/Data/SQLite" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1277,10 +1277,10 @@
 
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="System.Drawing.Common"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
@@ -1300,7 +1300,7 @@
     </Project>
 	
 
-    <Project name="OpenSim.Region.CoreModules" path="OpenSim/Region/CoreModules" type="Library">
+    <Project name="MutSea.Region.CoreModules" path="MutSea/Region/CoreModules" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1322,23 +1322,23 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="CSJ2K"/>
       <Reference name="Warp3D"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenUDP"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Data.MySQL"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.ClientStack.LindenUDP"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Data.MySQL"/>
       <Reference name="Ionic.Zip"/>
       <Reference name="MySql.Data"/>
 
@@ -1363,7 +1363,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.OptionalModules" path="OpenSim/Region/OptionalModules" type="Library">
+    <Project name="MutSea.Region.OptionalModules" path="MutSea/Region/OptionalModules" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1384,22 +1384,22 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="Mono.Data.SqliteClient"/>
       <Reference name="netcd"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenUDP"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.ClientStack.LindenUDP"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Mono.Addins"/>
 
       <!-- For scripting in funny languages by default -->
@@ -1417,7 +1417,7 @@
     </Project>
 
     <!-- Datastore Plugins -->
-    <Project name="OpenSim.Data.Null" path="OpenSim/Data/Null" type="Library">
+    <Project name="MutSea.Data.Null" path="MutSea/Data/Null" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1430,16 +1430,16 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Data"/>
+      <Reference name="MutSea.Data"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet" path="OpenSim/Region/PhysicsModules/ConvexDecompositionDotNet" type="Library">
+    <Project name="MutSea.Region.PhysicsModules.ConvexDecompositionDotNet" path="MutSea/Region/PhysicsModules/ConvexDecompositionDotNet" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1452,7 +1452,7 @@
       </Configuration>
 
       <ReferencePath>../../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
+      <Reference name="MutSea.Framework"/>
 	  <Reference name="Mono.Addins" path="../../../../bin/"/>
 
       <Files>
@@ -1463,7 +1463,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.Meshing" path="OpenSim/Region/PhysicsModules/Meshing" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.Meshing" path="MutSea/Region/PhysicsModules/Meshing" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1482,17 +1482,17 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
 
     </Project>
 
     <!-- Physics Plug-ins -->
-    <Project name="OpenSim.Region.PhysicsModule.BasicPhysics" path="OpenSim/Region/PhysicsModules/BasicPhysics" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.BasicPhysics" path="MutSea/Region/PhysicsModules/BasicPhysics" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1507,13 +1507,13 @@
       <ReferencePath>../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.POS" path="OpenSim/Region/PhysicsModules/POS" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.POS" path="MutSea/Region/PhysicsModules/POS" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1528,14 +1528,14 @@
       <ReferencePath>../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
 
     </Project>
 
-   <Project name="OpenSim.Region.PhysicsModule.ubOde" path="OpenSim/Region/PhysicsModules/ubOde" type="Library">
+   <Project name="MutSea.Region.PhysicsModule.ubOde" path="MutSea/Region/PhysicsModules/ubOde" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1552,11 +1552,11 @@
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
 
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.PhysicsModules.ConvexDecompositionDotNet"/>
 	  <Reference name="Mono.Addins" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
 
@@ -1568,7 +1568,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.ubOdeMeshing" path="OpenSim/Region/PhysicsModules/ubOdeMeshing" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.ubOdeMeshing" path="MutSea/Region/PhysicsModules/ubOdeMeshing" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1587,17 +1587,17 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-	  <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+	  <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModules.ConvexDecompositionDotNet"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
 
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.BulletS" path="OpenSim/Region/PhysicsModules/BulletS" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.BulletS" path="MutSea/Region/PhysicsModules/BulletS" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1615,13 +1615,13 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="Nini" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.PhysicsModule.Meshing" path="../../../../bin/"/>
-      <Reference name="OpenSim.Region.PhysicsModules.ConvexDecompositionDotNet"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.PhysicsModule.Meshing" path="../../../../bin/"/>
+      <Reference name="MutSea.Region.PhysicsModules.ConvexDecompositionDotNet"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
       <Reference name="BulletXNA.dll" path="../../../../bin/"/>
       <Reference name="log4net.dll" path="../../../../bin/"/>
@@ -1634,8 +1634,8 @@
       </Files>
     </Project>
 
-    <!-- OpenSim app -->
-    <Project name="OpenSim" path="OpenSim/Region/Application" type="Exe">
+    <!-- MutSea app -->
+    <Project name="MutSea" path="MutSea/Region/Application" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1655,26 +1655,26 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.UserAccountService"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.UserAccountService"/>
       <Reference name="XMLRPC"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.ApplicationPlugins.LoadRegions" path="OpenSim/ApplicationPlugins/LoadRegions" type="Library">
+    <Project name="MutSea.ApplicationPlugins.LoadRegions" path="MutSea/ApplicationPlugins/LoadRegions" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1690,13 +1690,13 @@
       <Reference name="Mono.Addins"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="Nini" path = "../../../bin/"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="log4net"/>
 
       <Files>
@@ -1707,7 +1707,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.ApplicationPlugins.RegionModulesController" path="OpenSim/ApplicationPlugins/RegionModulesController" type="Library">
+    <Project name="MutSea.ApplicationPlugins.RegionModulesController" path="MutSea/ApplicationPlugins/RegionModulesController" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1722,10 +1722,10 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="Mono.Addins"/>
       <Reference name="Nini"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Region.Framework"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Region.Framework"/>
       <Reference name="log4net"/>
 
       <Files>
@@ -1736,7 +1736,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.ApplicationPlugins.RemoteController" path="OpenSim/ApplicationPlugins/RemoteController" type="Library">
+    <Project name="MutSea.ApplicationPlugins.RemoteController" path="MutSea/ApplicationPlugins/RemoteController" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1755,14 +1755,14 @@
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="Nini"/>
       <Reference name="XMLRPC"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="log4net"/>
 
       <Files>
@@ -1775,7 +1775,7 @@
 
     <!-- Scene Server API Example Apps -->
 
-    <Project name="OpenSim.Region.ScriptEngine.Shared" path="OpenSim/Region/ScriptEngine/Shared" type="Library">
+    <Project name="MutSea.Region.ScriptEngine.Shared" path="MutSea/Region/ScriptEngine/Shared" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1789,12 +1789,12 @@
 
       <ReferencePath>../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="Nini" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
       <Reference name="SmartThreadPool"/>
@@ -1806,7 +1806,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ScriptEngine.Shared.Api.Runtime" path="OpenSim/Region/ScriptEngine/Shared/Api/Runtime" type="Library">
+    <Project name="MutSea.Region.ScriptEngine.Shared.Api.Runtime" path="MutSea/Region/ScriptEngine/Shared/Api/Runtime" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../../bin/</OutputPath>
@@ -1820,12 +1820,12 @@
 
       <ReferencePath>../../../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../../../bin/"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
       <Reference name="Nini" path="../../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../../bin/"/>
 
@@ -1836,7 +1836,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ScriptEngine.Shared.Api" path="OpenSim/Region/ScriptEngine/Shared/Api/Implementation" type="Library">
+    <Project name="MutSea.Region.ScriptEngine.Shared.Api" path="MutSea/Region/ScriptEngine/Shared/Api/Implementation" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../../bin/</OutputPath>
@@ -1853,17 +1853,17 @@
       <Reference name="OpenMetaverseTypes" path="../../../../../../bin/"/>
       <Reference name="OpenMetaverse" path="../../../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../../../bin/"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Api.Runtime"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Api.Runtime"/>
       <Reference name="Nini" path="../../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../../bin/"/>
       <Reference name="SmartThreadPool"/>
@@ -1872,7 +1872,7 @@
 
 
     <!-- YEngine/core XMRengine -->   
-    <Project name="OpenSim.Region.ScriptEngine.YEngine" path="OpenSim/Region/ScriptEngine/YEngine" type="Library">
+    <Project name="MutSea.Region.ScriptEngine.YEngine" path="MutSea/Region/ScriptEngine/YEngine" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -1891,16 +1891,16 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenCaps"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Api"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Api.Runtime"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Region.ClientStack.LindenCaps"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Api"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Api.Runtime"/>
+      <Reference name="MutSea.Services.Interfaces"/>
       <Reference name="System.Drawing.Common"/>
 
 </Project>
@@ -1908,7 +1908,7 @@
     
     <!-- Addons -->
 
-    <Project name="OpenSim.Addons.OfflineIM" path="OpenSim/Addons/OfflineIM" type="Library">
+    <Project name="MutSea.Addons.OfflineIM" path="MutSea/Addons/OfflineIM" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1929,15 +1929,15 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverseTypes"/>
 
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Data.MySQL"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Data.MySQL"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
 
       <Files>
         <Match pattern="*.cs" recurse="true">
@@ -1948,7 +1948,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Addons.Groups" path="OpenSim/Addons/Groups" type="Library">
+    <Project name="MutSea.Addons.Groups" path="MutSea/Addons/Groups" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -1969,16 +1969,16 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
 
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
 
       <Files>
         <Match pattern="*.cs" recurse="true">
@@ -1993,7 +1993,7 @@
 
     <!-- Tools -->
 
-    <Project name="pCampBot" path="OpenSim/Tools/pCampBot" type="Exe">
+    <Project name="pCampBot" path="MutSea/Tools/pCampBot" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2010,15 +2010,15 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
     </Project>
 
-    <Project name="OpenSim.Tools.Configger" path="OpenSim/Tools/Configger" type="Exe">
+    <Project name="MutSea.Tools.Configger" path="MutSea/Tools/Configger" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2031,7 +2031,7 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
+      <Reference name="MutSea.Framework"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
 
@@ -2039,7 +2039,7 @@
 
     <!-- Test Clients -->
 	<!--
-    <Project name="OpenSim.Tests.Clients.AssetClient" path="OpenSim/Tests/Clients/Assets" type="Exe">
+    <Project name="MutSea.Tests.Clients.AssetClient" path="MutSea/Tests/Clients/Assets" type="Exe">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -2054,9 +2054,9 @@
       <ReferencePath>../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Connectors"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Connectors"/>
       <Reference name="Nini" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
 
@@ -2068,7 +2068,7 @@
     </Project>
 -->
     <!-- Test assemblies
-    <Project name="OpenSim.Tests.Common" path="OpenSim/Tests/Common" type="Library">
+    <Project name="MutSea.Tests.Common" path="MutSea/Tests/Common" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2089,22 +2089,22 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Data.Null"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenCaps"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenUDP"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.PhysicsModule.BasicPhysics"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Data.Null"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.ClientStack.LindenCaps"/>
+      <Reference name="MutSea.Region.ClientStack.LindenUDP"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.PhysicsModule.BasicPhysics"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
 
       <Files>
         <Match pattern="*.cs" recurse="true">
@@ -2113,7 +2113,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Tests" path="OpenSim/Tests" type="Library">
+    <Project name="MutSea.Tests" path="MutSea/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../bin/</OutputPath>
@@ -2128,15 +2128,15 @@
       <ReferencePath>../../bin/</ReferencePath>
       <Reference name="Nini"/>
       <Reference name="nunit.framework"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Files>
         <Match pattern="*.cs" recurse="false"/>
       </Files>
     </Project>
 
-    <Project name="OpenSim.Services.InventoryService.Tests" path="OpenSim/Services/InventoryService/Tests" type="Library">
+    <Project name="MutSea.Services.InventoryService.Tests" path="MutSea/Services/InventoryService/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -2154,17 +2154,17 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Capabilities.Handlers"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Capabilities.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini" path="../../../../bin/"/>
       <Reference name="log4net" path="../../../../bin/"/>
 
@@ -2175,7 +2175,7 @@
       </Files>
     </Project>
 
-    <Project name="Robust.Tests" path="OpenSim/Tests/Robust" type="Library">
+    <Project name="Robust.Tests" path="MutSea/Tests/Robust" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2190,15 +2190,15 @@
       <ReferencePath>../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.Connectors"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.Connectors"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Robust"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
@@ -2212,7 +2212,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Capabilities.Handlers.Tests" path="OpenSim/Capabilities/Handlers" type="Library">
+    <Project name="MutSea.Capabilities.Handlers.Tests" path="MutSea/Capabilities/Handlers" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2230,17 +2230,17 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Capabilities.Handlers"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Capabilities.Handlers"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini"/>
       <Reference name="log4net"/>
       <Reference name="DotNetOpenId"/>
@@ -2264,7 +2264,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Data.Tests" path="OpenSim/Data/Tests" type="Library">
+    <Project name="MutSea.Data.Tests" path="MutSea/Data/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2280,18 +2280,18 @@
       <Reference name="System.Drawing.Common"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="log4net"/>
       <Reference name="Mono.Addins"/>
       <Reference name="nunit.framework"/>
       <Reference name="Nini"/>
 
-      <Reference name="OpenSim.Data.MySQL"/>
-      <Reference name="OpenSim.Data.SQLite"/>
+      <Reference name="MutSea.Data.MySQL"/>
+      <Reference name="MutSea.Data.SQLite"/>
 
       <Reference name="MySql.Data"/>
       <Reference name="Mono.Data.Sqlite"/>
@@ -2303,7 +2303,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Framework.Tests" path="OpenSim/Framework/Tests" type="Library">
+    <Project name="MutSea.Framework.Tests" path="MutSea/Framework/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2320,10 +2320,10 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="XMLRPC"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini"/>
       <Reference name="nunit.framework"/>
       <Files>
@@ -2331,7 +2331,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Framework.Serialization.Tests" path="OpenSim/Framework/Serialization/Tests" type="Library">
+    <Project name="MutSea.Framework.Serialization.Tests" path="MutSea/Framework/Serialization/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -2347,11 +2347,11 @@
       <Reference name="OpenMetaverse" path="../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../bin/"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Serialization"/>
       <Reference name="log4net" path="../../../../bin/"/>
       <Reference name="nunit.framework" path="../../../../bin/"/>
 
@@ -2362,7 +2362,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Framework.Servers.Tests" path="OpenSim/Framework/Servers/Tests" type="Library">
+    <Project name="MutSea.Framework.Servers.Tests" path="MutSea/Framework/Servers/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../bin/</OutputPath>
@@ -2375,12 +2375,12 @@
       </Configuration>
 
       <ReferencePath>../../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
       <Reference name="log4net" path="../../../../bin/"/>
       <Reference name="nunit.framework" path="../../../../bin/"/>
 
@@ -2391,7 +2391,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.CoreModules.Tests" path="OpenSim/Region/CoreModules" type="Library">
+    <Project name="MutSea.Region.CoreModules.Tests" path="MutSea/Region/CoreModules" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2408,23 +2408,23 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Data.Null"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.XEngine"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Data.Null"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.XEngine"/>
+      <Reference name="MutSea.Services.Interfaces"/>
 
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini"/>
       <Reference name="nunit.framework"/>
 
@@ -2496,7 +2496,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Region.Framework.Tests" path="OpenSim/Region/Framework" type="Library">
+    <Project name="MutSea.Region.Framework.Tests" path="MutSea/Region/Framework" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2513,24 +2513,24 @@
       <Reference name="Mono.Addins"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.ApplicationPlugins.RegionModulesController"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Data"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Framework.Serialization"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenCaps"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.ApplicationPlugins.RegionModulesController"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Data"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Framework.Serialization"/>
+      <Reference name="MutSea.Region.ClientStack.LindenCaps"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Services.Interfaces"/>
 
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini"/>
       <Reference name="nunit.framework"/>
 
@@ -2542,7 +2542,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ClientStack.LindenCaps.Tests" path="OpenSim/Region/ClientStack/Linden/Caps" type="Library">
+    <Project name="MutSea.Region.ClientStack.LindenCaps.Tests" path="MutSea/Region/ClientStack/Linden/Caps" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -2561,18 +2561,18 @@
       <Reference name="OpenMetaverse" path="../../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../../../bin/"/>
-      <Reference name="OpenSim.Capabilities"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenCaps"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenUDP"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Capabilities"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.ClientStack.LindenCaps"/>
+      <Reference name="MutSea.Region.ClientStack.LindenUDP"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
 
       <Files>
         <Match path="Tests" pattern="*.cs" recurse="false"/>
@@ -2580,7 +2580,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ClientStack.LindenUDP.Tests" path="OpenSim/Region/ClientStack/Linden/UDP/Tests" type="Library">
+    <Project name="MutSea.Region.ClientStack.LindenUDP.Tests" path="MutSea/Region/ClientStack/Linden/UDP/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../../bin/</OutputPath>
@@ -2598,13 +2598,13 @@
       <Reference name="nunit.framework" path="../../../../../../bin/"/>
       <Reference name="OpenMetaverse" path="../../../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Monitoring"/>
-      <Reference name="OpenSim.Region.ClientStack.LindenUDP"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Monitoring"/>
+      <Reference name="MutSea.Region.ClientStack.LindenUDP"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
 
       <Files>
         <Match pattern="*.cs" recurse="false"/>
@@ -2612,7 +2612,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.ScriptEngine.Tests" path="OpenSim/Region/ScriptEngine" type="Library">
+    <Project name="MutSea.Region.ScriptEngine.Tests" path="MutSea/Region/ScriptEngine" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2625,27 +2625,27 @@
       </Configuration>
 
       <ReferencePath>../../../bin/</ReferencePath>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Servers"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Api"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Api.Runtime"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.Instance"/>
-      <Reference name="OpenSim.Region.ScriptEngine.XEngine"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Servers"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Api"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Api.Runtime"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.Instance"/>
+      <Reference name="MutSea.Region.ScriptEngine.XEngine"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="log4net"/>
       <Reference name="nunit.framework"/>
       <Reference name="Nini"/>
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="OpenMetaverseTypes"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared.CodeTools"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared.CodeTools"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
       <Reference name="Tools"/>
 
       <Files>
@@ -2664,7 +2664,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.Ode.Tests" path="OpenSim/Region/PhysicsModules/Ode/Tests" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.Ode.Tests" path="MutSea/Region/PhysicsModules/Ode/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -2679,12 +2679,12 @@
       <ReferencePath>../../../../../bin/</ReferencePath>
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>
       <Reference name="Nini" path="../../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.PhysicsModule.Ode"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.PhysicsModule.Ode"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="nunit.framework" path="../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../bin/"/>
 
@@ -2695,7 +2695,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Region.PhysicsModule.BulletS.Tests" path="OpenSim/Region/PhysicsModules/BulletS/Tests" type="Library">
+    <Project name="MutSea.Region.PhysicsModule.BulletS.Tests" path="MutSea/Region/PhysicsModules/BulletS/Tests" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -2713,12 +2713,12 @@
       <Reference name="nunit.framework" path="../../../../../bin/"/>
       <Reference name="OpenMetaverse" path="../../../../../bin/"/>
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Tests.Common"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.PhysicsModule.Meshing"/>
-      <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
-      <Reference name="OpenSim.Region.PhysicsModule.BulletS"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Tests.Common"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.PhysicsModule.Meshing"/>
+      <Reference name="MutSea.Region.PhysicsModules.SharedBase"/>
+      <Reference name="MutSea.Region.PhysicsModule.BulletS"/>
 
       <Files>
         <Match pattern="*.cs" recurse="false"/>
@@ -2726,7 +2726,7 @@
     </Project>
 
 
-    <Project name="OpenSim.Server.Handlers.Tests" path="OpenSim/Server/Handlers" type="Library">
+    <Project name="MutSea.Server.Handlers.Tests" path="MutSea/Server/Handlers" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2746,16 +2746,16 @@
       <Reference name="OpenMetaverse"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="XMLRPC"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Server.Base"/>
-      <Reference name="OpenSim.Server.Handlers"/>
-      <Reference name="OpenSim.Services.AssetService"/>
-      <Reference name="OpenSim.Services.Base"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.UserAccountService"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Server.Base"/>
+      <Reference name="MutSea.Server.Handlers"/>
+      <Reference name="MutSea.Services.AssetService"/>
+      <Reference name="MutSea.Services.Base"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.UserAccountService"/>
+      <Reference name="MutSea.Tests.Common"/>
 
       <Files>
         <Match path="Asset/Tests" pattern="*.cs" recurse="true">
@@ -2764,7 +2764,7 @@
       </Files>
     </Project>
 
-    <Project name="OpenSim.Tests.Stress" path="OpenSim/Tests/Stress" type="Library">
+    <Project name="MutSea.Tests.Stress" path="MutSea/Tests/Stress" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2784,23 +2784,23 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="XMLRPC"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.XEngine"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.AvatarService"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.XEngine"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.AvatarService"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Files>
         <Match pattern="*.cs" recurse="false"/>
       </Files>
     </Project>
 
-    <Project name="OpenSim.Tests.Performance" path="OpenSim/Tests/Performance" type="Library">
+    <Project name="MutSea.Tests.Performance" path="MutSea/Tests/Performance" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2820,23 +2820,23 @@
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse.StructuredData"/>
       <Reference name="XMLRPC"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Framework.Console"/>
-      <Reference name="OpenSim.Framework.Servers.HttpServer"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.OptionalModules"/>
-      <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
-      <Reference name="OpenSim.Region.ScriptEngine.XEngine"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
-      <Reference name="OpenSim.Services.AvatarService"/>
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Framework.Console"/>
+      <Reference name="MutSea.Framework.Servers.HttpServer"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.OptionalModules"/>
+      <Reference name="MutSea.Region.ScriptEngine.Shared"/>
+      <Reference name="MutSea.Region.ScriptEngine.XEngine"/>
+      <Reference name="MutSea.Services.Interfaces"/>
+      <Reference name="MutSea.Services.AvatarService"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Files>
         <Match pattern="*.cs" recurse="false"/>
       </Files>
     </Project>
 
-    <Project name="OpenSim.Tests.Permissions" path="OpenSim/Tests/Permissions" type="Library">
+    <Project name="MutSea.Tests.Permissions" path="MutSea/Tests/Permissions" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -2852,14 +2852,14 @@
       <Reference name="Mono.Addins"/>
       <Reference name="OpenMetaverseTypes"/>
       <Reference name="OpenMetaverse"/>
-      <Reference name="OpenSim"/>
-      <Reference name="OpenSim.ApplicationPlugins.RegionModulesController"/>
-      <Reference name="OpenSim.Framework"/>
-      <Reference name="OpenSim.Region.Framework"/>
-      <Reference name="OpenSim.Region.CoreModules"/>
-      <Reference name="OpenSim.Services.Interfaces"/>
+      <Reference name="MutSea"/>
+      <Reference name="MutSea.ApplicationPlugins.RegionModulesController"/>
+      <Reference name="MutSea.Framework"/>
+      <Reference name="MutSea.Region.Framework"/>
+      <Reference name="MutSea.Region.CoreModules"/>
+      <Reference name="MutSea.Services.Interfaces"/>
 
-      <Reference name="OpenSim.Tests.Common"/>
+      <Reference name="MutSea.Tests.Common"/>
       <Reference name="Nini"/>
       <Reference name="nunit.framework"/>
 

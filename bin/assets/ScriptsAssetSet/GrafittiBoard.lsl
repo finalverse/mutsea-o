@@ -8,7 +8,7 @@ string text = "";
 
 integer LISTENING_CHANNEL = 43;
 
-// XXX Only putting this here as well to get around OpenSim's int -> string casting oddness
+// XXX Only putting this here as well to get around MutSea's int -> string casting oddness
 string LISTENING_CHANNEL_STRING = "43";
 
 // FIXME: Should be dynamic!

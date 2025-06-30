@@ -4,10 +4,10 @@
 
 ; * Configurations for enabling HG1.5
 ; *
-; * HG1.5 handlers are: OpenSim.Server.Handlers.dll:GatekeeperService
-; *                     OpenSim.Server.Handlers.dll:UserAgentService
-; * Additional OpenSim.Server.Handlers.dll:AssetServiceConnector and
-; *            OpenSim.Server.Handlers.dll:XInventoryInConnector
+; * HG1.5 handlers are: MutSea.Server.Handlers.dll:GatekeeperService
+; *                     MutSea.Server.Handlers.dll:UserAgentService
+; * Additional MutSea.Server.Handlers.dll:AssetServiceConnector and
+; *            MutSea.Server.Handlers.dll:XInventoryInConnector
 ; * are started in port 8002, outside the firewall
 ; *
 ; **
@@ -69,8 +69,8 @@
     ; Console commands can be saved to a file, so the command history persists after a restart. (default is true)
     ConsoleHistoryFileEnabled = true
 
-    ; The history file can be just a filename (relative to OpenSim's bin/ directory
-    ; or it can be a full path to somewhere else. (default is OpenSimConsoleHistory.txt in bin/)
+    ; The history file can be just a filename (relative to MutSea's bin/ directory
+    ; or it can be a full path to somewhere else. (default is MutSeaConsoleHistory.txt in bin/)
     ConsoleHistoryFile = "RobustConsoleHistory.txt"
 
     ; How many lines of command history should we keep? (default is 100)
@@ -89,7 +89,7 @@
     RobustCertRenewOnStartup = false
 
     ;; Certificate options:
-    ; Set the certificate file name. the output files extensions are CertFileName.p12 and RobustCertFileName.pfx. This must be different than CertFileName in OpenSim.ini
+    ; Set the certificate file name. the output files extensions are CertFileName.p12 and RobustCertFileName.pfx. This must be different than CertFileName in MutSea.ini
     RobustCertFileName = "Robust"
 
     ; Set the certificate password.
@@ -111,49 +111,49 @@
     
 
 [ServiceList]
-    AssetServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:AssetServiceConnector"
-    InventoryInConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:XInventoryInConnector"
+    AssetServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:AssetServiceConnector"
+    InventoryInConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:XInventoryInConnector"
     ;; Uncomment if you have set up Freeswitch (see [FreeswitchService] below)
-    ;VoiceConnector = "8004/OpenSim.Server.Handlers.dll:FreeswitchServerConnector"
-    GridServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:GridServiceConnector"
-    GridInfoServerInConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:GridInfoServerInConnector"
-    AuthenticationServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:AuthenticationServiceConnector"
-    OpenIdServerConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:OpenIdServerConnector"
-    AvatarServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:AvatarServiceConnector"
-    LLLoginServiceInConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:LLLoginServiceInConnector"
-    PresenceServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:PresenceServiceConnector"
-    UserAccountServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:UserAccountServiceConnector"
-    GridUserServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:GridUserServiceConnector"
-    AgentPreferencesServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:AgentPreferencesServiceConnector"
-    FriendsServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:FriendsServiceConnector"
-    MapAddServiceConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:MapAddServiceConnector"
-    MapGetServiceConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:MapGetServiceConnector"
+    ;VoiceConnector = "8004/MutSea.Server.Handlers.dll:FreeswitchServerConnector"
+    GridServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:GridServiceConnector"
+    GridInfoServerInConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:GridInfoServerInConnector"
+    AuthenticationServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:AuthenticationServiceConnector"
+    OpenIdServerConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:OpenIdServerConnector"
+    AvatarServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:AvatarServiceConnector"
+    LLLoginServiceInConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:LLLoginServiceInConnector"
+    PresenceServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:PresenceServiceConnector"
+    UserAccountServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:UserAccountServiceConnector"
+    GridUserServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:GridUserServiceConnector"
+    AgentPreferencesServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:AgentPreferencesServiceConnector"
+    FriendsServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:FriendsServiceConnector"
+    MapAddServiceConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:MapAddServiceConnector"
+    MapGetServiceConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:MapGetServiceConnector"
     ;; Uncomment this if you want offline IM to work
-    ; OfflineIMServiceConnector = "${Const|PrivatePort}/OpenSim.Addons.OfflineIM.dll:OfflineIMServiceRobustConnector"
+    ; OfflineIMServiceConnector = "${Const|PrivatePort}/MutSea.Addons.OfflineIM.dll:OfflineIMServiceRobustConnector"
     ;; Uncomment this if you want Groups V2 to work
-    ; GroupsServiceConnector = "${Const|PrivatePort}/OpenSim.Addons.Groups.dll:GroupsServiceRobustConnector"
+    ; GroupsServiceConnector = "${Const|PrivatePort}/MutSea.Addons.Groups.dll:GroupsServiceRobustConnector"
     ;; Uncomment to provide bakes caching
-    ; BakedTextureService = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:XBakesConnector"
+    ; BakedTextureService = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:XBakesConnector"
 
     ;; Uncomment for UserProfiles see [UserProfilesService] to configure...
-    ; UserProfilesServiceConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:UserProfilesConnector"
+    ; UserProfilesServiceConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:UserProfilesConnector"
 
     ;; Uncomment if you want to have centralized estate data
-    ; EstateDataService = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:EstateDataRobustConnector"
+    ; EstateDataService = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:EstateDataRobustConnector"
 
-    MuteListConnector = "${Const|PrivatePort}/OpenSim.Server.Handlers.dll:MuteListServiceConnector"
+    MuteListConnector = "${Const|PrivatePort}/MutSea.Server.Handlers.dll:MuteListServiceConnector"
 
     ;; Additions for Hypergrid
 
-    GatekeeperServiceInConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:GatekeeperServiceInConnector"
-    UserAgentServerConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:UserAgentServerConnector"
-    HeloServiceInConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:HeloServiceInConnector"
-    HGFriendsServerConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:HGFriendsServerConnector"
-    InstantMessageServerConnector = "${Const|PublicPort}/OpenSim.Server.Handlers.dll:InstantMessageServerConnector"
-    HGInventoryServiceConnector = "HGInventoryService@${Const|PublicPort}/OpenSim.Server.Handlers.dll:XInventoryInConnector"
-    HGAssetServiceConnector = "HGAssetService@${Const|PublicPort}/OpenSim.Server.Handlers.dll:AssetServiceConnector"
+    GatekeeperServiceInConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:GatekeeperServiceInConnector"
+    UserAgentServerConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:UserAgentServerConnector"
+    HeloServiceInConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:HeloServiceInConnector"
+    HGFriendsServerConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:HGFriendsServerConnector"
+    InstantMessageServerConnector = "${Const|PublicPort}/MutSea.Server.Handlers.dll:InstantMessageServerConnector"
+    HGInventoryServiceConnector = "HGInventoryService@${Const|PublicPort}/MutSea.Server.Handlers.dll:XInventoryInConnector"
+    HGAssetServiceConnector = "HGAssetService@${Const|PublicPort}/MutSea.Server.Handlers.dll:AssetServiceConnector"
     ;; Uncomment this if you want Groups V2, HG to work
-    ; HGGroupsServiceConnector = "${Const|PublicPort}/OpenSim.Addons.Groups.dll:HGGroupsServiceRobustConnector"
+    ; HGGroupsServiceConnector = "${Const|PublicPort}/MutSea.Addons.Groups.dll:HGGroupsServiceRobustConnector"
 
 ; * This is common for all services, it's the network setup for the entire
 ; * server instance, if none is specified above
@@ -256,7 +256,7 @@
     ; PGSQL
     ; Uncomment these lines if you want to use PGSQL storage
     ; Change the connection string to your db details
-    ;StorageProvider = "OpenSim.Data.PGSQL.dll"
+    ;StorageProvider = "MutSea.Data.PGSQL.dll"
     ;ConnectionString = "Server=localhost;Database=opensim;User Id=opensim; password=***;"
 
     ; MySQL
@@ -264,7 +264,7 @@
     ; Change the connection string to your db details
     ; If using MySQL 8.0.4 or later, check that default-authentication-plugin=mysql_native_password
     ;  rather than caching_sha2_password is set in /etc/mysql/mysql.conf.d/mysqld.cnf (not applicable to MariaDB).
-    StorageProvider = "OpenSim.Data.MySQL.dll"
+    StorageProvider = "MutSea.Data.MySQL.dll"
     ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=*****;Old Guids=true;SslMode=None;"
 
 
@@ -276,8 +276,8 @@
 [AssetService]
 
     ;; Choose an asset service (Only one option should be enabled)
-    LocalServiceModule = "OpenSim.Services.AssetService.dll:AssetService"
-    ;LocalServiceModule = "OpenSim.Services.FSAssetService.dll:FSAssetConnector"
+    LocalServiceModule = "MutSea.Services.AssetService.dll:AssetService"
+    ;LocalServiceModule = "MutSea.Services.FSAssetService.dll:FSAssetConnector"
 
     ;; FSAssets Directories. Base directory, where final asset files are stored and Spool directory for temp files
     ;; These directories must be on the same physical filesystem
@@ -289,7 +289,7 @@
 	;SecondaryInstance = true
 
     ;; Original service can be checked if FSAssets can not find an asset
-    ;FallbackService = "OpenSim.Services.AssetService.dll:AssetService";
+    ;FallbackService = "MutSea.Services.AssetService.dll:AssetService";
 
     ;; How many days since last updating the access time before its updated again by FSAssets when accessing an asset
     ;; Reduces DB calls if asset is requested often. Default value 0 will always update access time
@@ -310,7 +310,7 @@
     ;; The following are common to both the default asset service and FSAsset service
 
     ;; Common asset service options
-    DefaultAssetLoader = "OpenSim.Framework.AssetLoader.Filesystem.dll"
+    DefaultAssetLoader = "MutSea.Framework.AssetLoader.Filesystem.dll"
     AssetLoaderArgs = "./assets/AssetSets.xml"
 
     ; Allow maptile assets to remotely deleted by remote calls to the asset service.
@@ -330,7 +330,7 @@
 ; * the function of the legacy inventory server
 ; *
 [InventoryService]
-    LocalServiceModule = "OpenSim.Services.InventoryService.dll:XInventoryService"
+    LocalServiceModule = "MutSea.Services.InventoryService.dll:XInventoryService"
 
     ; Will calls to purge folders (empty trash) and immediately delete/update items or folders (not move to trash first) succeed?
     ; If this is set to false then some other arrangement must be made to perform these operations if necessary.
@@ -342,7 +342,7 @@
 ; * It defaults to "regions", which uses the legacy tables
 ; *
 [GridService]
-    LocalServiceModule = "OpenSim.Services.GridService.dll:GridService"
+    LocalServiceModule = "MutSea.Services.GridService.dll:GridService"
 
     ; Realm = "regions"
     ; AllowDuplicateNames = ""
@@ -351,7 +351,7 @@
     ; Check4096 = "True"
 
     ;; Needed to display non-default map tile images for linked regions
-    AssetService = "OpenSim.Services.AssetService.dll:AssetService"
+    AssetService = "MutSea.Services.AssetService.dll:AssetService"
 
     ;; Directory for map tile images of linked regions
     ; MapTileDirectory = "./maptiles"
@@ -393,7 +393,7 @@
 
 ; * This is the configuration for the freeswitch server in grid mode
 [FreeswitchService]
-    LocalServiceModule = "OpenSim.Services.FreeswitchService.dll:FreeswitchService"
+    LocalServiceModule = "MutSea.Services.FreeswitchService.dll:FreeswitchService"
 
     ;; The IP address of your FreeSWITCH server.
     ;; This address must be reachable by viewers.
@@ -433,7 +433,7 @@
 ; *
 [AuthenticationService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    LocalServiceModule = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"
     ; Realm = "auth"
 
     ;; Allow the service to process HTTP getauthinfo calls.
@@ -451,8 +451,8 @@
 
 [OpenIdService]
     ; for the server connector
-    AuthenticationServiceModule = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
-    UserAccountServiceModule = "OpenSim.Services.UserAccountService.dll:UserAccountService"
+    AuthenticationServiceModule = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    UserAccountServiceModule = "MutSea.Services.UserAccountService.dll:UserAccountService"
 
 
 ; * This is the new style user service.
@@ -462,16 +462,16 @@
 ; *
 [UserAccountService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.UserAccountService.dll:UserAccountService"
+    LocalServiceModule = "MutSea.Services.UserAccountService.dll:UserAccountService"
     ; Realm = "UserAccounts"
 
     ; These are for creating new accounts by the service
-    AuthenticationService = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
-    PresenceService = "OpenSim.Services.PresenceService.dll:PresenceService"
-    GridService = "OpenSim.Services.GridService.dll:GridService"
-    InventoryService = "OpenSim.Services.InventoryService.dll:XInventoryService"
-    AvatarService = "OpenSim.Services.AvatarService.dll:AvatarService"
-    GridUserService = "OpenSim.Services.UserAccountService.dll:GridUserService"
+    AuthenticationService = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    PresenceService = "MutSea.Services.PresenceService.dll:PresenceService"
+    GridService = "MutSea.Services.GridService.dll:GridService"
+    InventoryService = "MutSea.Services.InventoryService.dll:XInventoryService"
+    AvatarService = "MutSea.Services.AvatarService.dll:AvatarService"
+    GridUserService = "MutSea.Services.UserAccountService.dll:GridUserService"
 
     ;; This switch creates the minimum set of body parts and avatar entries for a viewer 2
     ;; to show a default "Ruth" avatar rather than a cloud for a newly created user.
@@ -489,59 +489,59 @@
 
 [GridUserService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.UserAccountService.dll:GridUserService"
+    LocalServiceModule = "MutSea.Services.UserAccountService.dll:GridUserService"
 
 
 [AgentPreferencesService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.UserAccountService.dll:AgentPreferencesService"
+    LocalServiceModule = "MutSea.Services.UserAccountService.dll:AgentPreferencesService"
 
 
 [PresenceService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.PresenceService.dll:PresenceService"
+    LocalServiceModule = "MutSea.Services.PresenceService.dll:PresenceService"
 
 [AvatarService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.AvatarService.dll:AvatarService"
+    LocalServiceModule = "MutSea.Services.AvatarService.dll:AvatarService"
 
 
 [FriendsService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.FriendsService.dll:FriendsService"
+    LocalServiceModule = "MutSea.Services.FriendsService.dll:FriendsService"
 
 [EstateService]
-    LocalServiceModule = "OpenSim.Services.EstateService.dll:EstateDataService"
+    LocalServiceModule = "MutSea.Services.EstateService.dll:EstateDataService"
 
 [LibraryService]
-    LibraryName = "OpenSim Library"
+    LibraryName = "MutSea Library"
     DefaultLibrary = "./inventory/Libraries.xml"
 
 
 [LoginService]
     ; for the server connector
-    LocalServiceModule = "OpenSim.Services.LLLoginService.dll:LLLoginService"
+    LocalServiceModule = "MutSea.Services.LLLoginService.dll:LLLoginService"
     ; for the service
-    UserAccountService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
-    GridUserService = "OpenSim.Services.UserAccountService.dll:GridUserService"
-    AuthenticationService = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
-    InventoryService = "OpenSim.Services.InventoryService.dll:XInventoryService"
-    AvatarService = "OpenSim.Services.AvatarService.dll:AvatarService"
-    PresenceService = "OpenSim.Services.PresenceService.dll:PresenceService"
-    GridService = "OpenSim.Services.GridService.dll:GridService"
-    SimulationService ="OpenSim.Services.Connectors.dll:SimulationServiceConnector"
-    LibraryService = "OpenSim.Services.InventoryService.dll:LibraryService"
-    FriendsService = "OpenSim.Services.FriendsService.dll:FriendsService"
+    UserAccountService = "MutSea.Services.UserAccountService.dll:UserAccountService"
+    GridUserService = "MutSea.Services.UserAccountService.dll:GridUserService"
+    AuthenticationService = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    InventoryService = "MutSea.Services.InventoryService.dll:XInventoryService"
+    AvatarService = "MutSea.Services.AvatarService.dll:AvatarService"
+    PresenceService = "MutSea.Services.PresenceService.dll:PresenceService"
+    GridService = "MutSea.Services.GridService.dll:GridService"
+    SimulationService ="MutSea.Services.Connectors.dll:SimulationServiceConnector"
+    LibraryService = "MutSea.Services.InventoryService.dll:LibraryService"
+    FriendsService = "MutSea.Services.FriendsService.dll:FriendsService"
     ; The minimum user level required for a user to be able to login.  0 by default
     ; If you disable a particular user's account then you can set their login level below this number.
     ; You can also change this level from the console though these changes will not be persisted.
     ; MinLoginLevel = 0
 
     ;; for hypergrid
-    UserAgentService = "OpenSim.Services.HypergridService.dll:UserAgentService"
+    UserAgentService = "MutSea.Services.HypergridService.dll:UserAgentService"
 
     ; This inventory service will be used to initialize the user's inventory
-    HGInventoryServicePlugin = "HGInventoryService@OpenSim.Services.HypergridService.dll:HGSuitcaseInventoryService"
+    HGInventoryServicePlugin = "HGInventoryService@MutSea.Services.HypergridService.dll:HGSuitcaseInventoryService"
     ; NOTE: HGInventoryServiceConstructorArg is deprecated. For now it will work, but see above
 	;       for the correct method if passing additional arguments.
     ;; end hypergrid
@@ -589,7 +589,7 @@
     ;; By default, this setting uses various timezone names to calculate DST with regards to the viewer's standard PST.
     ;; Options are
     ;;   "none"     no DST
-    ;;   "local"    use the server's only timezone to calculate DST.  This is previous OpenSimulator behaviour.
+    ;;   "local"    use the server's only timezone to calculate DST.  This is previous MutSea Virtual World behaviour.
     ;;   "America/Los_Angeles;Pacific Standard Time" use these timezone names to look up Daylight savings.
     ;;      'America/Los_Angeles' is used on Linux/Mac systems whilst 'Pacific Standard Time' is used on Windows
     DSTZone = "America/Los_Angeles;Pacific Standard Time"
@@ -623,14 +623,14 @@
     ;DeniedMacs = "YOURLONGMACTRSING ANOTHERMAC"
 
 [MapImageService]
-    LocalServiceModule = "OpenSim.Services.MapImageService.dll:MapImageService"
+    LocalServiceModule = "MutSea.Services.MapImageService.dll:MapImageService"
 
     ; Set this if you want to change the default
     ; TilesStoragePath = "maptiles"
     ;
     ; If for some reason you have the AddMapTile service outside the firewall (e.g. ${Const|PublicPort}),
     ; you may want to set this. Otherwise, don't set it, because it's already protected.
-    ; GridService = "OpenSim.Services.GridService.dll:GridService"
+    ; GridService = "MutSea.Services.GridService.dll:GridService"
     ;
     ; Additionally, if you run this server behind a proxy, set this to true
     ; HasProxy = false
@@ -692,15 +692,15 @@
     ;DisableStatsEndpoint = true
 
 [GatekeeperService]
-    LocalServiceModule = "OpenSim.Services.HypergridService.dll:GatekeeperService"
+    LocalServiceModule = "MutSea.Services.HypergridService.dll:GatekeeperService"
     ;; for the service
-    UserAccountService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
-    UserAgentService = "OpenSim.Services.HypergridService.dll:UserAgentService"
-    PresenceService = "OpenSim.Services.PresenceService.dll:PresenceService"
-    GridUserService = "OpenSim.Services.UserAccountService.dll:GridUserService"
-    GridService = "OpenSim.Services.GridService.dll:GridService"
-    AuthenticationService = "OpenSim.Services.Connectors.dll:AuthenticationServicesConnector"
-    SimulationService ="OpenSim.Services.Connectors.dll:SimulationServiceConnector"
+    UserAccountService = "MutSea.Services.UserAccountService.dll:UserAccountService"
+    UserAgentService = "MutSea.Services.HypergridService.dll:UserAgentService"
+    PresenceService = "MutSea.Services.PresenceService.dll:PresenceService"
+    GridUserService = "MutSea.Services.UserAccountService.dll:GridUserService"
+    GridService = "MutSea.Services.GridService.dll:GridService"
+    AuthenticationService = "MutSea.Services.Connectors.dll:AuthenticationServicesConnector"
+    SimulationService ="MutSea.Services.Connectors.dll:SimulationServiceConnector"
     ; how does the outside world reach me? This acts as public key too.
     ;; If you have GatekeeperURI set under [Hypergrid], no need to set it here, leave it commented
     ; ExternalName = "${Const|BaseURL}:${Const|PublicPort}"
@@ -727,14 +727,14 @@
     ;DeniedMacs = "YOURLONGMACTRSING ANOTHERMAC"
 
 [UserAgentService]
-    LocalServiceModule = "OpenSim.Services.HypergridService.dll:UserAgentService"
+    LocalServiceModule = "MutSea.Services.HypergridService.dll:UserAgentService"
     ;; for the service
-    GridUserService     = "OpenSim.Services.UserAccountService.dll:GridUserService"
-    GridService         = "OpenSim.Services.GridService.dll:GridService"
-    GatekeeperService   = "OpenSim.Services.HypergridService.dll:GatekeeperService"
-    PresenceService     = "OpenSim.Services.PresenceService.dll:PresenceService"
-    FriendsService      = "OpenSim.Services.FriendsService.dll:FriendsService"
-    UserAccountService  = "OpenSim.Services.UserAccountService.dll:UserAccountService"
+    GridUserService     = "MutSea.Services.UserAccountService.dll:GridUserService"
+    GridService         = "MutSea.Services.GridService.dll:GridService"
+    GatekeeperService   = "MutSea.Services.HypergridService.dll:GatekeeperService"
+    PresenceService     = "MutSea.Services.PresenceService.dll:PresenceService"
+    FriendsService      = "MutSea.Services.FriendsService.dll:FriendsService"
+    UserAccountService  = "MutSea.Services.UserAccountService.dll:UserAccountService"
 
     ; If you run this user agent server behind a proxy, set this to true
     ; HasProxy = false
@@ -778,15 +778,15 @@
 ; *
 [HGInventoryService]
     ; For the InventoryServiceInConnector
-    LocalServiceModule    = "OpenSim.Services.HypergridService.dll:HGSuitcaseInventoryService"
+    LocalServiceModule    = "MutSea.Services.HypergridService.dll:HGSuitcaseInventoryService"
     ;; alternatives:
     ;;  HG1.5, more permissive, not recommended, but still supported
-    ;LocalServiceModule    = "OpenSim.Services.HypergridService.dll:HGInventoryService"
+    ;LocalServiceModule    = "MutSea.Services.HypergridService.dll:HGInventoryService"
     ;;  HG1.0, totally permissive, not recommended, but OK for grids with 100% trust
-    ;LocalServiceModule    = "OpenSim.Services.InventoryService.dll:XInventoryService"
+    ;LocalServiceModule    = "MutSea.Services.InventoryService.dll:XInventoryService"
 
-    UserAccountsService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
-    AvatarService = "OpenSim.Services.AvatarService.dll:AvatarService"
+    UserAccountsService = "MutSea.Services.UserAccountService.dll:UserAccountService"
+    AvatarService = "MutSea.Services.AvatarService.dll:AvatarService"
 
     ; HGInventoryService is a public-facing inventory service that allows users to
     ; interact with their suitcase folder when on a foreign grid.  This reuses the general inventory service connector.
@@ -804,10 +804,10 @@
 ; *
 [HGAssetService]
     ;; Use the second option if you have FSAsset service enabled
-    LocalServiceModule = "OpenSim.Services.HypergridService.dll:HGAssetService"
-    ;LocalServiceModule = "OpenSim.Services.HypergridService.dll:HGFSAssetService"
+    LocalServiceModule = "MutSea.Services.HypergridService.dll:HGAssetService"
+    ;LocalServiceModule = "MutSea.Services.HypergridService.dll:HGFSAssetService"
 
-    UserAccountsService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
+    UserAccountsService = "MutSea.Services.UserAccountService.dll:UserAccountService"
 
     ; HGAssetService is a public-facing service that allows users to
     ; read and create assets when on another grid.  This reuses the general asset service connector.
@@ -832,34 +832,34 @@
 
 
 [HGFriendsService]
-    LocalServiceModule = "OpenSim.Services.HypergridService.dll:HGFriendsService"
-    UserAgentService = "OpenSim.Services.HypergridService.dll:UserAgentService"
-    FriendsService = "OpenSim.Services.FriendsService.dll:FriendsService"
-    UserAccountService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
-    GridService = "OpenSim.Services.GridService.dll:GridService"
-    PresenceService = "OpenSim.Services.PresenceService.dll:PresenceService"
+    LocalServiceModule = "MutSea.Services.HypergridService.dll:HGFriendsService"
+    UserAgentService = "MutSea.Services.HypergridService.dll:UserAgentService"
+    FriendsService = "MutSea.Services.FriendsService.dll:FriendsService"
+    UserAccountService = "MutSea.Services.UserAccountService.dll:UserAccountService"
+    GridService = "MutSea.Services.GridService.dll:GridService"
+    PresenceService = "MutSea.Services.PresenceService.dll:PresenceService"
 
 
 [HGInstantMessageService]
-    LocalServiceModule  = "OpenSim.Services.HypergridService.dll:HGInstantMessageService"
-    GridService         = "OpenSim.Services.GridService.dll:GridService"
-    PresenceService     = "OpenSim.Services.PresenceService.dll:PresenceService"
-    UserAgentService    = "OpenSim.Services.HypergridService.dll:UserAgentService"
+    LocalServiceModule  = "MutSea.Services.HypergridService.dll:HGInstantMessageService"
+    GridService         = "MutSea.Services.GridService.dll:GridService"
+    PresenceService     = "MutSea.Services.PresenceService.dll:PresenceService"
+    UserAgentService    = "MutSea.Services.HypergridService.dll:UserAgentService"
     ; This should always be true in the Robust config
     InGatekeeper = True
 
 
 [Messaging]
     ; OfflineIM
-    OfflineIMService = "OpenSim.Addons.OfflineIM.dll:OfflineIMService"
+    OfflineIMService = "MutSea.Addons.OfflineIM.dll:OfflineIMService"
     ; maximum number of offline ims per user, default 25
     ;MaxOfflineIMs = 25;
 
 
 [Groups]
     ;; for the HG Groups service
-    OfflineIMService = "OpenSim.Addons.OfflineIM.dll:OfflineIMService"
-    UserAccountService = "OpenSim.Services.UserAccountService.dll:UserAccountService"
+    OfflineIMService = "MutSea.Addons.OfflineIM.dll:OfflineIMService"
+    UserAccountService = "MutSea.Services.UserAccountService.dll:UserAccountService"
 
     ;; What is the HomeURI of users associated with this grid?
     ;; Can overwrite the default in [Hypergrid], but probably shouldn't
@@ -871,19 +871,19 @@
 
 
 [UserProfilesService]
-    LocalServiceModule = "OpenSim.Services.UserProfilesService.dll:UserProfilesService"
+    LocalServiceModule = "MutSea.Services.UserProfilesService.dll:UserProfilesService"
     Enabled = false
     ;; Configure this for separate profiles database
     ;; ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=*****;Old Guids=true;"
     ;; Realm = UserProfiles
-    UserAccountService = OpenSim.Services.UserAccountService.dll:UserAccountService
-    AuthenticationServiceModule = "OpenSim.Services.AuthenticationService.dll:PasswordAuthenticationService"
+    UserAccountService = MutSea.Services.UserAccountService.dll:UserAccountService
+    AuthenticationServiceModule = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"
 
 
 [BakedTextureService]
-    LocalServiceModule = "OpenSim.Server.Handlers.dll:XBakes"
+    LocalServiceModule = "MutSea.Server.Handlers.dll:XBakes"
     ;; This directory must be writable by the user ROBUST runs as. It will be created automatically.
     BaseDirectory = "./bakes"
 
 [MuteListService]
-	LocalServiceModule = "OpenSim.Services.MuteListService.dll:MuteListService"
+	LocalServiceModule = "MutSea.Services.MuteListService.dll:MuteListService"

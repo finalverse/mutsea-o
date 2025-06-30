@@ -26,7 +26,7 @@ jobs:
         dotnet-version: '8.0.x'
     - name: Build
       id: build
-      run: dotnet build --configuration Release OpenSim.sln
+      run: dotnet build --configuration Release MutSea.sln
 
     - name: release
       if: success()
@@ -38,7 +38,7 @@ jobs:
           name: LastDotNetAutoBuild
           files: LastDotNetBuild.zip
 
-    - name: report push to irc if from main OpenSim repository
+    - name: report push to irc if from main MutSea repository
       if: github.event_name == 'push' && github.repository_owner == 'opensim'
       uses: rectalogic/notify-irc@v1
       with:
@@ -50,7 +50,7 @@ jobs:
           ${{ join(github.event.commits.*.message, '\n') }}
           dotnet compile: ${{ steps.build.conclusion }}
 
-    - name: manual report to irc if from main OpenSim repository
+    - name: manual report to irc if from main MutSea repository
       if: github.event_name == 'workflow_dispatch' && github.repository_owner == 'opensim'
       uses: rectalogic/notify-irc@v1
       with:

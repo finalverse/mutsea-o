@@ -1,32 +1,32 @@
-Welcome to OpenSimulator (OpenSim for short)!
+Welcome to MutSea Virtual World (MutSea for short)!
 
 # Overview
 
-OpenSim is a BSD Licensed Open Source project to develop a functioning
+MutSea is a BSD Licensed Open Source project to develop a functioning
 virtual worlds server platform capable of supporting multiple clients
-and servers in a heterogeneous grid structure. OpenSim is written in
+and servers in a heterogeneous grid structure. MutSea is written in
 C#, and can run under Mono or the Microsoft .NET runtimes.
 
 This is considered an alpha release.  Some stuff works, a lot doesn't.
 If it breaks, you get to keep *both* pieces.
 
-# Compiling OpenSim
+# Compiling MutSea
 
 Please see BUILDING.md
 
-# Running OpenSim on Windows
+# Running MutSea on Windows
 
 You will need dotnet 8.0 runtime (https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 
-To run OpenSim from a command prompt
+To run MutSea from a command prompt
 
- * cd to the bin/ directory where you unpacked OpenSim
- * review and change configuration files (.ini) for your needs. see the "Configuring OpenSim" section
- * run OpenSim.exe
+ * cd to the bin/ directory where you unpacked MutSea
+ * review and change configuration files (.ini) for your needs. see the "Configuring MutSea" section
+ * run MutSea.exe
 
 
-# Running OpenSim on Linux/Mac
+# Running MutSea on Linux/Mac
 
 You will need
 
@@ -39,26 +39,26 @@ You will need
  
  `apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev`
  
-To run OpenSim, from the unpacked distribution type:
+To run MutSea, from the unpacked distribution type:
 
  * cd bin
- * review and change configuration files (.ini) for your needs. see the "Configuring OpenSim" section
- * run ./opensim.sh
+ * review and change configuration files (.ini) for your needs. see the "Configuring MutSea" section
+ * run ./MutSea.sh
 
 
-# Configuring OpenSim
+# Configuring MutSea
 
-When OpenSim starts for the first time, you will be prompted with a
+When MutSea starts for the first time, you will be prompted with a
 series of questions that look something like:
 
-	[09-17 03:54:40] DEFAULT REGION CONFIG: Simulator Name [OpenSim Test]:
+	[09-17 03:54:40] DEFAULT REGION CONFIG: Simulator Name [MutSea Test]:
 
 For all the options except simulator name, you can safely hit enter to accept
 the default if you want to connect using a client on the same machine or over
 your local network.
 
 You will then be asked "Do you wish to join an existing estate?".  If you're
-starting OpenSim for the first time then answer no (which is the default) and
+starting MutSea for the first time then answer no (which is the default) and
 provide an estate name.
 
 Shortly afterwards, you will then be asked to enter an estate owner first name,
@@ -70,41 +70,25 @@ Once you are presented with a prompt that looks like:
 
 	Region (My region name) #
 
-You have successfully started OpenSim.
+You have successfully started MutSea.
 
 If you want to create another user account to login rather than the estate
-account, then type "create user" on the OpenSim console and follow the prompts.
+account, then type "create user" on the MutSea console and follow the prompts.
 
 Helpful resources:
  * http://opensimulator.org/wiki/Configuration
  * http://opensimulator.org/wiki/Configuring_Regions
 
-# Connecting to your OpenSim
+# Connecting to your MutSea
 
 By default your sim will be available for login on port 9000.  You can login by
 adding -loginuri http://127.0.0.1:9000 to the command that starts Second Life
 (e.g. in the Target: box of the client icon properties on Windows).  You can
-also login using the network IP address of the machine running OpenSim (e.g.
+also login using the network IP address of the machine running MutSea (e.g.
 http://192.168.1.2:9000)
 
 To login, use the avatar details that you gave for your estate ownership or the
 one you set up using the "create user" command.
-
-# Bug reports
-
-In the very likely event of bugs biting you (err, your OpenSim) we
-encourage you to see whether the problem has already been reported on
-the [OpenSim mantis system](http://opensimulator.org/mantis/main_page.php).
-
-If your bug has already been reported, you might want to add to the
-bug description and supply additional information.
-
-If your bug has not been reported yet, file a bug report ("opening a
-mantis"). Useful information to include:
- * description of what went wrong
- * stack trace
- * OpenSim.log (attach as file)
- * OpenSim.ini (attach as file)
 
 
 # More Information on OpenSim
@@ -113,5 +97,5 @@ More extensive information on building, running, and configuring
 OpenSim, as well as how to report bugs, and participate in the OpenSim
 project can always be found at http://opensimulator.org.
 
-Thanks for trying OpenSim, we hope it is a pleasant experience.
+Thanks for trying MutSea, we hope it is a pleasant experience.
 
