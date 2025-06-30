@@ -257,7 +257,7 @@
     ; Uncomment these lines if you want to use PGSQL storage
     ; Change the connection string to your db details
     ;StorageProvider = "MutSea.Data.PGSQL.dll"
-    ;ConnectionString = "Server=localhost;Database=opensim;User Id=opensim; password=***;"
+    ;ConnectionString = "Server=localhost;Database=mutsea;User Id=mutsea; password=***;"
 
     ; MySQL
     ; Uncomment these lines if you want to use MySQL storage
@@ -265,7 +265,7 @@
     ; If using MySQL 8.0.4 or later, check that default-authentication-plugin=mysql_native_password
     ;  rather than caching_sha2_password is set in /etc/mysql/mysql.conf.d/mysqld.cnf (not applicable to MariaDB).
     StorageProvider = "MutSea.Data.MySQL.dll"
-    ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=*****;Old Guids=true;SslMode=None;"
+    ConnectionString = "Data Source=localhost;Database=mutsea;User ID=mutsea;Password=*****;Old Guids=true;SslMode=None;"
 
 
 ; * As an example, the below configuration precisely mimicks the legacy
@@ -874,7 +874,7 @@
     LocalServiceModule = "MutSea.Services.UserProfilesService.dll:UserProfilesService"
     Enabled = false
     ;; Configure this for separate profiles database
-    ;; ConnectionString = "Data Source=localhost;Database=opensim;User ID=opensim;Password=*****;Old Guids=true;"
+    ;; ConnectionString = "Data Source=localhost;Database=mutsea;User ID=mutsea;Password=*****;Old Guids=true;"
     ;; Realm = UserProfiles
     UserAccountService = MutSea.Services.UserAccountService.dll:UserAccountService
     AuthenticationServiceModule = "MutSea.Services.AuthenticationService.dll:PasswordAuthenticationService"

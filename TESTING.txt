@@ -29,7 +29,7 @@ integration system.
 
 == TESTING ON WINDOWS ==
 
-To use nunit testing on opensim code, you have a variety of methods.  The
+To use nunit testing on mutsea code, you have a variety of methods.  The
 easiast methods involve using IDE capabilities to test code.  Using
 VS2005/2008 I recommend using the testing capabilities of Resharper(commercial)
 or TestDriven.Net(free).  Both will recognize nunit tests within your

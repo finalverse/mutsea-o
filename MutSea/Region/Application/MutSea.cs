@@ -51,7 +51,7 @@ using MutSea.Region.Framework.Scenes;
 using MutSea.Services.Interfaces;
 using MutSea.Framework.Servers.HttpServer;
 
-namespace OpenSim
+namespace MutSea
 {
     /// <summary>
     /// Interactive OpenSim region server

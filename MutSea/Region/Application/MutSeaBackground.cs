@@ -30,7 +30,7 @@ using System.Threading;
 using log4net;
 using Nini.Config;
 
-namespace OpenSim
+namespace MutSea
 {
     /// <summary>
     /// Consoleless OpenSimulator region server

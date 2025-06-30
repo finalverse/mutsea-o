@@ -35,7 +35,7 @@ using Nini.Config;
 using MutSea.Framework;
 using MutSea.Framework.Console;
 
-namespace OpenSim
+namespace MutSea
 {
     /// <summary>
     /// Starting class for the OpenSimulator Region
