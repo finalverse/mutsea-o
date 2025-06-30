@@ -54,7 +54,7 @@ using MutSea.Region.Framework.Interfaces;
 namespace MutSea.Region.CoreModules.World.Archiver.Tests
 {
     [TestFixture]
-    public class ArchiverTests : OpenSimTestCase
+    public class ArchiverTests : MutSeaTestCase
     {
         private Guid m_lastRequestId;
         private string m_lastErrorMessage;
@@ -178,7 +178,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test saving an OpenSim Region Archive.
+        /// Test saving an MutSea Region Archive.
         /// </summary>
         [Test]
         public void TestSaveOar()
@@ -253,7 +253,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test saving an OpenSim Region Archive with the no assets option
+        /// Test saving an MutSea Region Archive with the no assets option
         /// </summary>
         [Test]
         public void TestSaveOarNoAssets()
@@ -335,7 +335,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test loading an OpenSim Region Archive.
+        /// Test loading an MutSea Region Archive.
         /// </summary>
         [Test]
         public void TestLoadOar()
@@ -409,7 +409,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test loading an OpenSim Region Archive where the scene object parts are not ordered by link number (e.g.
+        /// Test loading an MutSea Region Archive where the scene object parts are not ordered by link number (e.g.
         /// 2 can come after 3).
         /// </summary>
         [Test]
@@ -462,7 +462,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test loading an OpenSim Region Archive saved with the --publish option.
+        /// Test loading an MutSea Region Archive saved with the --publish option.
         /// </summary>
         [Test]
         public void TestLoadPublishedOar()
@@ -607,7 +607,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test loading the region settings of an OpenSim Region Archive.
+        /// Test loading the region settings of an MutSea Region Archive.
         /// </summary>
         [Test]
         public void TestLoadOarRegionSettings()
@@ -704,7 +704,7 @@ namespace MutSea.Region.CoreModules.World.Archiver.Tests
         }
 
         /// <summary>
-        /// Test merging an OpenSim Region Archive into an existing scene
+        /// Test merging an MutSea Region Archive into an existing scene
         /// </summary>
         //[Test]
         public void TestMergeOar()

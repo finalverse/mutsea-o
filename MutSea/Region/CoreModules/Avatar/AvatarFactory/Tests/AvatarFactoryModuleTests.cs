@@ -38,7 +38,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Avatar.AvatarFactory
 {
     [TestFixture]
-    public class AvatarFactoryModuleTests : OpenSimTestCase
+    public class AvatarFactoryModuleTests : MutSeaTestCase
     {
         /// <summary>
         /// Only partial right now since we don't yet test that it's ended up in the avatar appearance service.

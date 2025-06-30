@@ -41,7 +41,7 @@ using System.Threading;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class ScenePresenceSitTests : OpenSimTestCase
+    public class ScenePresenceSitTests : MutSeaTestCase
     {
         private TestScene m_scene;
         private ScenePresence m_sp;

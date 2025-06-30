@@ -166,7 +166,7 @@ namespace MutSea.Region.Framework.Scenes
         /// </summary>
         /// <remarks>
         /// Triggered by <see cref="TriggerParcelPrimCountUpdate"/> in
-        /// <see cref="MutSea.OpenSimBase.CreateRegion"/>,
+        /// <see cref="MutSea.MutSeaBase.CreateRegion"/>,
         /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.EventManagerOnRequestParcelPrimCountUpdate"/>,
         /// <see cref="MutSea.Region.CoreModules.World.Land.LandManagementModule.ClientOnParcelObjectOwnerRequest"/>,
         /// <see cref="MutSea.Region.CoreModules.World.Land.LandObject.GetPrimsFree"/>,
@@ -191,7 +191,7 @@ namespace MutSea.Region.Framework.Scenes
         /// <summary>
         /// Triggered after <see cref="MutSea.IApplicationPlugin.PostInitialise"/>
         /// has been called for all <see cref="MutSea.IApplicationPlugin"/>
-        /// loaded via <see cref="MutSea.OpenSimBase.LoadPlugins"/>.
+        /// loaded via <see cref="MutSea.MutSeaBase.LoadPlugins"/>.
         /// Handlers for this event are typically used to parse the arguments
         /// from <see cref="OnPluginConsoleDelegate"/> in order to process or
         /// filter the arguments and pass them onto <see cref="MutSea.Region.CoreModules.Framework.InterfaceCommander.Commander.ProcessConsoleCommand"/>
@@ -200,9 +200,9 @@ namespace MutSea.Region.Framework.Scenes
         /// Triggered by <see cref="TriggerOnPluginConsole"/> in
         /// <see cref="Scene.SendCommandToPlugins"/> via
         /// <see cref="SceneManager.SendCommandToPluginModules"/> via
-        /// <see cref="MutSea.OpenSimBase.HandleCommanderCommand"/> via
-        /// <see cref="MutSea.OpenSimBase.AddPluginCommands"/> via
-        /// <see cref="MutSea.OpenSimBase.StartupSpecific"/>
+        /// <see cref="MutSea.MutSeaBase.HandleCommanderCommand"/> via
+        /// <see cref="MutSea.MutSeaBase.AddPluginCommands"/> via
+        /// <see cref="MutSea.MutSeaBase.StartupSpecific"/>
         /// </remarks>
         public delegate void OnPluginConsoleDelegate(string[] args);
         public event OnPluginConsoleDelegate OnPluginConsole;

@@ -946,7 +946,7 @@ namespace MutSea.Framework
                                                 "UUID of Region (Default is recommended, random UUID)",
                                                 UUID.Random().ToString(), true);
             configMember.addConfigurationOption("sim_name", ConfigurationOption.ConfigurationTypes.TYPE_STRING_NOT_EMPTY,
-                                                "Region Name", "OpenSim Test", false);
+                                                "Region Name", "MutSea Test", false);
 
             configMember.addConfigurationOption("sim_location_x", ConfigurationOption.ConfigurationTypes.TYPE_UINT32,
                                                 "Grid Location (X Axis)", "1000", false);

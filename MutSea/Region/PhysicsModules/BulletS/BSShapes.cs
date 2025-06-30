@@ -630,7 +630,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
     // ============================================================================================================
     // BSShapeHull is a physical shape representation htat is made up of many convex hulls.
     // The convex hulls are either supplied with the asset or are approximated by one of the
-    //     convex hull creation routines (in OpenSim or in Bullet).
+    //     convex hull creation routines (in MutSea or in Bullet).
     public class BSShapeHull : BSShape
     {
     #pragma warning disable 414

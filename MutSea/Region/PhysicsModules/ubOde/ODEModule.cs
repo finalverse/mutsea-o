@@ -67,7 +67,7 @@ namespace MutSea.Region.PhysicsModule.ubOde
                         return;
                     }
 
-                    int indx = ode_config.IndexOf("ODE_OPENSIM");
+                    int indx = ode_config.IndexOf("ODE_MUTSEA");
                     if (indx < 0)
                     {
                         m_log.Error("[ubODE] Native ode library version not supported");

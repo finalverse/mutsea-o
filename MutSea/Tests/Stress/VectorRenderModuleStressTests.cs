@@ -45,7 +45,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Tests.Stress
 {
     [TestFixture]
-    public class VectorRenderModuleStressTests : OpenSimTestCase
+    public class VectorRenderModuleStressTests : MutSeaTestCase
     {
         public Scene Scene { get; private set; }
         public DynamicTextureModule Dtm { get; private set; }

@@ -3234,7 +3234,7 @@
   <key>type</key><string>integer</string>
   <key>value</key><string>0x20</string>
  </map>
- <key>SIT_FLAG_OPENSIMFORCED</key><map>
+ <key>SIT_FLAG_MUTSEAFORCED</key><map>
   <key>type</key><string>integer</string>
   <key>value</key><string>SIT_FLAG_ALLOW_UNSIT | SIT_FLAG_NO_COLLIDE | SIT_FLAG_NO_DAMAGE</string>
  </map>

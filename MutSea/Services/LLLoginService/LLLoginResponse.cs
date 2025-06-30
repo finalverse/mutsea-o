@@ -418,7 +418,7 @@ namespace MutSea.Services.LLLoginService
 
             ErrorMessage = "You have entered an invalid name/password combination.  Check Caps/lock.";
             ErrorReason = "key";
-            welcomeMessage = "Welcome to OpenSim!";
+            welcomeMessage = "Welcome to MutSea!";
             seedCapability = String.Empty;
             home = "{'region_handle':["
                     + "r" + Util.RegionToWorldLoc(1000).ToString()
@@ -820,7 +820,7 @@ namespace MutSea.Services.LLLoginService
         {
             //for now create random inventory library owner
             Hashtable TempHash = new Hashtable();
-            TempHash["agent_id"] = Constants.m_MrOpenSimID.ToString(); // libFolder.Owner
+            TempHash["agent_id"] = Constants.m_MrMutSeaID.ToString(); // libFolder.Owner
             ArrayList inventoryLibOwner = new ArrayList();
             inventoryLibOwner.Add(TempHash);
             return inventoryLibOwner;

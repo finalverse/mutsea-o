@@ -40,7 +40,7 @@ namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Grid
     public class RegionInfoCache
     {
         // private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private const int CACHE_EXPIRATION_SECONDS = 120; // 2 minutes  opensim regions change a lot
+        private const int CACHE_EXPIRATION_SECONDS = 120; // 2 minutes  mutsea regions change a lot
         private const int CACHE_PURGE_TIME = 60000; // milliseconds
         public const ulong HANDLEMASK = 0xffffff00ffffff00ul;
         public const ulong HANDLECOORDMASK = 0xffffff00ul;

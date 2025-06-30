@@ -886,7 +886,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             bool isEstateManager = m_scene.Permissions.IsEstateManager(m_agentId); // go by oficial path
             uint regionFlags = GetRegionFlags();
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             Buffer.BlockCopy(RegionHandshakeHeader, 0, buf.Data, 0, 11);
 
             // inline zeroencode
@@ -1005,7 +1005,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             m_thisAgentUpdateArgs.lastMoveUpdateTS = 0;
             m_thisAgentUpdateArgs.ControlFlags = 0;
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] bdata = buf.Data;
 
             //setup header
@@ -1056,7 +1056,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         public void SendChatMessage(string message, byte chattype, Vector3 fromPos, string fromName,
             UUID sourceID, UUID ownerID, byte sourcetype, byte audible)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -1113,7 +1113,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             if (!m_scene.Permissions.CanInstantMessage(fromAgentID, toAgentID))
                 return;
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -1205,7 +1205,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendGenericMessage(string method, UUID invoice, List<string> message)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -1254,7 +1254,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     //m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Task, null, false, true);
                     m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Task);
 
-                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     Buffer.BlockCopy(data, 0, newbuf.Data, 0, countpos);
                     buf = newbuf;
                     data = buf.Data;
@@ -1275,7 +1275,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendGenericMessage(string method, UUID invoice, List<byte[]> message)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -1325,7 +1325,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     //m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Task, null, false, true);
                     m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Task);
 
-                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     Buffer.BlockCopy(data, 0, newbuf.Data, 0, countpos);
                     buf = newbuf;
                     data = buf.Data;
@@ -1657,7 +1657,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
                 int numberPatchs = map.Length / 2;
 
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                 byte[] data = buf.Data;
 
                 Buffer.BlockCopy(TerrainPacketHeader, 0, data, 0, 7);
@@ -1678,7 +1678,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 for (int i = 0; i < numberPatchs; i++)
                 {
                     s = 2 * i;
-                    OpenSimTerrainCompressor.CreatePatchFromTerrainData(bitpack, terrData, map[s], map[s + 1]);
+                    MutSeaTerrainCompressor.CreatePatchFromTerrainData(bitpack, terrData, map[s], map[s + 1]);
                     if (bitpack.BytePos > 900 && i != numberPatchs - 1)
                     {
                         //finish this packet
@@ -1693,7 +1693,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                         m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Land);
 
                         // start another
-                        buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                        buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                         data = buf.Data;
 
                         Buffer.BlockCopy(TerrainPacketHeader, 0, data, 0, 7);
@@ -1787,7 +1787,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 byte layerType = (byte)TerrainPatch.LayerType.Wind;
 
                 LayerDataPacket layerpack =
-                     OpenSimTerrainCompressor.CreateLayerDataPacketStandardSize(
+                     MutSeaTerrainCompressor.CreateLayerDataPacketStandardSize(
                         patches, layerType);
                 layerpack.Header.Zerocoded = true;
                 lock(lastWindPackets)
@@ -1884,7 +1884,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendMapItemReply(mapItemReply[] replies, uint mapitemtype, uint flags)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header and agentinfo block
@@ -1925,7 +1925,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 else
                 {
                     // prepare next packet
-                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     Buffer.BlockCopy(data, 0, newbuf.Data, 0, 34);
 
                     // copy the block we already did
@@ -1988,7 +1988,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     needSizes = true;
             }
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header and agentinfo block
@@ -2031,7 +2031,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 else
                 {
                     // prepare next packet
-                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     Buffer.BlockCopy(data, 0, newbuf.Data, 0, 30);
 
                     // copy the block we already did
@@ -2815,7 +2815,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendTaskInventory(UUID taskID, short serial, byte[] fileName)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -2843,7 +2843,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         public void SendXferPacket(ulong xferID, uint packet,
                 byte[] XferData, int XferDataOffset, int XferDatapktLen, bool isTaskInventory)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -2891,7 +2891,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendAbortXferPacket(ulong xferID)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -2940,7 +2940,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendAvatarPickerReply(UUID QueryID, List<UserData> users)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -2986,7 +2986,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     m_udpServer.SendUDPPacket(m_udpClient, buf, ThrottleOutPacketType.Task);
                     if (u < users.Count - 1)
                     {
-                        UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                        UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                         byte[] newdata = newbuf.Data;
                         Buffer.BlockCopy(data, 0, newdata, 0, 42);
                         buf = newbuf;
@@ -4410,7 +4410,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         public void SendAppearance(UUID targetID, byte[] visualParams, byte[] textureEntry, float hover)
         {
             // doing post zero encode, because odds of beeing bad are not that low
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             Buffer.BlockCopy(AvatarAppearanceHeader, 0, buf.Data, 0, 10);
             byte[] data = buf.Data;
             int pos = 10;
@@ -4462,7 +4462,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         {
             //            m_log.DebugFormat("[LLCLIENTVIEW]: Sending animations for {0} to {1}", sourceAgentId, Name);
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
             //setup header
             Buffer.BlockCopy(AvatarAnimationHeader, 0, data, 0, 7);
@@ -4563,7 +4563,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             if (ent is not ScenePresence && ent is not SceneObjectPart)
                 return;
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             Buffer.BlockCopy(objectUpdateHeader, 0, buf.Data, 0, 7);
 
             LLUDPZeroEncoder zc = new(buf.Data);
@@ -4588,7 +4588,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             if (ent is null)
                 return;
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
 
             //setup header and regioninfo block
             Buffer.BlockCopy(terseUpdateHeader, 0, buf.Data, 0, 7);
@@ -4648,7 +4648,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
             //bool doprey = m_courseLocationPrey != UUID.Zero;
 
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             Buffer.BlockCopy(CoarseLocationUpdateHeader, 0, buf.Data, 0, 8);
             byte[] data = buf.Data;
 
@@ -5138,7 +5138,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             {
                 //List<EntityUpdate> tau = new List<EntityUpdate>(30);
 
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                 Buffer.BlockCopy(objectUpdateHeader, 0, buf.Data, 0, 7);
 
                 LLUDPZeroEncoder zc = new(buf.Data);
@@ -5179,7 +5179,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     else
                     {
                         // we need more packets
-                        UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                        UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                         Buffer.BlockCopy(buf.Data, 0, newbuf.Data, 0, countposition); // start is the same
 
                         buf.Data[countposition] = (byte)count;
@@ -5230,7 +5230,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             {
                 //List<EntityUpdate> tau = new List<EntityUpdate>(30);
 
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                 byte[] data = buf.Data;
 
                 Buffer.BlockCopy(CompressedObjectHeader, 0, data, 0, 7);
@@ -5274,7 +5274,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     else
                     {
                         // we need more packets
-                        UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                        UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                         Buffer.BlockCopy(buf.Data, 0, newbuf.Data, 0, countposition); // start is the same
 
                         buf.Data[countposition] = (byte)count;
@@ -5322,7 +5322,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
             if (objectUpdateProbes is not null)
             {
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                 byte[] data = buf.Data;
                 Buffer.BlockCopy(ObjectUpdateCachedHeader, 0, data, 0, 7);
 
@@ -5371,7 +5371,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                                 if (pos > (LLUDPServer.MAXPAYLOAD - 13))
                                 {
                                     // we need more packets
-                                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                                     Buffer.BlockCopy(data, 0, newbuf.Data, 0, countposition); // start is the same
 
                                     data[countposition] = (byte)count;
@@ -5402,7 +5402,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 int blocks = terseUpdates.Count;
                 //List<EntityUpdate> tau = new List<EntityUpdate>(30);
 
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
 
                 //setup header and regioninfo block
                 Buffer.BlockCopy(terseUpdateHeader, 0, buf.Data, 0, 7);
@@ -5440,7 +5440,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                                 else if (blocks > 0)
                                 {
                                     // we need more packets
-                                    UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                                    UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                                     Buffer.BlockCopy(buf.Data, 0, newbuf.Data, 0, COUNTINDEX); // start is the same
                                     // copy what we done in excess
                                     int extralen = pos - lastpos;
@@ -5496,7 +5496,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
                     int count = sop.GetAnimations(out UUID[] ids, out int[] seqs);
 
-                    UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     byte[] data = buf.Data;
 
                     //setup header
@@ -5564,7 +5564,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                         continue;
                     }
 
-                    UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     byte[] dataptr = buf.Data;
 
                     //setup header
@@ -5920,7 +5920,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         public void SendSimStats(SimStats stats)
         {
-            UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+            UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
             byte[] data = buf.Data;
 
             //setup header
@@ -6074,7 +6074,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 int blocks = objectPropertiesUpdates.Count;
                 //List<EntityUpdate> tau = new List<EntityUpdate>(30);
 
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                 Buffer.BlockCopy(ObjectPropertyUpdateHeader, 0, buf.Data, 0, 8);
 
                 LLUDPZeroEncoder zc = new(buf.Data);
@@ -6102,7 +6102,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     else if (blocks > 0)
                     {
                         // we need more packets
-                        UDPPacketBuffer newbuf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                        UDPPacketBuffer newbuf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                         Buffer.BlockCopy(buf.Data, 0, newbuf.Data, 0, countposition); // start is the same
 
                         buf.Data[countposition] = (byte)count;
@@ -6145,7 +6145,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             {
                 foreach (EntityUpdate eu in objectPropertiesFamilyUpdates)
                 {
-                    UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                    UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
                     Buffer.BlockCopy(ObjectFamilyUpdateHeader, 0, buf.Data, 0, 8);
 
                     LLUDPZeroEncoder zc = new(buf.Data);
@@ -13191,7 +13191,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         {
             if (p is ScenePresence sp)
             {
-                UDPPacketBuffer buf = OpenSimUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
+                UDPPacketBuffer buf = MutSeaUDPBase.GetNewUDPBuffer(m_udpClient.RemoteEndPoint);
 
                 //setup header and regioninfo block
                 Buffer.BlockCopy(terseUpdateHeader, 0, buf.Data, 0, 7);

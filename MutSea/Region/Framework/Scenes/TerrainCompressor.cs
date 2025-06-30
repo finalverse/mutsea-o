@@ -44,7 +44,7 @@ using OpenMetaverse.Packets;
 
 namespace MutSea.Region.ClientStack.LindenUDP
 {
-    public static class OpenSimTerrainCompressor
+    public static class MutSeaTerrainCompressor
     {
         private const float OO_SQRT2 = 0.7071068f;
         private const int END_OF_PATCHES = 97;
@@ -58,7 +58,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         private static readonly float[] QuantizeTable16 = new float[256];
         private static readonly float[] DequantizeTable16 = new float[256];
 
-        static OpenSimTerrainCompressor()
+        static MutSeaTerrainCompressor()
         {
             if(Constants.TerrainPatchSize != 16)
                 throw new Exception("Terrain patch size must be 16m x 16m");

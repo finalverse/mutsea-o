@@ -34,7 +34,7 @@ using MutSea.Tests.Common;
 
 namespace MutSea.Region.CoreModules.Terrain.Tests
 {
-    public class TerrainModuleTests : OpenSimTestCase
+    public class TerrainModuleTests : MutSeaTestCase
     {
         [Test]
         public void TestTerrainFill()

@@ -53,9 +53,9 @@ using MutSea.Services.UserAccountService;
 namespace MutSea
 {
     /// <summary>
-    /// Common OpenSimulator simulator code
+    /// Common MutSea simulator code
     /// </summary>
-    public class OpenSimBase : RegionApplicationBase
+    public class MutSeaBase : RegionApplicationBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -116,9 +116,9 @@ namespace MutSea
         private bool m_securePermissionsLoading = true;
 
         /// <value>
-        /// The config information passed into the OpenSimulator region server.
+        /// The config information passed into the MutSea region server.
         /// </value>
-        public OpenSimConfigSource ConfigSource { get; private set; }
+        public MutSeaConfigSource ConfigSource { get; private set; }
 
         protected EnvConfigSource m_EnvConfigSource = new EnvConfigSource();
 
@@ -143,7 +143,7 @@ namespace MutSea
         /// Constructor.
         /// </summary>
         /// <param name="configSource"></param>
-        public OpenSimBase(IConfigSource configSource) : base()
+        public MutSeaBase(IConfigSource configSource) : base()
         {
             EnableInitialPluginLoad = true;
             LoadEstateDataService = true;
@@ -658,7 +658,7 @@ namespace MutSea
                     UUID estateOwnerUuid = UUID.Zero;
                     if (!UUID.TryParse(rawEstateOwnerUuid, out estateOwnerUuid))
                     {
-                        m_log.ErrorFormat("[OPENSIM]: ID {0} is not a valid UUID", rawEstateOwnerUuid);
+                        m_log.ErrorFormat("[MUTSEA]: ID {0} is not a valid UUID", rawEstateOwnerUuid);
                         return;
                     }
 
@@ -680,7 +680,7 @@ namespace MutSea
             if (account == null)
             {
                 m_log.ErrorFormat(
-                    "[OPENSIM]: Unable to store account. If this simulator is connected to a grid, you must create the estate owner account first at the grid level.");
+                    "[MUTSEA]: Unable to store account. If this simulator is connected to a grid, you must create the estate owner account first at the grid level.");
             }
             else
             {
@@ -726,7 +726,7 @@ namespace MutSea
                 if (scene.RegionInfo.RegionFile.ToLower().EndsWith(".xml"))
                 {
                     File.Delete(scene.RegionInfo.RegionFile);
-                    m_log.InfoFormat("[OPENSIM]: deleting region file \"{0}\"", scene.RegionInfo.RegionFile);
+                    m_log.InfoFormat("[MUTSEA]: deleting region file \"{0}\"", scene.RegionInfo.RegionFile);
                 }
                 if (scene.RegionInfo.RegionFile.ToLower().EndsWith(".ini"))
                 {
@@ -835,7 +835,7 @@ namespace MutSea
         protected virtual void HandleRestartRegion(RegionInfo whichRegion)
         {
             m_log.InfoFormat(
-                "[OPENSIM]: Got restart signal from SceneManager for region {0} ({1},{2})",
+                "[MUTSEA]: Got restart signal from SceneManager for region {0} ({1},{2})",
                 whichRegion.RegionName, whichRegion.RegionLocX, whichRegion.RegionLocY);
 
             //ShutdownClientServer(whichRegion);
@@ -870,12 +870,12 @@ namespace MutSea
         /// </summary>
         public class XSimStatusHandler : SimpleStreamHandler
         {
-            OpenSimBase m_opensim;
+            MutSeaBase m_mutsea;
 
-            public XSimStatusHandler(OpenSimBase sim)
+            public XSimStatusHandler(MutSeaBase sim)
                 : base("/" + Util.SHA1Hash(sim.osSecret), "XSimStatus")
             {
-                m_opensim = sim;
+                m_mutsea = sim;
             }
 
             protected override void ProcessRequest(IOSHttpRequest httpRequest, IOSHttpResponse httpResponse)
@@ -883,7 +883,7 @@ namespace MutSea
                 httpResponse.KeepAlive = false;
                 try
                 {
-                    httpResponse.RawBuffer = Util.UTF8.GetBytes(m_MutSea.StatReport(httpRequest));
+                    httpResponse.RawBuffer = Util.UTF8.GetBytes(m_mutsea.StatReport(httpRequest));
                     httpResponse.StatusCode = (int)HttpStatusCode.OK;
                 }
                 catch
@@ -902,12 +902,12 @@ namespace MutSea
         /// </summary>
         protected class UXSimStatusHandler : SimpleStreamHandler
         {
-            OpenSimBase m_opensim;
+            MutSeaBase m_mutsea;
 
-            public UXSimStatusHandler(OpenSimBase sim)
+            public UXSimStatusHandler(MutSeaBase sim)
                 : base("/" + sim.userStatsURI, "UXSimStatus")
             {
-                m_opensim = sim;
+                m_mutsea = sim;
             }
 
             protected override void ProcessRequest(IOSHttpRequest httpRequest, IOSHttpResponse httpResponse)
@@ -915,7 +915,7 @@ namespace MutSea
                 httpResponse.KeepAlive = false;
                 try
                 {
-                    httpResponse.RawBuffer = Util.UTF8.GetBytes(m_MutSea.StatReport(httpRequest));
+                    httpResponse.RawBuffer = Util.UTF8.GetBytes(m_mutsea.StatReport(httpRequest));
                     httpResponse.StatusCode = (int)HttpStatusCode.OK;
                 }
                 catch
@@ -1100,7 +1100,7 @@ namespace MutSea
                     return true; // need to update the database
                 else
                     m_log.ErrorFormat(
-                        "[OPENSIM BASE]: Joining target estate specified in region config {0} failed", targetEstateIDstr);
+                        "[MUTSEA BASE]: Joining target estate specified in region config {0} failed", targetEstateIDstr);
             }
             //##
 
@@ -1127,7 +1127,7 @@ namespace MutSea
                         return true; // need to update the database
                     else
                         m_log.ErrorFormat(
-                            "[OPENSIM BASE]: Joining default estate {0} failed", defaultEstateName);
+                            "[MUTSEA BASE]: Joining default estate {0} failed", defaultEstateName);
                 }
             }
 
@@ -1191,7 +1191,7 @@ namespace MutSea
         }
     }
 
-    public class OpenSimConfigSource
+    public class MutSeaConfigSource
     {
         public IConfigSource Source;
     }

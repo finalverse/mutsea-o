@@ -46,7 +46,7 @@ namespace MutSea.Region.CoreModules.Asset.Tests
     /// At the moment we're only test the in-memory part of the FlotsamAssetCache.  This is a considerable weakness.
     /// </summary>
     [TestFixture]
-    public class FlotsamAssetCacheTests : OpenSimTestCase
+    public class FlotsamAssetCacheTests : MutSeaTestCase
     {
         protected TestScene m_scene;
         protected FlotsamAssetCache m_cache;

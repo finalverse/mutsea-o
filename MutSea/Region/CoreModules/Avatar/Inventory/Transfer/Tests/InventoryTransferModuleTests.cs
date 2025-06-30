@@ -43,7 +43,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Avatar.Inventory.Transfer.Tests
 {
     [TestFixture]
-    public class InventoryTransferModuleTests : OpenSimTestCase
+    public class InventoryTransferModuleTests : MutSeaTestCase
     {
         protected TestScene m_scene;
 

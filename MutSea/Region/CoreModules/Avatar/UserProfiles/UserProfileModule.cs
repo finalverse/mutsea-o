@@ -482,7 +482,7 @@ namespace MutSea.Region.CoreModules.Avatar.UserProfiles
             if (!UUID.TryParse(args[0], out UUID targetID) || targetID.IsZero())
                 return;
 
-            if (targetID.Equals(Constants.m_MrOpenSimID))
+            if (targetID.Equals(Constants.m_MrMutSeaID))
             {
                 remoteClient.SendAvatarClassifiedReply(targetID, classifieds);
                 return;
@@ -858,7 +858,7 @@ namespace MutSea.Region.CoreModules.Avatar.UserProfiles
 
             Dictionary<UUID, string> picks = new();
 
-            if (targetId.Equals(Constants.m_MrOpenSimID))
+            if (targetId.Equals(Constants.m_MrMutSeaID))
             {
                 remoteClient.SendAvatarPicksReply(targetId, picks);
                 return;
@@ -1414,7 +1414,7 @@ namespace MutSea.Region.CoreModules.Avatar.UserProfiles
         /// </param>
         public void NotesUpdate(IClientAPI remoteClient, UUID queryTargetID, string queryNotes)
         {
-            if (queryTargetID.Equals(Constants.m_MrOpenSimID))
+            if (queryTargetID.Equals(Constants.m_MrMutSeaID))
                 return;
 
             ScenePresence p = FindPresence(queryTargetID);
@@ -1574,10 +1574,10 @@ namespace MutSea.Region.CoreModules.Avatar.UserProfiles
                 return;
             }
 
-            if (avatarID.Equals(Constants.m_MrOpenSimID))
+            if (avatarID.Equals(Constants.m_MrMutSeaID))
             {
-                remoteClient.SendAvatarProperties(avatarID, "Creator of OpenSimulator shared assets library", Constants.m_MrOpenSimBorn.ToString(),
-                      Utils.StringToBytes("System agent"), "MrOpenSim has no life", 0x10,
+                remoteClient.SendAvatarProperties(avatarID, "Creator of OpenSimulator shared assets library", Constants.m_MrMutSeaBorn.ToString(),
+                      Utils.StringToBytes("System agent"), "MrMutSea has no life", 0x10,
                       UUID.Zero, UUID.Zero, "", UUID.Zero);
                 remoteClient.SendAvatarInterestsReply(avatarID, 0, "",
                           0, "Getting into trouble", "Droidspeak");

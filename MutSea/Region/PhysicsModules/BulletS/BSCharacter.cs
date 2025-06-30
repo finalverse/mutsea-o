@@ -210,7 +210,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
             }
         }
 
-        // OpenSim 0.9 introduces a common avatar size computation
+        // MutSea 0.9 introduces a common avatar size computation
         public override void setAvatarSize(OMV.Vector3 size, float feetOffset)
         {
             SetAvatarSize(size, feetOffset, false /* initializing */);

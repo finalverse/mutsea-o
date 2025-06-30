@@ -143,7 +143,7 @@ namespace MutSea.Region.CoreModules.Scripting.HttpRequest.Tests
     /// regression test this kind of code is very high.
     /// </remarks>
     [TestFixture]
-    public class ScriptsHttpRequestsTests : OpenSimTestCase
+    public class ScriptsHttpRequestsTests : MutSeaTestCase
     {
         /// <summary>
         /// Test what happens when we get a 404 response from a call.

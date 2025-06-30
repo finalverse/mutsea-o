@@ -38,7 +38,7 @@ using MutSea.Framework.Console;
 namespace MutSea
 {
     /// <summary>
-    /// Starting class for the OpenSimulator Region
+    /// Starting class for the MutSea Region
     /// </summary>
     public class Application
     {
@@ -63,11 +63,11 @@ namespace MutSea
         public static string m_crashDir = "crashes";
 
         /// <summary>
-        /// Instance of the OpenSim class.  This could be OpenSim or OpenSimBackground depending on the configuration
+        /// Instance of the MutSea class.  This could be MutSea or MutSeaBackground depending on the configuration
         /// </summary>
-        protected static OpenSimBase m_sim = null;
+        protected static MutSeaBase m_sim = null;
 
-        //could move our main function into OpenSimMain and kill this class
+        //could move our main function into MutSeaMain and kill this class
         public static void Main(string[] args)
         {
             // First line, hook the appdomain to the crash reporter
@@ -130,15 +130,15 @@ namespace MutSea
             if (!string.IsNullOrEmpty(logConfigFile))
             {
                 XmlConfigurator.Configure(new System.IO.FileInfo(logConfigFile));
-                m_log.Info($"[OPENSIM MAIN]: configured log4net using \"{logConfigFile}\" as configuration file");
+                m_log.Info($"[MUTSEA MAIN]: configured log4net using \"{logConfigFile}\" as configuration file");
             }
             else
             {
                 XmlConfigurator.Configure(new System.IO.FileInfo("MutSea.exe.config"));
-                m_log.Info("[OPENSIM MAIN]: configured log4net using default MutSea.exe.config");
+                m_log.Info("[MUTSEA MAIN]: configured log4net using default MutSea.exe.config");
             }
 
-            m_log.Info($"[OPENSIM MAIN]: System Locale is {System.Threading.Thread.CurrentThread.CurrentCulture}");
+            m_log.Info($"[MUTSEA MAIN]: System Locale is {System.Threading.Thread.CurrentThread.CurrentCulture}");
 
             int workerThreadsMin = 500;
             int workerThreadsMax = 1000;
@@ -147,20 +147,20 @@ namespace MutSea
 
             System.Threading.ThreadPool.GetMinThreads(out int currentMinWorkerThreads, out int currentMinIocpThreads);
             m_log.Info(
-                $"[OPENSIM MAIN]: Runtime gave us {currentMinWorkerThreads} min worker threads and {currentMinIocpThreads} min IOCP threads");
+                $"[MUTSEA MAIN]: Runtime gave us {currentMinWorkerThreads} min worker threads and {currentMinIocpThreads} min IOCP threads");
 
             System.Threading.ThreadPool.GetMaxThreads(out int workerThreads, out int iocpThreads);
-            m_log.Info($"[OPENSIM MAIN]: Runtime gave us {workerThreads} max worker threads and {iocpThreads} max IOCP threads");
+            m_log.Info($"[MUTSEA MAIN]: Runtime gave us {workerThreads} max worker threads and {iocpThreads} max IOCP threads");
 
             if (workerThreads < workerThreadsMin)
             {
                 workerThreads = workerThreadsMin;
-                m_log.Info($"[OPENSIM MAIN]: Bumping up max worker threads to {workerThreads}");
+                m_log.Info($"[MUTSEA MAIN]: Bumping up max worker threads to {workerThreads}");
             }
             if (workerThreads > workerThreadsMax)
             {
                 workerThreads = workerThreadsMax;
-                m_log.Info($"[OPENSIM MAIN]: Limiting max worker threads to {workerThreads}");
+                m_log.Info($"[MUTSEA MAIN]: Limiting max worker threads to {workerThreads}");
             }
 
             // Increase the number of IOCP threads available.
@@ -168,35 +168,35 @@ namespace MutSea
             if (iocpThreads < iocpThreadsMin)
             {
                 iocpThreads = iocpThreadsMin;
-                m_log.Info($"[OPENSIM MAIN]: Bumping up max IOCP threads to {iocpThreads}");
+                m_log.Info($"[MUTSEA MAIN]: Bumping up max IOCP threads to {iocpThreads}");
             }
             // Make sure we don't overallocate IOCP threads and thrash system resources
             if ( iocpThreads > iocpThreadsMax )
             {
                 iocpThreads = iocpThreadsMax;
-                m_log.Info($"[OPENSIM MAIN]: Limiting max IOCP completion threads to {iocpThreads}");
+                m_log.Info($"[MUTSEA MAIN]: Limiting max IOCP completion threads to {iocpThreads}");
             }
             // set the resulting worker and IO completion thread counts back to ThreadPool
             if ( System.Threading.ThreadPool.SetMaxThreads(workerThreads, iocpThreads) )
             {
                 m_log.Info(
-                    $"[OPENSIM MAIN]: Threadpool set to {workerThreads} max worker threads and {iocpThreads} max IOCP threads");
+                    $"[MUTSEA MAIN]: Threadpool set to {workerThreads} max worker threads and {iocpThreads} max IOCP threads");
             }
             else
             {
-                m_log.Warn("[OPENSIM MAIN]: Threadpool reconfiguration failed, runtime defaults still in effect.");
+                m_log.Warn("[MUTSEA MAIN]: Threadpool reconfiguration failed, runtime defaults still in effect.");
             }
 
-            // Check if the system is compatible with OpenSimulator.
+            // Check if the system is compatible with MutSea.
             // Ensures that the minimum system requirements are met
             string error = string.Empty;
             if (Util.IsEnvironmentSupported(ref error))
             {
-                m_log.Info("[OPENSIM MAIN]: Environment is supported by OpenSimulator.");
+                m_log.Info("[MUTSEA MAIN]: Environment is supported by MutSea.");
             }
             else
             {
-                m_log.Warn($"[OPENSIM MAIN]: Environment is not supported by OpenSimulator: {error}\n");
+                m_log.Warn($"[MUTSEA MAIN]: Environment is not supported by MutSea: {error}\n");
             }
 
             m_log.Info($"Default culture changed to {Culture.GetDefaultCurrentCulture().DisplayName}");
@@ -209,7 +209,7 @@ namespace MutSea
             /*
             m_log.Info("Checking for reguired configuration...\n");
 
-            bool OpenSim_Ini = (File.Exists(Path.Combine(Util.configDir(), "MutSea.ini")))
+            bool MutSea_Ini = (File.Exists(Path.Combine(Util.configDir(), "MutSea.ini")))
                                || (File.Exists(Path.Combine(Util.configDir(), "MutSea.ini")))
                                || (File.Exists(Path.Combine(Util.configDir(), "MutSea.ini")))
                                || (File.Exists(Path.Combine(Util.configDir(), "MutSea.ini")));
@@ -219,7 +219,7 @@ namespace MutSea
             bool GridCommon_ProperCased = File.Exists(Path.Combine(Path.Combine(Util.configDir(), "config-include"), "GridCommon.ini"));
             bool GridCommon_lowerCased = File.Exists(Path.Combine(Path.Combine(Util.configDir(), "config-include"), "gridcommon.ini"));
 
-            if ((OpenSim_Ini)
+            if ((MutSea_Ini)
                 && (
                 (StanaloneCommon_ProperCased
                 || StanaloneCommon_lowercased
@@ -233,12 +233,12 @@ namespace MutSea
             {
                 MainConsole.Instance = new LocalConsole("Region");
                 string resp = MainConsole.Instance.CmdPrompt(
-                                        "\n\n*************Required Configuration files not found.*************\n\n   OpenSimulator will not run without these files.\n\nRemember, these file names are Case Sensitive in Linux and Proper Cased.\n1. ./MutSea.ini\nand\n2. ./config-include/StandaloneCommon.ini \nor\n3. ./config-include/GridCommon.ini\n\nAlso, you will want to examine these files in great detail because only the basic system will load by default. OpenSimulator can do a LOT more if you spend a little time going through these files.\n\n" + ": " + "Do you want to copy the most basic Defaults from standalone?",
+                                        "\n\n*************Required Configuration files not found.*************\n\n   MutSea will not run without these files.\n\nRemember, these file names are Case Sensitive in Linux and Proper Cased.\n1. ./MutSea.ini\nand\n2. ./config-include/StandaloneCommon.ini \nor\n3. ./config-include/GridCommon.ini\n\nAlso, you will want to examine these files in great detail because only the basic system will load by default. MutSea can do a LOT more if you spend a little time going through these files.\n\n" + ": " + "Do you want to copy the most basic Defaults from standalone?",
                                         "yes");
                 if (resp == "yes")
                 {
 
-                        if (!(OpenSim_Ini))
+                        if (!(MutSea_Ini))
                         {
                             try
                             {
@@ -246,7 +246,7 @@ namespace MutSea
                                           Path.Combine(Util.configDir(), "MutSea.ini"));
                             } catch (UnauthorizedAccessException)
                             {
-                                MainConsole.Instance.Output("Unable to Copy MutSea.ini.example to MutSea.ini, Make sure OpenSim has have the required permissions\n");
+                                MainConsole.Instance.Output("Unable to Copy MutSea.ini.example to MutSea.ini, Make sure MutSea has have the required permissions\n");
                             } catch (ArgumentException)
                             {
                                 MainConsole.Instance.Output("Unable to Copy MutSea.ini.example to MutSea.ini, The current directory is invalid.\n");
@@ -278,7 +278,7 @@ namespace MutSea
                             }
                             catch (UnauthorizedAccessException)
                             {
-                                MainConsole.Instance.Output("Unable to Copy StandaloneCommon.ini.example to StandaloneCommon.ini, Make sure OpenSim has the required permissions\n");
+                                MainConsole.Instance.Output("Unable to Copy StandaloneCommon.ini.example to StandaloneCommon.ini, Make sure MutSea has the required permissions\n");
                             }
                             catch (ArgumentException)
                             {
@@ -341,12 +341,12 @@ namespace MutSea
 
             if (background)
             {
-                m_sim = new OpenSimBackground(configSource);
+                m_sim = new MutSeaBackground(configSource);
                 m_sim.Startup();
             }
             else
             {
-                m_sim = new OpenSim(configSource);
+                m_sim = new MutSea(configSource);
 
                 m_sim.Startup();
 

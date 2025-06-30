@@ -55,7 +55,7 @@ namespace MutSea.Region.CoreModules.World.Archiver
         public Scene Scene { get; private set; }
 
         /// <value>
-        /// The file used to load and save an opensimulator archive if no filename has been specified
+        /// The file used to load and save an mutseaarchive if no filename has been specified
         /// </value>
         protected const string DEFAULT_OAR_BACKUP_FILENAME = "region.oar";
 
@@ -95,7 +95,7 @@ namespace MutSea.Region.CoreModules.World.Archiver
         }
 
         /// <summary>
-        /// Load a whole region from an opensimulator archive.
+        /// Load a whole region from an mutseaarchive.
         /// </summary>
         /// <param name="cmdparams"></param>
         public void HandleLoadOarConsoleCommand(string module, string[] cmdparams)

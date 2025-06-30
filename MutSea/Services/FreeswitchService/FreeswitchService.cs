@@ -84,14 +84,14 @@ namespace MutSea.Services.FreeswitchService
                                    </condition>
                            </extension>*/
 
-                           @"<extension name=""opensim_conferences"">
+                           @"<extension name=""mutsea_conferences"">
                                    <condition field=""destination_number"" expression=""^confctl-(.*)$"">
                                            <action application=""answer""/>
                                            <action application=""conference"" data=""$1-{1}@{0}""/>
                                    </condition>
                            </extension>
 
-                           <extension name=""opensim_conf"">
+                           <extension name=""mutsea_conf"">
                                    <condition field=""destination_number"" expression=""^conf-(.*)$"">
                                            <action application=""answer""/>
                                            <action application=""conference"" data=""$1-{1}@{0}""/>

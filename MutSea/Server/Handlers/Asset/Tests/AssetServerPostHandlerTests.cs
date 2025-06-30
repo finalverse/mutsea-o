@@ -43,7 +43,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Server.Handlers.Asset.Test
 {
     [TestFixture]
-    public class AssetServerPostHandlerTests : OpenSimTestCase
+    public class AssetServerPostHandlerTests : MutSeaTestCase
     {
         [Test]
         public void TestGoodAssetStoreRequest()

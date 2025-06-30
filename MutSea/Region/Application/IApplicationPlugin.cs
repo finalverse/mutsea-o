@@ -31,7 +31,7 @@ using Mono.Addins;
 namespace MutSea
 {
     /// <summary>
-    /// OpenSimulator Application Plugin framework interface
+    /// MutSea Application Plugin framework interface
     /// </summary>
     [TypeExtensionPoint(NodeName="Plugin", NodeType = typeof(PluginExtensionNode), Path="/MutSea/Startup")]
     public interface IApplicationPlugin : IPlugin
@@ -39,8 +39,8 @@ namespace MutSea
         /// <summary>
         /// Initialize the Plugin
         /// </summary>
-        /// <param name="openSim">The Application instance</param>
-        void Initialise(OpenSimBase openSim);
+        /// <param name="mutSea">The Application instance</param>
+        void Initialise(MutSeaBase mutSea);
 
         /// <summary>
         /// Called when the application loading is completed
@@ -51,9 +51,9 @@ namespace MutSea
 
     public class ApplicationPluginInitialiser : PluginInitialiserBase
     {
-        private OpenSimBase server;
+        private MutSeaBase server;
 
-        public ApplicationPluginInitialiser(OpenSimBase s)
+        public ApplicationPluginInitialiser(MutSeaBase s)
         {
             server = s;
         }

@@ -38,7 +38,7 @@ using log4net;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class SceneObjectLinkingTests : OpenSimTestCase
+    public class SceneObjectLinkingTests : MutSeaTestCase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

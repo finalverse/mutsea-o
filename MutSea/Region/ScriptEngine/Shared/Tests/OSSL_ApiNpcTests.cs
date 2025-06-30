@@ -52,7 +52,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests for OSSL NPC API
     /// </summary>
     [TestFixture]
-    public class OSSL_NpcApiAppearanceTest : OpenSimTestCase
+    public class OSSL_NpcApiAppearanceTest : MutSeaTestCase
     {
         protected Scene m_scene;
         protected XEngine.XEngine m_engine;

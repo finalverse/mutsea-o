@@ -36,7 +36,7 @@ using Mono.Addins;
 [assembly : AssemblyTitle("MutSea.ApplicationPlugins.LoadRegions")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("http://mutsea.com")]
 [assembly : AssemblyProduct("MutSea")]
 [assembly : AssemblyCopyright("Copyright � OpenSimulator.org Developers 2007-2009")]
 [assembly : AssemblyTrademark("")]

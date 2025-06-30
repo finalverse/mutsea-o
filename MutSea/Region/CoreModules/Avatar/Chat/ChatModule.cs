@@ -114,9 +114,9 @@ namespace MutSea.Region.CoreModules.Avatar.Chat
             ISimulatorFeaturesModule featuresModule = scene.RequestModuleInterface<ISimulatorFeaturesModule>();
             if (featuresModule != null)
             {
-                featuresModule.AddOpenSimExtraFeature("say-range", new OSDInteger(m_saydistance));
-                featuresModule.AddOpenSimExtraFeature("whisper-range", new OSDInteger(m_whisperdistance));
-                featuresModule.AddOpenSimExtraFeature("shout-range", new OSDInteger(m_shoutdistance));
+                featuresModule.AddMutSeaExtraFeature("say-range", new OSDInteger(m_saydistance));
+                featuresModule.AddMutSeaExtraFeature("whisper-range", new OSDInteger(m_whisperdistance));
+                featuresModule.AddMutSeaExtraFeature("shout-range", new OSDInteger(m_shoutdistance));
             }
         }
 

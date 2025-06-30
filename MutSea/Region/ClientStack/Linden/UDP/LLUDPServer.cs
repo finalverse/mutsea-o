@@ -235,7 +235,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
     /// The LLUDP server for a region. This handles incoming and outgoing
     /// packets for all UDP connections to the region
     /// </summary>
-    public class LLUDPServer : OpenSimUDPBase
+    public class LLUDPServer : MutSeaUDPBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

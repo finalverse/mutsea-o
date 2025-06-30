@@ -41,7 +41,7 @@ using OpenMetaverse.StructuredData;
 namespace MutSea.Region.CoreModules.World.Serialiser.Tests
 {
     [TestFixture]
-    public class SerialiserTests : OpenSimTestCase
+    public class SerialiserTests : MutSeaTestCase
     {
         private const string ObjectRootPartStubXml =
 @"<SceneObjectGroup>

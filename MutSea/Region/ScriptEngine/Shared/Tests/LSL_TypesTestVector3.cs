@@ -36,7 +36,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests for Vector3
     /// </summary>
     [TestFixture]
-    public class LSL_TypesTestVector3 : OpenSimTestCase
+    public class LSL_TypesTestVector3 : MutSeaTestCase
     {
         [Test]
         public void TestDotProduct()

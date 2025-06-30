@@ -33,15 +33,15 @@ using Nini.Config;
 namespace MutSea
 {
     /// <summary>
-    /// Consoleless OpenSimulator region server
+    /// Consoleless MutSea region server
     /// </summary>
-    public class OpenSimBackground : OpenSim
+    public class MutSeaBackground : MutSea
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private ManualResetEvent WorldHasComeToAnEnd = new ManualResetEvent(false);
 
-        public OpenSimBackground(IConfigSource configSource) : base(configSource)
+        public MutSeaBackground(IConfigSource configSource) : base(configSource)
         {
         }
 
@@ -54,7 +54,7 @@ namespace MutSea
 
             base.Startup();
 
-            m_log.InfoFormat("[OPENSIM MAIN]: Startup complete, serving {0} region{1}",
+            m_log.InfoFormat("[MUTSEA MAIN]: Startup complete, serving {0} region{1}",
                              SceneManager.Scenes.Count, SceneManager.Scenes.Count > 1 ? "s" : "");
 
             WorldHasComeToAnEnd.WaitOne();
@@ -67,7 +67,7 @@ namespace MutSea
         public override void Shutdown()
         {
             WorldHasComeToAnEnd.Set();
-            m_log.Info("[OPENSIM MAIN]: World has come to an end");
+            m_log.Info("[MUTSEA MAIN]: World has come to an end");
             base.Shutdown();
         }
     }

@@ -38,7 +38,7 @@ using Mono.Addins;
 [assembly : AssemblyTitle("MutSea.Region.PhysicsModule.ubOde")]
 [assembly : AssemblyDescription("Ubit Variation of ODE")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("http://mutsea.com")]
 [assembly : AssemblyProduct("ubOde")]
 [assembly : AssemblyCopyright("Copyright (c) OpenSimulator.org Developers 2007-2009")]
 [assembly : AssemblyTrademark("")]

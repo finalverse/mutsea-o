@@ -40,7 +40,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.World.Land.Tests
 {
     [TestFixture]
-    public class PrimCountModuleTests : OpenSimTestCase
+    public class PrimCountModuleTests : MutSeaTestCase
     {
         protected UUID m_userId = new UUID("00000000-0000-0000-0000-100000000000");
         protected UUID m_groupId = new UUID("00000000-0000-0000-8888-000000000000");

@@ -126,7 +126,7 @@ namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver.Tests
         }
 
 //        /// <summary>
-//        /// Test loading a V0.1 OpenSim Inventory Archive (subject to change since there is no fixed format yet) where
+//        /// Test loading a V0.1 MutSea Inventory Archive (subject to change since there is no fixed format yet) where
 //        /// an account exists with the same name as the creator, though not the same id.
 //        /// </summary>
 //        [Test]
@@ -159,7 +159,7 @@ namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver.Tests
 //        }
 
         /// <summary>
-        /// Test loading a V0.1 OpenSim Inventory Archive (subject to change since there is no fixed format yet) where
+        /// Test loading a V0.1 MutSea Inventory Archive (subject to change since there is no fixed format yet) where
         /// the creator or an account with the creator's name does not exist within the system.
         /// </summary>
         [Test]

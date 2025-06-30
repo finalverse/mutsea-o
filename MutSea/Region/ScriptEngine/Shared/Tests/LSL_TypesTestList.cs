@@ -36,7 +36,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests the LSL_Types.list class.
     /// </summary>
     [TestFixture]
-    public class LSL_TypesTestList : OpenSimTestCase
+    public class LSL_TypesTestList : MutSeaTestCase
     {
         /// <summary>
         /// Tests concatenating a string to a list.

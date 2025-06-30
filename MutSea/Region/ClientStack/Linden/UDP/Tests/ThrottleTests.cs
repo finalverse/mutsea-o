@@ -37,7 +37,7 @@ namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     /*
     [TestFixture]
-    public class ThrottleTests : OpenSimTestCase
+    public class ThrottleTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

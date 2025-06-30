@@ -65,7 +65,7 @@ namespace MutSea.Region.Framework.Interfaces
         bool SaveBakedTextures(UUID agentId);
 
         /// <summary>
-        /// Validate that OpenSim can find the baked textures need to display a given avatar
+        /// Validate that MutSea can find the baked textures need to display a given avatar
         /// </summary>
         /// <param name="client"></param>
         /// <param name="checkonly"></param>

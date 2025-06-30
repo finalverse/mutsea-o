@@ -38,7 +38,7 @@ using Mono.Addins;
 [assembly : AssemblyTitle("BasicPhysicsModule")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("http://mutsea.com")]
 [assembly : AssemblyProduct("BasicPhysicsModule")]
 [assembly : AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly : AssemblyTrademark("")]

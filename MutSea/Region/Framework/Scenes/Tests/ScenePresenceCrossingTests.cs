@@ -45,7 +45,7 @@ using System.Threading;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class ScenePresenceCrossingTests : OpenSimTestCase
+    public class ScenePresenceCrossingTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

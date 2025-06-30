@@ -1288,7 +1288,7 @@ namespace MutSea.Region.CoreModules.Framework.UserManagement
         protected virtual void Init(IConfigSource config)
         {
             AddSystemUser(UUID.Zero, "Unknown", "User");
-            AddSystemUser(Constants.m_MrOpenSimID, "Mr", "Opensim");
+            AddSystemUser(Constants.m_MrMutSeaID, "Mr", "Opensim");
             RegisterConsoleCmds();
 
             IConfig userManagementConfig = config.Configs["UserManagement"];

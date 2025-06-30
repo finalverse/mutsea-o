@@ -43,7 +43,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence.Tests
 {
     [TestFixture]
-    public class PresenceConnectorsTests : OpenSimTestCase
+    public class PresenceConnectorsTests : MutSeaTestCase
     {
         LocalPresenceServicesConnector m_LocalConnector;
 
@@ -66,7 +66,7 @@ namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Presence.Tests
         }
 
         /// <summary>
-        /// Test OpenSim Presence.
+        /// Test MutSea Presence.
         /// </summary>
         [Test]
         public void TestPresenceV0_1()

@@ -187,9 +187,9 @@ namespace MutSea.Region.OptionalModules.World.MoneyModule
             ISimulatorFeaturesModule fm = scene.RequestModuleInterface<ISimulatorFeaturesModule>();
             if (fm != null && !string.IsNullOrWhiteSpace(m_localEconomyURL))
             {
-                if(fm.TryGetOpenSimExtraFeature("currency-base-uri", out OSD tmp))
+                if(fm.TryGetMutSeaExtraFeature("currency-base-uri", out OSD tmp))
                     return;
-                fm.AddOpenSimExtraFeature("currency-base-uri", Util.AppendEndSlash(m_localEconomyURL));
+                fm.AddMutSeaExtraFeature("currency-base-uri", Util.AppendEndSlash(m_localEconomyURL));
             }
         }
 

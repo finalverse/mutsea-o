@@ -33,7 +33,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class CacheTests : OpenSimTestCase
+    public class CacheTests : MutSeaTestCase
     {
         private Cache cache;
         private UUID cacheItemUUID;

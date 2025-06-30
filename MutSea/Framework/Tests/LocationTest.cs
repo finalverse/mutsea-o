@@ -31,7 +31,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class LocationTest : OpenSimTestCase
+    public class LocationTest : MutSeaTestCase
     {
         [Test]
         public void locationRegionHandleRegionHandle()

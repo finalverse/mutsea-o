@@ -610,7 +610,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
                 NextCollisionOkTime = PhysScene.SimulationNowTime + SubscribedEventsMs;
 
                 // We are called if we previously had collisions. If there are no collisions
-                //   this time, send up one last empty event so OpenSim can sense collision end.
+                //   this time, send up one last empty event so MutSea can sense collision end.
                 if (CollisionCollection.Count == 0)
                 {
                     // If I have no collisions this time, remove me from the list of objects with collisions.

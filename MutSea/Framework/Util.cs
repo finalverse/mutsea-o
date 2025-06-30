@@ -1120,7 +1120,7 @@ namespace MutSea.Framework
 
         public static bool LoadArchSpecificWindowsDll(string libraryName, string path)
         {
-            // We do this so that OpenSimulator on Windows loads the correct native library depending on whether
+            // We do this so that MutSea on Windows loads the correct native library depending on whether
             // it's running as a 32-bit process or a 64-bit one.  By invoking LoadLibary here, later DLLImports
             // will find it already loaded later on.
             //
@@ -1522,7 +1522,7 @@ namespace MutSea.Framework
             san.AddDnsName(certHostName);
             san.AddIpAddress(IPAddress.Parse(certHostIp));
 
-            // What OpenSim check (CN).
+            // What MutSea check (CN).
             X500DistinguishedName dn = new($"CN={certHostName}");
 
             using (RSA rsa = RSA.Create(2048))
@@ -2079,7 +2079,7 @@ namespace MutSea.Framework
                 }
             }
 
-            return "./OpenSimStats.log";
+            return "./MutSeaStats.log";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3467,7 +3467,7 @@ namespace MutSea.Framework
             }
             else
             {
-                // When OpenSim interacts with a database or sends data over the wire, it must send this in en_US culture
+                // When MutSea interacts with a database or sends data over the wire, it must send this in en_US culture
                 // so that we don't encounter problems where, for instance, data is saved with a culture that uses commas
                 // for decimals places but is read by a culture that treats commas as number seperators.
                 realCallback = o =>

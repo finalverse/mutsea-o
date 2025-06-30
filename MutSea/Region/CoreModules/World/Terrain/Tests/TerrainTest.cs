@@ -35,7 +35,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.World.Terrain.Tests
 {
     [TestFixture]
-    public class TerrainTest : OpenSimTestCase
+    public class TerrainTest : MutSeaTestCase
     {
         [Test]
         public void BrushTest()

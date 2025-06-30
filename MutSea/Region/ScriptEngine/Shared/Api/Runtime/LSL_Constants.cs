@@ -382,9 +382,9 @@ namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
         public const int CHANGED_MEDIA = 2048;
         public const int CHANGED_RENDER_MATERIAL = 0x1000; //4096
 
-        //ApiDesc opensim specific
+        //ApiDesc mutsea specific
         public const int CHANGED_ANIMATION = 16384;
-        //ApiDesc opensim specific
+        //ApiDesc mutsea specific
         public const int CHANGED_POSITION = 32768;
 
         public const int TYPE_INVALID = 0;
@@ -1081,7 +1081,7 @@ namespace MutSea.Region.ScriptEngine.Shared.ScriptBase
         public const int SIT_FLAG_SCRIPTED_ONLY = 0x04; // unsupported always false
         public const int SIT_FLAG_NO_COLLIDE    = 0x10; // unsupported always true
         public const int SIT_FLAG_NO_DAMAGE     = 0x20; // unsupported always true
-        public const int SIT_FLAG_OPENSIMFORCED = SIT_FLAG_ALLOW_UNSIT | SIT_FLAG_NO_COLLIDE | SIT_FLAG_NO_DAMAGE;
+        public const int SIT_FLAG_MUTSEAFORCED = SIT_FLAG_ALLOW_UNSIT | SIT_FLAG_NO_COLLIDE | SIT_FLAG_NO_DAMAGE;
 
         public const int ERR_GENERIC              = -1;
         public const int ERR_PARCEL_PERMISSIONS   = -2;

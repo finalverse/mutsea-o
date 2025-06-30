@@ -54,9 +54,9 @@ using MutSea.Framework.Servers.HttpServer;
 namespace MutSea
 {
     /// <summary>
-    /// Interactive OpenSim region server
+    /// Interactive MutSea region server
     /// </summary>
-    public class OpenSim : OpenSimBase
+    public class MutSea : MutSeaBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -80,7 +80,7 @@ namespace MutSea
         private int m_timeInterval = 1200;
         private System.Timers.Timer m_scriptTimer;
 
-        public OpenSim(IConfigSource configSource) : base(configSource)
+        public MutSea(IConfigSource configSource) : base(configSource)
         {
         }
 
@@ -129,9 +129,9 @@ namespace MutSea
             if (Util.FireAndForgetMethod == FireAndForgetMethod.SmartThreadPool)
                 Util.InitThreadPool(stpMinThreads, stpMaxThreads);
 
-            m_log.Info("[OPENSIM MAIN]: Using async_call_method " + Util.FireAndForgetMethod);
+            m_log.Info("[MUTSEA MAIN]: Using async_call_method " + Util.FireAndForgetMethod);
 
-            m_log.InfoFormat("[OPENSIM MAIN] Running GC in {0} mode", GCSettings.IsServerGC ? "server":"workstation");
+            m_log.InfoFormat("[MUTSEA MAIN] Running GC in {0} mode", GCSettings.IsServerGC ? "server":"workstation");
         }
 
         /// <summary>
@@ -140,13 +140,13 @@ namespace MutSea
         protected override void StartupSpecific()
         {
             m_log.Info("====================================================================");
-            m_log.Info("========================= STARTING OPENSIM =========================");
+            m_log.Info("========================= STARTING MUTSEA =========================");
             m_log.Info("====================================================================");
 
-            //m_log.InfoFormat("[OPENSIM MAIN]: GC Is Server GC: {0}", GCSettings.IsServerGC.ToString());
+            //m_log.InfoFormat("[MUTSEA MAIN]: GC Is Server GC: {0}", GCSettings.IsServerGC.ToString());
             // http://msdn.microsoft.com/en-us/library/bb384202.aspx
             //GCSettings.LatencyMode = GCLatencyMode.Batch;
-            //m_log.InfoFormat("[OPENSIM MAIN]: GC Latency Mode: {0}", GCSettings.LatencyMode.ToString());
+            //m_log.InfoFormat("[MUTSEA MAIN]: GC Latency Mode: {0}", GCSettings.LatencyMode.ToString());
 
             if (m_gui) // Driven by external GUI
             {
@@ -190,7 +190,7 @@ namespace MutSea
                 string urlBase = $"/{managedStatsURI}/";
                 StatsManager.StatsPassword = managedStatsPassword;
                 MainServer.Instance.AddHTTPHandler(urlBase, StatsManager.HandleStatsRequest);
-                m_log.InfoFormat("[OPENSIM] Enabling remote managed stats fetch. URL = {0}", urlBase);
+                m_log.InfoFormat("[MUTSEA] Enabling remote managed stats fetch. URL = {0}", urlBase);
             }
 
             MethodInfo mi = m_console.GetType().GetMethod("SetServer", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(BaseHttpServer) }, null);
@@ -1265,7 +1265,7 @@ namespace MutSea
         }
 
         /// <summary>
-        /// Load a whole region from an opensimulator archive.
+        /// Load a whole region from an mutseaarchive.
         /// </summary>
         /// <param name="cmdparams"></param>
         protected void LoadOar(string module, string[] cmdparams)

@@ -33,7 +33,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class UtilTests : OpenSimTestCase
+    public class UtilTests : MutSeaTestCase
     {
         [Test]
         public void VectorOperationTests()

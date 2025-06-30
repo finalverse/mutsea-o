@@ -44,7 +44,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Grid.Tests
 {
     [TestFixture]
-    public class GridConnectorsTests : OpenSimTestCase
+    public class GridConnectorsTests : MutSeaTestCase
     {
         RegionGridServicesConnector m_LocalConnector;
 

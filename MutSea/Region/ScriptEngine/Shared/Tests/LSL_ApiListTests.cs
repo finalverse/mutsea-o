@@ -45,7 +45,7 @@ using LSL_String = MutSea.Region.ScriptEngine.Shared.LSL_Types.LSLString;
 namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
-    public class LSL_ApiListTests : OpenSimTestCase
+    public class LSL_ApiListTests : MutSeaTestCase
     {
         private LSL_Api m_lslApi;
 

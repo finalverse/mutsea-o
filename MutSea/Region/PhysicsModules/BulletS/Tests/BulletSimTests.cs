@@ -32,7 +32,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.PhysicsModule.BulletS.Tests
 {
     [TestFixture]
-    public class BulletSimTests : OpenSimTestCase
+    public class BulletSimTests : MutSeaTestCase
     {
         // Documentation on attributes: http://www.nunit.org/index.php?p=attributes&r=2.6.1
         // Documentation on assertions: http://www.nunit.org/index.php?p=assertions&r=2.6.1

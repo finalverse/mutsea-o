@@ -33,7 +33,7 @@ using MutSea.Framework.Servers;
 namespace MutSea.Tests.Common
 {
     [TestFixture]
-    public class OpenSimTestCase
+    public class MutSeaTestCase
     {
         [SetUp]
         public virtual void SetUp()

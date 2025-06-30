@@ -263,7 +263,7 @@ namespace MutSea.Region.Framework.Scenes
 
         public virtual string GetSimulatorVersion()
         {
-            return "OpenSimulator Server";
+            return "MutSea Server";
         }
 
         #endregion
@@ -525,7 +525,7 @@ namespace MutSea.Region.Framework.Scenes
         #endregion
 
         /// <summary>
-        /// Call this from a region module to add a command to the OpenSim console.
+        /// Call this from a region module to add a command to the MutSea console.
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="command"></param>
@@ -538,7 +538,7 @@ namespace MutSea.Region.Framework.Scenes
         }
 
         /// <summary>
-        /// Call this from a region module to add a command to the OpenSim console.
+        /// Call this from a region module to add a command to the MutSea console.
         /// </summary>
         /// <param name="mod">
         /// The use of IRegionModuleBase is a cheap trick to get a different method signature,
@@ -558,7 +558,7 @@ namespace MutSea.Region.Framework.Scenes
         }
 
         /// <summary>
-        /// Call this from a region module to add a command to the OpenSim console.
+        /// Call this from a region module to add a command to the MutSea console.
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="command"></param>
@@ -573,7 +573,7 @@ namespace MutSea.Region.Framework.Scenes
         }
 
         /// <summary>
-        /// Call this from a region module to add a command to the OpenSim console.
+        /// Call this from a region module to add a command to the MutSea console.
         /// </summary>
         /// <param name="category">
         /// Category of the command.  This is the section under which it will appear when the user asks for help

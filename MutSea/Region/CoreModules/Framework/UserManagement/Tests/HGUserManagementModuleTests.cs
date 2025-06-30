@@ -36,7 +36,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Framework.UserManagement.Tests
 {
     [TestFixture]
-    public class HGUserManagementModuleTests : OpenSimTestCase
+    public class HGUserManagementModuleTests : MutSeaTestCase
     {
         /// <summary>
         /// Test that a new HG agent (i.e. one without a user account) has their name cached in the UMM upon creation.

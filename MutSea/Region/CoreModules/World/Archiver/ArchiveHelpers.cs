@@ -37,11 +37,11 @@ namespace MutSea.Region.CoreModules.World.Archiver
     /// <summary>
     /// Helper methods for archive manipulation
     /// </summary>
-    /// This is a separate class from ArchiveConstants because we need to bring in very OpenSim specific classes.
+    /// This is a separate class from ArchiveConstants because we need to bring in very MutSea specific classes.
     public static class ArchiveHelpers
     {
         /// <summary>
-        /// Create the filename used for objects in OpenSim Archives.
+        /// Create the filename used for objects in MutSea Archives.
         /// </summary>
         /// <param name="objectName"></param>
         /// <param name="uuid"></param>
@@ -53,7 +53,7 @@ namespace MutSea.Region.CoreModules.World.Archiver
         }
 
         /// <summary>
-        /// Create the path used to store an object in an OpenSim Archive.
+        /// Create the path used to store an object in an MutSea Archive.
         /// </summary>
         /// <param name="objectName"></param>
         /// <param name="uuid"></param>

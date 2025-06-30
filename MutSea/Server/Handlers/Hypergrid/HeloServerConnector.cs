@@ -39,7 +39,7 @@ namespace MutSea.Server.Handlers.Hypergrid
         public HeloServiceInConnector(IConfigSource config, IHttpServer server, string configName) :
                 base(config, server, configName)
         {
-            server.AddSimpleStreamHandler(new HeloServerGetAndHeadHandler("opensim-robust"));
+            server.AddSimpleStreamHandler(new HeloServerGetAndHeadHandler("mutsea- robust"));
         }
     }
 

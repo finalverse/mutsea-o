@@ -38,7 +38,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class SceneGraphTests : OpenSimTestCase
+    public class SceneGraphTests : MutSeaTestCase
     {
         [Test]
         public void TestDuplicateObject()

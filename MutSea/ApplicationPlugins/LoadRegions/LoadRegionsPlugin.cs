@@ -66,7 +66,7 @@ namespace MutSea.ApplicationPlugins.LoadRegions
             get { return m_name; }
         }
 
-        protected OpenSimBase m_openSim;
+        protected MutSeaBase m_mutSea;
 
         public void Initialise()
         {
@@ -74,10 +74,10 @@ namespace MutSea.ApplicationPlugins.LoadRegions
             throw new PluginNotInitialisedException(Name);
         }
 
-        public void Initialise(OpenSimBase openSim)
+        public void Initialise(MutSeaBase mutSea)
         {
-            m_openSim = openSim;
-            m_MutSea.ApplicationRegistry.RegisterInterface<IRegionCreator>(this);
+            m_mutSea = mutSea;
+            m_mutSea.ApplicationRegistry.RegisterInterface<IRegionCreator>(this);
         }
 
         public void PostInitialise()
@@ -86,12 +86,12 @@ namespace MutSea.ApplicationPlugins.LoadRegions
 
             IEstateLoader estateLoader = null;
             IRegionLoader regionLoader;
-            if (m_MutSea.ConfigSource.Source.Configs["Startup"].GetString("region_info_source", "filesystem") == "filesystem")
+            if (m_mutSea.ConfigSource.Source.Configs["Startup"].GetString("region_info_source", "filesystem") == "filesystem")
             {
                 m_log.Info("[LOAD REGIONS PLUGIN]: Loading region configurations from filesystem");
                 regionLoader = new RegionLoaderFileSystem();
 
-                estateLoader = new EstateLoaderFileSystem(m_openSim);
+                estateLoader = new EstateLoaderFileSystem(m_mutSea);
             }
             else
             {
@@ -102,23 +102,23 @@ namespace MutSea.ApplicationPlugins.LoadRegions
             // Load Estates Before Regions!
             if(estateLoader != null)
             {
-                estateLoader.SetIniConfigSource(m_MutSea.ConfigSource.Source);
+                estateLoader.SetIniConfigSource(m_mutSea.ConfigSource.Source);
 
                 estateLoader.LoadEstates();
             }
 
-            regionLoader.SetIniConfigSource(m_MutSea.ConfigSource.Source);
+            regionLoader.SetIniConfigSource(m_mutSea.ConfigSource.Source);
             RegionInfo[] regionsToLoad = regionLoader.LoadRegions();
 
             m_log.Info("[LOAD REGIONS PLUGIN]: Loading specific shared modules...");
             //m_log.Info("[LOAD REGIONS PLUGIN]: DynamicTextureModule...");
-            //m_MutSea.ModuleLoader.LoadDefaultSharedModule(new DynamicTextureModule());
+            //m_mutSea.ModuleLoader.LoadDefaultSharedModule(new DynamicTextureModule());
             //m_log.Info("[LOAD REGIONS PLUGIN]: LoadImageURLModule...");
-            //m_MutSea.ModuleLoader.LoadDefaultSharedModule(new LoadImageURLModule());
+            //m_mutSea.ModuleLoader.LoadDefaultSharedModule(new LoadImageURLModule());
             //m_log.Info("[LOAD REGIONS PLUGIN]: XMLRPCModule...");
-            //m_MutSea.ModuleLoader.LoadDefaultSharedModule(new XMLRPCModule());
+            //m_mutSea.ModuleLoader.LoadDefaultSharedModule(new XMLRPCModule());
 //            m_log.Info("[LOADREGIONSPLUGIN]: AssetTransactionModule...");
-//            m_MutSea.ModuleLoader.LoadDefaultSharedModule(new AssetTransactionModule());
+//            m_mutSea.ModuleLoader.LoadDefaultSharedModule(new AssetTransactionModule());
             m_log.Info("[LOAD REGIONS PLUGIN]: Done.");
 
             if (!CheckRegionsForSanity(regionsToLoad))
@@ -136,13 +136,13 @@ namespace MutSea.ApplicationPlugins.LoadRegions
                             Thread.CurrentThread.ManagedThreadId.ToString() +
                             ")");
 
-                bool changed = m_MutSea.PopulateRegionEstateInfo(regionsToLoad[i]);
+                bool changed = m_mutSea.PopulateRegionEstateInfo(regionsToLoad[i]);
 
-                m_MutSea.CreateRegion(regionsToLoad[i], true, out scene);
+                m_mutSea.CreateRegion(regionsToLoad[i], true, out scene);
                 createdScenes.Add(scene);
 
                 if (changed)
-                    m_MutSea.EstateDataService.StoreEstateSettings(regionsToLoad[i].EstateSettings);
+                    m_mutSea.EstateDataService.StoreEstateSettings(regionsToLoad[i].EstateSettings);
             }
 
             foreach (IScene scene in createdScenes)

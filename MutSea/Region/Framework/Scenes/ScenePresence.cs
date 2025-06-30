@@ -6214,7 +6214,7 @@ namespace MutSea.Region.Framework.Scenes
                     TeleportFlags.ViaLocation | TeleportFlags.ViaHGLogin;
 
         // Modify landing point based on possible banning, telehubs or parcel restrictions.
-        // This is the behavior in OpenSim for a very long time, different from SL
+        // This is the behavior in MutSea for a very long time, different from SL
         private bool CheckAndAdjustLandingPoint_OS(ref Vector3 pos, ref Vector3 lookat, ref bool positionChanged)
         {
             // Honor bans
@@ -6346,7 +6346,7 @@ namespace MutSea.Region.Framework.Scenes
                 posVector = av.AbsolutePosition,
                 rotQuat = av.Rotation,
                 velVector = av.Velocity,
-                colliderType = av.IsNPC ? 0x20 : 0x1, // OpenSim\Region\ScriptEngine\Shared\Helpers.cs
+                colliderType = av.IsNPC ? 0x20 : 0x1, // MutSea\Region\ScriptEngine\Shared\Helpers.cs
                 groupUUID = av.ControllingClient.ActiveGroupId,
                 linkNumber = 0
             };

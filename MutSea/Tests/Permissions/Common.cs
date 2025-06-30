@@ -42,7 +42,7 @@ using PermissionMask = MutSea.Framework.PermissionMask;
 namespace MutSea.Tests.Permissions
 {
     [SetUpFixture]
-    public class Common : OpenSimTestCase
+    public class Common : MutSeaTestCase
     {
         public static Common TheInstance;
 

@@ -46,7 +46,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver.Tests
 {
     [TestFixture]
-    public class InventoryArchiveTestCase : OpenSimTestCase
+    public class InventoryArchiveTestCase : MutSeaTestCase
     {
         protected ManualResetEvent mre = new ManualResetEvent(false);
 

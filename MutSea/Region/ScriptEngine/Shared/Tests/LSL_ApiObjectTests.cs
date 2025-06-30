@@ -50,7 +50,7 @@ using LSL_List = MutSea.Region.ScriptEngine.Shared.LSL_Types.list;
 namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
-    public class LSL_ApiObjectTests : OpenSimTestCase
+    public class LSL_ApiObjectTests : MutSeaTestCase
     {
         /*
         private const double VECTOR_COMPONENT_ACCURACY = 0.0000005d;

@@ -187,13 +187,13 @@ namespace pCampBot
             //
             ILoggerRepository repository = LogManager.GetRepository();
             IAppender[] appenders = repository.GetAppenders();
-            OpenSimAppender consoleAppender = null;
+            MutSeaAppender consoleAppender = null;
 
             foreach (IAppender appender in appenders)
             {
                 if (appender.Name == "Console")
                 {
-                    consoleAppender = (OpenSimAppender)appender;
+                    consoleAppender = (MutSeaAppender)appender;
                     consoleAppender.Console = m_console;
                     break;
                 }

@@ -9,7 +9,7 @@ using Mono.Addins;
 [assembly: AssemblyTitle("MutSea.Addons.Groups")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly: AssemblyProduct("MutSea.Addons.Groups")]
 [assembly: AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly: AssemblyTrademark("")]

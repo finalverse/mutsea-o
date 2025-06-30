@@ -486,7 +486,7 @@ namespace MutSea.Region.CoreModules.World.Archiver
             m_log.InfoFormat("[ARCHIVER]: Creating version {0}.{1} OAR", majorVersion, minorVersion);
             if (majorVersion == 1)
             {
-                m_log.WarnFormat("[ARCHIVER]: Please be aware that version 1.0 OARs are not compatible with OpenSim versions prior to 0.7.4. Do not use the --all option if you want to produce a compatible OAR");
+                m_log.WarnFormat("[ARCHIVER]: Please be aware that version 1.0 OARs are not compatible with MutSea versions prior to 0.7.4. Do not use the --all option if you want to produce a compatible OAR");
             }
 
             String s;

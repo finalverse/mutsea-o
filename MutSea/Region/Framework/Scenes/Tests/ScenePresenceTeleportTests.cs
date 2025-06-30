@@ -49,7 +49,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Teleport tests in a standalone OpenSim
     /// </summary>
     [TestFixture]
-    public class ScenePresenceTeleportTests : OpenSimTestCase
+    public class ScenePresenceTeleportTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

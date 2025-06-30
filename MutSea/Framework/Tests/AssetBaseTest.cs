@@ -35,7 +35,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class AssetBaseTest : OpenSimTestCase
+    public class AssetBaseTest : MutSeaTestCase
     {
         [Test]
         public void TestContainsReferences()

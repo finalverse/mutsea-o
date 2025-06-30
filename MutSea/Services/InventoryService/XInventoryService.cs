@@ -108,7 +108,7 @@ namespace MutSea.Services.InventoryService
 
             if (rootFolder == null)
             {
-                rootFolder = ConvertToOpenSim(CreateFolder(principalID, UUID.Zero, (int)FolderType.Root, InventoryFolderBase.ROOT_FOLDER_NAME));
+                rootFolder = ConvertToMutSea(CreateFolder(principalID, UUID.Zero, (int)FolderType.Root, InventoryFolderBase.ROOT_FOLDER_NAME));
                 result = true;
             }
 
@@ -222,7 +222,7 @@ namespace MutSea.Services.InventoryService
             foreach (XInventoryFolder x in allFolders)
             {
                 //m_log.DebugFormat("[XINVENTORY SERVICE]: Adding folder {0} to skeleton", x.folderName);
-                folders.Add(ConvertToOpenSim(x));
+                folders.Add(ConvertToMutSea(x));
             }
 
             return folders;
@@ -249,7 +249,7 @@ namespace MutSea.Services.InventoryService
 
             root ??= folders[0]; //oops
 
-            return ConvertToOpenSim(root);
+            return ConvertToMutSea(root);
         }
 
         public virtual InventoryFolderBase GetFolderForType(UUID principalID, FolderType type)
@@ -291,7 +291,7 @@ namespace MutSea.Services.InventoryService
             //    "[XINVENTORY SERVICE]: Found folder {0} {1} for type {2}",
             //    folders[0].folderName, folders[0].folderID, type);
 
-            return ConvertToOpenSim(folders[0]);
+            return ConvertToMutSea(folders[0]);
         }
 
         public virtual InventoryCollection GetFolderContent(UUID principalID, UUID folderID)
@@ -315,7 +315,7 @@ namespace MutSea.Services.InventoryService
             foreach (XInventoryFolder x in folders)
             {
                 //m_log.DebugFormat("[XINVENTORY]: Adding folder {0} to response", x.folderName);
-                inventory.Folders.Add(ConvertToOpenSim(x));
+                inventory.Folders.Add(ConvertToMutSea(x));
             }
 
             XInventoryItem[] items = m_Database.GetItems(
@@ -325,7 +325,7 @@ namespace MutSea.Services.InventoryService
             foreach (XInventoryItem i in items)
             {
                 //m_log.DebugFormat("[XINVENTORY]: Adding item {0} to response", i.inventoryName);
-                inventory.Items.Add(ConvertToOpenSim(i));
+                inventory.Items.Add(ConvertToMutSea(i));
             }
 
             InventoryFolderBase f = GetFolder(principalID, folderID);
@@ -362,7 +362,7 @@ namespace MutSea.Services.InventoryService
                     [folderID.ToString()]);
 
             foreach (XInventoryItem i in items)
-                invItems.Add(ConvertToOpenSim(i));
+                invItems.Add(ConvertToMutSea(i));
 
             return invItems;
         }
@@ -404,7 +404,7 @@ namespace MutSea.Services.InventoryService
                 }
             }
 
-            XInventoryFolder xFolder = ConvertFromOpenSim(folder);
+            XInventoryFolder xFolder = ConvertFromMutSea(folder);
             return m_Database.StoreFolder(xFolder);
         }
 
@@ -412,7 +412,7 @@ namespace MutSea.Services.InventoryService
         {
 //            m_log.DebugFormat("[XINVENTORY]: Update folder {0} {1} ({2})", folder.Name, folder.Type, folder.ID);
 
-            XInventoryFolder xFolder = ConvertFromOpenSim(folder);
+            XInventoryFolder xFolder = ConvertFromMutSea(folder);
             InventoryFolderBase check = GetFolder(folder.Owner, folder.ID);
 
             if (check == null)
@@ -428,7 +428,7 @@ namespace MutSea.Services.InventoryService
                 }
 
                 check.Version = (ushort)xFolder.version;
-                xFolder = ConvertFromOpenSim(check);
+                xFolder = ConvertFromMutSea(check);
 
 //                m_log.DebugFormat(
 //                    "[XINVENTORY]: Storing version only update to system folder {0} {1} {2}",
@@ -496,7 +496,7 @@ namespace MutSea.Services.InventoryService
 
             foreach (XInventoryFolder x in subFolders)
             {
-                PurgeFolder(ConvertToOpenSim(x), onlyIfTrash);
+                PurgeFolder(ConvertToMutSea(x), onlyIfTrash);
                 m_Database.DeleteFolders("folderID", x.folderID.ToString());
             }
 
@@ -510,7 +510,7 @@ namespace MutSea.Services.InventoryService
 //            m_log.DebugFormat(
 //                "[XINVENTORY SERVICE]: Adding item {0} {1} to folder {2} for {3}", item.Name, item.ID, item.Folder, item.Owner);
 
-            return m_Database.StoreItem(ConvertFromOpenSim(item));
+            return m_Database.StoreItem(ConvertFromMutSea(item));
         }
 
         public virtual bool UpdateItem(InventoryItemBase item)
@@ -562,7 +562,7 @@ namespace MutSea.Services.InventoryService
                 item.Owner = retrievedItem.Owner;
             }
 
-            return m_Database.StoreItem(ConvertFromOpenSim(item));
+            return m_Database.StoreItem(ConvertFromMutSea(item));
         }
 
         public virtual bool MoveItems(UUID principalID, List<InventoryItemBase> items)
@@ -615,7 +615,7 @@ namespace MutSea.Services.InventoryService
             if (items.Length == 0)
                 return null;
 
-            return ConvertToOpenSim(items[0]);
+            return ConvertToMutSea(items[0]);
         }
 
         public virtual InventoryItemBase[] GetMultipleItems(UUID userID, UUID[] ids)
@@ -637,7 +637,7 @@ namespace MutSea.Services.InventoryService
             if (folders.Length == 0)
                 return null;
 
-            return ConvertToOpenSim(folders[0]);
+            return ConvertToMutSea(folders[0]);
         }
 
         public virtual List<InventoryItemBase> GetActiveGestures(UUID principalID)
@@ -650,7 +650,7 @@ namespace MutSea.Services.InventoryService
             List<InventoryItemBase> ret = new();
 
             foreach (XInventoryItem x in items)
-                ret.Add(ConvertToOpenSim(x));
+                ret.Add(ConvertToMutSea(x));
 
             return ret;
         }
@@ -669,7 +669,7 @@ namespace MutSea.Services.InventoryService
 
         // CM Helpers
         //
-        protected static InventoryFolderBase ConvertToOpenSim(XInventoryFolder folder)
+        protected static InventoryFolderBase ConvertToMutSea(XInventoryFolder folder)
         {
             return new InventoryFolderBase
             {
@@ -682,7 +682,7 @@ namespace MutSea.Services.InventoryService
             };
         }
 
-        protected static XInventoryFolder ConvertFromOpenSim(InventoryFolderBase folder)
+        protected static XInventoryFolder ConvertFromMutSea(InventoryFolderBase folder)
         {
             return new XInventoryFolder
             {
@@ -695,7 +695,7 @@ namespace MutSea.Services.InventoryService
             };
         }
 
-        protected static InventoryItemBase ConvertToOpenSim(XInventoryItem item)
+        protected static InventoryItemBase ConvertToMutSea(XInventoryItem item)
         {
             return new InventoryItemBase
             {
@@ -722,7 +722,7 @@ namespace MutSea.Services.InventoryService
             };
         }
 
-        protected static XInventoryItem ConvertFromOpenSim(InventoryItemBase item)
+        protected static XInventoryItem ConvertFromMutSea(InventoryItemBase item)
         {
             return new XInventoryItem
             {

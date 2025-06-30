@@ -57,7 +57,7 @@ namespace MutSea.Tests.Performance
     /// earlier tests.
     /// </remarks>
     [TestFixture]
-    public class NPCPerformanceTests : OpenSimTestCase
+    public class NPCPerformanceTests : MutSeaTestCase
     {
         private TestScene scene;
         private AvatarFactoryModule afm;

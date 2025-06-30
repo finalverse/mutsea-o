@@ -51,7 +51,7 @@ using GridRegion = MutSea.Services.Interfaces.GridRegion;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class ScenePresenceCapabilityTests : OpenSimTestCase
+    public class ScenePresenceCapabilityTests : MutSeaTestCase
     {
         [Test]
         public void TestChildAgentSingleRegionCapabilities()

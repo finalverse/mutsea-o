@@ -60,7 +60,7 @@ namespace MutSea.Region.CoreModules.Avatar.Attachments.Tests
     /// Attachment tests
     /// </summary>
     [TestFixture]
-    public class AttachmentsModuleTests : OpenSimTestCase
+    public class AttachmentsModuleTests : MutSeaTestCase
     {
         private AutoResetEvent m_chatEvent = new AutoResetEvent(false);
 //        private OSChatMessage m_osChatMessageReceived;

@@ -172,7 +172,7 @@ namespace MutSea.Region.ClientStack.Linden
                 };
 
                 // Extra information for viewers that want to use it
-                OSDMap extrasMap = m_features.TryGetValue("OpenSimExtras", out OSD oe) ? oe as OSDMap : new OSDMap();
+                OSDMap extrasMap = m_features.TryGetValue("MutSeaExtras", out OSD oe) ? oe as OSDMap : new OSDMap();
 
                 extrasMap["AvatarSkeleton"] = true;
                 extrasMap["AnimationSet"] = true;
@@ -185,7 +185,7 @@ namespace MutSea.Region.ClientStack.Linden
                 if (m_ExportSupported)
                     extrasMap["ExportSupported"] = true;
 
-                m_features["OpenSimExtras"] = extrasMap;
+                m_features["MutSeaExtras"] = extrasMap;
             }
         }
 
@@ -211,17 +211,17 @@ namespace MutSea.Region.ClientStack.Linden
                 m_features[name] = value;
         }
 
-        public void AddOpenSimExtraFeature(string name, OSD value)
+        public void AddMutSeaExtraFeature(string name, OSD value)
         {
             lock (m_features)
             {
                 OSDMap extrasMap;
-                if (m_features.TryGetValue("OpenSimExtras", out OSD extra))
+                if (m_features.TryGetValue("MutSeaExtras", out OSD extra))
                     extrasMap = extra as OSDMap;
                 else
                 {
                     extrasMap = new OSDMap();
-                    m_features["OpenSimExtras"] = extrasMap;
+                    m_features["MutSeaExtras"] = extrasMap;
                 }
                 extrasMap[name] = value;
             }
@@ -239,21 +239,21 @@ namespace MutSea.Region.ClientStack.Linden
                 return m_features.TryGetValue(name, out value);
         }
 
-        public bool TryGetOpenSimExtraFeature(string name, out OSD value)
+        public bool TryGetMutSeaExtraFeature(string name, out OSD value)
         {
             value = null;
             lock (m_features)
             {
-                if (m_features.TryGetValue("OpenSimExtras", out OSD extra) && extra is OSDMap exm)
+                if (m_features.TryGetValue("MutSeaExtras", out OSD extra) && extra is OSDMap exm)
                     return exm.TryGetValue(name, out value);
             }
             return false;
         }
-        public bool OpenSimExtraFeatureContains(string name)
+        public bool MutSeaExtraFeatureContains(string name)
         {
             lock (m_features)
             {
-                if (m_features.TryGetValue("OpenSimExtras", out OSD extra) && extra is OSDMap exm)
+                if (m_features.TryGetValue("MutSeaExtras", out OSD extra) && extra is OSDMap exm)
                     return exm.ContainsKey(name);
             }
             return false;
@@ -294,7 +294,7 @@ namespace MutSea.Region.ClientStack.Linden
             }
 
             // Let's add the agentID to the destination guide, if it is expecting that.
-            if(copy.TryGetValue("OpenSimExtras", out OSD oe))
+            if(copy.TryGetValue("MutSeaExtras", out OSD oe))
             {
                 if(((OSDMap)oe).TryGetValue("destination-guide-url", out OSD dgl))
                 {
@@ -348,7 +348,7 @@ namespace MutSea.Region.ClientStack.Linden
             lock (m_features)
             {
                 OSDMap extrasMap;
-                if (m_features.TryGetValue("OpenSimExtras", out OSD extra))
+                if (m_features.TryGetValue("MutSeaExtras", out OSD extra))
                     extrasMap = extra as OSDMap;
                 else
                 {
@@ -395,7 +395,7 @@ namespace MutSea.Region.ClientStack.Linden
                             break;
                     }
                 }
-                m_features["OpenSimExtras"] = extrasMap;
+                m_features["MutSeaExtras"] = extrasMap;
             }
         }
 

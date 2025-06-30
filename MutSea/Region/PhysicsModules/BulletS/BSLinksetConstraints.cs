@@ -255,7 +255,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
 
         // The object is going static (non-physical). Do any setup necessary for a static linkset.
         // Return 'true' if any properties updated on the passed object.
-        // This doesn't normally happen -- OpenSim removes the objects from the physical
+        // This doesn't normally happen -- MutSea removes the objects from the physical
         //     world if it is a static linkset.
         // Called at taint-time!
         public override bool MakeStatic(BSPrimLinkable child)

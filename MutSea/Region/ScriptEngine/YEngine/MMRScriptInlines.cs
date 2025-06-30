@@ -116,7 +116,7 @@ namespace MutSea.Region.ScriptEngine.Yengine
 
             /*
              * These functions really return a 'key' even though we see them as
-             * returning 'string' because OpenSim has key and string as same type.
+             * returning 'string' because MutSea has key and string as same type.
              */
             keyReturns = new string[] {
                 "llAvatarOnLinkSitTarget",
@@ -316,7 +316,7 @@ namespace MutSea.Region.ScriptEngine.Yengine
         }
 
         /**
-         * @brief The dumbass OpenSim has key and string as the same type so non-ll
+         * @brief The dumbass MutSea has key and string as the same type so non-ll
          *        methods must be tagged with xmrMethodReturnsKeyAttribute if we
          *        are to think they return a key type, otherwise we will think they
          *        return string.

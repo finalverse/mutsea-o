@@ -81,7 +81,7 @@ namespace MutSea.Framework.Servers.HttpServer
         /// </summary>
         /// <remarks>
         /// This is an internal number.  In some debug situations an external number may also be supplied in the
-        /// opensim-request-id header but we are not currently logging this.
+        /// mutsea- request-id header but we are not currently logging this.
         /// </remarks>
         public int RequestNumber { get; private set; }
 
@@ -613,8 +613,8 @@ namespace MutSea.Framework.Servers.HttpServer
             try
             {
                 // MutSea.Framework.WebUtil.OSHeaderRequestID
-                // if (request.Headers["opensim-request-id"] != null)
-                //  reqnum = String.Format("{0}:{1}",request.RemoteIPEndPoint,request.Headers["opensim-request-id"]);
+                // if (request.Headers["mutsea- request-id"] != null)
+                //  reqnum = String.Format("{0}:{1}",request.RemoteIPEndPoint,request.Headers["mutsea- request-id"]);
                 // m_log.DebugFormat("[BASE HTTP SERVER]: <{0}> handle request for {1}",reqnum,request.RawUrl);
 
                 Culture.SetCurrentCulture();

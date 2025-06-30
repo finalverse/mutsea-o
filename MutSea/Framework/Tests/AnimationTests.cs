@@ -37,7 +37,7 @@ using Animation = MutSea.Framework.Animation;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class AnimationTests : OpenSimTestCase
+    public class AnimationTests : MutSeaTestCase
     {
         private Animation anim1 = null;
         private Animation anim2 = null;

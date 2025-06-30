@@ -33,7 +33,7 @@ using System.Collections.Generic;
 using System.Threading;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim;
+using MutSea;
 using MutSea.Region;
 using MutSea.Region.Framework;
 using MutSea.Region.Framework.Scenes;
@@ -124,10 +124,10 @@ namespace MutSea.Region.OptionalModules.ViewerSupport
                 OSDMap specialUI = new OSDMap();
                 using (StreamReader s = new StreamReader(Path.Combine(VIEWER_SUPPORT_DIR, "panel_toolbar.xml")))
                 {
-                    if (!features.TryGetValue("OpenSimExtras", out extrasMap))
+                    if (!features.TryGetValue("MutSeaExtras", out extrasMap))
                     {
                         extrasMap = new OSDMap();
-                        features["OpenSimExtras"] = extrasMap;
+                        features["MutSeaExtras"] = extrasMap;
                     }
 
                     specialUI["toolbar"] = OSDMap.FromString(s.ReadToEnd());

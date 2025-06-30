@@ -219,7 +219,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                     {
                         // Update stats
                         Interlocked.Add(ref removedPacket.Client.UnackedBytes, -removedPacket.Buffer.DataLength);
-                        OpenSimUDPBase.FreeUDPBuffer(removedPacket.Buffer);
+                        MutSeaUDPBase.FreeUDPBuffer(removedPacket.Buffer);
                         removedPacket.Buffer = null;
                     }
                 }
@@ -246,7 +246,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                         {
                             Interlocked.Add(ref ackedPacket.Client.UnackedBytes, -ackedPacket.Buffer.DataLength);
 
-                            OpenSimUDPBase.FreeUDPBuffer(ackedPacket.Buffer);
+                            MutSeaUDPBase.FreeUDPBuffer(ackedPacket.Buffer);
                             ackedPacket.Buffer = null;
                         }
                         // As with other network applications, assume that an acknowledged packet is an

@@ -70,7 +70,7 @@ namespace MutSea.Tools.Configger
 
             List<string> sources = new List<string>();
 
-            string masterFileName = startupConfig.GetString("inimaster", "OpenSimDefaults.ini");
+            string masterFileName = startupConfig.GetString("inimaster", "MutSeaDefaults.ini");
 
             if (masterFileName == "none")
                 masterFileName = String.Empty;

@@ -39,7 +39,7 @@ using OpenMetaverse;
 
 namespace MutSea.ConsoleClient
 {
-    public class OpenSimConsoleClient
+    public class MutSeaConsoleClient
     {
         protected static ServicesServerBase m_Server = null;
         private static string m_Host;

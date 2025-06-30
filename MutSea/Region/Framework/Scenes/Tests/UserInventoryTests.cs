@@ -45,7 +45,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Tests
 {
     [TestFixture]
-    public class UserInventoryTests : OpenSimTestCase
+    public class UserInventoryTests : MutSeaTestCase
     {
         [Test]
         public void TestCreateInventoryFolders()

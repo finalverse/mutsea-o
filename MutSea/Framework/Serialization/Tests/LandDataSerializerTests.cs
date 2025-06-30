@@ -37,7 +37,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Serialization.Tests
 {
     [TestFixture]
-    public class LandDataSerializerTest : OpenSimTestCase
+    public class LandDataSerializerTest : MutSeaTestCase
     {
         private LandData land;
         private LandData landWithParcelAccessList;

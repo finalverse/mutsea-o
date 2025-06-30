@@ -369,7 +369,7 @@ namespace MutSea.Server.Handlers.Simulation
                 if (theirVersion == 0f)
                 {
                     resp["success"] = OSD.FromBoolean(false);
-                    resp["reason"] = OSD.FromString("Your region is running a old version of opensim no longer supported. Consider updating it");
+                    resp["reason"] = OSD.FromString("Your region is running a old version of mutsea no longer supported. Consider updating it");
                     httpResponse.RawBuffer = Util.UTF8.GetBytes(OSDParser.SerializeJsonString(resp, true));
                     return;
                 }
@@ -481,7 +481,7 @@ namespace MutSea.Server.Handlers.Simulation
             }
 
             httpResponse.StatusCode = (int)HttpStatusCode.OK;
-            httpResponse.RawBuffer = Util.UTF8.GetBytes("OpenSim agent " + agentID.ToString());
+            httpResponse.RawBuffer = Util.UTF8.GetBytes("MutSea agent " + agentID.ToString());
 
             //m_log.DebugFormat("[AGENT HANDLER]: Agent {0} Released/Deleted from region {1}", id, regionID);
         }

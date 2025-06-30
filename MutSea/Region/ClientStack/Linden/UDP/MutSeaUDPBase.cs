@@ -49,7 +49,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
     /// <summary>
     /// Base UDP server
     /// </summary>
-    public abstract class OpenSimUDPBase
+    public abstract class MutSeaUDPBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -132,7 +132,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         /// <param name="bindAddress">Local IP address to bind the server to</param>
         /// <param name="port">Port to listening for incoming UDP packets on</param>
         /// /// <param name="usePool">Are we to use an object pool to get objects for handing inbound data?</param>
-        public OpenSimUDPBase(IPAddress bindAddress, int port)
+        public MutSeaUDPBase(IPAddress bindAddress, int port)
         {
             m_localBindAddress = bindAddress;
             m_udpPort = port;
@@ -142,7 +142,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             // m_dropRandomGenerator = new Random();
         }
 
-        ~OpenSimUDPBase()
+        ~MutSeaUDPBase()
         {
             if(m_udpSocket is not null)
                 try { m_udpSocket.Close(); } catch { }

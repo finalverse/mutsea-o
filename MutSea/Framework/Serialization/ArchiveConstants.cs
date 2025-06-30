@@ -93,7 +93,7 @@ namespace MutSea.Framework.Serialization
         public const string INVENTORY_NODE_NAME_COMPONENT_SEPARATOR = "__";
 
         /// <summary>
-        /// Template used for creating filenames in OpenSim Archives.
+        /// Template used for creating filenames in MutSea Archives.
         /// </summary>
         public const string OAR_OBJECT_FILENAME_TEMPLATE = "{0}_{1:#000}-{2:#000}-{3:#000}__{4}.xml";
 
@@ -158,7 +158,7 @@ namespace MutSea.Framework.Serialization
         }
 
         /// <summary>
-        /// Create the filename used to store an object in an OpenSim Archive.
+        /// Create the filename used to store an object in an MutSea Archive.
         /// </summary>
         /// <param name="objectName"></param>
         /// <param name="uuid"></param>
@@ -173,7 +173,7 @@ namespace MutSea.Framework.Serialization
         }
 
         /// <summary>
-        /// Create the path used to store an object in an OpenSim Archives.
+        /// Create the path used to store an object in an MutSea Archives.
         /// </summary>
         /// <param name="objectName"></param>
         /// <param name="uuid"></param>

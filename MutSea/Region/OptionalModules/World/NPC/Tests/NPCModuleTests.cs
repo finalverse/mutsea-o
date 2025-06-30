@@ -46,7 +46,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.OptionalModules.World.NPC.Tests
 {
     [TestFixture]
-    public class NPCModuleTests : OpenSimTestCase
+    public class NPCModuleTests : MutSeaTestCase
     {
         private TestScene m_scene;
         private AvatarFactoryModule m_afMod;

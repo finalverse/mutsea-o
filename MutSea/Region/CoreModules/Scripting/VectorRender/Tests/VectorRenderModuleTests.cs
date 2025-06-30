@@ -44,7 +44,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Scripting.VectorRender.Tests
 {
     [TestFixture]
-    public class VectorRenderModuleTests : OpenSimTestCase
+    public class VectorRenderModuleTests : MutSeaTestCase
     {
         Scene m_scene;
         DynamicTextureModule m_dtm;

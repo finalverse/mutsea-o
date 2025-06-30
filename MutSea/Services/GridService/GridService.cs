@@ -1132,7 +1132,7 @@ namespace MutSea.Services.GridService
         }
 
         /// <summary>
-        /// Gets the grid extra service URls we wish for the region to send in OpenSimExtras to dynamically refresh
+        /// Gets the grid extra service URls we wish for the region to send in MutSeaExtras to dynamically refresh
         /// parameters in the viewer used to access services like map, search and destination guides.
         /// <para>see "SimulatorFeaturesModule" </para>
         /// </summary>

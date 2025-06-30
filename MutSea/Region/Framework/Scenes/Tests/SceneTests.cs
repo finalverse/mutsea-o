@@ -48,7 +48,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Scene presence tests
     /// </summary>
     [TestFixture]
-    public class SceneTests : OpenSimTestCase
+    public class SceneTests : MutSeaTestCase
     {
         [Test]
         public void TestCreateScene()

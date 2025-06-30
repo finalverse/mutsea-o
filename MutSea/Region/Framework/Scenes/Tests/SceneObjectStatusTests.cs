@@ -40,7 +40,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Basic scene object status tests
     /// </summary>
     [TestFixture]
-    public class SceneObjectStatusTests : OpenSimTestCase
+    public class SceneObjectStatusTests : MutSeaTestCase
     {
         private TestScene m_scene;
         private UUID m_ownerId = TestHelpers.ParseTail(0x1);

@@ -2384,7 +2384,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Api
         /// <summary>
         /// Tries to move the entire object so that the root prim is within 0.1m of position. http://wiki.secondlife.com/wiki/LlSetRegionPos
         /// Documentation indicates that the use of x/y coordinates up to 10 meters outside the bounds of a region will work but do not specify what happens if there is no adjacent region for the object to move into.
-        /// Uses the RegionSize constant here rather than hard-coding 266.0 to alert any developer modifying OpenSim to support variable-sized regions that this method will need tweaking.
+        /// Uses the RegionSize constant here rather than hard-coding 266.0 to alert any developer modifying MutSea to support variable-sized regions that this method will need tweaking.
         /// </summary>
         /// <param name="pos"></param>
         /// <returns>1 if successful, 0 otherwise.</returns>
@@ -5359,7 +5359,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Api
                     }
                 }
 
-                // special opensim legacy extra permissions, possible to remove
+                // special mutsea legacy extra permissions, possible to remove
                 // agent must be wearing the object
                 if (m_host.ParentGroup.AttachmentPoint != 0 && m_host.OwnerID.Equals(presence.UUID))
                 {
@@ -19370,7 +19370,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Api
             SceneObjectPart part = linknum == ScriptBaseClass.LINK_THIS ? m_host : m_host.ParentGroup.GetLinkNumPart(linknum);
             if (part is not null)
             {
-                int flags = ScriptBaseClass.SIT_FLAG_OPENSIMFORCED;
+                int flags = ScriptBaseClass.SIT_FLAG_MUTSEAFORCED;
                 if(part.IsSitTargetSet)
                     flags |= 0x01;
                 return new LSL_Integer(flags);

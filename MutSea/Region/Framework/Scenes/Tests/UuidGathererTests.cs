@@ -37,7 +37,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class UuidGathererTests : OpenSimTestCase
+    public class UuidGathererTests : MutSeaTestCase
     {
         protected IAssetService m_assetService;
         protected UuidGatherer m_uuidGatherer;

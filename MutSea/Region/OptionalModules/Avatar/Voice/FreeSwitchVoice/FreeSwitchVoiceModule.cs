@@ -89,7 +89,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
         private static int m_freeSwitchDefaultTimeout;
         private static string m_freeSwitchUrlResetPassword;
         private uint m_freeSwitchServicePort;
-        private string m_openSimWellKnownHTTPAddress;
+        private string m_mutSeaWellKnownHTTPAddress;
 //        private string m_freeSwitchContext;
 
         private readonly Dictionary<string, string> m_UUIDName = new Dictionary<string, string>();
@@ -192,7 +192,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
             // as defined in Regions.ini is a good address to use. It's a
             // dotted quad (or should be!) and it can reach this host from
             // a client. The port is grabbed from the region's HTTP server.
-            m_openSimWellKnownHTTPAddress = scene.RegionInfo.ExternalHostName;
+            m_mutSeaWellKnownHTTPAddress = scene.RegionInfo.ExternalHostName;
             m_freeSwitchServicePort = MainServer.Instance.Port;
 
             if (m_Enabled)
@@ -258,7 +258,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
 
         // <summary>
         // OnRegisterCaps is invoked via the scene.EventManager
-        // everytime OpenSim hands out capabilities to a client
+        // everytime MutSea hands out capabilities to a client
         // (login, region crossing). We contribute two capabilities to
         // the set of capabilities handed back to the client:
         // ProvisionVoiceAccountRequest and ParcelVoiceInfoRequest.
@@ -382,7 +382,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Voice.FreeSwitchVoice
                     }
                 }
 
-                string accounturl = String.Format("http://{0}:{1}{2}/", m_openSimWellKnownHTTPAddress,
+                string accounturl = String.Format("http://{0}:{1}{2}/", m_mutSeaWellKnownHTTPAddress,
                                                               m_freeSwitchServicePort, m_freeSwitchAPIPrefix);
                 // fast foward encode
                 osUTF8 lsl = LLSDxmlEncode2.Start();

@@ -32,7 +32,7 @@ using Mono.Addins;
 using Nini.Config;
 using NUnit.Framework;
 using OpenMetaverse;
-using OpenSim;
+using MutSea;
 using MutSea.ApplicationPlugins.RegionModulesController;
 using MutSea.Framework;
 using MutSea.Region.CoreModules.ServiceConnectorsOut.Grid;
@@ -41,7 +41,7 @@ using MutSea.Tests.Common;
 
 namespace MutSea.Region.Framework.Scenes.Tests
 {
-    public class SharedRegionModuleTests : OpenSimTestCase
+    public class SharedRegionModuleTests : MutSeaTestCase
     {
 //        [Test]
         public void TestLifecycle()
@@ -58,7 +58,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
 
 //            // We use this to skip estate questions
             // Turns out not to be needed is estate owner id is pre-set in region information.
-//            IConfig estateConfig = configSource.AddConfig(OpenSimBase.ESTATE_SECTION_NAME);
+//            IConfig estateConfig = configSource.AddConfig(MutSeaBase.ESTATE_SECTION_NAME);
 //            estateConfig.Set("DefaultEstateOwnerName", "Zaphod Beeblebrox");
 //            estateConfig.Set("DefaultEstateOwnerUUID", estateOwnerId);
 //            estateConfig.Set("DefaultEstateOwnerEMail", "zaphod@galaxy.com");
@@ -73,7 +73,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
 
             RegionGridServicesConnector gridService = new RegionGridServicesConnector();
 //
-            OpenSim sim = new OpenSim(configSource);
+            MutSea sim = new MutSea(configSource);
 
             sim.SuppressExit = true;
             sim.EnableInitialPluginLoad = false;
@@ -179,16 +179,16 @@ namespace MutSea.Region.Framework.Scenes.Tests
         private List<ISharedRegionModule> m_sharedInstances = new List<ISharedRegionModule>();
 
         // Config access
-        private OpenSimBase m_openSim;
+        private MutSeaBase m_mutSea;
 
         public string Version { get { return "0"; } }
         public string Name { get { return "MockRegionModulesControllerPlugin"; } }
 
         public void Initialise() {}
 
-        public void Initialise(OpenSimBase sim)
+        public void Initialise(MutSeaBase sim)
         {
-            m_openSim = sim;
+            m_mutSea = sim;
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
         public void AddNode(ISharedRegionModule module)
         {
             m_sharedInstances.Add(module);
-            module.Initialise(m_MutSea.ConfigSource.Source);
+            module.Initialise(m_mutsea.ConfigSource.Source);
         }
 
         public void Dispose()

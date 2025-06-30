@@ -52,7 +52,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Scene presence tests
     /// </summary>
     [TestFixture]
-    public class ScenePresenceAgentTests : OpenSimTestCase
+    public class ScenePresenceAgentTests : MutSeaTestCase
     {
 //        public Scene scene, scene2, scene3;
 //        public UUID agent1, agent2, agent3;

@@ -152,7 +152,7 @@ namespace pCampBot
 
             Console.WriteLine(
                 "Usage: pCampBot -loginuri <loginuri> -firstname <first-name> -lastname <last-name> -password <password> [OPTIONS]\n"
-                    + "Spawns a set of bots to test an OpenSim region\n\n"
+                    + "Spawns a set of bots to test an MutSea region\n\n"
                     + "  -l, -loginuri      loginuri for grid/standalone (required)\n"
                     + "  -s, -start         start location for bots (default: last) (optional).  Can be \"last\", \"home\" or a specific location with or without co-ords (e.g. \"region1\" or \"region2/50/30/90\"\n"
                     + "  -firstname         first name for the bots (required)\n"

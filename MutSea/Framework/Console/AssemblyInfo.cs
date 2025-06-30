@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTitle("ServerConsole")]
 [assembly : AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly : AssemblyProduct("ServerConsole")]
 [assembly: AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly: AssemblyTrademark("")]

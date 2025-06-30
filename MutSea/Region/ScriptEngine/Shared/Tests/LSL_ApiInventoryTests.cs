@@ -53,7 +53,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// </summary>
     [TestFixture]
     /*
-    public class LSL_ApiInventoryTests : OpenSimTestCase
+    public class LSL_ApiInventoryTests : MutSeaTestCase
     {
         protected Scene m_scene;
         protected XEngine.XEngine m_engine;

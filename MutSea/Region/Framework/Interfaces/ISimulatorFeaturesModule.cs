@@ -40,11 +40,11 @@ namespace MutSea.Region.Framework.Interfaces
     {
         event SimulatorFeaturesRequestDelegate OnSimulatorFeaturesRequest;
         void AddFeature(string name, OSD value);
-        void AddOpenSimExtraFeature(string name, OSD value);
+        void AddMutSeaExtraFeature(string name, OSD value);
         bool RemoveFeature(string name);
         bool TryGetFeature(string name, out OSD value);
-        bool TryGetOpenSimExtraFeature(string name, out OSD value);
-        bool OpenSimExtraFeatureContains(string name);
+        bool TryGetMutSeaExtraFeature(string name, out OSD value);
+        bool MutSeaExtraFeatureContains(string name);
         OSDMap GetFeatures();
     }
 }

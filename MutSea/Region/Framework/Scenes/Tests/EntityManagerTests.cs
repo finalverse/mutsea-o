@@ -40,7 +40,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture, LongRunning]
-    public class EntityManagerTests : OpenSimTestCase
+    public class EntityManagerTests : MutSeaTestCase
     {
         static public Random random;
         SceneObjectGroup found;

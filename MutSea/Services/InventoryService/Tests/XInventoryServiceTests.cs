@@ -43,7 +43,7 @@ namespace MutSea.Services.InventoryService.Tests
     /// TODO: Fill out more tests.
     /// </remarks>
     [TestFixture]
-    public class XInventoryServiceTests : OpenSimTestCase
+    public class XInventoryServiceTests : MutSeaTestCase
     {
         private IInventoryService CreateXInventoryService()
         {

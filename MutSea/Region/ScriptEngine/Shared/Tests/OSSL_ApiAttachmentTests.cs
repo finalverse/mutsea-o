@@ -53,7 +53,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// TODO: Add tests for all functions
     /// </remarks>
     [TestFixture]
-    public class OSSL_ApiAttachmentTests : OpenSimTestCase
+    public class OSSL_ApiAttachmentTests : MutSeaTestCase
     {
         protected Scene m_scene;
         protected XEngine.XEngine m_engine;

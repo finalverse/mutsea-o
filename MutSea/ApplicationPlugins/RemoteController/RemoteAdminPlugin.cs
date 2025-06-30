@@ -40,7 +40,7 @@ using Nini.Config;
 using Nwc.XmlRpc;
 using OpenMetaverse;
 using Mono.Addins;
-using OpenSim;
+using MutSea;
 using MutSea.Framework;
 using MutSea.Framework.Console;
 using MutSea.Framework.Servers;
@@ -65,7 +65,7 @@ namespace MutSea.ApplicationPlugins.RemoteController
         private static Object   m_requestLock = new Object();
         private static Object   m_saveOarLock = new Object();
 
-        private OpenSimBase m_application;
+        private MutSeaBase m_application;
         private IHttpServer m_httpServer;
         private IConfig m_config;
         private IConfigSource m_configSource;
@@ -74,7 +74,7 @@ namespace MutSea.ApplicationPlugins.RemoteController
 
         private string m_name = "RemoteAdminPlugin";
         private string m_version = "0.0";
-        private string m_openSimVersion;
+        private string m_mutSeaVersion;
 
         public string Version
         {
@@ -92,11 +92,11 @@ namespace MutSea.ApplicationPlugins.RemoteController
             throw new PluginNotInitialisedException(Name);
         }
 
-        public void Initialise(OpenSimBase openSim)
+        public void Initialise(MutSeaBase mutSea)
         {
-            m_openSimVersion = MutSea.GetVersionText();
+            m_mutSeaVersion = mutSea.GetVersionText();
 
-            m_configSource = MutSea.ConfigSource.Source;
+            m_configSource = mutSea.ConfigSource.Source;
             try
             {
                 if (m_configSource.Configs["RemoteAdmin"] == null ||
@@ -125,7 +125,7 @@ namespace MutSea.ApplicationPlugins.RemoteController
                         }
                     }
 
-                    m_application = openSim;
+                    m_application = mutSea;
                     string bind_ip_address = m_config.GetString("bind_ip_address", "0.0.0.0");
                     IPAddress ipaddr = IPAddress.Parse(bind_ip_address);
                     m_httpServer = MainServer.GetHttpServer((uint)port,ipaddr);
@@ -172,7 +172,7 @@ namespace MutSea.ApplicationPlugins.RemoteController
                     // Misc
                     availableMethods["admin_refresh_search"] = (req, ep) => InvokeXmlRpcMethod(req, ep, XmlRpcRefreshSearch);
                     availableMethods["admin_refresh_map"] = (req, ep) => InvokeXmlRpcMethod(req, ep, XmlRpcRefreshMap);
-                    availableMethods["admin_get_opensim_version"] = (req, ep) => InvokeXmlRpcMethod(req, ep, XmlRpcGetOpenSimVersion);
+                    availableMethods["admin_get_mutsea_version"] = (req, ep) => InvokeXmlRpcMethod(req, ep, XmlRpcGetMutSeaVersion);
                     availableMethods["admin_get_agent_count"] = (req, ep) => InvokeXmlRpcMethod(req, ep, XmlRpcGetAgentCount);
 
                     // Either enable full remote functionality or just selected features
@@ -1481,7 +1481,7 @@ namespace MutSea.ApplicationPlugins.RemoteController
         /// <item><term>success</term>
         ///       <description>true or false</description></item>
         /// <item><term>token</term>
-        ///       <description>the authentication token sent by OpenSim</description></item>
+        ///       <description>the authentication token sent by MutSea</description></item>
         /// <item><term>error</term>
         ///       <description>error message if success is false</description></item>
         /// </list>
@@ -2344,16 +2344,16 @@ namespace MutSea.ApplicationPlugins.RemoteController
             m_log.Info("[RADMIN]: Refresh Map Request complete");
         }
 
-        private void XmlRpcGetOpenSimVersion(XmlRpcRequest request, XmlRpcResponse response, IPEndPoint remoteClient)
+        private void XmlRpcGetMutSeaVersion(XmlRpcRequest request, XmlRpcResponse response, IPEndPoint remoteClient)
         {
-            m_log.Info("[RADMIN]: Received Get OpenSim Version Request");
+            m_log.Info("[RADMIN]: Received Get MutSea Version Request");
 
             Hashtable responseData = (Hashtable)response.Value;
 
-            responseData["version"] = m_openSimVersion;
+            responseData["version"] = m_mutSeaVersion;
             responseData["success"] = true;
 
-            m_log.Info("[RADMIN]: Get OpenSim Version Request complete");
+            m_log.Info("[RADMIN]: Get MutSea Version Request complete");
         }
 
         private void XmlRpcGetAgentCount(XmlRpcRequest request, XmlRpcResponse response, IPEndPoint remoteClient)

@@ -34,7 +34,7 @@ namespace MutSea.Framework.Console
     /// <summary>
     /// Writes log information out onto the console
     /// </summary>
-    public class OpenSimAppender : AnsiColorTerminalAppender
+    public class MutSeaAppender : AnsiColorTerminalAppender
     {
         private ConsoleBase m_console = null;
 

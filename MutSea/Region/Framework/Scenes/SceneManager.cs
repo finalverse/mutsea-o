@@ -287,7 +287,7 @@ namespace MutSea.Region.Framework.Scenes
         }
 
         /// <summary>
-        /// Load an OpenSim archive into the current scene.  This will load both the shapes of the prims and upload
+        /// Load an MutSea archive into the current scene.  This will load both the shapes of the prims and upload
         /// their assets to the asset service.
         /// </summary>
         /// <param name="cmdparams"></param>

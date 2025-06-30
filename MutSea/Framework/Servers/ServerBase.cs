@@ -56,7 +56,7 @@ namespace MutSea.Framework.Servers
         /// </summary>
         protected ICommandConsole m_console;
 
-        protected OpenSimAppender m_consoleAppender;
+        protected MutSeaAppender m_consoleAppender;
         protected FileAppender m_logFileAppender;
         protected FileAppender m_statsLogFileAppender;
 
@@ -148,7 +148,7 @@ namespace MutSea.Framework.Servers
             {
                 if (appender.Name == "Console")
                 {
-                    m_consoleAppender = (OpenSimAppender)appender;
+                    m_consoleAppender = (MutSeaAppender)appender;
                 }
                 else if (appender.Name == "LogFileAppender")
                 {

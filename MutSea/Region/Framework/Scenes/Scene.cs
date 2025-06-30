@@ -295,7 +295,7 @@ namespace MutSea.Region.Framework.Scenes
         protected Timer m_timerWatchdog = new();
         protected List<RegionInfo> m_regionRestartNotifyList = new();
         protected List<RegionInfo> m_neighbours = new();
-        protected string m_simulatorVersion = "OpenSimulator Server";
+        protected string m_simulatorVersion = "MutSea Server";
         protected AgentCircuitManager m_authenticateHandler;
         protected SceneCommunicationService m_sceneGridService;
         protected ISnmpModule m_snmpService = null;
@@ -1228,36 +1228,36 @@ namespace MutSea.Region.Framework.Scenes
                 if(Normalized55FPS)
                     statisticsFPSfactor = 55.0f * FrameTime;
 
-                fm.AddOpenSimExtraFeature("SimulatorFPS", OSD.FromReal(1.0f / FrameTime));
-                fm.AddOpenSimExtraFeature("SimulatorFPSFactor", OSD.FromReal(statisticsFPSfactor));
-                fm.AddOpenSimExtraFeature("SimulatorFPSWarnPercent", OSD.FromInteger(FrameTimeWarnPercent));
-                fm.AddOpenSimExtraFeature("SimulatorFPSCritPercent", OSD.FromInteger(FrameTimeCritPercent));
+                fm.AddMutSeaExtraFeature("SimulatorFPS", OSD.FromReal(1.0f / FrameTime));
+                fm.AddMutSeaExtraFeature("SimulatorFPSFactor", OSD.FromReal(statisticsFPSfactor));
+                fm.AddMutSeaExtraFeature("SimulatorFPSWarnPercent", OSD.FromInteger(FrameTimeWarnPercent));
+                fm.AddMutSeaExtraFeature("SimulatorFPSCritPercent", OSD.FromInteger(FrameTimeCritPercent));
 
-                fm.AddOpenSimExtraFeature("MinPrimScale", OSD.FromReal(m_minNonphys));
-                fm.AddOpenSimExtraFeature("MaxPrimScale", OSD.FromReal(m_maxNonphys));
-                fm.AddOpenSimExtraFeature("MinPhysPrimScale", OSD.FromReal(m_minPhys));
-                fm.AddOpenSimExtraFeature("MaxPhysPrimScale", OSD.FromReal(m_maxPhys));
+                fm.AddMutSeaExtraFeature("MinPrimScale", OSD.FromReal(m_minNonphys));
+                fm.AddMutSeaExtraFeature("MaxPrimScale", OSD.FromReal(m_maxNonphys));
+                fm.AddMutSeaExtraFeature("MinPhysPrimScale", OSD.FromReal(m_minPhys));
+                fm.AddMutSeaExtraFeature("MaxPhysPrimScale", OSD.FromReal(m_maxPhys));
 
                 if(SceneGridInfo is not null)
                 {
-                    if (!fm.OpenSimExtraFeatureContains("GridName"))
+                    if (!fm.MutSeaExtraFeatureContains("GridName"))
                     {
                         if (!string.IsNullOrEmpty(SceneGridInfo.GridName))
-                            fm.AddOpenSimExtraFeature("GridName", SceneGridInfo.GridName);
+                            fm.AddMutSeaExtraFeature("GridName", SceneGridInfo.GridName);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("GridNick"))
+                    if (!fm.MutSeaExtraFeatureContains("GridNick"))
                     {
                         if (!string.IsNullOrEmpty(SceneGridInfo.GridNick))
-                            fm.AddOpenSimExtraFeature("GridNick", SceneGridInfo.GridNick);
+                            fm.AddMutSeaExtraFeature("GridNick", SceneGridInfo.GridNick);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("GridURL"))
+                    if (!fm.MutSeaExtraFeatureContains("GridURL"))
                     {
-                        fm.AddOpenSimExtraFeature("GridURL", SceneGridInfo.GridUrl);
+                        fm.AddMutSeaExtraFeature("GridURL", SceneGridInfo.GridUrl);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("GridURLAlias"))
+                    if (!fm.MutSeaExtraFeatureContains("GridURLAlias"))
                     {
                         string[] alias = SceneGridInfo.GridUrlAlias;
                         if(alias is not null && alias.Length > 0)
@@ -1270,28 +1270,28 @@ namespace MutSea.Region.Framework.Scenes
                                 sb.Append(',');
                             }
                             sb.Append(alias[i]);
-                            fm.AddOpenSimExtraFeature("GridURLAlias", osStringBuilderCache.GetStringAndRelease(sb));
+                            fm.AddMutSeaExtraFeature("GridURLAlias", osStringBuilderCache.GetStringAndRelease(sb));
                         }
                         else
-                            fm.AddOpenSimExtraFeature("GridURLAlias", string.Empty);
+                            fm.AddMutSeaExtraFeature("GridURLAlias", string.Empty);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("search-server-url"))
+                    if (!fm.MutSeaExtraFeatureContains("search-server-url"))
                     {
                         if (!string.IsNullOrEmpty(SceneGridInfo.SearchURL))
-                            fm.AddOpenSimExtraFeature("search-server-url", SceneGridInfo.SearchURL);
+                            fm.AddMutSeaExtraFeature("search-server-url", SceneGridInfo.SearchURL);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("destination-guide-url"))
+                    if (!fm.MutSeaExtraFeatureContains("destination-guide-url"))
                     {
                         if (!string.IsNullOrEmpty(SceneGridInfo.DestinationGuideURL))
-                            fm.AddOpenSimExtraFeature("destination-guide-url", SceneGridInfo.DestinationGuideURL);
+                            fm.AddMutSeaExtraFeature("destination-guide-url", SceneGridInfo.DestinationGuideURL);
                     }
 
-                    if (!fm.OpenSimExtraFeatureContains("currency-base-uri"))
+                    if (!fm.MutSeaExtraFeatureContains("currency-base-uri"))
                     {
                         if (!string.IsNullOrEmpty(SceneGridInfo.EconomyURL))
-                            fm.AddOpenSimExtraFeature("currency-base-uri", SceneGridInfo.EconomyURL);
+                            fm.AddMutSeaExtraFeature("currency-base-uri", SceneGridInfo.EconomyURL);
                     }
                 }
             }
@@ -5021,7 +5021,7 @@ Label_GroupsDone:
 
         /// <summary>
         /// This is currently only used for scale (to scale to MegaPrim size)
-        /// There is a console command that calls this in OpenSimMain
+        /// There is a console command that calls this in MutSeaMain
         /// </summary>
         /// <param name="cmdparams"></param>
         public void HandleEditCommand(string[] cmdparams)

@@ -50,7 +50,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// This is at a level above the SceneObjectBasicTests, which act on the scene directly.
     /// </remarks>
     [TestFixture]
-    public class SceneObjectCopyTests : OpenSimTestCase
+    public class SceneObjectCopyTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

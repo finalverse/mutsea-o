@@ -50,7 +50,7 @@ namespace MutSea.Services.InventoryService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static readonly UUID libOwner = Constants.m_MrOpenSimID;
+        private static readonly UUID libOwner = Constants.m_MrMutSeaID;
         private const string m_LibraryRootFolderIDstr = "00000112-000f-0000-0000-000100bba000";
         private static readonly UUID m_LibraryRootFolderID = new UUID(m_LibraryRootFolderIDstr);
 
@@ -88,7 +88,7 @@ namespace MutSea.Services.InventoryService
             }
 
             string pLibrariesLocation = Path.Combine("inventory", "Libraries.xml");
-            string pLibName = "OpenSim Library";
+            string pLibName = "MutSea Library";
 
             IConfig libConfig = config.Configs["LibraryService"];
             if (libConfig != null)

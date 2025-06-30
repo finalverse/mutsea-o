@@ -33,7 +33,7 @@ using MutSea.Region.ScriptEngine.Shared;
 namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
-    public class LSL_TypesTestLSLFloat : OpenSimTestCase
+    public class LSL_TypesTestLSLFloat : MutSeaTestCase
     {
         // Used for testing equality of two floats.
         private double _lowPrecisionTolerance = 0.000001;

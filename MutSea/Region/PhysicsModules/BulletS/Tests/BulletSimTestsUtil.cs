@@ -49,13 +49,13 @@ namespace MutSea.Region.PhysicsModule.BulletS.Tests
         //      May be 'null' if there are no overrides.
         public static BSScene CreateBasicPhysicsEngine(Dictionary<string, string> paramOverrides)
         {
-            IConfigSource openSimINI = new IniConfigSource();
-            IConfig startupConfig = openSimINI.AddConfig("Startup");
+            IConfigSource mutSeaINI = new IniConfigSource();
+            IConfig startupConfig = mutSeaINI.AddConfig("Startup");
             startupConfig.Set("physics", "BulletSim");
             startupConfig.Set("meshing", "Meshmerizer");
             startupConfig.Set("cacheSculptMaps", "false");  // meshmerizer shouldn't save maps
 
-            IConfig bulletSimConfig = openSimINI.AddConfig("BulletSim");
+            IConfig bulletSimConfig = mutSeaINI.AddConfig("BulletSim");
             // If the caller cares, specify the bullet engine otherwise it will default to "BulletUnmanaged".
             // bulletSimConfig.Set("BulletEngine", "BulletUnmanaged");
             // bulletSimConfig.Set("BulletEngine", "BulletXNA");
@@ -88,13 +88,13 @@ namespace MutSea.Region.PhysicsModule.BulletS.Tests
 
             IMesher mesher = new MutSea.Region.PhysicsModule.Meshing.Meshmerizer();
             INonSharedRegionModule mod = mesher as INonSharedRegionModule;
-            mod.Initialise(openSimINI);
+            mod.Initialise(mutSeaINI);
             mod.AddRegion(scene);
             mod.RegionLoaded(scene);
 
             BSScene pScene = new BSScene();
             mod = (pScene as INonSharedRegionModule);
-            mod.Initialise(openSimINI);
+            mod.Initialise(mutSeaINI);
             mod.AddRegion(scene);
             mod.RegionLoaded(scene);
 

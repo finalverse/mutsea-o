@@ -45,7 +45,7 @@ namespace MutSea.Data.Tests
     /// Requires NUnit 2.5 or better (to support the generics).
     /// </summary>
     /// <remarks>
-    /// FIXME: Should extend OpenSimTestCase but compile on mono 2.4.3 currently fails with
+    /// FIXME: Should extend MutSeaTestCase but compile on mono 2.4.3 currently fails with
     /// AssetTests`2 : System.MemberAccessException : Cannot create an instance of MutSea.Data.Tests.AssetTests`2[TConn,TAssetData] because Type.ContainsGenericParameters is true.
     /// and similar on EstateTests, InventoryTests and RegionTests.
     /// Runs fine with mono 2.10.8.1, so easiest thing is to wait until min Mono version uplifts.

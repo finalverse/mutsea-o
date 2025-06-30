@@ -55,7 +55,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// MutSea.Region.Framework.Scenes.Tests.SceneObjectLinkingTests.
     /// </remarks>
     [TestFixture]
-    public class LSL_ApiLinkingTests : OpenSimTestCase
+    public class LSL_ApiLinkingTests : MutSeaTestCase
     {
         /*
         protected Scene m_scene;

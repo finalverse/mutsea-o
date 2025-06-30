@@ -49,7 +49,7 @@ namespace MutSea.Data.Null
         {
             if (m_estate == null)
             {
-                // This fools the initialization caller into thinking an estate was fetched (a check in OpenSimBase).
+                // This fools the initialization caller into thinking an estate was fetched (a check in MutSeaBase).
                 // The estate info is pretty empty so don't try banning anyone.
                 m_estate = new EstateSettings();
                 m_estate.EstateID = 1;

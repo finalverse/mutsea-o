@@ -48,7 +48,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.ClientStack.Linden.Tests
 {
     [TestFixture]
-    public class EventQueueTests : OpenSimTestCase
+    public class EventQueueTests : MutSeaTestCase
     {
         private TestScene m_scene;
         private EventQueueGetModule m_eqgMod;

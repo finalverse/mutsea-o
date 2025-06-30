@@ -2678,7 +2678,7 @@ namespace MutSea.Region.Framework.Scenes
                 posVector = av.AbsolutePosition,
                 rotQuat = av.Rotation,
                 velVector = av.Velocity,
-                colliderType = av.IsNPC ? 0x20 : 0x1, // OpenSim\Region\ScriptEngine\Shared\Helpers.cs
+                colliderType = av.IsNPC ? 0x20 : 0x1, // MutSea\Region\ScriptEngine\Shared\Helpers.cs
                 groupUUID = av.ControllingClient.ActiveGroupId,
                 linkNumber = LinkNum
             };

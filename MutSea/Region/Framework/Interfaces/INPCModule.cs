@@ -74,7 +74,7 @@ namespace MutSea.Region.Framework.Interfaces
         /// <param name="senseAsAgent">
         /// Make the NPC show up as an agent on LSL sensors. The default is
         /// that they show up as the NPC type instead, but this is currently
-        /// an OpenSim-only extension.
+        /// an MutSea-only extension.
         /// </param>
         /// <param name="scene"></param>
         /// <param name="appearance">
@@ -100,7 +100,7 @@ namespace MutSea.Region.Framework.Interfaces
         /// <param name="senseAsAgent">
         /// Make the NPC show up as an agent on LSL sensors. The default is
         /// that they show up as the NPC type instead, but this is currently
-        /// an OpenSim-only extension.
+        /// an MutSea-only extension.
         /// </param>
         /// <param name="scene"></param>
         /// <param name="appearance">

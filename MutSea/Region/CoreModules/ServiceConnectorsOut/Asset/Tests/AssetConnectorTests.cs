@@ -42,7 +42,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.ServiceConnectorsOut.Asset.Tests
 {
     [TestFixture]
-    public class AssetConnectorTests : OpenSimTestCase
+    public class AssetConnectorTests : MutSeaTestCase
     {
         [Test]
         public void TestAddAsset()

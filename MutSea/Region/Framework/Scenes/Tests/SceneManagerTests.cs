@@ -39,7 +39,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class SceneManagerTests : OpenSimTestCase
+    public class SceneManagerTests : MutSeaTestCase
     {
         [Test]
         public void TestClose()

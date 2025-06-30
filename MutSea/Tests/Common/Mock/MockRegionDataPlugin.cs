@@ -214,7 +214,7 @@ namespace MutSea.Data.Null
 
         public void StoreObject(SceneObjectGroup obj, UUID regionUUID)
         {
-            // We can't simply store groups here because on delinking, OpenSim will not update the original group
+            // We can't simply store groups here because on delinking, MutSea will not update the original group
             // directly.  Rather, the newly delinked parts will be updated to be in their own scene object group
             // Therefore, we need to store parts rather than groups.
             foreach (SceneObjectPart prim in obj.Parts)

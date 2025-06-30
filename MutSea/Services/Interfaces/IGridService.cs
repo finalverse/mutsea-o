@@ -206,7 +206,7 @@ namespace MutSea.Services.Interfaces
         /// Region flags.
         /// </summary>
         /// <remarks>
-        /// If not set (chiefly if a robust service is running code pre OpenSim 0.8.1) then this will be null and
+        /// If not set (chiefly if a robust service is running code pre MutSea 0.8.1) then this will be null and
         /// should be ignored.  If you require flags information please use the separate IGridService.GetRegionFlags() call
         /// XXX: This field is currently ignored when used in RegisterRegion, but could potentially be
         /// used to set flags at this point.

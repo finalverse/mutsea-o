@@ -41,7 +41,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
-    public class LSL_ApiUserTests : OpenSimTestCase
+    public class LSL_ApiUserTests : MutSeaTestCase
     {
         private Scene m_scene;
         private MockScriptEngine m_engine;

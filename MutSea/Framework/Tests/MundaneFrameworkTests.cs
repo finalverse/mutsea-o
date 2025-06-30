@@ -37,7 +37,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class MundaneFrameworkTests : OpenSimTestCase
+    public class MundaneFrameworkTests : MutSeaTestCase
     {
         private bool m_RegionSettingsOnSaveEventFired;
 

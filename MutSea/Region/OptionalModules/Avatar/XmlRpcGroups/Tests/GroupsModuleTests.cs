@@ -52,7 +52,7 @@ namespace MutSea.Region.OptionalModules.Avatar.XmlRpcGroups.Tests
     /// Basic groups module tests
     /// </summary>
     [TestFixture]
-    public class GroupsModuleTests : OpenSimTestCase
+    public class GroupsModuleTests : MutSeaTestCase
     {
         [SetUp]
         public override void SetUp()

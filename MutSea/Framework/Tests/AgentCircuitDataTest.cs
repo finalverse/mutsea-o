@@ -34,7 +34,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class AgentCircuitDataTest : OpenSimTestCase
+    public class AgentCircuitDataTest : MutSeaTestCase
     {
         private UUID AgentId;
         private AvatarAppearance AvAppearance;

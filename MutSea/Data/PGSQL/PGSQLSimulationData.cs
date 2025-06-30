@@ -143,7 +143,7 @@ namespace MutSea.Data.PGSQL
 
                             lastGroupID = groupID;
 
-                            // There sometimes exist OpenSim bugs that 'orphan groups' so that none of the prims are
+                            // There sometimes exist MutSea bugs that 'orphan groups' so that none of the prims are
                             // recorded as the root prim (for which the UUID must equal the persisted group UUID).  In
                             // this case, force the UUID to be the same as the group UUID so that at least these can be
                             // deleted (we need to change the UUID so that any other prims in the linkset can also be

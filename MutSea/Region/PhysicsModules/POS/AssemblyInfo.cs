@@ -38,7 +38,7 @@ using Mono.Addins;
 [assembly : AssemblyTitle("POSPlugin")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("http://opensimulator.org")]
+[assembly : AssemblyCompany("http://mutsea.com")]
 [assembly : AssemblyProduct("POSPlugin")]
 [assembly : AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly : AssemblyTrademark("")]

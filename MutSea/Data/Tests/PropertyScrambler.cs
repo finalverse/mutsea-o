@@ -159,7 +159,7 @@ namespace MutSea.Data.Tests
     }
 
     [TestFixture]
-    public class PropertyScramblerTests : OpenSimTestCase
+    public class PropertyScramblerTests : MutSeaTestCase
     {
         [Test]
         public void TestScramble()

@@ -52,7 +52,7 @@ namespace MutSea.Tests.Performance
     /// earlier tests.
     /// </remarks>
     [TestFixture]
-    public class ScriptPerformanceTests : OpenSimTestCase
+    public class ScriptPerformanceTests : MutSeaTestCase
     {
         /*
          * private TestScene m_scene;

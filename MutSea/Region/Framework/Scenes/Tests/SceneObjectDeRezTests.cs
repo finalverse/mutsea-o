@@ -50,7 +50,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// TODO: These tests are incomplete - need to test more kinds of derez (e.g. return object).
     /// </remarks>
     [TestFixture]
-    public class SceneObjectDeRezTests : OpenSimTestCase
+    public class SceneObjectDeRezTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

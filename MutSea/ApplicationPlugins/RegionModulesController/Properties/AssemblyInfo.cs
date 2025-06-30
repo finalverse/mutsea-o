@@ -9,9 +9,9 @@ using Mono.Addins;
 [assembly: AssemblyTitle("MutSea.ApplicationPlugins.RegionModulesController")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly: AssemblyProduct("MutSea")]
-[assembly: AssemblyCopyright("OpenSimulator developers")]
+[assembly: AssemblyCopyright("MutSea developers")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

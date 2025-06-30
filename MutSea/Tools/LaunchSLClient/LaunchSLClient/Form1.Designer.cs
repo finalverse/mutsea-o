@@ -82,7 +82,7 @@ namespace LaunchSLClient
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.comboBox1);
             this.Name = "Form1";
-            this.Text = "OpenSim Client Launcher";
+            this.Text = "MutSea Client Launcher";
             this.ResumeLayout(false);
             this.PerformLayout();
         }

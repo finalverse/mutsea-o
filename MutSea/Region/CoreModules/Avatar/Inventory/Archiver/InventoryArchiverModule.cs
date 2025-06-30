@@ -474,7 +474,7 @@ namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
                 }
 
                 if (options.ContainsKey("home"))
-                    m_log.WarnFormat("[INVENTORY ARCHIVER]: Please be aware that inventory archives with creator information are not compatible with OpenSim 0.7.0.2 and earlier.  Do not use the -home option if you want to produce a compatible IAR");
+                    m_log.WarnFormat("[INVENTORY ARCHIVER]: Please be aware that inventory archives with creator information are not compatible with MutSea 0.7.0.2 and earlier.  Do not use the -home option if you want to produce a compatible IAR");
 
                 string firstName = mainParams[2];
                 string lastName = mainParams[3];

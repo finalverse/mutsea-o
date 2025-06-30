@@ -154,9 +154,9 @@ namespace MutSea.Server.Handlers.Authentication
         /// <summary>Login form used to authenticate OpenID requests</summary>
         const string LOGIN_PAGE =
 @"<html>
-<head><title>OpenSim OpenID Login</title></head>
+<head><title>MutSea OpenID Login</title></head>
 <body>
-<h3>OpenSim Login</h3>
+<h3>MutSea Login</h3>
 <form method=""post"">
 <label for=""first"">First Name:</label> <input readonly type=""text"" name=""first"" id=""first"" value=""{0}""/>
 <label for=""last"">Last Name:</label> <input readonly type=""text"" name=""last"" id=""last"" value=""{1}""/>

@@ -9,9 +9,9 @@ using Mono.Addins;
 [assembly: AssemblyTitle("MutSea.ApplicationPlugins.RemoteController")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly: AssemblyProduct("MutSea")]
-[assembly: AssemblyCopyright("Copyright OpenSimulator developers ©  2012")]
+[assembly: AssemblyCopyright("Copyright MutSea developers © 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

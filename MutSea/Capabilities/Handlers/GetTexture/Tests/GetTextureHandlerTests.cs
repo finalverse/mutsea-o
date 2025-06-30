@@ -42,7 +42,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Capabilities.Handlers.GetTexture.Tests
 {
     [TestFixture]
-    public class GetTextureHandlerTests : OpenSimTestCase
+    public class GetTextureHandlerTests : MutSeaTestCase
     {
         [Test]
         public void TestTextureNotFound()

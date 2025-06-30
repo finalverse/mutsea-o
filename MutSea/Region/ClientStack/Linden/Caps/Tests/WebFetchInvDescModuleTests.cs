@@ -54,7 +54,7 @@ namespace MutSea.Region.ClientStack.Linden.Caps.Tests
 {
     /*
     [TestFixture]
-    public class WebFetchInvDescModuleTests : OpenSimTestCase
+    public class WebFetchInvDescModuleTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void TestFixtureSetUp()

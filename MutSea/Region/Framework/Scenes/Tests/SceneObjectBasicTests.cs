@@ -43,7 +43,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Basic scene object tests (create, read and delete but not update).
     /// </summary>
     [TestFixture]
-    public class SceneObjectBasicTests : OpenSimTestCase
+    public class SceneObjectBasicTests : MutSeaTestCase
     {
 //        [TearDown]
 //        public void TearDown()

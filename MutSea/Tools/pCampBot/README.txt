@@ -13,14 +13,14 @@ Using this bot on a public grid could get you banned permanently, so
 just say No! to griefing!
 
 ----- Setup -----
-Linux: To build, in the main opensim directory, run:
+Linux: To build, in the main mutsea directory, run:
   ./runprebuild.sh
   nant
 
-Windows: Run the prebuild.bat in the main opensim directory and then
+Windows: Run the prebuild.bat in the main mutsea directory and then
 open the created solution and compile it.
 
-pCampBot.exe will end up in the regular opensim/bin folder
+pCampBot.exe will end up in the regular mutsea/bin folder
 
 ----- Running the bot -----
 

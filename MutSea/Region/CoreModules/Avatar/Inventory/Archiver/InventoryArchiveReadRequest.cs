@@ -167,7 +167,7 @@ namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
             m_loadStream = loadStream;
             m_module = module;
 
-            // FIXME: Do not perform this check since older versions of OpenSim do save the control file after other things
+            // FIXME: Do not perform this check since older versions of MutSea do save the control file after other things
             // (I thought they weren't).  We will need to bump the version number and perform this check on all
             // subsequent IAR versions only
             ControlFileLoaded = true;
@@ -588,7 +588,7 @@ namespace MutSea.Region.CoreModules.Avatar.Inventory.Archiver
             {
                 throw new Exception(
                     string.Format(
-                        "The IAR you are trying to load has major version number of {0} but this version of OpenSim can only load IARs with major version number {1} and below",
+                        "The IAR you are trying to load has major version number of {0} but this version of MutSea can only load IARs with major version number {1} and below",
                         majorVersion, MAX_MAJOR_VERSION));
             }
 

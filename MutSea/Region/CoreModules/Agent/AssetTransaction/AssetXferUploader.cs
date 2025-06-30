@@ -49,7 +49,7 @@ namespace MutSea.Region.CoreModules.Agent.AssetTransaction
                 new UUID("6522e74d-1660-4e7f-b601-6f48c1659a77"), // eyes
                 new UUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"), // skin
                 new UUID("8dcd4a48-2d37-4909-9f78-f7a9eb4ef903"), // transparency for alpha
-                // opensim assets textures possibly obsolete now
+                // mutsea assets textures possibly obsolete now
                 new UUID("00000000-0000-1111-9999-000000000010"),
                 new UUID("00000000-0000-1111-9999-000000000011"),
                 new UUID("00000000-0000-1111-9999-000000000012"),

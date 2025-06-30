@@ -128,11 +128,11 @@ namespace MutSea.Services.HypergridService
             List<InventoryFolderBase> folders = new List<InventoryFolderBase>();
             foreach (XInventoryFolder x in tree)
             {
-                folders.Add(ConvertToOpenSim(x));
+                folders.Add(ConvertToMutSea(x));
             }
 
             SetAsNormalFolder(suitcase);
-            folders.Add(ConvertToOpenSim(suitcase));
+            folders.Add(ConvertToMutSea(suitcase));
 
             return folders;
         }
@@ -170,7 +170,7 @@ namespace MutSea.Services.HypergridService
 
             SetAsNormalFolder(suitcase);
 
-            return ConvertToOpenSim(suitcase);
+            return ConvertToMutSea(suitcase);
         }
 
         protected void CreateSystemFolders(UUID principalID, UUID rootID)
@@ -239,7 +239,7 @@ namespace MutSea.Services.HypergridService
                 "[HG SUITCASE INVENTORY SERVICE]: Found folder {0} {1} for type {2} for user {3}",
                 folders[0].folderName, folders[0].folderID, type, principalID);
 
-            return ConvertToOpenSim(folders[0]);
+            return ConvertToMutSea(folders[0]);
         }
 
         public override InventoryCollection GetFolderContent(UUID principalID, UUID folderID)
@@ -292,7 +292,7 @@ namespace MutSea.Services.HypergridService
             {
                 List<XInventoryFolder> tree;
                 if (m_SuitcaseTrees.TryGetValue(folder.Owner, out tree))
-                    tree.Add(ConvertFromOpenSim(folder));
+                    tree.Add(ConvertFromMutSea(folder));
 
                 return true;
             }

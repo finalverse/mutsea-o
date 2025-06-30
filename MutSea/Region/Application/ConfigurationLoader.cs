@@ -55,7 +55,7 @@ namespace MutSea
         /// <summary>
         /// A source of Configuration data
         /// </summary>
-        protected OpenSimConfigSource m_config;
+        protected MutSeaConfigSource m_config;
 
         /// <summary>
         /// Grid Service Information.  This refers to classes and addresses of the grid service
@@ -69,7 +69,7 @@ namespace MutSea
         /// <param name="configSettings"></param>
         /// <param name="networkInfo"></param>
         /// <returns>A configuration that gets passed to modules</returns>
-        public OpenSimConfigSource LoadConfigSettings(
+        public MutSeaConfigSource LoadConfigSettings(
                 IConfigSource argvSource, EnvConfigSource envConfigSource, out ConfigSettings configSettings,
                 out NetworkServersInfo networkInfo)
         {
@@ -82,7 +82,7 @@ namespace MutSea
 
             List<string> sources = new List<string>();
 
-            string masterFileName = startupConfig.GetString("inimaster", "OpenSimDefaults.ini");
+            string masterFileName = startupConfig.GetString("inimaster", "MutSeaDefaults.ini");
 
             if (masterFileName == "none")
                 masterFileName = String.Empty;
@@ -138,7 +138,7 @@ namespace MutSea
                 }
             }
 
-            m_config = new OpenSimConfigSource();
+            m_config = new MutSeaConfigSource();
             m_config.Source = new IniConfigSource();
 
             m_log.Info("[CONFIG]: Reading configuration settings");
@@ -178,7 +178,7 @@ namespace MutSea
 
                 if (overrideSources.Count > 0)
                 {
-                    OpenSimConfigSource overrideConfig = new OpenSimConfigSource();
+                    MutSeaConfigSource overrideConfig = new MutSeaConfigSource();
                     overrideConfig.Source = new IniConfigSource();
 
                     for (int i = 0 ; i < overrideSources.Count ; i++)
@@ -223,7 +223,7 @@ namespace MutSea
         /// Adds the included files as ini configuration files
         /// </summary>
         /// <param name="sources">List of URL strings or filename strings</param>
-        private void AddIncludes(OpenSimConfigSource configSource, List<string> sources)
+        private void AddIncludes(MutSeaConfigSource configSource, List<string> sources)
         {
             //loop over config sources
             foreach (IConfig config in configSource.Source.Configs)
@@ -293,7 +293,7 @@ namespace MutSea
         /// </summary>
         /// <param name="iniPath">Full path to the ini</param>
         /// <returns></returns>
-        private bool ReadConfig(OpenSimConfigSource configSource, string iniPath)
+        private bool ReadConfig(MutSeaConfigSource configSource, string iniPath)
         {
             bool success = false;
 

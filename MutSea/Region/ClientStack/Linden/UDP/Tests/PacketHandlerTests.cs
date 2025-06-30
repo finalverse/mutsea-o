@@ -38,7 +38,7 @@ namespace MutSea.Region.ClientStack.LindenUDP.Tests
     /// Tests for the LL packet handler
     /// </summary>
     [TestFixture]
-    public class PacketHandlerTests : OpenSimTestCase
+    public class PacketHandlerTests : MutSeaTestCase
     {
 //        [Test]
 //        /// <summary>

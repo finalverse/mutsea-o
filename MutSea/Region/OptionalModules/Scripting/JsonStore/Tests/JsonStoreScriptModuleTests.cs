@@ -47,7 +47,7 @@ namespace MutSea.Region.OptionalModules.Scripting.JsonStore.Tests
     /// Tests for inventory functions in LSL
     /// </summary>
     [TestFixture]
-    public class JsonStoreScriptModuleTests : OpenSimTestCase
+    public class JsonStoreScriptModuleTests : MutSeaTestCase
     {
         private Scene m_scene;
         private MockScriptEngine m_engine;

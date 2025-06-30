@@ -468,7 +468,7 @@ namespace MutSea.Region.ScriptEngine.Yengine
 
         /****************************************************************\
          *  Abstract function prototypes.                               *
-         *  These functions require access to the OpenSim environment.  *
+         *  These functions require access to the MutSea environment.  *
         \****************************************************************/
 
         public abstract void CheckRunWork();
@@ -1102,7 +1102,7 @@ namespace MutSea.Region.ScriptEngine.Yengine
                 throw new InvalidCastException("only do arrays not " + sdtClass.longName.val);
 
             // Validate objects they want to put in the list.
-            // We can't allow anything funky that OpenSim runtime doesn't expect.
+            // We can't allow anything funky that MutSea runtime doesn't expect.
             Array srcarray = (Array)array.instVars.iarObjects[0];
             object[] output = new object[count];
             for(int i = 0; i < count; i++)
@@ -1270,11 +1270,11 @@ namespace MutSea.Region.ScriptEngine.Yengine
 
         // internal use only: converts any IL addresses in script-defined methods to source location equivalent
         // Mono ex.StackTrace:
-        //   at MutSea.Region.ScriptEngine.YEngine.TypeCast.ObjectToInteger (System.Object x) [0x0005e] in /home/kunta/opensim-0.9/addon-modules/YEngine/Module/MMRScriptTypeCast.cs:750
+        //   at MutSea.Region.ScriptEngine.YEngine.TypeCast.ObjectToInteger (System.Object x) [0x0005e] in /home/kunta/mutsea- 0.9/addon-modules/YEngine/Module/MMRScriptTypeCast.cs:750
         //   at (wrapper dynamic-method) System.Object:default state_entry (MutSea.Region.ScriptEngine.YEngine.XMRInstAbstract) [0x00196]
 
         // Microsoft ex.StackTrace:
-        //    at MutSea.Region.ScriptEngine.YEngine.TypeCast.ObjectToInteger(Object x) in C:\Users\mrieker\opensim-0.9-source\addon-modules\YEngine\Module\MMRScriptTypeCast.cs:line 750
+        //    at MutSea.Region.ScriptEngine.YEngine.TypeCast.ObjectToInteger(Object x) in C:\Users\mrieker\mutsea- 0.9-source\addon-modules\YEngine\Module\MMRScriptTypeCast.cs:line 750
         //    at default state_entry (XMRInstAbstract )
         public string XMRExceptionStackString(Exception ex)
         {

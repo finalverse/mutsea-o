@@ -117,7 +117,7 @@ namespace MutSea.Services.LLLoginService
             string avatarService = m_LoginServerConfig.GetString("AvatarService", string.Empty);
             string simulationService = m_LoginServerConfig.GetString("SimulationService", string.Empty);
 
-            m_WelcomeMessage = m_LoginServerConfig.GetString("WelcomeMessage", "Welcome to OpenSim!");
+            m_WelcomeMessage = m_LoginServerConfig.GetString("WelcomeMessage", "Welcome to MutSea!");
             m_RequireInventory = m_LoginServerConfig.GetBoolean("RequireInventory", true);
             m_AllowRemoteSetLoginLevel = m_LoginServerConfig.GetBoolean("AllowRemoteSetLoginLevel", false);
             m_MinLoginLevel = m_LoginServerConfig.GetInt("MinLoginLevel", 0);
@@ -182,7 +182,7 @@ namespace MutSea.Services.LLLoginService
             }
 
             if (string.IsNullOrEmpty(m_WelcomeMessage))
-                m_WelcomeMessage = m_LoginServerConfig.GetString("WelcomeMessage", "Welcome to OpenSim!");
+                m_WelcomeMessage = m_LoginServerConfig.GetString("WelcomeMessage", "Welcome to MutSea!");
 
             m_WelcomeMessage = m_WelcomeMessage.Replace("\\n", "\n");
 

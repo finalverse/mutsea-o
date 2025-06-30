@@ -77,7 +77,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
         public HashSet<BSPhysObject> ObjectsWithUpdates = new HashSet<BSPhysObject>();
 
         // Keep track of all the avatars so we can send them a collision event
-        //    every tick so OpenSim will update its animation.
+        //    every tick so MutSea will update its animation.
         private HashSet<BSPhysObject> AvatarsInScene = new HashSet<BSPhysObject>();
         private Object AvatarsInSceneLock = new Object();
 
@@ -139,7 +139,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
         /// </summary>
         private ManualResetEvent m_updateWaitEvent;
 
-        public const uint TERRAIN_ID = 0;       // OpenSim senses terrain with a localID of zero
+        public const uint TERRAIN_ID = 0;       // MutSea senses terrain with a localID of zero
         public const uint GROUNDPLANE_ID = 1;
         public const uint CHILDTERRAIN_ID = 2;  // Terrain allocated based on our mega-prim childre start here
 
@@ -545,7 +545,7 @@ namespace MutSea.Region.PhysicsModule.BulletS
 
             // TODO: Remove kludge someday.
             // We must generate a collision for avatars whether they collide or not.
-            // This is required by OpenSim to update avatar animations, etc.
+            // This is required by MutSea to update avatar animations, etc.
             lock (AvatarsInSceneLock)
                 AvatarsInScene.Add(actor);
 

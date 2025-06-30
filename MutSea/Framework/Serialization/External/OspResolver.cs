@@ -94,7 +94,7 @@ namespace MutSea.Framework.Serialization
         }
 
         /// <summary>
-        /// Resolve an osp string into the most suitable internal OpenSim identifier.
+        /// Resolve an osp string into the most suitable internal MutSea identifier.
         /// </summary>
         ///
         /// In some cases this will be a UUID if a suitable profile exists on the system.  In other cases, this may
@@ -156,7 +156,7 @@ namespace MutSea.Framework.Serialization
         /// <param name="name"></param>
         /// <param name="commsManager"></param>
         /// <returns>
-        /// An OpenSim internal identifier for the name given.  Returns null if the name was not valid
+        /// An MutSea internal identifier for the name given.  Returns null if the name was not valid
         /// </returns>
         protected static UUID ResolveOspaName(string name, IUserAccountService userService)
         {

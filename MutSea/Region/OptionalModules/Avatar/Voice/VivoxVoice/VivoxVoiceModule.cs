@@ -399,7 +399,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Voice.VivoxVoice
 
         // <summary>
         // OnRegisterCaps is invoked via the scene.EventManager
-        // everytime OpenSim hands out capabilities to a client
+        // everytime MutSea hands out capabilities to a client
         // (login, region crossing). We contribute two capabilities to
         // the set of capabilities handed back to the client:
         // ProvisionVoiceAccountRequest and ParcelVoiceInfoRequest.

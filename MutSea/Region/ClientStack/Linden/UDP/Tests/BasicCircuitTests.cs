@@ -43,7 +43,7 @@ namespace MutSea.Region.ClientStack.LindenUDP.Tests
     /// This will contain basic tests for the LindenUDP client stack
     /// </summary>
     [TestFixture]
-    public class BasicCircuitTests : OpenSimTestCase
+    public class BasicCircuitTests : MutSeaTestCase
     {
         private Scene m_scene;
 

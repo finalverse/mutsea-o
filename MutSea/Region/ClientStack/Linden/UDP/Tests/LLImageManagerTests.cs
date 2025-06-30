@@ -43,7 +43,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.ClientStack.LindenUDP.Tests
 {
     [TestFixture]
-    public class LLImageManagerTests : OpenSimTestCase
+    public class LLImageManagerTests : MutSeaTestCase
     {
         private AssetBase m_testImageAsset;
         private Scene scene;

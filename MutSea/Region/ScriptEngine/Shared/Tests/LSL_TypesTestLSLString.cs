@@ -33,7 +33,7 @@ using MutSea.Region.ScriptEngine.Shared;
 namespace MutSea.Region.ScriptEngine.Shared.Tests
 {
     [TestFixture]
-    public class LSL_TypesTestLSLString : OpenSimTestCase
+    public class LSL_TypesTestLSLString : MutSeaTestCase
     {
         private Dictionary<double, string> m_doubleStringSet;
 

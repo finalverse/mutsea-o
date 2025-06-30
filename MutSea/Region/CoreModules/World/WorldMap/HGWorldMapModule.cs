@@ -176,10 +176,10 @@ namespace MutSea.Region.CoreModules.Hypergrid
         {
             if (m_UserManagement != null && !string.IsNullOrEmpty(m_MapImageServerURL) && !m_UserManagement.IsLocalGridUser(agentID))
             {
-                if (!features.TryGetValue("OpenSimExtras", out OSD extras))
+                if (!features.TryGetValue("MutSeaExtras", out OSD extras))
                 {
                     extras = new OSDMap();
-                    features["OpenSimExtras"] = extras;
+                    features["MutSeaExtras"] = extras;
                 }
 
                 ((OSDMap)extras)["map-server-url"] = m_MapImageServerURL;

@@ -47,7 +47,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Basic scene object serialization tests.
     /// </summary>
     [TestFixture]
-    public class SceneObjectSerializationTests : OpenSimTestCase
+    public class SceneObjectSerializationTests : MutSeaTestCase
     {
 
         /// <summary>

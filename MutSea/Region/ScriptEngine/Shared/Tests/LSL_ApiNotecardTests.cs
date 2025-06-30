@@ -25,7 +25,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests for notecard related functions in LSL
     /// </summary>
     [TestFixture]
-    public class LSL_ApiNotecardTests : OpenSimTestCase
+    public class LSL_ApiNotecardTests : MutSeaTestCase
     {
         private Scene m_scene;
         private MockScriptEngine m_engine;

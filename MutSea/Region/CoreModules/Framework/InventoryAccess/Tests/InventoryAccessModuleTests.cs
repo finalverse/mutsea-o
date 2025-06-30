@@ -47,7 +47,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Framework.InventoryAccess.Tests
 {
     [TestFixture]
-    public class InventoryAccessModuleTests : OpenSimTestCase
+    public class InventoryAccessModuleTests : MutSeaTestCase
     {
         protected TestScene m_scene;
         protected BasicInventoryAccessModule m_iam;

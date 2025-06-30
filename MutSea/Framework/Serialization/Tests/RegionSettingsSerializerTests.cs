@@ -37,7 +37,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Serialization.Tests
 {
     [TestFixture]
-    public class RegionSettingsSerializerTests : OpenSimTestCase
+    public class RegionSettingsSerializerTests : MutSeaTestCase
     {
         private string m_serializedRs = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <RegionSettings>

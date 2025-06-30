@@ -40,7 +40,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class ScenePresenceAutopilotTests : OpenSimTestCase
+    public class ScenePresenceAutopilotTests : MutSeaTestCase
     {
         private TestScene m_scene;
 

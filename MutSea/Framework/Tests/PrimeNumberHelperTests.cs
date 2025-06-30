@@ -36,7 +36,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Tests
 {
     [TestFixture]
-    public class PrimeNumberHelperTests : OpenSimTestCase
+    public class PrimeNumberHelperTests : MutSeaTestCase
     {
         [Test]
         public void TestGetPrime()

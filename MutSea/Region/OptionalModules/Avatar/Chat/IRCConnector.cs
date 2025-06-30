@@ -162,7 +162,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Chat
             set { m_password = value; }
         }
 
-        private string m_user = "USER OpenSimBot 8 * :I'm an OpenSim to IRC bot";
+        private string m_user = "USER MutSeaBot 8 * :I'm an MutSea to IRC bot";
         public string User
         {
             get { return m_user; }
@@ -358,7 +358,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Chat
                         m_writer.WriteLine(String.Format("PASS {0}", m_password));
                     m_writer.WriteLine(String.Format("NICK {0}", m_nick));
                     m_writer.Flush();
-                    m_writer.WriteLine(String.Format("USER {0} 0 * :OpenSim Relay",m_user));
+                    m_writer.WriteLine(String.Format("USER {0} 0 * :MutSea Relay",m_user));
                     m_writer.Flush();
                 }
                 catch (Exception e)

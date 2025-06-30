@@ -54,7 +54,7 @@ namespace LaunchSLClient
 
         public override string GetConfigDir()
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\OpenSim\MutSea");
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MutSea\MutSea");
 
             if (key == null)
             {

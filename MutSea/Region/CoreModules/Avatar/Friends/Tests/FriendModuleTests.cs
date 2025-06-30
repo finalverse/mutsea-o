@@ -39,7 +39,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Avatar.Friends.Tests
 {
     [TestFixture]
-    public class FriendsModuleTests : OpenSimTestCase
+    public class FriendsModuleTests : MutSeaTestCase
     {
         private FriendsModule m_fm;
         private TestScene m_scene;

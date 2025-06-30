@@ -46,7 +46,7 @@ namespace MutSea.Tests.Performance
     /// earlier tests.
     /// </remarks>
     [TestFixture]
-    public class ObjectPerformanceTests : OpenSimTestCase
+    public class ObjectPerformanceTests : MutSeaTestCase
     {
         [TearDown]
         public void TearDown()

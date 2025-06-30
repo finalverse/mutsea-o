@@ -49,7 +49,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Scene presence animation tests
     /// </summary>
     [TestFixture]
-    public class ScenePresenceAnimationTests : OpenSimTestCase
+    public class ScenePresenceAnimationTests : MutSeaTestCase
     {
         [Test]
         public void TestFlyingAnimation()

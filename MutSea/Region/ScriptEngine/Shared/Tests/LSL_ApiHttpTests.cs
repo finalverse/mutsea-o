@@ -52,7 +52,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests for HTTP related functions in LSL
     /// </summary>
     [TestFixture]
-    public class LSL_ApiHttpTests : OpenSimTestCase
+    public class LSL_ApiHttpTests : MutSeaTestCase
     {
         private Scene m_scene;
         private MockScriptEngine m_engine;

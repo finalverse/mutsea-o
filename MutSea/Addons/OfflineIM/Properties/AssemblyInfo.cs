@@ -9,7 +9,7 @@ using Mono.Addins;
 [assembly: AssemblyTitle("MutSea.Addons.OfflineIM")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly: AssemblyProduct("MutSea.Addons.OfflineIM")]
 [assembly: AssemblyCopyright("Copyright (c) OpenSimulator.org Developers")]
 [assembly: AssemblyTrademark("")]

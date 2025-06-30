@@ -42,11 +42,11 @@ namespace MutSea.ApplicationPlugins.LoadRegions
 
         private IConfigSource m_configSource;
 
-        private OpenSimBase m_application;
+        private MutSeaBase m_application;
 
-        public EstateLoaderFileSystem(OpenSimBase openSim)
+        public EstateLoaderFileSystem(MutSeaBase mutSea)
         {
-            m_application = openSim;
+            m_application = mutSea;
         }
 
         public void SetIniConfigSource(IConfigSource configSource)

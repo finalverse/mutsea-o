@@ -34,7 +34,7 @@ using MutSea.Tests.Common;
 
 namespace MutSea.Region.CoreModules.World.Land.Tests
 {
-    public class LandManagementModuleTests : OpenSimTestCase
+    public class LandManagementModuleTests : MutSeaTestCase
     {
         [Test]
         public void TestAddLandObject()

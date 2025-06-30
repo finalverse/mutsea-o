@@ -112,11 +112,11 @@ namespace MutSea.Services.HypergridService
                     new string[] { principalID.ToString(), "My Suitcase" });
 
             if (folders.Length > 0)
-                return ConvertToOpenSim(folders[0]);
+                return ConvertToMutSea(folders[0]);
 
             // make one
             XInventoryFolder suitcase = CreateFolder(principalID, UUID.Zero, (int)FolderType.Suitcase, "My Suitcase");
-            return ConvertToOpenSim(suitcase);
+            return ConvertToMutSea(suitcase);
         }
 
         //private bool CreateSystemFolders(UUID principalID, XInventoryFolder suitcase)
@@ -175,7 +175,7 @@ namespace MutSea.Services.HypergridService
         //    foreach (InventoryFolderBase f in suitDescendents)
         //        if (folder.ParentID == f.ID)
         //        {
-        //            XInventoryFolder xFolder = ConvertFromOpenSim(folder);
+        //            XInventoryFolder xFolder = ConvertFromMutSea(folder);
         //            return m_Database.StoreFolder(xFolder);
         //        }
         //    return false;
@@ -247,7 +247,7 @@ namespace MutSea.Services.HypergridService
 
         //    foreach (InventoryFolderBase f in suitDescendents)
         //        if (item.Folder == f.ID)
-        //            return m_Database.StoreItem(ConvertFromOpenSim(item));
+        //            return m_Database.StoreItem(ConvertFromMutSea(item));
 
         //    return false;
         //}
@@ -261,7 +261,7 @@ namespace MutSea.Services.HypergridService
 
         //    foreach (InventoryFolderBase f in suitDescendents)
         //        if (item.Folder == f.ID)
-        //            return m_Database.StoreItem(ConvertFromOpenSim(item));
+        //            return m_Database.StoreItem(ConvertFromMutSea(item));
 
         //    return false;
         //}

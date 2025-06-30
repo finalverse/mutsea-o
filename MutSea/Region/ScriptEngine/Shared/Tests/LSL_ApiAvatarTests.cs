@@ -53,7 +53,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests relating directly to avatars
     /// </summary>
     [TestFixture]
-    public class LSL_ApiAvatarTests : OpenSimTestCase
+    public class LSL_ApiAvatarTests : MutSeaTestCase
     {
         /*
         protected Scene m_scene;

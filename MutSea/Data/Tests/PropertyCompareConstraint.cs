@@ -255,7 +255,7 @@ namespace MutSea.Data.Tests
     }
 
     [TestFixture]
-    public class PropertyCompareConstraintTest : OpenSimTestCase
+    public class PropertyCompareConstraintTest : MutSeaTestCase
     {
         public class HasInt
         {

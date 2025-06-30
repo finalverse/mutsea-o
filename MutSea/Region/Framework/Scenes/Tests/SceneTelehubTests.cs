@@ -43,7 +43,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// in the case of an error condition
     /// </remarks>
     [TestFixture]
-    public class SceneTelehubTests : OpenSimTestCase
+    public class SceneTelehubTests : MutSeaTestCase
     {
         /// <summary>
         /// Test for desired behaviour when a telehub has no spawn points

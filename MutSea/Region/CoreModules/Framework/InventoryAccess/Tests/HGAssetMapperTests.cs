@@ -41,7 +41,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.Framework.InventoryAccess.Tests
 {
     [TestFixture]
-    public class HGAssetMapperTests : OpenSimTestCase
+    public class HGAssetMapperTests : MutSeaTestCase
     {
         /*
         [Test]

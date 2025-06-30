@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LaunchSLClient")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://opensimulator.org")]
+[assembly: AssemblyCompany("http://mutsea.com")]
 [assembly: AssemblyProduct("LaunchSLClient")]
 [assembly: AssemblyCopyright("Copyright (c) 2007")]
 [assembly: AssemblyTrademark("")]

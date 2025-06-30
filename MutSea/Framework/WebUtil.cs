@@ -82,7 +82,7 @@ namespace MutSea.Framework
         /// this is the header field used to communicate the local request id
         /// used for performance and debugging
         /// </summary>
-        public const string OSHeaderRequestID = "opensim-request-id";
+        public const string OSHeaderRequestID = "mutsea- request-id";
 
         /// <summary>
         /// Number of milliseconds a call can take before it is considered

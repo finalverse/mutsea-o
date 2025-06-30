@@ -39,7 +39,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// <summary>
     /// Tests for undo/redo
     /// </summary>
-    public class SceneObjectUndoRedoTests : OpenSimTestCase
+    public class SceneObjectUndoRedoTests : MutSeaTestCase
     {
         [Test]
         public void TestUndoRedoResizeSceneObject()

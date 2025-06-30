@@ -14,9 +14,9 @@
 ;; save_crashes = false in the [Startup] section below.
 ;;
 ;; All settings are initially commented out and the default value used, as
-;; found in OpenSimDefaults.ini.  To change a setting, first uncomment it by
+;; found in MutSeaDefaults.ini.  To change a setting, first uncomment it by
 ;; deleting the initial semicolon (;) and then change the value.  This will
-;; override the value in OpenSimDefaults.ini
+;; override the value in MutSeaDefaults.ini
 ;;
 ;; If you want to find out what configuration OpenSimulator has finished with
 ;; once all the configuration files are loaded then type "config show" on the
@@ -89,10 +89,10 @@
     ;; Console commands can be saved to a file, so the command history persists after a restart. (default is false)
     ; ConsoleHistoryFileEnabled = true
 
-    ;# {ConsoleHistoryFile} {} {Filename in which to save history} {} OpenSimConsoleHistory.txt
+    ;# {ConsoleHistoryFile} {} {Filename in which to save history} {} MutSeaConsoleHistory.txt
     ;; The history file can be just a filename (relative to OpenSim's bin/ directory
-    ;; or it can be a full path to somewhere else. (default is OpenSimConsoleHistory.txt in bin/)
-    ; ConsoleHistoryFile = "OpenSimConsoleHistory.txt"
+    ;; or it can be a full path to somewhere else. (default is MutSeaConsoleHistory.txt in bin/)
+    ; ConsoleHistoryFile = "MutSeaConsoleHistory.txt"
 
     ;# {ConsoleHistoryFileLines} {} {How many lines of history to save?} {} 100
     ;; How many lines of command history should we keep? (default is 100)
@@ -266,7 +266,7 @@
     ; physics = ubODE
 
     ; ubODE does allocate a lot of memory on stack. On linux you may need to increase its limit
-    ; script opensim-ode-sh starts opensim setting that limit. You may need to increase it even more on large regions
+    ; script mutsea- ode-sh starts mutsea setting that limit. You may need to increase it even more on large regions
     ; edit the line ulimit -s 262144, and change this last value
 
     ;# {DefaultScriptEngine} {} {Default script engine} {YEngine}
@@ -308,7 +308,7 @@
 
     ;; Let's Encrypt and others ".pem" certificates converter settings.
     ;; Enabling this feature will automatically convert the CA .pem certificates to
-    ;; OpenSim compatible PKCS12 .p12 and .pfx certificates on every server startup.
+    ;; MutSea compatible PKCS12 .p12 and .pfx certificates on every server startup.
     ;; The resulting certificates are stored in the bin\SSL\ssl folder.
     ;# {EnableCertConverter} {} {Enable pem to pkcs12 certificates converter} {true false} false
     EnableCertConverter = false
@@ -651,7 +651,7 @@
     ;http_listener_cert_pass = "mycertpass"
     
     ; By default, OpenSimulator does not allow scripts to make HTTP calls to addresses on the simulator's LAN.
-    ; See the OutboundDisallowForUserScripts parameter in OpenSimDefaults.ini for more information on this filter.
+    ; See the OutboundDisallowForUserScripts parameter in MutSeaDefaults.ini for more information on this filter.
     ; If you need to allow scripts to make some LAN calls use the OutboundDisallowForUserScriptsExcept parameter below.
     ; We recommend that you do not override OutboundDisallowForUserScripts directly unless you are very sure about what you're doing.
     ; this HTTP calls can also use ssl see opensimDefaults.ini
@@ -702,13 +702,13 @@
     ;; The below is not commented for compatibility.
     shard = "MutSea"
 
-    ;# {user_agent} {} {User agent to report to web servers?} {} OpenSim LSL (Mozilla Compatible)
+    ;# {user_agent} {} {User agent to report to web servers?} {} MutSea LSL (Mozilla Compatible)
     ;; What is reported as the "User-Agent" when using llHTTPRequest
     ;; Defaults to not sent if not set here. See the notes section in the wiki
     ;; at http://wiki.secondlife.com/wiki/LlHTTPRequest for comments on adding
     ;; " (Mozilla Compatible)" to the text where there are problems with a
     ;; web server
-    ; user_agent = "OpenSim LSL (Mozilla Compatible)"
+    ; user_agent = "MutSea LSL (Mozilla Compatible)"
 
     ;; The following 3 variables are for HTTP Basic Authentication for the Robust services.
     ;; Use this if your central services in port 8003 need to be accessible on the Internet
@@ -745,7 +745,7 @@
 [ClientStack.LindenUDP]
     ;; See OpensSimDefaults.ini for the throttle options. You can copy the
     ;; relevant sections and override them here.
-    ;; DO NOT MODIFY OpenSimDefaults.ini, as your changes would be lost
+    ;; DO NOT MODIFY MutSeaDefaults.ini, as your changes would be lost
     ;; with the next update!
 
     ;# {DisableFacelights} {} {Stop facelights from working?} {true false} false
@@ -760,7 +760,7 @@
 
 
 [ClientStack.LindenCaps]
-    ;; For the long list of capabilities, see OpenSimDefaults.ini
+    ;; For the long list of capabilities, see MutSeaDefaults.ini
     ;; Here are the few ones you may want to change. Possible values
     ;; are:
     ;;   "" -- empty, capability disabled
@@ -1235,7 +1235,7 @@
     ;;
     ;; For instance, if you chose "config-include/Standalone.ini" then you will need to copy
     ;; "config-include/StandaloneCommon.ini.example" to "config-include/StandaloneCommon.ini" before
-    ;; editing it to set the database and backend services that OpenSim will use.
+    ;; editing it to set the database and backend services that MutSea will use.
     ;;
     Include-Architecture = "config-include/Standalone.ini"
     ; Include-Architecture = "config-include/StandaloneHypergrid.ini"

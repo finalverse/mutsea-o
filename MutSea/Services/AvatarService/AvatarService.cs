@@ -110,7 +110,7 @@ namespace MutSea.Services.AvatarService
             {
                 av.Data["Name"] = kvp.Key;
 
-                // justincc 20110730.  Yes, this is a hack to get around the fact that a bug in OpenSim is causing
+                // justincc 20110730.  Yes, this is a hack to get around the fact that a bug in MutSea is causing
                 // various simulators on osgrid to inject bad values.  Since these simulators might be around for a
                 // long time, we are going to manually police the value.
                 //

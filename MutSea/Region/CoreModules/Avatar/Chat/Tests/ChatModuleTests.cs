@@ -46,7 +46,7 @@ using System.Threading;
 namespace MutSea.Region.CoreModules.Avatar.Chat.Tests
 {
     [TestFixture]
-    public class ChatModuleTests : OpenSimTestCase
+    public class ChatModuleTests : MutSeaTestCase
     {
         [TestFixtureSetUp]
         public void FixtureInit()

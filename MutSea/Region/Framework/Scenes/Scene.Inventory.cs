@@ -207,7 +207,7 @@ namespace MutSea.Region.Framework.Scenes
         /// <param name="item">
         /// A <see cref="InventoryItemBase"/>
         /// </param>
-        [Obsolete("Use AddInventoryItem(InventoryItemBase item) instead.  This was deprecated in OpenSim 0.7.1")]
+        [Obsolete("Use AddInventoryItem(InventoryItemBase item) instead.  This was deprecated in MutSea 0.7.1")]
         public void AddInventoryItem(UUID AgentID, InventoryItemBase item)
         {
             AddInventoryItem(item);

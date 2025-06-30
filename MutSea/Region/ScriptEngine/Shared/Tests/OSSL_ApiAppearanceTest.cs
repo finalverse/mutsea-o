@@ -50,7 +50,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Tests
     /// Tests for OSSL_Api
     /// </summary>
     [TestFixture]
-    public class OSSL_ApiAppearanceTest : OpenSimTestCase
+    public class OSSL_ApiAppearanceTest : MutSeaTestCase
     {
         /*
         protected Scene m_scene;

@@ -34,7 +34,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Framework.Servers.Tests
 {
     [TestFixture]
-    public class VersionInfoTests : OpenSimTestCase
+    public class VersionInfoTests : MutSeaTestCase
     {
         [Test]
         public void TestVersionLength()

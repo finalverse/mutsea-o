@@ -48,7 +48,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Tests
 {
     [TestFixture]
-    public class TaskInventoryTests : OpenSimTestCase
+    public class TaskInventoryTests : MutSeaTestCase
     {
         [Test]
         public void TestAddTaskInventoryItem()

@@ -51,7 +51,7 @@ namespace MutSea.Region.CoreModules.Avatar.Groups
         private Dictionary<UUID, IClientAPI> m_ClientMap =
                 new Dictionary<UUID, IClientAPI>();
 
-        private UUID opensimulatorGroupID =
+        private UUID mutseaGroupID =
                 new UUID("00000000-68f9-1111-024e-222222111123");
 
         private List<Scene> m_SceneList = new List<Scene>();
@@ -100,12 +100,12 @@ namespace MutSea.Region.CoreModules.Avatar.Groups
                 {
                     if (m_SceneList.Count == 0)
                     {
-                        osGroup.GroupID = opensimulatorGroupID;
-                        osGroup.GroupName = "OpenSimulator Testing";
+                        osGroup.GroupID = mutseaGroupID;
+                        osGroup.GroupName = "MutSea Testing";
                         osGroup.GroupPowers =
                                 (uint)(GroupPowers.AllowLandmark |
                                        GroupPowers.AllowSetHome);
-                        m_GroupMap[opensimulatorGroupID] = osGroup;
+                        m_GroupMap[mutseaGroupID] = osGroup;
                     }
                     m_SceneList.Add(scene);
                 }

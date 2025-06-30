@@ -53,7 +53,7 @@ namespace MutSea.Region.CoreModules.Framework.Library
         private static bool m_HasRunOnce = false;
 
         private bool m_Enabled = false;
-//        private string m_LibraryName = "OpenSim Library";
+//        private string m_LibraryName = "MutSea Library";
         private Scene m_Scene;
 
         private ILibraryService m_Library;

@@ -290,7 +290,7 @@ namespace MutSea.Region.OptionalModules.Agent.InternetRelayClientView.Server
             if (m_hasUser && m_hasNick)
             {
                 SendServerCommand("001 " + m_nick + " :Welcome to OpenSimulator IRCd");
-                SendServerCommand("002 " + m_nick + " :Running OpenSimVersion");
+                SendServerCommand("002 " + m_nick + " :Running MutSeaVersion");
                 SendServerCommand("003 " + m_nick + " :This server was created over 9000 years ago");
                 SendServerCommand("004 " + m_nick + " :opensimirc r1 aoOirw abeiIklmnoOpqrstv");
                 SendServerCommand("251 " + m_nick + " :There are 0 users and 0 services on 1 servers");

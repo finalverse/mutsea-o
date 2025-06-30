@@ -33,7 +33,7 @@ using System.Threading;
 using log4net;
 using OpenMetaverse;
 using Nini.Config;
-using OpenSim;
+using MutSea;
 using MutSea.Framework;
 using MutSea.Region.Framework.Interfaces;
 using MutSea.Region.Framework.Scenes;

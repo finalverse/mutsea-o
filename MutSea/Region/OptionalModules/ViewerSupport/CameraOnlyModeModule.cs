@@ -34,7 +34,7 @@ using System.Threading;
 
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim;
+using MutSea;
 using MutSea.Region;
 using MutSea.Region.Framework;
 using MutSea.Region.Framework.Scenes;
@@ -128,10 +128,10 @@ namespace MutSea.Region.OptionalModules.ViewerSupport
             m_log.DebugFormat("[CAMERA-ONLY MODE]: OnSimulatorFeaturesRequest in {0}", m_scene.RegionInfo.RegionName);
             if (m_Helper.UserLevel(agentID) <= m_UserLevel)
             {
-                if (!features.TryGetValue("OpenSimExtras", out OSD extrasMap))
+                if (!features.TryGetValue("MutSeaExtras", out OSD extrasMap))
                 {
                     extrasMap = new OSDMap();
-                    features["OpenSimExtras"] = extrasMap;
+                    features["MutSeaExtras"] = extrasMap;
                 }
 
                 ((OSDMap)extrasMap)["camera-only-mode"] = OSDMap.FromString("true");

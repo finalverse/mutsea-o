@@ -35,11 +35,11 @@ namespace MutSea.Region.Framework.Interfaces
     public delegate void ScriptCommand(UUID script, string id, string module, string command, string k);
 
     /// <summary>
-    /// Interface for communication between OpenSim modules and in-world scripts
+    /// Interface for communication between MutSea modules and in-world scripts
     /// </summary>
     ///
     /// See MutSea.Region.ScriptEngine.Shared.Api.MOD_Api.modSendCommand() for information on receiving messages
-    /// from scripts in OpenSim modules.
+    /// from scripts in MutSea modules.
     public interface IScriptModuleComms
     {
         /// <summary>

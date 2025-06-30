@@ -53,7 +53,7 @@ namespace MutSea
 
         public static string GetVersionString(string versionNumber, Flavour flavour)
         {
-            string versionString = $"OpenSim {versionNumber} Nessie {flavour}";
+            string versionString = $"MutSea {versionNumber} Nessie {flavour}";
             return versionString.PadRight(VERSIONINFO_VERSION_LENGTH);
         }
 

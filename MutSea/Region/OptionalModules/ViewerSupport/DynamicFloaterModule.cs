@@ -32,7 +32,7 @@ using System.Text;
 using System.Collections.Generic;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim;
+using MutSea;
 using MutSea.Region;
 using MutSea.Region.Framework;
 using MutSea.Region.Framework.Scenes;

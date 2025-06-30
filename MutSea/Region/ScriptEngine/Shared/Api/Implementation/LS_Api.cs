@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Threading;
 using OpenMetaverse;
 using Nini.Config;
-using OpenSim;
+using MutSea;
 using MutSea.Framework;
 using MutSea.Region.CoreModules.World.LightShare;
 using MutSea.Region.Framework.Interfaces;

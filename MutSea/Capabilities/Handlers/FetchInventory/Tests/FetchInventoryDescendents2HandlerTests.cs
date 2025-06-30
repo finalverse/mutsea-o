@@ -44,7 +44,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Capabilities.Handlers.FetchInventory.Tests
 {
     [TestFixture]
-    public class FetchInventoryDescendents2HandlerTests : OpenSimTestCase
+    public class FetchInventoryDescendents2HandlerTests : MutSeaTestCase
     {
         private UUID m_userID = new UUID("00000000-0000-0000-0000-000000000001");
         private Scene m_scene;

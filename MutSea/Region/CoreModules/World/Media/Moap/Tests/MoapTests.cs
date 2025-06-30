@@ -43,7 +43,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.CoreModules.World.Media.Moap.Tests
 {
     [TestFixture]
-    public class MoapTests : OpenSimTestCase
+    public class MoapTests : MutSeaTestCase
     {
         protected TestScene m_scene;
         protected MoapModule m_module;

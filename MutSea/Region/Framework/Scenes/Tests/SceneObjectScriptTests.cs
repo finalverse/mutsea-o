@@ -38,7 +38,7 @@ using MutSea.Tests.Common;
 namespace MutSea.Region.Framework.Scenes.Tests
 {
     [TestFixture]
-    public class SceneObjectScriptTests : OpenSimTestCase
+    public class SceneObjectScriptTests : MutSeaTestCase
     {
         [Test]
         public void TestAddScript()

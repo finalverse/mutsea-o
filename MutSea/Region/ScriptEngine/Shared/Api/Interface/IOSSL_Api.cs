@@ -115,7 +115,7 @@ namespace MutSea.Region.ScriptEngine.Shared.Api.Interfaces
     {
         void CheckThreatLevel(ThreatLevel level, string function);
 
-        //OpenSim functions
+        //MutSea functions
         //ApiDesc Generate a dynamic texture from a given URL, returns the texture UUID, applies to all faces.
             string osSetDynamicTextureURL(string dynamicID, string contentType, string url, string extraParams, int timer);
         //ApiDesc Generate a dynamic texture alpha blended from a given URL, returns the texture UUID, applies to all faces.

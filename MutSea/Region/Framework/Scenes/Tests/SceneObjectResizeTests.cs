@@ -39,7 +39,7 @@ namespace MutSea.Region.Framework.Scenes.Tests
     /// Basic scene object resize tests
     /// </summary>
     [TestFixture]
-    public class SceneObjectResizeTests : OpenSimTestCase
+    public class SceneObjectResizeTests : MutSeaTestCase
     {
         /// <summary>
         /// Test resizing an object

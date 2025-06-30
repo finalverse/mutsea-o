@@ -970,7 +970,7 @@ namespace MutSea.Data.SQLite
                     fillLandRow(landRow, parcel.LandData, parcel.RegionUUID);
                 }
 
-                // I know this caused someone issues before, but OpenSim is unusable if we leave this stuff around
+                // I know this caused someone issues before, but MutSea is unusable if we leave this stuff around
                 //using (SqliteCommand cmd = new SqliteCommand("delete from landaccesslist where LandUUID=:LandUUID", m_conn))
                 //{
                 //    cmd.Parameters.Add(new SqliteParameter(":LandUUID", parcel.LandData.GlobalID.ToString()));
@@ -1574,7 +1574,7 @@ namespace MutSea.Data.SQLite
 
         /***********************************************************************
          *
-         *  Convert between ADO.NET <=> OpenSim Objects
+         *  Convert between ADO.NET <=> MutSea Objects
          *
          *  These should be database independant
          *

@@ -34,7 +34,7 @@ using System.Runtime.CompilerServices;
 namespace MutSea.Framework.Servers.HttpServer
 {
     /// <summary>
-    /// OSHttpResponse is the OpenSim representation of an HTTP
+    /// OSHttpResponse is the MutSea representation of an HTTP
     /// response.
     /// </summary>
     public class OSHttpResponse : IOSHttpResponse
