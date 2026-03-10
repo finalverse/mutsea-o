@@ -56,10 +56,10 @@ using System.Resources;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle(".NET Prebuild")]
-[assembly: AssemblyDescription("A .NET project file build tool")]
+[assembly: AssemblyDescription("A MutSea project file build tool")]
 [assembly: AssemblyConfiguration(".NET CLR")]
-[assembly: AssemblyCompany("The Prebuild Project")]
-[assembly: AssemblyProduct("")]
+[assembly: AssemblyCompany("Finalverse Inc.")]
+[assembly: AssemblyProduct("MutSea Prebuild")]
 [assembly: AssemblyCopyright("Copyright 2004-2015 " +
                              "Matthew Holmes, " +
                              "Dan Moorehead, " +
@@ -68,7 +68,7 @@ using System.Resources;
                              "David Hudson," +
                              "John Hurliman" +
                              "WhiteCore Development" +
-                             "OpenSimulator developers")]
+                             "MutSea developers")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

@@ -3,14 +3,14 @@
 case "$1" in
 
  'clean')
-    dotnet bin/prebuild.dll /file prebuild.xml /clean
+    DOTNET_ROLL_FORWARD=Major dotnet bin/prebuild.dll /file prebuild.xml /clean
 
   ;;
 
 
   'autoclean')
 
-    echo y|dotnet bin/prebuild.dll /file prebuild.xml /clean
+    echo y|DOTNET_ROLL_FORWARD=Major dotnet bin/prebuild.dll /file prebuild.xml /clean
 
   ;;
 
@@ -19,8 +19,8 @@ case "$1" in
   *)
 
     cp bin/System.Drawing.Common.dll.linux bin/System.Drawing.Common.dll
-    dotnet bin/prebuild.dll /target vs2022 /targetframework net8_0 /excludedir = "obj | bin" /file prebuild.xml
-    echo "dotnet build -c Release OpenSim.sln" > compile.sh
+    DOTNET_ROLL_FORWARD=Major dotnet bin/prebuild.dll /target vs2022 /targetframework net8_0 /excludedir = "obj | bin" /file prebuild.xml
+    echo "dotnet build -c Release MutSea.sln" > compile.sh
     chmod +x compile.sh
 
   ;;

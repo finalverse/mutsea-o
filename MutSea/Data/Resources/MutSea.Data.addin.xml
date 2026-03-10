@@ -1,0 +1,12 @@
+<Addin id="MutSea.Data" isroot="true" version="0.5">
+    <Runtime>
+        <Import assembly="MutSea.Data.dll" />
+        <Import assembly="MutSea.Framework.dll" />
+    </Runtime>
+    <ExtensionPoint path = "/MutSea/AssetData">
+        <ExtensionNode name="Plugin" type="MutSea.Framework.PluginExtensionNode" objectType="MutSea.Data.IAssetDataPlugin" />
+    </ExtensionPoint>
+    <ExtensionPoint path = "/MutSea/InventoryData">
+        <ExtensionNode name="Plugin" type="MutSea.Framework.PluginExtensionNode" objectType="MutSea.Data.IInventoryDataPlugin" />
+    </ExtensionPoint>
+</Addin>
