@@ -1,0 +1,16 @@
+[Unit]
+Description=Update MutSea apex DNS from the gateway DDNS record
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=DEPLOY_USER
+EnvironmentFile=/etc/mutsea/dns.env
+Environment=AWS_EC2_METADATA_DISABLED=true
+Environment=AWS_MAX_ATTEMPTS=1
+ExecStart=/usr/bin/python3 /usr/local/lib/mutsea/update-dns.py
+TimeoutStartSec=90
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
