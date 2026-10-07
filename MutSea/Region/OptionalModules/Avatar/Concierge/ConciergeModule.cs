@@ -211,9 +211,9 @@ namespace MutSea.Region.OptionalModules.Avatar.Concierge
                 ISimulatorFeaturesModule featuresModule = scene.RequestModuleInterface<ISimulatorFeaturesModule>();
                 if (featuresModule != null)
                 {
-                    featuresModule.AddOpenSimExtraFeature("say-range", new OSDInteger(9999));
-                    featuresModule.AddOpenSimExtraFeature("whisper-range", new OSDInteger(10));
-                    featuresModule.AddOpenSimExtraFeature("shout-range", new OSDInteger(9999));
+                    featuresModule.AddMutSeaExtraFeature("say-range", new OSDInteger(9999));
+                    featuresModule.AddMutSeaExtraFeature("whisper-range", new OSDInteger(10));
+                    featuresModule.AddMutSeaExtraFeature("shout-range", new OSDInteger(9999));
                 }
             }
         }
