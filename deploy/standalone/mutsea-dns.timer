@@ -1,0 +1,9 @@
+[Unit]
+Description=Keep MutSea DNS aligned with the gateway
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+RandomizedDelaySec=20
+Persistent=true
+[Install]
+WantedBy=timers.target

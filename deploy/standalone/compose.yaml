@@ -1,0 +1,29 @@
+services:
+  mutsea:
+    image: ${MUTSEA_IMAGE:?Set a tested MutSea image tag or digest}
+    container_name: mutsea
+    restart: unless-stopped
+    init: true
+    stdin_open: true
+    tty: true
+    cpus: 2
+    mem_limit: 2g
+    user: "1000:1000"
+    environment:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+    volumes:
+      - ${MUTSEA_CONFIG:?Set the private configuration directory}:/config:ro
+      - ${MUTSEA_DATA:?Set the persistent data directory}:/data
+      - ${MUTSEA_SCENE:?Set the generated starter scene directory}:/scene:ro
+    ports:
+      # HTTPS is reachable only through the gateway/LAN. No console or DB ports.
+      - "${MUTSEA_BIND_IP:?Set the server LAN address}:19000:443/tcp"
+      - "${MUTSEA_BIND_IP}:19000:19000/udp"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

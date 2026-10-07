@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name mutsea.com www.mutsea.com grid.mutsea.com;
+    root /var/www/mutsea;
+    location /.well-known/acme-challenge/ { try_files $uri =404; }
+    location / { return 301 https://$host$request_uri; }
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name mutsea.com www.mutsea.com;
+    ssl_certificate /etc/letsencrypt/live/mutsea.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mutsea.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    root /var/www/mutsea;
+    index index.html;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    location / { try_files $uri $uri/ =404; }
+    access_log /var/log/nginx/mutsea.access.log;
+    error_log /var/log/nginx/mutsea.error.log;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name grid.mutsea.com;
+    ssl_certificate /etc/letsencrypt/live/mutsea.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mutsea.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    default_type application/json;
+    add_header Retry-After 3600 always;
+    add_header X-Content-Type-Options nosniff always;
+    return 503 '{"service":"MutSea","status":"setup_pending","login_enabled":false}\n';
+}

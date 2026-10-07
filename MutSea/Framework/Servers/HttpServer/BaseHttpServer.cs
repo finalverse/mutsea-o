@@ -116,9 +116,6 @@ namespace MutSea.Framework.Servers.HttpServer
         protected bool m_ssl;
         private X509Certificate2 m_cert;
         protected string m_SSLCommonName = "";
-        protected List<string> m_certNames = new List<string>();
-        protected List<string> m_certIPs = new List<string>();
-        protected string m_certCN= "";
         protected RemoteCertificateValidationCallback m_certificateValidationCallback = null;
 
         protected IPAddress m_listenIPAddress = IPAddress.Any;
@@ -171,10 +168,6 @@ namespace MutSea.Framework.Servers.HttpServer
                 if (Uri.CheckHostName(CN) == UriHostNameType.Unknown)
                     throw new Exception("invalid main http server CN (ExternalHostName)");
 
-                m_certNames.Clear();
-                m_certIPs.Clear();
-                m_certCN = "";
-
                 m_ssl = true;
                 load_cert(CPath, CPass);
 
@@ -218,42 +211,7 @@ namespace MutSea.Framework.Servers.HttpServer
             try
             {
                 m_cert = new X509Certificate2(CPath, CPass);
-                X509Extension ext = m_cert.Extensions["2.5.29.17"];
-                if(ext != null)
-                {
-                    AsnEncodedData asndata = new AsnEncodedData(ext.Oid, ext.RawData);
-                    string datastr = asndata.Format(true);
-                    string[] lines = datastr.Split(new char[] {'\n','\r'});
-                    foreach(string s in lines)
-                    {
-                        if(String.IsNullOrEmpty(s))
-                            continue;
-                        string[] parts = s.Split(new char[] {'='});
-                        if(String.IsNullOrEmpty(parts[0]))
-                            continue;
-                        string entryName = parts[0].Replace(" ","");
-                        if(entryName == "DNSName")
-                            m_certNames.Add(parts[1]);
-                        else if(entryName == "IPAddress")
-                            m_certIPs.Add(parts[1]);
-                        else if(entryName == "Unknown(135)") // stupid mono
-                        {
-                            try
-                            {
-                                if(parts[1].Length == 8)
-                                {
-                                    long tmp = long.Parse(parts[1], NumberStyles.AllowHexSpecifier);
-                                    tmp = IPAddress.HostToNetworkOrder(tmp);
-                                    tmp = (long)((ulong) tmp >> 32);
-                                    IPAddress ia = new IPAddress(tmp);     
-                                    m_certIPs.Add(ia.ToString());
-                                }
-                            }
-                            catch {}
-                        }
-                    }
-                }
-                m_certCN = m_cert.GetNameInfo(X509NameType.SimpleName, false);
+
             }
             catch
             {
@@ -261,74 +219,27 @@ namespace MutSea.Framework.Servers.HttpServer
             }
         }
 
-        static bool MatchDNS(string hostname, string dns)
-        {
-            int indx = dns.IndexOf('*');
-            if (indx == -1)
-                return (String.Compare(hostname, dns, true, CultureInfo.InvariantCulture) == 0);
-
-            int dnslen = dns.Length;
-            dnslen--;
-            if (indx == dnslen)
-                return true; // just * ?
-
-            if (indx > dnslen - 2)
-                return false; // 2 short ?
-
-            if (dns[indx + 1] != '.')
-                return false;
-
-            int indx2 = dns.IndexOf('*', indx + 1);
-            if (indx2 != -1)
-                return false; // there can only be one;
-
-            string end = dns[(indx + 1)..];
-            int hostlen = hostname.Length;
-            int endlen = end.Length;
-            int length = hostlen - endlen;
-            if (length <= 0)
-                return false;
-
-            if (String.Compare(hostname, length, end, 0, endlen, true, CultureInfo.InvariantCulture) != 0)
-                return false;
-
-            if (indx == 0)
-            {
-                indx2 = hostname.IndexOf('.');
-                return ((indx2 == -1) || (indx2 >= length));
-            }
-
-            string start = dns[..indx];
-            return (String.Compare(hostname, 0, start, 0, start.Length, true, CultureInfo.InvariantCulture) == 0);
-        }
-
         public bool CheckSSLCertHost(string hostname)
         {
-            UriHostNameType htype = Uri.CheckHostName(hostname);
-
-            if(htype == UriHostNameType.Unknown || htype == UriHostNameType.Basic)
+            if (m_cert == null || string.IsNullOrWhiteSpace(hostname))
                 return false;
-            if(htype == UriHostNameType.Dns || htype == UriHostNameType.IPv4)
-            {
-                foreach(string name in m_certNames)
-                {
-                    if(MatchDNS(hostname, name))
-                        return true;
-                }
-                if(MatchDNS(hostname, m_certCN))
-                    return true;
-            }
-            else
-            {
-                foreach(string ip in m_certIPs)
-                {
-                    if (String.Compare(hostname, ip, true, CultureInfo.InvariantCulture) == 0)
-                        return true;
-                }               
-            }
 
-            return false;
+            try
+            {
+                // Parse the certificate's SAN data, not localized display text.
+                // .NET 8 handles DNS, IP addresses and single-label wildcards.
+                return m_cert.MatchesHostname(hostname);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (System.Security.Cryptography.CryptographicException)
+            {
+                return false;
+            }
         }
+
         /// <summary>
         /// Add a stream handler to the http server.  If the handler already exists, then nothing happens.
         /// </summary>

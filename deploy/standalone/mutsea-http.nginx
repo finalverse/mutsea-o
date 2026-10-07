@@ -1,0 +1,11 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name mutsea.com www.mutsea.com grid.mutsea.com;
+    root /var/www/mutsea;
+    index index.html;
+    location /.well-known/acme-challenge/ { try_files $uri =404; }
+    location / { try_files $uri $uri/ =404; }
+    access_log /var/log/nginx/mutsea.access.log;
+    error_log /var/log/nginx/mutsea.error.log;
+}
