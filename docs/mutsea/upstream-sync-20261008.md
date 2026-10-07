@@ -1,6 +1,6 @@
 # Upstream synchronization — 2026-10-08
 
-The product integration branch is `main`. `master` remains the reviewed upstream-tracking branch. The GitHub default branch is still `master`; select `main` when building the Finalverse world-operations integration.
+The product integration branch is `main`. `master` remains the reviewed upstream-tracking branch. The GitHub default branch is `main`, so a normal clone includes the Finalverse world-operations integration.
 
 ## Source and merge order
 
