@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><MutSeaBin Condition="'$(MutSeaBin)' == ''">../../bin</MutSeaBin></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MutSea.Capabilities"><HintPath>$(MutSeaBin)/MutSea.Capabilities.dll</HintPath></Reference>
+    <Reference Include="MutSea.Framework"><HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath></Reference>
+    <Reference Include="MutSea.Framework.Servers.HttpServer"><HintPath>$(MutSeaBin)/MutSea.Framework.Servers.HttpServer.dll</HintPath></Reference>
+    <Reference Include="MutSea.Region.Framework"><HintPath>$(MutSeaBin)/MutSea.Region.Framework.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverse"><HintPath>$(MutSeaBin)/OpenMetaverse.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverseTypes"><HintPath>$(MutSeaBin)/OpenMetaverseTypes.dll</HintPath></Reference>
+    <Reference Include="Mono.Addins"><HintPath>$(MutSeaBin)/Mono.Addins.dll</HintPath></Reference>
+    <Reference Include="Nini"><HintPath>$(MutSeaBin)/Nini.dll</HintPath></Reference>
+    <Reference Include="System.Drawing.Common"><HintPath>$(MutSeaBin)/System.Drawing.Common.dll</HintPath></Reference>
+    <Reference Include="log4net"><HintPath>$(MutSeaBin)/log4net.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>
