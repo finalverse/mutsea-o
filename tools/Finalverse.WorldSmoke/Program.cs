@@ -102,6 +102,8 @@ try
         context=await World(new {op="inspect",selected_id=cube.GetProperty("id").GetString()});
         var read=await Ask("What objects are around me?",context);
         Assert(read.GetProperty("plan").ValueKind==JsonValueKind.Null,"Read query unexpectedly proposed mutation");
+        string answer=read.GetProperty("answer").GetString()!;
+        Assert(context.GetProperty("nearby_entities").EnumerateArray().Count(e=>answer.Contains(e.GetProperty("entity").GetProperty("name").GetString()!,StringComparison.OrdinalIgnoreCase))>=2,"Read answer did not name actual inspected entities");
         var move=await Ask("Move this two meters toward the Harbor Pavilion Floor.",context);
         Assert(move.GetProperty("plan").ValueKind==JsonValueKind.Object,"Model did not propose a move");
         var prepared=await World(new{op="prepare",plan=move.GetProperty("plan")});
@@ -118,6 +120,7 @@ try
         prepared=await World(new{op="prepare",plan=generated.GetProperty("plan")});
         var committed=await World(new{op="commit",plan_id=prepared.GetProperty("plan_id").GetString()});
         Assert(committed.GetProperty("status").GetString()=="committed","Home transaction failed");
+        Assert(committed.GetProperty("steps").GetArrayLength()==17,"Expected the complete 17-component home");
         await Observe(committed.GetProperty("steps"));
         var repeat=await World(new{op="commit",plan_id=prepared.GetProperty("plan_id").GetString()});
         Assert(repeat.GetProperty("operation_id").GetString()==committed.GetProperty("operation_id").GetString(),"Idempotent retry failed");
@@ -147,6 +150,7 @@ try
         var committed=saved.GetProperty("committed");await Teleport(172,154);
         await Observe(committed.GetProperty("steps"));
         var lumi=await World(new{op="lumi"});Assert(lumi.GetProperty("home_entity_id").GetString()==saved.GetProperty("lumi").GetProperty("home_entity_id").GetString(),"Home identity changed after restart");
+        Assert(lumi.GetProperty("agent_id").GetString()==saved.GetProperty("lumi").GetProperty("agent_id").GetString()&&lumi.GetProperty("memory").EnumerateArray().Select(m=>m.GetString()).SequenceEqual(saved.GetProperty("lumi").GetProperty("memory").EnumerateArray().Select(m=>m.GetString())),"Lumi identity or memory changed after restart");
         var semantic=await World(new{op="semantic",entity_id=lumi.GetProperty("home_entity_id").GetString()});Assert(semantic.GetProperty("owner_agent_id").GetString()==lumi.GetProperty("agent_id").GetString(),"Semantic ownership lost");
         var journal=await World(new{op="journal"});Assert(journal.EnumerateArray().Any(e=>e.GetProperty("operation_id").GetString()==committed.GetProperty("operation_id").GetString()),"WorldLine lost");
         if(args[2]=="undo")
