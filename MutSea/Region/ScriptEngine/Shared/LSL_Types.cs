@@ -948,7 +948,7 @@ namespace MutSea.Region.ScriptEngine.Shared
                     return (float)dov;
                 if (o is LSL_Types.LSLString lso)
                     return Convert.ToSingle(lso.m_string);
-                throw new InvalidCastException(string.Format($"LSL float expected but {0} given", o is not null ? o.GetType().Name : "null"));
+                throw new InvalidCastException(string.Format("LSL float expected but {0} given", o is not null ? o.GetType().Name : "null"));
             }
 
             public LSL_Types.LSLString GetLSLStringItem(int itemIndex)
@@ -2963,7 +2963,26 @@ namespace MutSea.Region.ScriptEngine.Shared
             public LSLFloat(ReadOnlySpan<char> s)
             {
                 if (!double.TryParse(s, NumberStyles.Float, Culture.NumberFormatInfo, out value))
+                {
+                    if(s.Length >= 3)
+                    {
+                        ReadOnlySpan<char> ts = s.TrimStart();
+                        bool neg = ts[0] == '-';
+
+                        if(neg)
+                            ts = ts[1..].TrimStart();
+
+                        if(ts.StartsWith("nan", StringComparison.InvariantCultureIgnoreCase))
+                            value = double.NaN;
+                        else if(ts.StartsWith("inf", StringComparison.InvariantCultureIgnoreCase))
+                            value = neg ? double.NegativeInfinity : double.PositiveInfinity;
+                        else
+                            value = 0;
+
+                        return;
+                    }
                     value = 0;
+                }
             }
 
             #endregion

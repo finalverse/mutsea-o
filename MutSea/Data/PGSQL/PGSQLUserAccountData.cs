@@ -274,7 +274,7 @@ namespace MutSea.Data.PGSQL
 
         public UserAccountData[] GetUsers(UUID scopeID, string query)
         {
-            string[] words = query.Split();
+            string[] words = query.Split(' ', StringSplitOptions.RemoveEmptyEntries);;
 
             for (int i = 0; i < words.Length; i++)
             {

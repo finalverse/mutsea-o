@@ -253,7 +253,6 @@ namespace MutSea.Region.Framework.Scenes
                     }
                 }
                 m_hasGroupChanged = value;
-
                 //m_log.DebugFormat(
                 //    "[SCENE OBJECT GROUP]: HasGroupChanged set to {0} for {1} {2}", m_hasGroupChanged, Name, LocalId);
             }
@@ -3109,7 +3108,7 @@ namespace MutSea.Region.Framework.Scenes
                 return linknum < 0 ? null : RootPart;
             }
 
-            Span<SceneObjectPart> parts = m_parts.GetArray().AsSpan();
+            SceneObjectPart[] parts = m_parts.GetArray();
             if (linknum <= parts.Length)
             {
                 SceneObjectPart sop = parts[linknum - 1];

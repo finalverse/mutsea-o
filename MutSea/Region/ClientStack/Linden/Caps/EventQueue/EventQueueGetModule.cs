@@ -45,12 +45,6 @@ using Caps=MutSea.Framework.Capabilities.Caps;
 
 namespace MutSea.Region.ClientStack.Linden
 {
-    public struct QueueItem
-    {
-        public int id;
-        public OSDMap body;
-    }
-
     [Mono.Addins.Extension(Path = "/MutSea/RegionModules", NodeName = "RegionModule", Id = "EventQueueGetModule")]
     public partial class  EventQueueGetModule : IEventQueue, INonSharedRegionModule
     {

@@ -60,6 +60,7 @@ namespace MutSea.Framework
         /// The name of this scene.
         /// </summary>
         string Name { get; }
+        UUID ID { get; }
 
         RegionInfo RegionInfo { get; }
         RegionStatus RegionStatus { get; set; }

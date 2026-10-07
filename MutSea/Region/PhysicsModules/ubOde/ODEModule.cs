@@ -137,8 +137,7 @@ namespace MutSea.Region.PhysicsModule.ubOde
             if (!m_Enabled)
                 return;
 
-            if(m_odeScene != null)
-                m_odeScene.RegionLoaded();
+            m_odeScene?.RegionLoaded();
 
         }
         #endregion

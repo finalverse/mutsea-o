@@ -35,7 +35,6 @@ namespace osWebRtcVoice
 {
     public class VoiceViewerSession : IVoiceViewerSession
     {
-
         // A simple session structure that is used when the connection is actually in the
         //    remote service.
         public VoiceViewerSession(IWebRtcVoiceService pVoiceService, UUID pRegionId, UUID pAgentId)
@@ -44,22 +43,19 @@ namespace osWebRtcVoice
             AgentId = pAgentId;
             ViewerSessionID = UUID.Random().ToString();
             VoiceService = pVoiceService;
-
         }
         public string ViewerSessionID { get; set; }
         public IWebRtcVoiceService VoiceService { get; set; }
-        public string VoiceServiceSessionId
-        {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
+        public string VoiceServiceSessionId { get; set; }
         public UUID RegionId { get; set; }
         public UUID AgentId { get; set; }
+        public IVoiceViewerSession.VFlags Flags { get; set; }
 
         // =====================================================================
         // ViewerSessions hold the connection information for the client connection through to the voice service.
         // This collection is static and is simulator wide so there will be sessions for all regions and all clients.
         public static Dictionary<string, IVoiceViewerSession> ViewerSessions = new Dictionary<string, IVoiceViewerSession>();
+
         // Get a viewer session by the viewer session ID
         public static bool TryGetViewerSession(string pViewerSessionId, out IVoiceViewerSession pViewerSession)
         {
@@ -68,8 +64,9 @@ namespace osWebRtcVoice
                 return ViewerSessions.TryGetValue(pViewerSessionId, out pViewerSession);
             }
         }
+
         // public static bool TryGetViewerSessionByAgentId(UUID pAgentId, out IVoiceViewerSession pViewerSession)
-        public static bool TryGetViewerSessionByAgentId(UUID pAgentId, out IEnumerable<KeyValuePair<string, IVoiceViewerSession>> pViewerSessions)
+        public static bool TryGetViewerSessionsByAgentId(UUID pAgentId, out IEnumerable<KeyValuePair<string, IVoiceViewerSession>> pViewerSessions)
         {
             lock (ViewerSessions)
             {
@@ -77,12 +74,28 @@ namespace osWebRtcVoice
                 return pViewerSessions.Count() > 0;
             }
         }
+
+        public static bool TryGetViewerSessionByAgentId(UUID pAgentId, out IVoiceViewerSession pViewerSession)
+        {
+            lock (ViewerSessions)
+            {
+                IEnumerable<KeyValuePair<string,IVoiceViewerSession>> sessions = ViewerSessions.Where(v => v.Value.AgentId == pAgentId);
+                if(sessions.Count() > 0)
+                {
+                    pViewerSession = sessions.First().Value;
+                    return true;
+                }
+                pViewerSession = null;
+                return false;
+            }
+        }
+
         // Get a viewer session by the VoiceService session ID
         public static bool TryGetViewerSessionByVSSessionId(string pVSSessionId, out IVoiceViewerSession pViewerSession)
         {
             lock (ViewerSessions)
             {
-                var sessions = ViewerSessions.Where(v => v.Value.VoiceServiceSessionId == pVSSessionId);
+                IEnumerable<KeyValuePair<string,IVoiceViewerSession>> sessions = ViewerSessions.Where(v => v.Value.VoiceServiceSessionId == pVSSessionId);
                 if (sessions.Count() > 0)
                 {
                     pViewerSession = sessions.First().Value;
@@ -92,6 +105,31 @@ namespace osWebRtcVoice
                 return false;
             }
         }
+
+        public static bool TryGetViewerSessionByAgentAndRegion(UUID pAgentId, UUID pRegionId, out IVoiceViewerSession pViewerSession)
+        {
+            lock (ViewerSessions)
+            {
+                IVoiceViewerSession session = ViewerSessions.Values.FirstOrDefault(v => v.AgentId == pAgentId && v.RegionId == pRegionId);
+                if (session is not null)
+                {
+                    pViewerSession = session;
+                    return true;
+                }
+                pViewerSession = null;
+                return false;
+            }
+        }
+
+        public static bool TryGetViewerSessionsByAgentAndRegion(UUID pAgentId, UUID pRegionId, out IEnumerable<KeyValuePair<string, IVoiceViewerSession>> pViewerSessions)
+        {
+            lock (ViewerSessions)
+            {
+                pViewerSessions = ViewerSessions.Where(v => v.Value.AgentId == pAgentId && v.Value.RegionId == pRegionId);
+                return pViewerSessions.Count() > 0;
+            }
+        }
+
         public static void AddViewerSession(IVoiceViewerSession pSession)
         {
             lock (ViewerSessions)
@@ -99,6 +137,7 @@ namespace osWebRtcVoice
                 ViewerSessions[pSession.ViewerSessionID] = pSession;
             }
         }
+
         public static void RemoveViewerSession(string pSessionId)
         {
             lock (ViewerSessions)
@@ -125,8 +164,11 @@ namespace osWebRtcVoice
 
         public Task Shutdown()
         {
-            throw new System.NotImplementedException();
-        }
+            if (!string.IsNullOrEmpty(ViewerSessionID))
+            {
+                RemoveViewerSession(ViewerSessionID);
+            }
+            return Task.CompletedTask;        }
     }
 }
 

@@ -58,16 +58,20 @@ namespace osWebRtcVoice
 
         public async Task<AudioBridgeResp> SendAudioBridgeMsg(PluginMsgReq pMsg)
         {
-            AudioBridgeResp ret = null;
             try
             {
-                ret = new AudioBridgeResp(await SendPluginMsg(pMsg));
+                JanusMessageResp ret = await SendPluginMsg(pMsg).ConfigureAwait(false);
+                if(ret is not null)
+                    return new AudioBridgeResp(ret);
+                else
+                    m_log.Error($"{LogHeader} AudioBridge SendPluginMsg returned null");
+
             }
             catch (Exception e)
             {
-                m_log.ErrorFormat("{0} SendPluginMsg. Exception {1}", LogHeader, e);
+                m_log.Error($"{LogHeader} SendPluginMsg. Exception", e);
             }
-            return ret;
+            return null;
         }
 
         /// <summary>
@@ -80,15 +84,15 @@ namespace osWebRtcVoice
         /// <param name="pSpatial">boolean on whether room will be spatial or non-spatial</param>
         /// <param name="pRoomDesc">added as "description" to the created room</param>
         /// <returns></returns>
-        public async Task<JanusRoom> CreateRoom(int pRoomId, bool pSpatial, string pRoomDesc)
+        public async Task<JanusRoom> CreateRoom(int pRoomId, bool pSpatial, string pRoomDesc, string credentials)
         {
             JanusRoom ret = null;
             try
             {
-                JanusMessageResp resp = await SendPluginMsg(new AudioBridgeCreateRoomReq(pRoomId, pSpatial, pRoomDesc));
-                AudioBridgeResp abResp = new AudioBridgeResp(resp);
+                JanusMessageResp resp = await SendPluginMsg(new AudioBridgeCreateRoomReq(pRoomId, pSpatial, pRoomDesc, credentials)).ConfigureAwait(false);
+                AudioBridgeResp abResp = new(resp);
 
-                m_log.DebugFormat("{0} CreateRoom. ReturnCode: {1}", LogHeader, abResp.AudioBridgeReturnCode);
+                m_log.Debug($"{LogHeader} CreateRoom. ReturnCode: '{abResp.AudioBridgeReturnCode}'");
                 switch (abResp.AudioBridgeReturnCode)
                 {
                     case "created":
@@ -97,132 +101,143 @@ namespace osWebRtcVoice
                     case "event":
                         if (abResp.AudioBridgeErrorCode == 486)
                         {
-                            m_log.WarnFormat("{0} CreateRoom. Room {1} already exists. Reusing! {2}", LogHeader, pRoomId, abResp.ToString());
+                            m_log.Info($"{LogHeader} CreateRoom. Room {pRoomId} already exists (reconnect).");
+                            if (m_log.IsDebugEnabled)
+                            {
+                                m_log.Debug($"{LogHeader} CreateRoom. Reconnect details: {abResp}");
+                            }
                             // if room already exists, just use it
                             ret = new JanusRoom(this, pRoomId);
                         }
                         else
                         {
-                            m_log.ErrorFormat("{0} CreateRoom. XX Room creation failed: {1}", LogHeader, abResp.ToString());
+                            m_log.Error($"{LogHeader} CreateRoom. XX Room creation failed.");
+                            if (m_log.IsDebugEnabled)
+                            {
+                                m_log.Debug($"{LogHeader} CreateRoom. XX failure detail: {abResp}");
+                            }
                         }
                         break;
                     default:
-                        m_log.ErrorFormat("{0} CreateRoom. YY Room creation failed: {1}", LogHeader, abResp.ToString());
+                        m_log.Error($"{LogHeader} CreateRoom. YY Room creation failed.");
+                        if (m_log.IsDebugEnabled)
+                        {
+                            m_log.Debug($"{LogHeader} CreateRoom. YY failure detail: {abResp}");
+                        }
                         break;
                 }   
             }
             catch (Exception e)
             {
-                m_log.ErrorFormat("{0} CreateRoom. Exception {1}", LogHeader, e);
+                m_log.Error($"{LogHeader} CreateRoom. Exception '{e.Message}'");
             }
             return ret;
         }
 
         public async Task<bool> DestroyRoom(JanusRoom janusRoom)
         {
-            bool ret = false;
             try
             {
-                JanusMessageResp resp = await SendPluginMsg(new AudioBridgeDestroyRoomReq(janusRoom.RoomId));
-                ret = true;
+                JanusMessageResp resp = await SendPluginMsg(new AudioBridgeDestroyRoomReq(janusRoom.RoomId)).ConfigureAwait(false);
+                return true;
             }
             catch (Exception e)
             {
-                m_log.ErrorFormat("{0} DestroyRoom. Exception {1}", LogHeader, e);
+                m_log.Error($"{LogHeader} DestroyRoom. Exception ", e);
             }
-            return ret;
+            return false;
         }
 
         // Constant used to denote that this is a spatial audio room for the region (as opposed to parcels)
         public const int REGION_ROOM_ID = -999;
-        private Dictionary<int, JanusRoom> _rooms = new Dictionary<int, JanusRoom>();
+        private Dictionary<int, JanusRoom> _rooms = [];
 
         // Calculate a room number for the given parameters. The room number is a hash of the parameters.
         // The attempt is to deterministicly create a room number so all regions will generate the
         //     same room number across sessions and across the grid.
         // getHashCode() is not deterministic across sessions.
-        public static int CalcRoomNumber(string pRegionId, string pChannelType, int pParcelLocalID, string pChannelID)
+        public static int CalcRoomNumber(string regionID, string gridhash, string pChannelType, int pParcelLocalID, string pChannelID)
         {
-            var hasher = new BHasherMdjb2();
+            BHasherMdjb2 hasher = new();
             // If there is a channel specified it must be group 
             switch (pChannelType)
             {
                 case "local":
                     // A "local" channel is unique to the region and parcel
-                    hasher.Add(pRegionId);
+                    hasher.Add(regionID);
                     hasher.Add(pChannelType);
                     hasher.Add(pParcelLocalID);
                     break;
                 case "multiagent":
-                    // A "multiagent" channel is unique to the grid
-                    // should add a GridId here
+                    hasher.Add(gridhash);
                     hasher.Add(pChannelID);
                     hasher.Add(pChannelType);
                     break;
                 default:
                     throw new Exception("Unknown channel type: " + pChannelType);
             }   
-            var hashed = hasher.Finish();
+            BHash hashed = hasher.Finish();
             // The "Abs()" is because Janus room number must be a positive integer
             // And note that this is the BHash.GetHashCode() and not Object.getHashCode().
             int roomNumber = Math.Abs(hashed.GetHashCode());
             return roomNumber;
         }
-        public async Task<JanusRoom> SelectRoom(string pRegionId, string pChannelType, bool pSpatial, int pParcelLocalID, string pChannelID)
+
+        public async Task<JanusRoom> SelectRoom(string pRegionId, string pgridhash, string pChannelType, bool pSpatial, int pParcelLocalID, string pChannelID, string credentials)
         {
-            int roomNumber = CalcRoomNumber(pRegionId, pChannelType, pParcelLocalID, pChannelID);
+            int roomNumber = CalcRoomNumber(pRegionId, pgridhash, pChannelType, pParcelLocalID, pChannelID);
 
             // Should be unique for the given use and channel type
-            m_log.DebugFormat("{0} SelectRoom: roomNumber={1}", LogHeader, roomNumber);
+            m_log.Debug($"{LogHeader} SelectRoom: roomNumber={roomNumber}");
 
             // Check to see if the room has already been created
+            JanusRoom existingRoom;
             lock (_rooms)
             {
-                if (_rooms.ContainsKey(roomNumber))
+                if (_rooms.TryGetValue(roomNumber, out existingRoom))
                 {
-                    return _rooms[roomNumber];
+                    return existingRoom;
                 }
             }
 
             // The room doesn't exist. Create it.
-            string roomDesc = pRegionId + "/" + pChannelType + "/" + pParcelLocalID + "/" + pChannelID;
-            JanusRoom ret = await CreateRoom(roomNumber, pSpatial, roomDesc);
+            string roomDesc;
+            if(pChannelType == "local")
+                roomDesc = $"{pRegionId}/{pChannelType}/{pParcelLocalID}";
+            else
+                roomDesc = $"{pgridhash}/{pChannelType}/{pChannelID}";
 
-            JanusRoom existingRoom = null;
+            JanusRoom ret = await CreateRoom(roomNumber, pSpatial, roomDesc, credentials).ConfigureAwait(false);
+
             if (ret is not null)
             {
                 lock (_rooms)
                 {
-                    if (_rooms.ContainsKey(roomNumber))
+                    if(!_rooms.TryGetValue(roomNumber, out existingRoom))
                     {
                         // If the room was created while we were waiting, 
-                        existingRoom = _rooms[roomNumber];
-                    }
-                    else
-                    {
-                        // Our room is the first one created. Save it.
                         _rooms[roomNumber] = ret;
                     }
                 }
             }
+
             if (existingRoom is not null)
             {
                 // The room we created was already created by someone else. Delete ours and use the existing one
-                await DestroyRoom(ret);
-                ret = existingRoom;
+                await DestroyRoom(ret).ConfigureAwait(false);
+                return existingRoom;
             }
+
             return ret;
         }
 
         // Return the room with the given room ID or 'null' if no such room
-        public JanusRoom GetRoom(int pRoomId)
+        public bool GetRoom(int pRoomId, out JanusRoom room)
         {
-            JanusRoom ret = null;
             lock (_rooms)
             {
-                _rooms.TryGetValue(pRoomId, out ret);
+                return _rooms.TryGetValue(pRoomId, out room);
             }
-            return ret;
         }
 
         public override void Handle_Event(JanusMessageResp pResp)
@@ -234,8 +249,8 @@ namespace osWebRtcVoice
                 // An audio bridge event!
                 m_log.DebugFormat("{0} Handle_Event. {1}", LogHeader, abResp.ToString());
             }
-
         }
+
         public override void Handle_Message(JanusMessageResp pResp)
         {
             base.Handle_Message(pResp);
@@ -245,7 +260,6 @@ namespace osWebRtcVoice
                 // An audio bridge event!
                 m_log.DebugFormat("{0} Handle_Event. {1}", LogHeader, abResp.ToString());
             }
-
         }
     }
 }

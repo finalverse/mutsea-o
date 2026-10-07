@@ -212,6 +212,7 @@ namespace MutSea.Framework.Servers.HttpServer
         {
             set { m_certificateValidationCallback = value; }
         }
+        private static readonly char[] LineSeparators = ['\n','\r'];
 
         private void load_cert(string CPath, string CPass)
         {
@@ -223,13 +224,13 @@ namespace MutSea.Framework.Servers.HttpServer
                 {
                     AsnEncodedData asndata = new AsnEncodedData(ext.Oid, ext.RawData);
                     string datastr = asndata.Format(true);
-                    string[] lines = datastr.Split(new char[] {'\n','\r'});
+                    string[] lines = datastr.Split(LineSeparators);
                     foreach(string s in lines)
                     {
-                        if(String.IsNullOrEmpty(s))
+                        if(string.IsNullOrEmpty(s))
                             continue;
-                        string[] parts = s.Split(new char[] {'='});
-                        if(String.IsNullOrEmpty(parts[0]))
+                        string[] parts = s.Split('=');
+                        if(string.IsNullOrEmpty(parts[0]))
                             continue;
                         string entryName = parts[0].Replace(" ","");
                         if(entryName == "DNSName")
@@ -1015,8 +1016,7 @@ namespace MutSea.Framework.Servers.HttpServer
             }
             finally
             {
-                if (innerStream != null)
-                    innerStream.Dispose();
+                innerStream?.Dispose();
                 inputStream.Dispose();
             }
         }
@@ -1177,7 +1177,7 @@ namespace MutSea.Framework.Servers.HttpServer
             {
                 using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
                 {
-                    var xmlDes = new XmlRpcRequestDeserializer();
+                    XmlRpcRequestDeserializer xmlDes = new();
                     xmlRprcRequest = (XmlRpcRequest)xmlDes.Deserialize(reader);
                 }
             }
@@ -1272,7 +1272,7 @@ namespace MutSea.Framework.Servers.HttpServer
                 using (XmlTextWriter writer = new XmlTextWriter(outs, UTF8NoBOM))
                 {
                     writer.Formatting = Formatting.None;
-                    var xmlrpcSer = new XmlRpcResponseSerializer();
+                    XmlRpcResponseSerializer xmlrpcSer = new();
                     xmlrpcSer.Serialize(writer, xmlRpcResponse);
                     writer.Flush();
                     response.RawBuffer = outs.GetBuffer();
@@ -1314,7 +1314,7 @@ namespace MutSea.Framework.Servers.HttpServer
             {
                 using (StreamReader reader = new StreamReader(requestStream, Encoding.UTF8))
                 {
-                    var xmlDes = new XmlRpcRequestDeserializer();
+                    XmlRpcRequestDeserializer xmlDes = new();
                     xmlRprcRequest = (XmlRpcRequest)xmlDes.Deserialize(reader);
                 }
             }
@@ -1406,7 +1406,7 @@ namespace MutSea.Framework.Servers.HttpServer
                 using (XmlTextWriter writer = new XmlTextWriter(outs, UTF8NoBOM))
                 {
                     writer.Formatting = Formatting.None;
-                    var xmlrpcSer = new XmlRpcResponseSerializer();
+                    XmlRpcResponseSerializer xmlrpcSer = new();
                     xmlrpcSer.Serialize(writer, xmlRpcResponse);
                     writer.Flush();
                     response.RawBuffer = outs.GetBuffer();
@@ -1641,7 +1641,7 @@ namespace MutSea.Framework.Servers.HttpServer
                 return false;
             }
 
-            var searchquery = CleanSearchPath(path.AsSpan());
+            ReadOnlySpan<char> searchquery = CleanSearchPath(path.AsSpan());
 
             lock (m_llsdHandlers)
             {
@@ -1661,7 +1661,7 @@ namespace MutSea.Framework.Servers.HttpServer
         /// <returns>true if we have one, false if not</returns>
         private bool DoWeHaveAHTTPHandler(string path)
         {
-            var searchquery = CleanSearchPath(path.AsSpan());
+            ReadOnlySpan<char> searchquery = CleanSearchPath(path.AsSpan());
 
             //m_log.DebugFormat("[BASE HTTP HANDLER]: Checking if we have an HTTP handler for {0}", searchquery);
             lock (m_HTTPHandlers)
@@ -1688,7 +1688,7 @@ namespace MutSea.Framework.Servers.HttpServer
             // {0}/{1}/{2}
             // where {0} isn't something we really control 100%
 
-            var searchquery = CleanSearchPath(path.AsSpan());
+            ReadOnlySpan<char> searchquery = CleanSearchPath(path.AsSpan());
 
             // while the matching algorithm below doesn't require it, we're expecting a query in the form
             //
@@ -1808,7 +1808,7 @@ namespace MutSea.Framework.Servers.HttpServer
                 return false;
             }
 
-            var searchquery = CleanSearchPath(path);
+            ReadOnlySpan<char> searchquery = CleanSearchPath(path);
             string bestMatch = null;
             bool nomatch = true;
 

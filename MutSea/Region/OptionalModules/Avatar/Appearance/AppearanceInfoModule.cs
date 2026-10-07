@@ -451,7 +451,7 @@ namespace MutSea.Region.OptionalModules.Avatar.Appearance
                                             assetStrings[k], existChecks[k] ? "yes" : "no");
 
                                     sb.Append(cdt.ToString());
-                                    sb.Append("\n");
+                                    sb.Append('\n');
                                 }
                             }
                             else

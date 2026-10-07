@@ -788,6 +788,7 @@ namespace MutSea.Region.Framework.Scenes
 
         #region Constructors
 
+
         public Scene(RegionInfo regInfo, AgentCircuitManager authen,
                      ISimulationDataService simDataService, IEstateDataService estateDataService,
                      IConfigSource config, string simulatorVersion)
@@ -1008,7 +1009,8 @@ namespace MutSea.Region.Framework.Scenes
                 m_strictAccessControl = startupConfig.GetBoolean("StrictAccessControl", m_strictAccessControl);
                 m_seeIntoBannedRegion = startupConfig.GetBoolean("SeeIntoBannedRegion", m_seeIntoBannedRegion);
 
-                string[] possibleMapConfigSections = new string[] { "Map", "Startup" };
+
+                string[] possibleMapConfigSections = ["Map", "Startup"];
 
                 m_generateMaptiles
                     = Util.GetConfigVarFromSections<bool>(config, "GenerateMaptiles", possibleMapConfigSections, true);
@@ -1041,7 +1043,7 @@ namespace MutSea.Region.Framework.Scenes
                     }
                 }
 
-                string[] possibleAccessControlConfigSections = new string[] { "Startup", "AccessControl"};
+                string[] possibleAccessControlConfigSections = ["Startup", "AccessControl"];
 
                 string grant = Util.GetConfigVarFromSections<string>(
                     config, "AllowedClients", possibleAccessControlConfigSections, string.Empty);
@@ -1082,7 +1084,7 @@ namespace MutSea.Region.Framework.Scenes
                 m_update_terrain          = startupConfig.GetInt("UpdateTerrainEveryNFrames",         m_update_terrain);
                 m_update_temp_cleaning    = startupConfig.GetInt("UpdateTempCleaningEveryNSeconds",   m_update_temp_cleaning);
 
-                string[] possibleScriptConfigSections = new string[] { "YEngine", "Xengine", "Scripts" };
+                string[] possibleScriptConfigSections = ["YEngine", "Xengine", "Scripts"];
                 m_LinkSetDataLimit = Util.GetConfigVarFromSections<int>(config, "LinksetDataLimit", possibleScriptConfigSections, m_LinkSetDataLimit);
             }
 
@@ -2978,7 +2980,7 @@ namespace MutSea.Region.Framework.Scenes
             return true;
         }
 
-        public bool IncomingAttechments(ScenePresence sp, List<SceneObjectGroup> attachments)
+        public bool IncomingAttachments(ScenePresence sp, List<SceneObjectGroup> attachments)
         {
             //m_log.DebugFormat(" >>> IncomingCreateObject(sog) <<< {0} deleted? {1} isAttach? {2}", ((SceneObjectGroup)sog).AbsolutePosition,
             //    ((SceneObjectGroup)sog).IsDeleted, ((SceneObjectGroup)sog).RootPart.IsAttachment);
@@ -3110,9 +3112,7 @@ namespace MutSea.Region.Framework.Scenes
             {
              */
                 UserAccount uac = UserAccountService.GetUserAccount(RegionInfo.ScopeID, user);
-                if (uac is null)
-                    return 0;
-                return uac.UserFlags;
+                return uac is null ? 0 : uac.UserFlags;
             //}
         }
 

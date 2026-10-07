@@ -347,13 +347,7 @@ namespace MutSea.Region.ClientStack.Linden
             GridInfo ginfo = scene.SceneGridInfo;
             lock (m_features)
             {
-                OSDMap extrasMap;
-                if (m_features.TryGetValue("MutSeaExtras", out OSD extra))
-                    extrasMap = extra as OSDMap;
-                else
-                {
-                    extrasMap = new OSDMap();
-                }
+                OSDMap extrasMap = m_features.TryGetOSDMap("MutSeaExtras", out OSDMap extra) ? extra : new OSDMap();
 
                 foreach (string key in extraFeatures.Keys)
                 {

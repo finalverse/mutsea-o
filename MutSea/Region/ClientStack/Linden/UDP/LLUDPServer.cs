@@ -80,7 +80,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
             uint port = (uint)scene.RegionInfo.InternalEndPoint.Port;
 
             IPAddress listenIP = scene.RegionInfo.InternalEndPoint.Address;
-            m_udpServer = new LLUDPServer(listenIP, port, scene.RegionInfo.ProxyOffset, m_Config, scene.AuthenticateHandler);
+            m_udpServer = new LLUDPServer(listenIP, port, m_Config, scene.AuthenticateHandler);
             scene.RegionInfo.InternalEndPoint.Port = m_udpServer.Port;
             AddScene(scene);
         }
@@ -361,7 +361,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
         public JobEngine OqrEngine { get; protected set; }
 
         public LLUDPServer(
-            IPAddress listenIP, uint port, int proxyPortOffsetParm,
+            IPAddress listenIP, uint port,
             IConfigSource configSource, AgentCircuitManager circuitManager)
             : base(listenIP, (int)port)
         {
@@ -1535,10 +1535,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 catch (Exception ex)
                 {
                     m_log.Error($"Packet statistics gathering failed: {ex.Message}");
-                    if (PacketLog.Log != null)
-                    {
-                        PacketLog.Log.Close();
-                    }
+                    PacketLog?.Log?.Close();
                     PacketLog = null;
                 }
             }
@@ -1732,7 +1729,6 @@ namespace MutSea.Region.ClientStack.LindenUDP
                 LLUDPClient udpClient = new(this, ThrottleRates, Throttle, circuitCode, agentID, remoteEndPoint, m_defaultRTO, m_maxRTO);
 
                 client = new LLClientView(Scene, this, udpClient, sessionInfo, agentID, sessionID, circuitCode);
-                client.OnLogout += LogoutHandler;
                 client.DebugPacketLevel = DefaultClientPacketDebugLevel;
 
                 ((LLClientView)client).DisableFacelights = m_disableFacelights;
@@ -1948,7 +1944,7 @@ namespace MutSea.Region.ClientStack.LindenUDP
 
         #endregion
 
-        protected void LogoutHandler(IClientAPI client)
+        public void LogoutHandler(IClientAPI client)
         {
             client.SendLogoutPacket();
 

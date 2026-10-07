@@ -246,6 +246,7 @@ namespace MutSea.Framework
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double lerp(double a, double b, double c)
         {
             return (b * a) + (c * (1 - a));
@@ -281,9 +282,21 @@ namespace MutSea.Framework
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] UTF8Getbytes(string s, int len)
+        {
+            return UTF8.GetBytes(s, 0, len);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte[] UTF8NBGetbytes(string s)
         {
             return UTF8NoBomEncoding.GetBytes(s);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] UTF8NBGetbytes(string s, int len)
+        {
+            return UTF8NoBomEncoding.GetBytes(s, 0 , len);
         }
 
         /// <value>
@@ -412,6 +425,7 @@ namespace MutSea.Framework
         // legacy, do not use
         public static Random RandomClass
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get {  return Random.Shared;}
         }
 
@@ -1388,6 +1402,34 @@ namespace MutSea.Framework
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UUID ComputeShake128UUID(string src)
+        {
+            return ComputeShake128UUID(Encoding.ASCII.GetBytes(src));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UUID ComputeShake128UUID(ReadOnlySpan<byte> src)
+        {
+            byte[] ret;
+            UUID uuid;
+            if(Shake128.IsSupported)
+            {
+                ret = Shake128.HashData(src, 16);
+                uuid = new(ret, 0);
+            }
+            else
+            { 
+                ret = SHA1.HashData(src);
+                uuid = new(ret, 2);
+            }
+            uuid.c &= 0x0fff;
+            uuid.c |= 0x5000;
+            uuid.d &= 0x3f;
+            uuid.d |= 0x80;
+            return uuid;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string AESEncrypt(ReadOnlySpan<char> secret, ReadOnlySpan<char> plainText)
         {
             return AESEncryptString(secret, plainText, string.Empty);
@@ -2190,9 +2232,9 @@ namespace MutSea.Framework
         /// <returns></returns>
         public static T GetConfigVarFromSections<T>(IConfigSource config, string varname, string[] sections, object val)
         {
-            foreach (string section in sections.AsSpan())
+            for (int i = 0 ; i < sections.Length; i++)
             {
-                IConfig cnf = config.Configs[section];
+                IConfig cnf = config.Configs[sections[i]];
                 if (cnf == null)
                     continue;
 
@@ -2209,6 +2251,119 @@ namespace MutSea.Framework
             }
             return (T)val;
         }
+
+        /// <summary>
+        /// Gets the value of a configuration variable by looking into
+        /// multiple sections in order. Returns as soon one is found, ignoring other sections
+        /// </summary>
+        /// <remarks>
+        /// If no value is found then the given default value is returned
+        /// </remarks>
+        /// <typeparam name="T">Type of the variable</typeparam>
+        /// <param name="config">The configuration object</param>
+        /// <param name="varname">The configuration variable</param>
+        /// <param name="sections">Ordered sequence of sections to look at</param>
+        /// <param name="val">Default value</param>
+        /// <returns></returns>
+        public static T GetFirstConfigVarFromSections<T>(IConfigSource config, string varname, string[] sections, object val)
+        {
+            for (int i = 0 ; i < sections.Length; i++)
+            {
+                IConfig cnf = config.Configs[sections[i]];
+                if (cnf == null)
+                    continue;
+
+                string text = cnf.Get(varname);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if (typeof(T) == typeof(string))
+                        return Unsafe.As<string, T>(ref text);
+
+                    if (typeof(T) == typeof(bool))
+                    {
+                        bool b = bool.Parse(text);
+                        return Unsafe.As<bool, T>(ref b);
+                    }
+
+                    if (typeof(T) == typeof(int))
+                    {
+                        int ti = int.Parse(text);
+                        return Unsafe.As<int, T>(ref ti);
+                    }
+
+                    if (typeof(T) == typeof(float))
+                    {
+                        float f = float.Parse(text);
+                        return Unsafe.As<float, T>(ref f);
+                    }
+
+                    if (typeof(T) == typeof(double))
+                    {
+                        double d = double.Parse(text);
+                        return Unsafe.As<double, T>(ref d);
+                    }
+                }
+            }
+
+            return val == null ? default : (T) val;
+        }
+
+        /// <summary>
+        /// Gets the value of a configuration variable by looking into
+        /// multiple sections in order. Returns as soon one is found, ignoring other sections
+        /// </summary>
+        /// <remarks>
+        /// If no value is found then the default value of T is returned
+        /// </remarks>
+        /// <typeparam name="T">Type of the variable</typeparam>
+        /// <param name="config">The configuration object</param>
+        /// <param name="varname">The configuration variable</param>
+        /// <param name="sections">Ordered sequence of sections to look at</param>
+        /// <returns></returns>
+
+        public static T GetFirstConfigVarFromSections<T>(IConfigSource config, string varname, string[] sections)
+        {
+            for (int i = 0 ; i < sections.Length; i++)
+            {
+                IConfig cnf = config.Configs[sections[i]];
+                if (cnf == null)
+                    continue;
+
+                string text = cnf.Get(varname);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if (typeof(T) == typeof(string))
+                        return Unsafe.As<string, T>(ref text);
+
+                    if (typeof(T) == typeof(bool))
+                    {
+                        bool b = bool.Parse(text);
+                        return Unsafe.As<bool, T>(ref b);
+                    }
+
+                    if (typeof(T) == typeof(int))
+                    {
+                        int ti = int.Parse(text);
+                        return Unsafe.As<int, T>(ref ti);
+                    }
+
+                    if (typeof(T) == typeof(float))
+                    {
+                        float f = float.Parse(text);
+                        return Unsafe.As<float, T>(ref f);
+                    }
+
+                    if (typeof(T) == typeof(double))
+                    {
+                        double d = double.Parse(text);
+                        return Unsafe.As<double, T>(ref d);
+                    }
+                }
+            }
+
+            return default;
+        }
+
 
         public static void MergeEnvironmentToConfig(IConfigSource ConfigSource)
         {
@@ -2721,32 +2876,22 @@ namespace MutSea.Framework
 
         public static byte ConvertMaturityToAccessLevel(uint maturity)
         {
-            byte retVal = 0;
-            switch (maturity)
+            return maturity switch
             {
-                case 0: //PG
-                    retVal = 13;
-                    break;
-                case 1: //Mature
-                    retVal = 21;
-                    break;
-                case 2: // Adult
-                    retVal = 42;
-                    break;
-            }
-
-            return retVal;
-
+               //0 => 13, //PG
+               1 =>  21, //Mature
+               2 => 42,  // Adult
+               _ => 13  // PG 
+            };
         }
 
         public static uint ConvertAccessLevelToMaturity(byte maturity)
         {
             if (maturity <= 13)
                 return 0;
-            else if (maturity <= 21)
+            if (maturity <= 21)
                 return 1;
-            else
-                return 2;
+            return 2;
         }
 
         /// <summary>

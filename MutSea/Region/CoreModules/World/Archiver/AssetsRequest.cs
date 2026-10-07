@@ -157,7 +157,7 @@ namespace MutSea.Region.CoreModules.World.Archiver
                     {
                         if(!UUID.TryParse(thiskey, out UUID id) || id.IsZero())
                         {
-                            m_log.InfoFormat($"[ARCHIVER]: cannot save asset {kvp.Key} because it has Invalid UUID");
+                            m_log.Info($"[ARCHIVER]: cannot save asset {kvp.Key} because it has Invalid UUID");
                             m_notFoundAssetUuids.Add(kvp.Key);
                             continue;
                         }

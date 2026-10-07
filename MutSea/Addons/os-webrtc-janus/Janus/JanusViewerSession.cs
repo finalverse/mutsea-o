@@ -26,8 +26,8 @@
  */
 
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
-
 using OMV = OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
@@ -53,8 +53,10 @@ namespace osWebRtcVoice
         // IVoiceViewerSession.AgentId
         public OMV.UUID AgentId { get; set; }
 
+        public IVoiceViewerSession.VFlags Flags { get; set; }
+
         // Janus keeps track of the user by this ID
-        public int ParticipantId { get; set; }
+        public long ParticipantId { get; set; }
 
         // Connections to the Janus server
         public JanusSession Session { get; set; }
@@ -67,12 +69,18 @@ namespace osWebRtcVoice
         // Contains "type" and "sdp" fields
         public OSDMap Answer { get; set; }
 
+        private int _disconnectStarted;
+        public string DisconnectReason { get; private set; }
+        private readonly SemaphoreSlim _provisionLock = new SemaphoreSlim(1, 1);
+        public SemaphoreSlim ProvisionLock => _provisionLock;
+
         public JanusViewerSession(IWebRtcVoiceService pVoiceService)
         {
             ViewerSessionID = OMV.UUID.Random().ToString();
             VoiceService = pVoiceService;
             m_log.Debug($"{LogHeader} JanusViewerSession created {ViewerSessionID}");
         }
+
         public JanusViewerSession(string pViewerSessionID, IWebRtcVoiceService pVoiceService)
         {
             ViewerSessionID = pViewerSessionID;
@@ -80,29 +88,42 @@ namespace osWebRtcVoice
             m_log.Debug($"{LogHeader} JanusViewerSession created {ViewerSessionID}");
         }
 
+        public bool TryStartDisconnect(string pReason)
+        {
+            if (Interlocked.CompareExchange(ref _disconnectStarted, 1, 0) == 0)
+            {
+                DisconnectReason = pReason;
+                return true;
+            }
+            return false;
+         }
+
         // Send the messages to the voice service to try and get rid of the session
         // IVoiceViewerSession.Shutdown
         public async Task Shutdown()
         {
-            m_log.DebugFormat($"{LogHeader} JanusViewerSession shutdown {ViewerSessionID}");
+            m_log.Debug($"{LogHeader} JanusViewerSession shutdown {ViewerSessionID}");
             if (Room is not null)
             {
-                var rm = Room;
+                JanusRoom rm = Room;
                 Room = null;
-                await rm.LeaveRoom(this);
+                _ = await rm.LeaveRoom(this).ConfigureAwait(false);
             }
             if (AudioBridge is not null)
             {
-                var ab = AudioBridge;
+                JanusAudioBridge ab = AudioBridge;
                 AudioBridge = null;
-                await ab.Detach();
+                _ = await ab.Detach().ConfigureAwait(false);
             }   
             if (Session is not null)
             {
-                var s = Session;
+                JanusSession s = Session;
                 Session = null;
-                _ = await s.DestroySession().ConfigureAwait(false);
-                s.Dispose();
+                if(s != null)
+                {
+                    _ = await s.DestroySession().ConfigureAwait(false);
+                    s.Dispose();
+                }
             }
         }
     }
