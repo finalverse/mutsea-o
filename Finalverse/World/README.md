@@ -55,6 +55,8 @@ Kernel tests use explicit fake worlds/models. Live capability/UDP tests are sepa
 ```sh
 dotnet build tools/Finalverse.WorldSmoke -c Release -o /private/world-smoke -p:MutSeaBin=/private/protocol-build/sdk/bin
 dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /private/receipt.json apply
+# Instead, after creating a home in the viewer and logging out, capture that existing operation:
+dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /private/ui-receipt.json capture
 # After a normal simulator shutdown/restart:
 dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /private/receipt.json verify
 dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /private/receipt.json undo
@@ -64,4 +66,4 @@ dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /pri
 dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /private/actions.json actions
 ```
 
-`account.json` fields: `grid_url`, `first_name`, `last_name`, `password`. Keep it and receipts private; never put credentials in arguments, console history or Git. Do not run this probe while the same account is logged into the viewer. `apply` leaves a home for restart verification; `undo` removes it. The probe checks authoritative execution results plus UDP existence/position/scale; it does not substitute for visual client acceptance. The full UI release gate remains in the viewer's `docs/finalverse/phase2-ai-world-creation.md`.
+`account.json` fields: `grid_url`, `first_name`, `last_name`, `password`. Keep it and receipts private; never put credentials in arguments, console history or Git. Do not run this probe while the same account is logged into the viewer. `apply` leaves a home for restart verification; `undo` removes it. `capture` reads an already committed home through the authenticated API and UDP, storing a new private receipt without prepare/commit/undo calls; it refuses to overwrite a receipt. It logs in and teleports the probe avatar to the home test site. Use the captured receipt for later verification of that same UI-created operation. Restart verification also compares every semantic metadata field with the captured API receipt. The probe checks authoritative execution results plus UDP existence/position/rotation/scale; it does not substitute for visual client acceptance. The full UI release gate remains in the viewer's `docs/finalverse/phase2-ai-world-creation.md`.

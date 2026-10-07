@@ -5,7 +5,7 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length!=3||args[2] is not ("apply" or "verify" or "undo" or "verify_undo" or "actions")){Console.Error.WriteLine("Usage: WorldSmoke private-account.json receipt.json apply|verify|undo|verify_undo|actions");return 2;}
+if(args.Length!=3||args[2] is not ("apply" or "capture" or "verify" or "undo" or "verify_undo" or "actions")){Console.Error.WriteLine("Usage: WorldSmoke private-account.json receipt.json apply|capture|verify|undo|verify_undo|actions");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;
 var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();
@@ -52,9 +52,17 @@ async Task Observe(JsonElement steps,bool exists=true)
         if(exists)
         {
             var expected=step.GetProperty("after");var pos=expected.GetProperty("position").EnumerateArray().Select(x=>x.GetSingle()).ToArray();var size=expected.GetProperty("scale").EnumerateArray().Select(x=>x.GetSingle()).ToArray();
+            var rotation=expected.GetProperty("rotation").EnumerateArray().Select(x=>x.GetSingle()).ToArray();
+            bool Matches(Primitive p)
+            {
+                var actual=new[]{p.Rotation.X,p.Rotation.Y,p.Rotation.Z,p.Rotation.W};
+                // q and -q describe the same rotation; compare either representation.
+                double difference=Math.Min(actual.Zip(rotation,(a,b)=>(a-b)*(a-b)).Sum(),actual.Zip(rotation,(a,b)=>(a+b)*(a+b)).Sum());
+                return Vector3.Distance(p.Position,new(pos[0],pos[1],pos[2]))<.02f&&Vector3.Distance(p.Scale,new(size[0],size[1],size[2]))<.02f&&difference<.0001;
+            }
             // Wait for existing-object transform updates as well as creation.
-            do {found=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.First(p=>p.ID==id);if(Vector3.Distance(found.Position,new(pos[0],pos[1],pos[2]))<.02f&&Vector3.Distance(found.Scale,new(size[0],size[1],size[2]))<.02f)break;await Task.Delay(150);}while(DateTime.UtcNow<deadline);
-            Assert(Vector3.Distance(found!.Position,new(pos[0],pos[1],pos[2]))<.02f&&Vector3.Distance(found.Scale,new(size[0],size[1],size[2]))<.02f,"UDP transform mismatch");
+            do {found=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.First(p=>p.ID==id);if(Matches(found))break;await Task.Delay(150);}while(DateTime.UtcNow<deadline);
+            Assert(Matches(found!),"UDP transform mismatch");
         }
     }
 }
@@ -74,7 +82,24 @@ try
     if(parsed is not OSDMap){File.WriteAllText(args[1]+".seed-error",seedBody);throw new Exception("Seed did not return LLSD map; content type "+response.Content.Headers.ContentType);}
     var caps=(OSDMap)parsed;cap=caps["FinalverseWorld"].AsString();
     Assert(!string.IsNullOrEmpty(cap),"World capability missing");
-    if(args[2]=="actions")
+    if(args[2]=="capture")
+    {
+        // Capture an existing UI-created home without proposing or executing changes.
+        Assert(!File.Exists(args[1]),"Capture receipt already exists; choose a new private path");
+        await Teleport(172,154);
+        var lumi=await World(new{op="lumi"});string home=lumi.GetProperty("home_entity_id").GetString() ?? throw new Exception("Lumi has no home to capture");
+        var journal=await World(new{op="journal"});
+        var undone=journal.EnumerateArray().Where(e=>e.GetProperty("status").GetString()=="undone").Select(e=>e.GetProperty("plan_id").GetString()).ToHashSet();
+        var committed=journal.EnumerateArray().Last(e=>e.GetProperty("status").GetString()=="committed"&&!undone.Contains(e.GetProperty("plan_id").GetString())&&e.GetProperty("steps")[0].GetProperty("id").GetString()==home);
+        Assert(committed.GetProperty("steps").GetArrayLength()==17,"Expected a complete 17-component home");
+        await Observe(committed.GetProperty("steps"));
+        var semantic=await World(new{op="semantic",entity_id=home});
+        Assert(semantic.GetProperty("owner_agent_id").GetString()==lumi.GetProperty("agent_id").GetString(),"Lumi reciprocal ownership missing");
+        File.WriteAllText(args[1],JsonSerializer.Serialize(new{source="existing-home-read-only-capture",udp_home_verified=true,committed,lumi,semantic,journal}));
+        if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1],UnixFileMode.UserRead|UnixFileMode.UserWrite);
+        Console.WriteLine("WORLD_SMOKE capture passed: existing 17 components, semantics, Lumi memory and WorldLine; no world mutation requested.");
+    }
+    else if(args[2]=="actions")
     {
         await Teleport(110,145);
         async Task<JsonElement> Execute(string type,string? id,object parameters)
@@ -152,6 +177,12 @@ try
         var lumi=await World(new{op="lumi"});Assert(lumi.GetProperty("home_entity_id").GetString()==saved.GetProperty("lumi").GetProperty("home_entity_id").GetString(),"Home identity changed after restart");
         Assert(lumi.GetProperty("agent_id").GetString()==saved.GetProperty("lumi").GetProperty("agent_id").GetString()&&lumi.GetProperty("memory").EnumerateArray().Select(m=>m.GetString()).SequenceEqual(saved.GetProperty("lumi").GetProperty("memory").EnumerateArray().Select(m=>m.GetString())),"Lumi identity or memory changed after restart");
         var semantic=await World(new{op="semantic",entity_id=lumi.GetProperty("home_entity_id").GetString()});Assert(semantic.GetProperty("owner_agent_id").GetString()==lumi.GetProperty("agent_id").GetString(),"Semantic ownership lost");
+        // Compare decoded scalar values: the receipt serializer may escape '+' in a timestamp.
+        foreach(var property in saved.GetProperty("semantic").EnumerateObject())
+        {
+            var current=semantic.GetProperty(property.Name);
+            Assert(current.ValueKind==property.Value.ValueKind&&current.ToString()==property.Value.ToString(),"Semantic metadata changed after restart: "+property.Name);
+        }
         var journal=await World(new{op="journal"});Assert(journal.EnumerateArray().Any(e=>e.GetProperty("operation_id").GetString()==committed.GetProperty("operation_id").GetString()),"WorldLine lost");
         if(args[2]=="undo")
         {var result=await World(new{op="undo",plan_id=committed.GetProperty("plan_id").GetString()});Assert(result.GetProperty("status").GetString()=="undone","Home undo rejected");await Observe(committed.GetProperty("steps"),false);}

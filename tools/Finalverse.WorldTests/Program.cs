@@ -29,6 +29,7 @@ Test("undo conflict",()=>{world.Objects[cube]=world.Objects[cube] with {position
 Test("guarded undo",()=>{Check(kernel.Undo(moved,actor).status=="undone");Check(Kernel.Same(world.Objects[cube],original));});
 Test("deterministic relative movement",()=>{string reference=Guid.NewGuid().ToString();world.Objects[reference]=original with {id=reference,position=[180,161,26]};var p=kernel.Prepare(Plan("move_entity",new{toward_id=reference,distance=2},cube),actor);Check(Math.Abs(p.steps[0].after!.position[0]-170-Math.Sqrt(2))<.001);Check(kernel.Commit(p.plan_id,actor).status=="committed");Check(kernel.Undo(p.plan_id,actor).status=="undone");world.Objects.Remove(reference);});
 Test("missing spatial reference",()=>Reject(()=>kernel.Prepare(Plan("move_entity",new{toward_id=Guid.NewGuid().ToString(),distance=2},cube),actor)));
+Test("spatial reference outside inspection radius",()=>{string reference=Guid.NewGuid().ToString();world.Objects[reference]=original with {id=reference,position=[10,10,26]};Reject(()=>kernel.Prepare(Plan("move_entity",new{toward_id=reference,distance=2},cube),actor));world.Objects.Remove(reference);});
 Test("stale preparation",()=>{var p=kernel.Prepare(Plan("set_name",new{name="changed"},cube),actor);world.Objects[cube]=original with {name="another edit"};Reject(()=>kernel.Commit(p.plan_id,actor));world.Objects[cube]=original;});
 Test("session actor mismatch",()=>{var p=kernel.Prepare(Plan("set_name",new{name="changed"},cube),actor);Reject(()=>kernel.Commit(p.plan_id,Guid.NewGuid().ToString()));});
 Test("session invalidates approval",()=>{var p=kernel.Prepare(Plan("set_name",new{name="changed"},cube),actor);kernel.InvalidateSession(actor);Reject(()=>kernel.Commit(p.plan_id,actor));});
@@ -52,6 +53,7 @@ Test("volume budget",()=>Reject(()=>kernel.Prepare(Plan("create_primitive",new{p
 Test("submerged home rejected",()=>{world.Terrain=17;Reject(()=>kernel.Prepare(Plan("create_structure",new{anchor=new[]{172,154,17},width=6,depth=5,height=3,yaw=0,owner_agent_id=Kernel.LumiId}),actor));world.Terrain=25;});
 world.Objects.Clear();
 Plan Home()=>Plan("create_structure",new {anchor=new[]{172,154,25},width=6,depth=5,height=3,yaw=0,owner_agent_id=Kernel.LumiId});
+Test("excessive home dimensions",()=>Reject(()=>kernel.Prepare(Plan("create_structure",new{anchor=new[]{172,154,25},width=50,depth=5,height=3,yaw=0,owner_agent_id=Kernel.LumiId}),actor)));
 Test("slope rejected",()=>{world.Slope=true;Reject(()=>kernel.Prepare(Home(),actor));world.Slope=false;});
 Test("overlap preserves paths",()=>{world.Objects[cube]=original with {position=[172,154,25]};Reject(()=>kernel.Prepare(Home(),actor));world.Objects.Clear();});
 Test("clearance includes linked child extents",()=>{world.Objects[cube]=original with {position=[185,154,25],clearance_radius=12,editable=false};Reject(()=>kernel.Prepare(Home(),actor));world.Objects.Clear();});
