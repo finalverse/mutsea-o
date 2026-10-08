@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <MutSeaBin Condition="'$(MutSeaBin)' == ''">../../bin</MutSeaBin>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenMetaverse"><HintPath>$(MutSeaBin)/OpenMetaverse.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverseTypes"><HintPath>$(MutSeaBin)/OpenMetaverseTypes.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverse.StructuredData"><HintPath>$(MutSeaBin)/OpenMetaverse.StructuredData.dll</HintPath></Reference>
+    <Reference Include="log4net"><HintPath>$(MutSeaBin)/log4net.dll</HintPath></Reference>
+    <Reference Include="XMLRPC"><HintPath>$(MutSeaBin)/XMLRPC.dll</HintPath></Reference>
+    <Reference Include="SmartThreadPool"><HintPath>$(MutSeaBin)/SmartThreadPool.dll</HintPath></Reference>
+    <Reference Include="zlib.net"><HintPath>$(MutSeaBin)/zlib.net.dll</HintPath></Reference>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+  </ItemGroup>
+</Project>

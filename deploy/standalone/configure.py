@@ -102,6 +102,10 @@ for section, name in [('InventoryService','inventory'),('AvatarService','avatars
     ('AuthenticationService','auth'),('UserAccountService','userprofiles'),
     ('GridUserService','griduser'),('FriendsService','friends')]:
     common += f'[{section}]\nConnectionString = "URI=file:/data/{name}.db"\n'
+    if section == 'UserAccountService':
+        # Reuse inherited wearable/COF/appearance provisioning for fresh users.
+        # This is an initial bundle, not an atomic public registration service.
+        common += 'CreateDefaultAvatarEntries = true\n'
 write('StandaloneCommon.ini', common)
 write('Regions/Harbor.ini', f'''[MutSea Harbor]
 RegionUUID = {region}
