@@ -43,6 +43,7 @@ public sealed class Kernel
     public const int MaxActions = 8, MaxCreates = 24;
     public const double MaxVolume = 120, MaxMove = 12, MaxScale = 12;
     public static readonly string LumiId = "b151468b-cbcc-4af2-ae2d-6967e8938bb4";
+    public static string TraceIdForCitizen(int component) => TraceId(LumiId, component);
     public Kernel(IWorld world, string directory)
     {
         this.world = world;

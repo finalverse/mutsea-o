@@ -3,6 +3,7 @@
   <ItemGroup>
     <Reference Include="MutSea.Capabilities"><HintPath>$(MutSeaBin)/MutSea.Capabilities.dll</HintPath></Reference>
     <Reference Include="MutSea.Framework"><HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath></Reference>
+    <Reference Include="MutSea.Framework.Servers"><HintPath>$(MutSeaBin)/MutSea.Framework.Servers.dll</HintPath></Reference>
     <Reference Include="MutSea.Framework.Servers.HttpServer"><HintPath>$(MutSeaBin)/MutSea.Framework.Servers.HttpServer.dll</HintPath></Reference>
     <Reference Include="MutSea.Region.Framework"><HintPath>$(MutSeaBin)/MutSea.Region.Framework.dll</HintPath></Reference>
     <Reference Include="OpenMetaverse"><HintPath>$(MutSeaBin)/OpenMetaverse.dll</HintPath></Reference>

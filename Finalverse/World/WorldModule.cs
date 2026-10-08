@@ -18,7 +18,7 @@ using Permissions = MutSea.Framework.PermissionMask;
 namespace Finalverse.World;
 
 [Extension(Path="/MutSea/RegionModules",NodeName="RegionModule",Id="FinalverseWorldModule")]
-public sealed class WorldModule : INonSharedRegionModule, IWorld
+public sealed partial class WorldModule : INonSharedRegionModule, IWorld
 {
     static readonly ILog log=LogManager.GetLogger(typeof(WorldModule));
     readonly object gate = new();
@@ -40,6 +40,7 @@ public sealed class WorldModule : INonSharedRegionModule, IWorld
         var c=config.Configs["FinalverseWorld"];
         enabled=c?.GetBoolean("Enabled",false)??false;
         directory=c?.GetString("DataDirectory","/data/finalverse")??"/data/finalverse";
+        InitialiseCitizen(config);
     }
     public void AddRegion(Scene s)
     {
@@ -48,9 +49,9 @@ public sealed class WorldModule : INonSharedRegionModule, IWorld
         kernel=new Kernel(this,directory);
         s.EventManager.OnRegisterCaps+=RegisterCaps;
     }
-    public void RegionLoaded(Scene s) { }
-    public void RemoveRegion(Scene s) { if(enabled)s.EventManager.OnRegisterCaps-=RegisterCaps; lock(gate)sessions.Clear(); }
-    public void Close() { lock(gate)sessions.Clear(); }
+    public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
+    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled)s.EventManager.OnRegisterCaps-=RegisterCaps; lock(gate)sessions.Clear(); }
+    public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {
         Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); sessions[agent]=session; }
@@ -67,6 +68,17 @@ public sealed class WorldModule : INonSharedRegionModule, IWorld
                 while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>32768)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
+                if(data.GetProperty("op").GetString()=="citizen")
+                {
+                    lock(gate)
+                    {
+                        if(!sessions.TryGetValue(agent,out var active)||active!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");
+                        if(lastRequest.TryGetValue(agent,out var recent)&&DateTimeOffset.UtcNow-recent<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
+                        lastRequest[agent]=DateTimeOffset.UtcNow;
+                    }
+                    operation="citizen";output=CitizenHuman(data,agent.ToString());
+                    response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output});response.StatusCode=200;return;
+                }
                 lock(gate)
                 {
                     if(!sessions.TryGetValue(agent,out var current)||current!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");

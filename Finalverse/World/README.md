@@ -42,7 +42,7 @@ Objects must be owned unlinked roots, nonphysical, unattached and inventory-free
 
 ## Persistence and recovery
 
-WorldLine is private append-only JSONL, flushed before mutation and after result. Commits use the inherited synchronous object backup API. Semantic metadata and Lumi's home/creation memory are projections of committed records. Lumi has no avatar binding or autonomous behavior yet. Provider/model provenance is an unsigned caller assertion.
+WorldLine is private append-only JSONL, flushed before mutation and after result. Commits use the inherited synchronous object backup API. Semantic metadata and Lumi's home/creation memory are projections of committed records. The optional Phase 3 citizen bridge binds Lumi to a persistent linked entity and separate agent service, as described below. Provider/model provenance is an unsigned caller assertion.
 
 Structured simulator logs contain actor/region, operation, HTTP status, latency, plan/operation IDs, outcome and step count. They exclude capability URLs, prompts and scene labels. The planner separately logs its request ID/provider/latency/action count; cross-service tracing, signed provenance and production metrics remain future work.
 
@@ -67,3 +67,40 @@ dotnet /private/world-smoke/Finalverse.WorldSmoke.dll /private/account.json /pri
 ```
 
 `account.json` fields: `grid_url`, `first_name`, `last_name`, `password`. Keep it and receipts private; never put credentials in arguments, console history or Git. Do not run this probe while the same account is logged into the viewer. `apply` leaves a home for restart verification; `undo` removes it. `capture` reads an already committed home through the authenticated API and UDP, storing a new private receipt without prepare/commit/undo calls; it refuses to overwrite a receipt. It logs in and teleports the probe avatar to the home test site. Use the captured receipt for later verification of that same UI-created operation. Restart verification also compares every semantic metadata field with the captured API receipt. The probe checks authoritative execution results plus UDP existence/position/rotation/scale; it does not substitute for visual client acceptance. The full UI release gate remains in the viewer's `docs/finalverse/phase2-ai-world-creation.md`.
+
+
+## Phase 3: opt-in persistent citizen
+
+Enable only in an isolated development region with the separate `services/agent-runtime` service. Keep `[FinalverseWorld]` enabled. Add to private simulator configuration:
+
+```ini
+[FinalverseCitizens]
+Enabled = true
+ControllerId = REPLACE_WITH_EXISTING_SANDBOX_ACCOUNT_UUID
+TokenFile = /config/service-token
+RuntimeUrl = http://host.docker.internal:18766
+```
+
+`RuntimeUrl` above is for Docker Desktop calling the host service. A same-host native simulator uses loopback instead. Share a private 32–128-character token with the runtime's token file, readable only by the simulator service user. Configuration, passwords and tokens never belong in the image or repository. Keep simulator TCP/UDP on loopback for this development workflow.
+
+`CitizenBridge.cs` implements fixed-controller authentication, actual bounded scene perception, canonical Lumi embodiment, speech, semantic home navigation, durable intent/receipt handling and an approved three-shrub garden recipe. `CitizenNavigator.cs` bounds route search/distance/time and checks clearance/ownership/entry while moving. Inherited scene position/rotation, UDP update and backup APIs remain the executor. No renderer or avatar-system replacement is included.
+
+The human `FinalverseWorld` capability accepts `op: citizen` with commands `inspect`, `say`, `pause`, `resume`, `cancel`, `approve`, `undo`. Actor identity comes from the logged-in avatar. The private service endpoint `/finalverse/citizen/<region UUID>` accepts only `ensure`, `observe`, `navigate_home`, `stop`, `speak`, `prepare_garden`, `commit_garden`, `undo_garden`. Mutations require a UUID action correlation and durable intent; uncertain intents are not replayed. Garden commit/undo is restricted to this citizen's recorded plans. The service cannot administer accounts, edit inventory, run scripts or arbitrarily delete world objects.
+
+The runtime provides one-second perception without inference polling. A five-second lease stops motion when it disappears. Simulator restart restores the embodiment from scene backup but never resumes movement automatically. Preserve `.citizens.worldline.jsonl`, the existing kernel journal and scene databases together. The seven-part primitive embodiment deliberately avoids the sandbox's inherited cloud appearance; articulated NPC animation is future work.
+
+```sh
+dotnet build tools/Finalverse.CitizenSmoke -c Release -p:MutSeaBin=/absolute/path/to/protocol-sdk/bin -o /private/citizen-smoke
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/receipt.json observe
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/questions.json questions
+# Requires Lumi to start away from home; verifies actual UDP motion:
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/navigation.json navigate
+# Against the captured receipt, after normal runtime/simulator/combined restart:
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/receipt.json verify
+# After human garden approval; repeat with the same receipt after restart:
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/garden.json garden_verify
+# After human Undo; checks the same objects are absent and history/memory remain:
+dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json /private/garden.json garden_undo_verify
+```
+
+If only a newer .NET host is installed, prefix the .NET 8 probe with `DOTNET_ROLL_FORWARD=Major`; the simulator image uses native .NET 8. Protocol SDK assemblies come from its documented SDK build, not unrelated simulator binaries. Receipts contain private world/controller state and stay outside Git. Complete service-specific docs are in `~/Finalverse/services/agent-runtime/docs/finalverse/agents/`.

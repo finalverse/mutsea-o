@@ -69,6 +69,19 @@ Test("failed compensation locks writes",()=>{var p=kernel.Prepare(Home(),actor);
 Test("compensation preserves a concurrent edit",()=>{var other=new Fake(actor){FailAt=3,EditOnFailure=true};var k=new Kernel(other,Path.Combine(path,"concurrent"));var p=k.Prepare(Home(),actor);Check(k.Commit(p.plan_id,actor).status=="recovery_required");Check(other.Objects.Values.Any(e=>e.name=="Concurrent edit"));});
 Test("audit write failure blocks future mutations",()=>{string directory=Path.Combine(path,"audit-failure");var k=new Kernel(new Fake(actor),directory);var p=k.Prepare(Home(),actor);Directory.CreateDirectory(Path.Combine(directory,world.RegionId+".worldline.jsonl"));try{k.Commit(p.plan_id,actor);throw new Exception("Expected IO failure");}catch(UnauthorizedAccessException){}Check(k.RecoveryRequired);Reject(()=>k.Prepare(Home(),actor));});
 Test("interrupted intent locks after restart",()=>{var other=Path.Combine(path,"interrupted");Directory.CreateDirectory(other);File.WriteAllText(Path.Combine(other,world.RegionId+".worldline.jsonl"),JsonSerializer.Serialize(new Entry(Guid.NewGuid().ToString(),Guid.NewGuid().ToString(),actor,DateTimeOffset.UtcNow,"intent",Home(),[],null,null))+"\n");Check(new Kernel(world,other).RecoveryRequired);});
+
+var navWorld=new Fake(actor);double[] navStart=[100,100,25.9],navEnd=[112,100,25.9];
+Test("citizen route arrives exactly",()=>{var route=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);Check(CitizenNavigator.Distance(route.Last(),navEnd)<.001);});
+Test("citizen denies excessive travel",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[220,100,25.9])));
+Test("citizen rejects missing/invalid coordinates",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[double.NaN,100,25.9])));
+Test("citizen rejects region boundary",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[0,100,25.9])));
+Test("citizen rejects water",()=>{navWorld.Terrain=18;Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd));navWorld.Terrain=25;});
+Test("citizen avoids obstacle",()=>{navWorld.Objects[cube]=original with {position=[106,100,26],scale=[2,2,2]};var route=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);Check(route.Any(p=>Math.Abs(p[1]-100)>=2)&&route.All(p=>CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,p)));});
+Test("citizen refuses blocked destination",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[106,100,25.9])));
+Test("citizen detects new route obstacle",()=>{navWorld.Objects.Clear();var route=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);var next=route[0];navWorld.Objects[cube]=original with {position=next,scale=[1,1,2]};Check(!CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,next));});
+Test("citizen ignores own embodiment",()=>{navWorld.Objects.Clear();navWorld.Objects[Kernel.LumiId]=original with {id=Kernel.LumiId,position=navStart};Check(CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,navStart));});
+Test("citizen walks beneath overhead roof",()=>{navWorld.Objects.Clear();navWorld.Objects[cube]=original with {position=[106,100,30],scale=[8,8,.4]};Check(CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd).All(p=>Math.Abs(p[1]-100)<.01));});
+Test("citizen ids stable distinct",()=>Check(Kernel.TraceIdForCitizen(1)==Kernel.TraceIdForCitizen(1)&&Kernel.TraceIdForCitizen(1)!=Kernel.TraceIdForCitizen(2)));
 Console.WriteLine($"WORLD_TESTS {passed} passed");return 0;
 
 sealed class Fake(string actor):IWorld
