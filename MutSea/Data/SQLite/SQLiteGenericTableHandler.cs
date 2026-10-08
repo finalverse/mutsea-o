@@ -46,6 +46,7 @@ namespace MutSea.Data.SQLite
                 new Dictionary<string, FieldInfo>();
 
         protected List<string> m_ColumnNames = null;
+        private readonly object m_ColumnNamesGate = new object();
         protected string m_Realm;
         protected FieldInfo m_DataField = null;
 
@@ -103,17 +104,21 @@ namespace MutSea.Data.SQLite
 
         private void CheckColumnNames(IDataReader reader)
         {
-            if (m_ColumnNames != null)
-                return;
-
-            m_ColumnNames = new List<string>();
-
-            DataTable schemaTable = reader.GetSchemaTable();
-            foreach (DataRow row in schemaTable.Rows)
+            // Parallel first queries must never observe an empty/partial cache.
+            // In particular, user-account login requires the Created column.
+            lock (m_ColumnNamesGate)
             {
-                if (row["ColumnName"] != null &&
-                        (!m_Fields.ContainsKey(row["ColumnName"].ToString())))
-                    m_ColumnNames.Add(row["ColumnName"].ToString());
+                if (m_ColumnNames != null)
+                    return;
+                List<string> columns = new List<string>();
+                DataTable schemaTable = reader.GetSchemaTable();
+                foreach (DataRow row in schemaTable.Rows)
+                {
+                    if (row["ColumnName"] != null &&
+                            (!m_Fields.ContainsKey(row["ColumnName"].ToString())))
+                        columns.Add(row["ColumnName"].ToString());
+                }
+                m_ColumnNames = columns;
             }
         }
 

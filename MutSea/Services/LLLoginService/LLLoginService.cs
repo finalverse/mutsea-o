@@ -416,6 +416,12 @@ namespace MutSea.Services.LLLoginService
                     return LLFailedLoginResponse.UserProblem;
                 }
 
+                if (account.ServiceURLs != null && account.ServiceURLs.TryGetValue("MutSeaProvisioningState", out object provisioning)
+                    && provisioning is string state && state != "active")
+                {
+                    m_log.WarnFormat("[LLOGIN SERVICE]: Required account provisioning is incomplete for {0}", account.PrincipalID);
+                    return LLFailedLoginResponse.LoginBlockedProblem;
+                }
                 if (account.UserLevel < m_MinLoginLevel)
                 {
                     m_log.InfoFormat(

@@ -56,6 +56,7 @@ namespace MutSea.Services.UserAccountService
         protected IGridUserService m_GridUserService;
         protected IInventoryService m_InventoryService;
         protected IAvatarService m_AvatarService;
+        protected IAssetService m_AssetService;
 
         public UserAccountService(IConfigSource config)
             : base(config)
@@ -85,6 +86,13 @@ namespace MutSea.Services.UserAccountService
                 m_AvatarService = LoadPlugin<IAvatarService>(avatarServiceDll, [config]);
 
             m_CreateDefaultAvatarEntries = userConfig.GetBoolean("CreateDefaultAvatarEntries", false);
+            if (m_CreateDefaultAvatarEntries)
+            {
+                string assetServiceDll = userConfig.GetString("AssetService",
+                    config.Configs["AssetService"]?.GetString("LocalServiceModule", string.Empty) ?? string.Empty);
+                if (assetServiceDll != string.Empty)
+                    m_AssetService = LoadPlugin<IAssetService>(assetServiceDll, [config]);
+            }
 
             if (m_RootInstance == null)
             {
@@ -614,65 +622,125 @@ namespace MutSea.Services.UserAccountService
                 };
             }
 
+            // LLLoginService rejects incomplete provisioning regardless of its
+            // configured minimum level. Activate only after persisted verification.
+            if (m_CreateDefaultAvatarEntries)
+            {
+                account.UserLevel = -1000;
+                account.ServiceURLs["MutSeaProvisioningState"] = "pending";
+            }
             if (!StoreUserAccount(account))
             {
                 m_log.Error($"[USER ACCOUNT SERVICE]: Account creation failed for account {firstName} {lastName}");
                 return null;
             }
 
-            bool success;
-            if (m_AuthenticationService != null)
+            try
             {
-                success = m_AuthenticationService.SetPassword(account.PrincipalID, password);
-                if (!success)
-                    m_log.Warn($"[USER ACCOUNT SERVICE]: Unable to set password for account {firstName} {lastName}");
-            }
-
-            GridRegion home = null;
-            if (m_GridService != null)
-            {
-                List<GridRegion> defaultRegions = m_GridService.GetDefaultRegions(UUID.Zero);
-                if (defaultRegions != null && defaultRegions.Count >= 1)
-                    home = defaultRegions[0];
-
-                if (home != null)
-                    m_GridUserService.SetHome(account.PrincipalID.ToString(), home.RegionID, new Vector3(128, 128, 0), new Vector3(0, 1, 0));
-                else
-                    m_log.Warn($"[USER ACCOUNT SERVICE]: Unable to set home for account {firstName} {lastName}");
-            }
-            else
-            {
-                m_log.Warn(
-                    $"[USER ACCOUNT SERVICE]: Unable to retrieve default home region for account {firstName} {lastName}");
-            }
-
-            if (m_InventoryService != null)
-            {
-                success = m_InventoryService.CreateUserInventory(account.PrincipalID);
-                if (!success)
+                bool success;
+                if (m_CreateDefaultAvatarEntries && (m_AuthenticationService == null || m_InventoryService == null || m_AvatarService == null || m_AssetService == null))
+                    throw new InvalidOperationException("Required provisioning service is unavailable.");
+                if (m_AuthenticationService != null)
                 {
-                    m_log.Warn(
-                        $"[USER ACCOUNT SERVICE]: Unable to create inventory for account {firstName} {lastName}");
+                    success = m_AuthenticationService.SetPassword(account.PrincipalID, password);
+                    if (!success)
+                    {
+                        if (m_CreateDefaultAvatarEntries) throw new InvalidOperationException("Authentication initialization failed.");
+                        m_log.Warn($"[USER ACCOUNT SERVICE]: Unable to set password for account {firstName} {lastName}");
+                    }
+                }
+
+                GridRegion home = null;
+                if (m_GridService != null)
+                {
+                    List<GridRegion> defaultRegions = m_GridService.GetDefaultRegions(UUID.Zero);
+                    if (defaultRegions != null && defaultRegions.Count >= 1)
+                        home = defaultRegions[0];
+
+                    if (home != null)
+                        m_GridUserService.SetHome(account.PrincipalID.ToString(), home.RegionID, new Vector3(128, 128, 0), new Vector3(0, 1, 0));
+                    else
+                        m_log.Warn($"[USER ACCOUNT SERVICE]: Unable to set home for account {firstName} {lastName}");
                 }
                 else
                 {
-                    m_log.Debug(
-                        $"[USER ACCOUNT SERVICE]: Created user inventory for {firstName} {lastName}");
+                    m_log.Warn(
+                        $"[USER ACCOUNT SERVICE]: Unable to retrieve default home region for account {firstName} {lastName}");
+                }
+
+                if (m_InventoryService != null)
+                {
+                    success = m_InventoryService.CreateUserInventory(account.PrincipalID);
+                    if (!success)
+                    {
+                        if (m_CreateDefaultAvatarEntries) throw new InvalidOperationException("Inventory initialization failed.");
+                        m_log.Warn(
+                            $"[USER ACCOUNT SERVICE]: Unable to create inventory for account {firstName} {lastName}");
+                    }
+                    else
+                    {
+                        m_log.Debug(
+                            $"[USER ACCOUNT SERVICE]: Created user inventory for {firstName} {lastName}");
+                    }
+
+                    if (m_CreateDefaultAvatarEntries)
+                    {
+                        if (string.IsNullOrEmpty(model))
+                            CreateDefaultAppearanceEntries(account.PrincipalID);
+                        else
+                            EstablishAppearance(account.PrincipalID, model);
+                    }
                 }
 
                 if (m_CreateDefaultAvatarEntries)
                 {
-                    if (string.IsNullOrEmpty(model))
-                        CreateDefaultAppearanceEntries(account.PrincipalID);
-                    else
-                        EstablishAppearance(account.PrincipalID, model);
+                    ValidateInitialAppearance(account.PrincipalID);
+                    account.UserLevel = 0;
+                    account.ServiceURLs["MutSeaProvisioningState"] = "active";
+                    if (!StoreUserAccount(account)) throw new InvalidOperationException("Account activation failed.");
                 }
+                m_log.Info(
+                    $"[USER ACCOUNT SERVICE]: Account {firstName} {lastName} {account.PrincipalID} created successfully");
+
+                return account;
             }
+            catch (Exception ex) when (m_CreateDefaultAvatarEntries)
+            {
+                // Keep failed state for operator repair. Never delete identity,
+                // inventory or assets to conceal a partial provisioning failure.
+                account.UserLevel = -1001;
+                account.ServiceURLs["MutSeaProvisioningState"] = "failed";
+                try { if (!StoreUserAccount(account)) m_log.Error("[USER ACCOUNT SERVICE]: Failed provisioning state could not be persisted."); }
+                catch { m_log.Error("[USER ACCOUNT SERVICE]: Failed provisioning state storage is unavailable."); }
+                m_log.Error($"[USER ACCOUNT SERVICE]: Required provisioning failed for {account.PrincipalID}; account remains inactive ({ex.GetType().Name}).");
+                return null;
+            }
+        }
 
-            m_log.Info(
-                $"[USER ACCOUNT SERVICE]: Account {firstName} {lastName} {account.PrincipalID} created successfully");
-
-            return account;
+        private void ValidateInitialAppearance(UUID principalID)
+        {
+            InventoryFolderBase root = m_InventoryService.GetRootFolder(principalID);
+            InventoryFolderBase cof = m_InventoryService.GetFolderForType(principalID, FolderType.CurrentOutfit);
+            AvatarAppearance appearance = m_AvatarService.GetAppearance(principalID);
+            if (root == null || root.Owner != principalID || cof == null || cof.Owner != principalID || appearance == null || appearance.Wearables.Length < 6)
+                throw new InvalidOperationException("Required inventory/appearance is missing.");
+            InventoryCollection content = m_InventoryService.GetFolderContent(principalID, cof.ID);
+            if (content?.Items == null) throw new InvalidOperationException("Current Outfit is unavailable.");
+            for (int i = 0; i < 6; i++)
+            {
+                AvatarWearable wearable = appearance.Wearables[i];
+                if (wearable == null || wearable.Count == 0) throw new InvalidOperationException("Required starter wearable is missing.");
+                WearableItem worn = wearable[0];
+                InventoryItemBase item = m_InventoryService.GetItem(principalID, worn.ItemID);
+                int type = i < 4 ? (int)AssetType.Bodypart : (int)AssetType.Clothing;
+                if (item == null || item.Owner != principalID || item.AssetID.IsZero() || item.AssetID != worn.AssetID || item.AssetType != type || item.InvType != (int)InventoryType.Wearable || (item.Flags & 0xff) != i)
+                    throw new InvalidOperationException("Starter wearable binding is invalid.");
+                if (!content.Items.Any(link => link.Owner == principalID && link.AssetType == (int)AssetType.Link && link.AssetID == item.ID && link.Folder == cof.ID))
+                    throw new InvalidOperationException("Starter Current Outfit link is missing.");
+                AssetBase asset = m_AssetService.Get(item.AssetID.ToString());
+                if (asset == null || asset.Type != type || asset.Data == null || asset.Data.Length == 0)
+                    throw new InvalidOperationException("Starter wearable asset is unavailable.");
+            }
         }
 
         protected void CreateDefaultAppearanceEntries(UUID principalID)

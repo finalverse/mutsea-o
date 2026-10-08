@@ -44,6 +44,7 @@ namespace MutSea.Data.SQLite
 
         private string m_Realm;
         private List<string> m_ColumnNames;
+        private readonly object m_ColumnNamesGate = new object();
         private int m_LastExpire;
 
         protected static SQLiteConnection m_Connection;
@@ -92,14 +93,7 @@ namespace MutSea.Data.SQLite
                 {
                     ret.PrincipalID = principalID;
 
-                    if (m_ColumnNames == null)
-                    {
-                        m_ColumnNames = new List<string>();
-
-                        DataTable schemaTable = result.GetSchemaTable();
-                        foreach (DataRow row in schemaTable.Rows)
-                            m_ColumnNames.Add(row["ColumnName"].ToString());
-                    }
+                    CheckColumnNames(result);
 
                     foreach (string s in m_ColumnNames)
                     {
@@ -121,6 +115,20 @@ namespace MutSea.Data.SQLite
             }
 
             return null;
+        }
+
+        private void CheckColumnNames(IDataReader reader)
+        {
+            // Authentication must not see an empty cache on parallel first logins.
+            lock (m_ColumnNamesGate)
+            {
+                if (m_ColumnNames != null)
+                    return;
+                List<string> columns = new List<string>();
+                foreach (DataRow row in reader.GetSchemaTable().Rows)
+                    columns.Add(row["ColumnName"].ToString());
+                m_ColumnNames = columns;
+            }
         }
 
         public bool Store(AuthenticationData data)

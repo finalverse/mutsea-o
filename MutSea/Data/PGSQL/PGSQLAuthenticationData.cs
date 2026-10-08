@@ -42,6 +42,7 @@ namespace MutSea.Data.PGSQL
     {
         private string m_Realm;
         private List<string> m_ColumnNames = null;
+        private readonly object m_ColumnNamesGate = new object();
         private int m_LastExpire = 0;
         private string m_ConnectionString;
         private PGSQLManager m_database;
@@ -82,14 +83,7 @@ namespace MutSea.Data.PGSQL
                     {
                         ret.PrincipalID = principalID;
 
-                        if (m_ColumnNames == null)
-                        {
-                            m_ColumnNames = new List<string>();
-
-                            DataTable schemaTable = result.GetSchemaTable();
-                            foreach (DataRow row in schemaTable.Rows)
-                                m_ColumnNames.Add(row["ColumnName"].ToString());
-                        }
+                        CheckColumnNames(result);
 
                         foreach (string s in m_ColumnNames)
                         {
@@ -103,6 +97,19 @@ namespace MutSea.Data.PGSQL
                 }
             }
             return null;
+        }
+
+        private void CheckColumnNames(IDataReader reader)
+        {
+            lock (m_ColumnNamesGate)
+            {
+                if (m_ColumnNames != null)
+                    return;
+                List<string> columns = new List<string>();
+                foreach (DataRow row in reader.GetSchemaTable().Rows)
+                    columns.Add(row["ColumnName"].ToString());
+                m_ColumnNames = columns;
+            }
         }
 
         public bool Store(AuthenticationData data)
