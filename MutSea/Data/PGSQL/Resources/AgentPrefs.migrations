@@ -17,3 +17,14 @@ WITH (OIDS=FALSE);
 ALTER TABLE "public"."agentprefs" ADD PRIMARY KEY ("PrincipalID") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 COMMIT;
+
+:VERSION 2
+BEGIN;
+-- Fixed-width char values acquire padding, changing native string preferences.
+ALTER TABLE agentprefs ALTER COLUMN "AccessPrefs" DROP DEFAULT;
+ALTER TABLE agentprefs ALTER COLUMN "Language" DROP DEFAULT;
+ALTER TABLE agentprefs ALTER COLUMN "AccessPrefs" TYPE varchar(2) USING rtrim("AccessPrefs");
+ALTER TABLE agentprefs ALTER COLUMN "Language" TYPE varchar(5) USING rtrim("Language");
+ALTER TABLE agentprefs ALTER COLUMN "AccessPrefs" SET DEFAULT 'M';
+ALTER TABLE agentprefs ALTER COLUMN "Language" SET DEFAULT 'en-us';
+COMMIT;
