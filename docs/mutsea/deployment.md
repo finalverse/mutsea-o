@@ -6,6 +6,8 @@ As of 2026-10-09, a new x86-64 simulator is installed on the requested developme
 
 The full native source build and Finalverse module build passed. Fresh startup provisioned an active developer account with initial appearance data and seeded 40 Harbor objects. Real LAN HTTPS login through the gateway, the advertised HTTPS capability origin, all 40 UDP object identities/transforms and logout passed. This uses explicit private test DNS mappings and is **not** proof of public world entry.
 
+The final development image also passes bench import, all thirteen semantic records, simulator restart and guarded Undo through that gateway. A matching stopped-server backup pins the image, PostgreSQL dump, role definitions, configuration, runtime journals and scene seed. Restoring the dump into a separate verification database reproduced every row in all 31 native tables. Original Harbor streaming passed again after content acceptance; detailed receipts and backups remain private.
+
 `https://mutsea.com` and `https://www.mutsea.com` remain the welcome website. Public grid login remains gated pending an externally verified UDP route and simulator certificate-renewal synchronization. A public UDP 19000 probe did not reach the gateway, and the router did not answer UPnP discovery. Operational addresses, account credentials, configurations, certificates and raw receipts remain outside Git.
 
 ## Prepare a new instance

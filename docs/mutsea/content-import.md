@@ -44,7 +44,7 @@ The journal is durable logical coordination, not one atomic PostgreSQL-plus-file
 - 51 existing world/navigation tests and 16 package validator tests.
 - A path lantern rendered in the packaged macOS viewer before the PostgreSQL cutover; its import, restart and Undo checks passed.
 - Bench v0.1.1: 13 native mesh parts, 1404 triangles and two materials imported into the PostgreSQL fixture. Actual UDP mesh bindings and all 13 semantic records passed after a complete database/simulator restart. Guarded Undo removed the instance and semantic projection; a fresh instance is retained for visual testing.
-- Fresh remote x86-64 PostgreSQL deployment: the same bench imported through verified gateway HTTPS and native LAN UDP, including all thirteen semantic records. This is LAN acceptance, not public world entry.
+- Fresh remote x86-64 PostgreSQL deployment: the same bench imported through verified gateway HTTPS and native LAN UDP, including all thirteen semantic records. Restart, guarded Undo and verification of removal passed with the final module build. A fresh bench is retained, and all 40 original Harbor identities/transforms passed again. This is LAN acceptance, not public world entry.
 - Lumi's identity, autonomy, seven embodiment components, semantic home, memories and goal history passed the same restart audit.
 
 Bench rendering, sitting, collision and controlled performance measurements remain pending because the Mac locked before the visual check. This is a working bounded import seam, not Phase 4B completion or a general Studio live-link implementation. Pavilion-scale placement, Harbor composition, environments and avatar art remain subsequent content gates.
