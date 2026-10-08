@@ -1,5 +1,7 @@
 # MutSea platform verification — 2026-10-07
 
+This is the historical platform baseline. For the PostgreSQL deployment verified on 2026-10-09 and its remaining public-entry gates, see [current deployment](deployment.md) and [content import](content-import.md).
+
 Server baseline: `13c546ce413e49e957e387547d97e79800cf33ca`. Simulator source was rebuilt with .NET 8 rather than reusing the Phase 0 binaries. Tests use fresh isolated standalone worlds; the original development sandbox and neighboring services were preserved. MutSea remains the server brand; Finalverse remains the client brand.
 
 | Target | Observed result | Remaining limit |

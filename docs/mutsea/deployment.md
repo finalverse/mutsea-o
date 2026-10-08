@@ -2,9 +2,11 @@
 
 ## Current public state
 
-`https://mutsea.com` and `https://www.mutsea.com` serve the MutSea welcome site. AWS Route 53 supplies DNS. The existing gateway serves HTTPS; no EC2 instance was provisioned. `https://grid.mutsea.com` returns HTTP 503 with `setup_pending` until an actual simulator and its public UDP route pass login tests.
+As of 2026-10-09, a new x86-64 simulator is installed on the requested development host with a dedicated PostgreSQL 16.15 container, persistent storage and a private database network. The application role owns its database and has no superuser, database-creation or role-creation privileges. No database port is published. Existing neighboring containers and volumes were preserved.
 
-The requested simulator deployment is pending: the destination host was unreachable through the gateway during this run. A successful gateway website or certificate does not prove world entry.
+The full native source build and Finalverse module build passed. Fresh startup provisioned an active developer account with initial appearance data and seeded 40 Harbor objects. Real LAN HTTPS login through the gateway, the advertised HTTPS capability origin, all 40 UDP object identities/transforms and logout passed. This uses explicit private test DNS mappings and is **not** proof of public world entry.
+
+`https://mutsea.com` and `https://www.mutsea.com` remain the welcome website. Public grid login remains gated pending an externally verified UDP route and simulator certificate-renewal synchronization. A public UDP 19000 probe did not reach the gateway, and the router did not answer UPnP discovery. Operational addresses, account credentials, configurations, certificates and raw receipts remain outside Git.
 
 ## Prepare a new instance
 
@@ -20,7 +22,7 @@ The generator defaults to PostgreSQL and requires a private database configurati
 
 Build `tools/MutSea.StarterScene` against the freshly compiled simulator assemblies with `-p:MutSeaBin=/absolute/path/to/bin`. Run its DLL with the owner UUID from the private account file and a new scene directory. UUIDs are identifiers, not passwords.
 
-For the public TLS profile, install a valid PKCS12 certificate at `/config/mutsea.p12`, using the generated certificate-password file through OpenSSL's file input. Its SAN must cover `grid.mutsea.com`. Keep certificate keys private; arrange renewal and simulator certificate reload/restart before enabling public traffic. The currently installed gateway renewal hook reloads nginx only; simulator certificate synchronization is still a deployment gate.
+For the public TLS profile, install a valid PKCS12 certificate at `/config/mutsea.p12`, using the generated certificate-password file through OpenSSL's file input. Its SAN must cover `grid.mutsea.com`. Keep certificate keys private; arrange renewal and simulator certificate reload/restart before enabling public traffic. The gateway renewal hook currently reloads nginx only. Simulator certificate synchronization is still a deployment gate; the gateway does not yet have authorized unattended SSH access to the simulator. A manual certificate installation is verified, with expiration on 2027-01-05.
 
 Set the Compose environment privately:
 
@@ -45,7 +47,7 @@ load xml2 /scene/harbor.xml
 
 After PostgreSQL is healthy, start with `docker compose -f deploy/standalone/compose.yaml -f deploy/standalone/compose.postgresql.yaml up -d` and the private `MUTSEA_DATABASE_NETWORK` setting. Verify initialization and the scene; then empty `startup.txt` before the next restart. Imports are operator actions and may replace scene content; never automatically replay them against a live edited world. The XML2 importer and normal region storage perform the mutations.
 
-The public profile exposes native simulator HTTPS on container port 443 through LAN TCP 19000. Region UDP uses 19000. The gateway must proxy HTTPS to this upstream with certificate verification and the router must forward public UDP 19000 to the simulator. The inherited service calculates capability URLs from its actual TLS listener, so port 443 is intentional. Do not expose its auxiliary HTTP listener, console or databases. Enable the grid route only after HTTPS capabilities, UDP scene streaming, region crossing assumptions and real Finalverse login have been checked from outside the LAN.
+The public profile exposes native simulator HTTPS on container port 443 through LAN TCP 19000. Region UDP uses 19000. The gateway must proxy HTTPS to this upstream with certificate verification (including an adequate chain depth and the certificate issuer chain) and the router must forward public UDP 19000 to the simulator. The inherited service calculates capability URLs from its actual TLS listener, so port 443 is intentional. Do not expose its auxiliary HTTP listener, console or databases. Enable the grid route only after HTTPS capabilities, UDP scene streaming, region crossing assumptions and real Finalverse login have been checked from outside the LAN.
 
 ## DNS and gateway
 

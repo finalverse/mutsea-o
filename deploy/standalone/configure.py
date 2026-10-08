@@ -81,6 +81,8 @@ BaseURL = {base}
 PublicPort = {public_port}
 [Startup]
 console = basic
+logfile = /data/MutSea.log
+StatsLogFile = /data/MutSeaStats.log
 physics = ubODE
 meshing = ubODEMeshmerizer
 ConsoleHistoryFileEnabled = false
@@ -137,7 +139,7 @@ ConnectionString = "URI=file:/data/MutSea.db;UseUTF16Encoding=True"
             common += 'CreateDefaultAvatarEntries = true\n'
 common += '''[Modules]
 AssetCaching = FlotsamAssetCache
-[FlotsamCache]
+[AssetCache]
 CacheDirectory = /data/assetcache
 [GridService]
 StorageProvider = MutSea.Data.Null.dll:NullRegionData
