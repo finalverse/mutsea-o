@@ -26,6 +26,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     readonly Dictionary<UUID,DateTimeOffset> lastRequest = new();
     Scene scene = null!;
     Kernel kernel = null!;
+    bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true;
     bool enabled;
     string directory = "";
     public string Name => "FinalverseWorldModule";
@@ -40,6 +41,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var c=config.Configs["FinalverseWorld"];
         enabled=c?.GetBoolean("Enabled",false)??false;
         directory=c?.GetString("DataDirectory","/data/finalverse")??"/data/finalverse";
+        contentDirectory=c?.GetString("ContentLibraryDirectory","")??"";
         InitialiseCitizen(config);
     }
     public void AddRegion(Scene s)
@@ -47,6 +49,8 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         scene=s;
         if(!enabled)return;
         kernel=new Kernel(this,directory);
+        content=new ContentKernel(this,new ContentCatalog(contentDirectory),directory,RegionId);
+        kernel.ContentSemantics=content.Semantic;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
@@ -54,7 +58,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {
-        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); sessions[agent]=session; }
+        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); content?.Invalidate(agent.ToString()); sessions[agent]=session; }
         caps.RegisterSimpleHandler("FinalverseWorld",new SimpleStreamHandler("/"+UUID.Random(),(request,response)=>
         {
             response.ContentType="application/json";
@@ -85,8 +89,14 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                     if(lastRequest.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
                     lastRequest[agent]=DateTimeOffset.UtcNow;
                     string actor=agent.ToString(); string op=data.GetProperty("op").GetString()!;
+                    if(WorldRecoveryRequired && op is "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
                     if(op is "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
+                    if(op.StartsWith("content_",StringComparison.Ordinal))operation=op;
                     object result=op switch {
+                        "content_preview"=>content!.Preview(data.GetProperty("package_id").GetString()!,data.GetProperty("version").GetString()!,data.GetProperty("anchor").Deserialize<double[]>()!,actor),
+                        "content_commit"=>content!.Commit(data.GetProperty("plan_id").GetString()!,actor),
+                        "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),
+                        "content_history"=>content!.History(actor),
                         "inspect"=>kernel.Inspect(actor,data.TryGetProperty("selected_id",out var selected)&&selected.ValueKind==JsonValueKind.String?selected.GetString():null),
                         "prepare"=>kernel.Prepare(data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)!,actor),
                         "commit"=>kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),

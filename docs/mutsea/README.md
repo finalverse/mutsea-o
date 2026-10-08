@@ -9,3 +9,5 @@ MutSea remains the simulator/server brand. Finalverse is the world client. This 
 - [Upstream synchronization](upstream-sync-20261008.md): merge order, branch roles and verification of the updated runtime.
 
 Server baseline: `13c546ce413e49e957e387547d97e79800cf33ca`. New tools and deployment assets are authored separately; inherited copyright and BSD notices remain in place. Docker images include `LICENSE.txt` and `CONTRIBUTORS.txt`. This is a development deployment, not a production readiness claim.
+
+- [Phase 4B bounded Starter Library runtime import](content-import.md)

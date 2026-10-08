@@ -40,6 +40,7 @@ public sealed class Kernel
     readonly List<Entry> entries = new();
     readonly HashSet<string> undone = new();
     public bool RecoveryRequired { get; private set; }
+    public Func<string,string,object?>? ContentSemantics { get; set; }
     public const int MaxActions = 8, MaxCreates = 24;
     public const double MaxVolume = 120, MaxMove = 12, MaxScale = 12;
     public static readonly string LumiId = "b151468b-cbcc-4af2-ae2d-6967e8938bb4";
@@ -67,6 +68,8 @@ public sealed class Kernel
     }
     public object? Semantic(string id, string actor)
     {
+        var content = ContentSemantics?.Invoke(id, actor);
+        if (content != null) return content;
         var operation = entries.LastOrDefault(e => e.actor_id == actor && e.status == "committed" && !undone.Contains(e.plan_id) && e.steps.Any(s => s.id == id && s.type == "create"));
         if (operation == null || world.Find(id, actor) == null) return null;
         return new { entity_id = id, structure_id = operation.steps.First(s => s.type == "create").id,

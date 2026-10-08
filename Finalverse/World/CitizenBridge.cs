@@ -98,6 +98,7 @@ public sealed partial class WorldModule
         if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden"))throw new InvalidDataException("Tool capability denied.");
         lease=DateTimeOffset.UtcNow;
         if(op=="observe")return ObserveCitizen();
+        if(WorldRecoveryRequired&&op!="stop")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
         string action=data.GetProperty("action_id").GetString()!;if(!Guid.TryParse(action,out _))throw new InvalidDataException("Invalid action correlation.");
         if(citizenReceipts.TryGetValue(action,out var receipt))return receipt;
         if(citizenIntents.Contains(action))throw new InvalidDataException("Tool has an unresolved durable intent; do not replay uncertain actions.");
@@ -207,6 +208,7 @@ public sealed partial class WorldModule
             if(navigation is not {status:"moving"})return;
             try
             {
+                if(WorldRecoveryRequired){FinishNavigation("blocked","World transaction requires administrator recovery.");return;}
                 if(now-lease>TimeSpan.FromSeconds(5)){FinishNavigation("blocked","Runtime navigation lease expired.");return;}
                 if(now-navigation.started_at>TimeSpan.FromSeconds(90)){FinishNavigation("blocked","Navigation time budget exhausted.");return;}
                 var (home,_)=Home();if(home.id!=navigation.home_id||CitizenNavigator.Distance(Door(home),navigation.target)>.1){FinishNavigation("blocked","Home changed while navigating.");return;}

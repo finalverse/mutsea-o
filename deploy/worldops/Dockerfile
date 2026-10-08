@@ -9,7 +9,11 @@ WORKDIR /src
 COPY --from=inherited /opt/mutsea/ /mutsea-bin/
 COPY Finalverse/World/ Finalverse/World/
 COPY tools/Finalverse.WorldTests/ tools/Finalverse.WorldTests/
+COPY tools/MutSea.ContentTests/ tools/MutSea.ContentTests/
+COPY tools/MutSea.ContentNativeTests/ tools/MutSea.ContentNativeTests/
 RUN dotnet run --project tools/Finalverse.WorldTests -c Release \
+    && dotnet run --project tools/MutSea.ContentTests -c Release \
+    && dotnet run --project tools/MutSea.ContentNativeTests -c Release -p:MutSeaBin=/mutsea-bin \
     && dotnet build Finalverse/World/Finalverse.World.csproj -c Release -p:MutSeaBin=/mutsea-bin -o /module
 
 FROM inherited
