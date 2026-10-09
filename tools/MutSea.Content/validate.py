@@ -130,10 +130,53 @@ def validate(manifest, catalog=None, stack=None):
             require(relationship['target'] in ids, 'Dangling semantic relationship')
     definition = data['definition']
     keys(definition, {'scale', 'units', 'up_axis', 'minimum_client_version'},
-        {'spawn_points', 'required_slots', 'components', 'environment'})
+        {'spawn_points', 'required_slots', 'components', 'environment', 'materials', 'material_bindings', 'seating', 'lods', 'collision'})
     choice(definition['scale'], {'asset', 'prefab', 'building', 'place', 'neighborhood', 'community', 'city', 'world'}, 'Invalid composition scale')
     require(definition['units'] == 'meters' and definition['up_axis'] == 'Z', 'Unsupported authoring coordinates')
     text(definition['minimum_client_version'], 64)
+    if 'materials' in definition or 'material_bindings' in definition:
+        materials=definition.get('materials');bindings=definition.get('material_bindings')
+        require(isinstance(materials,list) and 0<len(materials)<=8 and isinstance(bindings,dict), 'Bounded material definitions and face bindings required')
+        material_ids=set()
+        for material in materials:
+            keys(material,{'local_id','base_color_linear','metallic_factor','roughness_factor','emissive_linear','alpha_mode','alpha_cutoff','double_sided'})
+            text(material['local_id'],120);require(material['local_id'] not in material_ids,'Duplicate material ID');material_ids.add(material['local_id'])
+            for key,length in [('base_color_linear',4),('emissive_linear',3)]:
+                require(isinstance(material[key],list) and len(material[key])==length and all(type(v) in (int,float) and math.isfinite(v) and 0<=v<=1 for v in material[key]),'Invalid linear material factors')
+            for key in ['metallic_factor','roughness_factor','alpha_cutoff']:
+                require(type(material[key]) in (int,float) and math.isfinite(material[key]) and 0<=material[key]<=1,'Invalid material factor')
+            choice(material['alpha_mode'],{'OPAQUE','MASK','BLEND'},'Invalid alpha mode');require(type(material['double_sided']) is bool,'Invalid sidedness')
+        require(set(bindings)==ids,'Material bindings must cover every semantic part')
+        for faces in bindings.values():
+            require(isinstance(faces,list) and 0<len(faces)<=8 and all(isinstance(x,str) and x in material_ids for x in faces),'Unknown face material')
+    if 'seating' in definition:
+        seats=definition['seating']
+        require(isinstance(seats,dict) and 0<len(seats)<=8 and set(seats)<=ids,'Invalid native seats')
+        for local_id,seat in seats.items():
+            keys(seat,{'capacity','position','rotation'})
+            entity=next(e for e in data['entities'] if e['local_id']==local_id)
+            require(type(seat['capacity']) is int and seat['capacity']==1 and entity['semantic_type']=='seating' and 'sit' in entity['affordances'],'Native seat needs seating semantics and capacity one')
+            for key,length,bound in [('position',3,2),('rotation',4,1)]:
+                require(isinstance(seat[key],list) and len(seat[key])==length and all(type(v) in (int,float) and math.isfinite(v) and -bound<=v<=bound for v in seat[key]),'Invalid native sit transform')
+            require(any(seat['position']) and abs(sum(v*v for v in seat['rotation'])-1)<.001,'Invalid native sit target')
+    if 'collision' in definition:
+        shapes=definition['collision']
+        require('materials' in definition and isinstance(shapes,dict) and 0<len(shapes)<=32 and set(shapes)<=ids,'Collision requires bounded native material-package parts')
+        for shape in shapes.values():
+            keys(shape,{'shape'},{'minimum','maximum'})
+            choice(shape['shape'],{'box','none'},'Unsupported small-part collision')
+            if shape['shape']=='none': require(set(shape)=={'shape'},'Noncolliding part cannot contain hull bounds')
+            else:
+                for key in ('minimum','maximum'):
+                    require(isinstance(shape.get(key),list) and len(shape[key])==3 and all(type(v) in (int,float) and math.isfinite(v) and -.5<=v<=.5 for v in shape[key]),'Collision hull must stay inside the normalized visual bounds')
+                require(all(high-low>=.001 for low,high in zip(shape['minimum'],shape['maximum'])),'Collision hull must have positive extents')
+    if 'lods' in definition:
+        lods=definition['lods'];keys(lods,{'medium','low','lowest'})
+        previous=data['budget']['triangles']
+        for level in ('medium','low','lowest'):
+            keys(lods[level],{'path','triangles'});nonnegative(lods[level]['triangles'])
+            require(lods[level]['path'] in seen and 0<lods[level]['triangles']<previous,'Missing or unreduced LOD payload')
+            previous=lods[level]['triangles']
     if data['kind'] == 'world':
         require(isinstance(definition.get('spawn_points'), list) and definition['spawn_points'], 'World requires spawn points')
         for position in definition['spawn_points']:

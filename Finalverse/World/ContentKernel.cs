@@ -5,19 +5,24 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Finalverse.World;
-public sealed record ContentFace(double[] color,bool fullbright);
+public sealed record ContentFace(double[] color,bool fullbright,string? material_id=null);
+public sealed record ContentMaterialFactors(string local_id,double[] base_color_linear,double metallic_factor,double roughness_factor,double[] emissive_linear,string alpha_mode,double alpha_cutoff,bool double_sided);
+public sealed record ContentMaterial(string local_id,string asset_path,string asset_sha256,ContentMaterialFactors factors);
 public sealed record ContentRelationship(string type,string target);
 public sealed record ContentMetadata(string[] tags,string[] affordances,ContentRelationship[] relationships);
-public sealed record ContentPart(string local_id,string name,string semantic_type,string description,double[] position,double[] scale,double[] rotation,ContentFace[] faces,string mesh_path,string mesh_sha256,int triangles,ContentMetadata? semantics=null);
-public sealed record ContentPackage(int schema_version,string package_id,string version,string title,string manifest_sha256,string license,ContentPart[] parts,string lod_policy,string collision_policy);
+public sealed record ContentSeat(int capacity,double[] position,double[] rotation);
+public sealed record ContentCollision(string shape,double[]? minimum=null,double[]? maximum=null);
+public sealed record ContentPart(string local_id,string name,string semantic_type,string description,double[] position,double[] scale,double[] rotation,ContentFace[] faces,string mesh_path,string mesh_sha256,int triangles,ContentMetadata? semantics=null,ContentSeat? seat=null,ContentCollision? collision=null);
+public sealed record ContentPackage(int schema_version,string package_id,string version,string title,string manifest_sha256,string license,ContentPart[] parts,string lod_policy,string collision_policy,ContentMaterial[]? materials=null,int[]? lod_triangles=null);
 public sealed record ContentPlan(string plan_id,string actor_id,DateTimeOffset expires_at,ContentPackage package,double[] anchor,string[] entity_ids,string[] asset_ids);
 public sealed record ContentEntry(string operation_id,string status,DateTimeOffset timestamp,ContentPlan plan,string? fingerprint,string? error);
 public interface IContentWorld
 {
     void Check(ContentPlan plan);
-    string Create(ContentPlan plan,byte[][] meshes);
+    string Create(ContentPlan plan,byte[][] meshes,byte[][] materials);
     string? Fingerprint(ContentPlan plan);
     bool MatchesFingerprint(ContentPlan plan, string fingerprint) => Fingerprint(plan) == fingerprint;
+    void CheckDelete(ContentPlan plan) { }
     void Delete(ContentPlan plan);
 }
 
@@ -26,8 +31,8 @@ public interface IContentWorld
 public sealed class ContentCatalog
 {
     public static readonly JsonSerializerOptions Json=new(){UnmappedMemberHandling=JsonUnmappedMemberHandling.Disallow};
-    readonly Dictionary<string,(ContentPackage package,byte[][] meshes)> packages=new();
-    public ContentCatalog(string root)
+    readonly Dictionary<string,(ContentPackage package,byte[][] meshes,byte[][] materials)> packages=new();
+    public ContentCatalog(string root,Func<byte[],ContentMaterialFactors,bool>? validateNativeMaterial=null)
     {
         if(string.IsNullOrEmpty(root))return;
         SafeFile(root,true);
@@ -55,29 +60,71 @@ public sealed class ContentCatalog
             }
             Validate(package);
             Require(original.GetProperty("budget").GetProperty("triangles").GetInt32()==package.parts.Sum(p=>p.triangles),"Triangle manifest mismatch.");
+            if(package.lod_triangles is {} lodCounts)
+            {
+                var lods=original.GetProperty("definition").GetProperty("lods");
+                Require(lodCounts.Skip(1).SequenceEqual(new[]{"medium","low","lowest"}.Select(level=>lods.GetProperty(level).GetProperty("triangles").GetInt32())),"LOD counts contradict the pinned manifest.");
+            }
+            if(package.schema_version==3)
+            {
+                var definition=original.GetProperty("definition");
+                var declared=definition.GetProperty("materials").Deserialize<ContentMaterialFactors[]>(Json)!;
+                Require(JsonSerializer.Serialize(package.materials!.Select(m=>m.factors))==JsonSerializer.Serialize(declared),"PBR factors contradict the pinned manifest.");
+                var bindings=definition.GetProperty("material_bindings").Deserialize<Dictionary<string,string[]>>(Json)!;
+                Require(bindings.Count==package.parts.Length&&package.parts.All(p=>bindings.TryGetValue(p.local_id,out var faces)&&faces.SequenceEqual(p.faces.Select(f=>f.material_id))),"PBR face bindings contradict the pinned manifest.");
+                var seating=definition.TryGetProperty("seating",out var seats)?seats.Deserialize<Dictionary<string,ContentSeat>>(Json)!:new();
+                Require(seating.Count==package.parts.Count(p=>p.seat!=null)&&package.parts.All(p=>p.seat==null?!seating.ContainsKey(p.local_id):seating.TryGetValue(p.local_id,out var seat)&&JsonSerializer.Serialize(p.seat)==JsonSerializer.Serialize(seat)),"Native seating contradicts the pinned manifest.");
+                var collision=definition.TryGetProperty("collision",out var collisionMap)?collisionMap.Deserialize<Dictionary<string,ContentCollision>>(Json)!:new();
+                Require(collision.Count==package.parts.Count(p=>p.collision!=null)&&package.parts.All(p=>p.collision==null?!collision.ContainsKey(p.local_id):collision.TryGetValue(p.local_id,out var shape)&&JsonSerializer.Serialize(p.collision)==JsonSerializer.Serialize(shape)),"Native collision contradicts the pinned manifest.");
+            }
             var meshes=package.parts.Select(p=>{
                 var file=Path.Combine(directory,p.mesh_path);SafeFile(file,false);var bytes=Read(file,2*1024*1024);
                 Require(Hash(bytes)==p.mesh_sha256,"Mesh hash mismatch.");return bytes;
             }).ToArray();
-            Require(packages.TryAdd(package.package_id+"@"+package.version,(package,meshes)),"Duplicate catalog identity.");
+            var materials=(package.materials??[]).Select(m=>{
+                var file=Path.Combine(directory,m.asset_path);SafeFile(file,false);var bytes=Read(file,32768);
+                Require(Hash(bytes)==m.asset_sha256&&validateNativeMaterial!=null&&validateNativeMaterial(bytes,m.factors),"PBR asset does not match its bounded native material contract.");return bytes;
+            }).ToArray();
+            Require(packages.TryAdd(package.package_id+"@"+package.version,(package,meshes,materials)),"Duplicate catalog identity.");
         }
     }
-    public (ContentPackage package,byte[][] meshes) Get(string id,string version)=>packages.TryGetValue(id+"@"+version,out var p)?p:throw new InvalidDataException("Package is not in the operator-approved catalog.");
+    public (ContentPackage package,byte[][] meshes,byte[][] materials) Get(string id,string version)=>packages.TryGetValue(id+"@"+version,out var p)?p:throw new InvalidDataException("Package is not in the operator-approved catalog.");
     public static void Validate(ContentPackage p)
     {
-        Require(p!=null&&p.schema_version is 1 or 2&&p.license=="CC0-1.0"&&p.parts is {Length:>0 and <=32},"Only small original CC0 asset packages are enabled in this first adapter.");
+        Require(p!=null&&p.schema_version is 1 or 2 or 3&&p.license=="CC0-1.0"&&p.parts is {Length:>0 and <=32},"Only small original CC0 asset packages are enabled in this first adapter.");
         Require(p!.package_id?.Length is >0 and <=120&&p.version?.Length is >0 and <=40&&p.title?.Length is >0 and <=120&&IsHash(p.manifest_sha256),"Invalid package identity.");
         Require(p.parts.Select(x=>x.local_id).Distinct().Count()==p.parts.Length,"Duplicate local IDs.");
         Require(p.parts.Sum(x=>x.triangles) is >0 and <=4096,"Initial small-asset triangle budget exceeded.");
+        if(p.lod_triangles is {} lodCounts)Require(lodCounts.Length==4&&lodCounts[0]==p.parts.Sum(x=>x.triangles)&&lodCounts.All(n=>n>0)&&lodCounts.Zip(lodCounts.Skip(1),(a,b)=>a>b).All(v=>v),"Invalid reduced LOD metrics.");
+        Require(p.schema_version==3?p.materials is {Length:>0 and <=8}:p.materials==null,"Material assets require the explicit v3 contract.");
+        foreach(var material in p.materials??[])
+        {
+            Require(material.local_id?.Length is >0 and <=120&&material.factors?.local_id==material.local_id,"Invalid material identity.");
+            Require(p.materials!.Count(m=>m.local_id==material.local_id)==1,"Duplicate material identity.");
+            Require(SafePayloadName(material.asset_path)&&IsHash(material.asset_sha256),"Invalid native material path/hash.");
+            ValidateMaterial(material.factors!);
+        }
         foreach(var part in p.parts)
         {
             Require(part.local_id?.Length is >0 and <=120&&part.name?.Length is >0 and <=120&&part.description?.Length is >0 and <=512&&part.semantic_type?.Length is >0 and <=80,"Missing semantic metadata.");
             Vector(part.position,3,-4,4);Vector(part.scale,3,.01,4);Vector(part.rotation,4,-1,1);
             Require(Math.Abs(part.rotation.Sum(x=>x*x)-1)<.001,"Invalid part quaternion.");
             Require(part.faces is {Length:>0 and <=8}&&part.triangles>0,"Invalid face budget.");
-            foreach(var face in part.faces)Vector(face.color,4,0,1);
+            foreach(var face in part.faces){Vector(face.color,4,0,1);Require(p.schema_version==3?p.materials!.Any(m=>m.local_id==face.material_id)&&!face.fullbright:face.material_id==null,"Unknown PBR material or unsupported legacy binding/fullbright.");}
             Require(part.mesh_path is {Length:>0 and <=80}&&!part.mesh_path.Contains('/')&&!part.mesh_path.Contains('\\')&&!part.mesh_path.Contains("..")&&IsHash(part.mesh_sha256),"Invalid mesh path/hash.");
             Require(p.schema_version==1||part.semantics!=null,"Complete semantic metadata is required in v2 packages.");
+            if(part.seat is {} seat)
+            {
+                Require(p.schema_version==3&&seat.capacity==1&&part.semantic_type=="seating"&&part.semantics!.affordances.Contains("sit"),"Only an explicit single native seat is enabled.");
+                Vector(seat.position,3,-2,2);Vector(seat.rotation,4,-1,1);
+                Require(seat.position.Any(v=>v!=0)&&Math.Abs(seat.rotation.Sum(v=>v*v)-1)<.001,"Invalid native sit target.");
+            }
+            if(part.collision is {} collision)
+            {
+                Require(p.schema_version==3&&collision.shape is "box" or "none","Unsupported explicit collision shape.");
+                Require(collision.shape!="none"||part!=p.parts[0],"A native linked root must retain a collision shape.");
+                ValidateCollision(collision);
+            }
             if(part.semantics is {} metadata)
             {
                 Require(metadata.tags is {Length:<=64}&&metadata.tags.All(t=>t is {Length:>0 and <=64}&&!t.Any(char.IsControl)),"Invalid semantic tags.");
@@ -86,6 +133,24 @@ public sealed class ContentCatalog
             }
         }
     }
+    public static void ValidateMaterial(ContentMaterialFactors f)
+    {
+        Require(f!=null&&f.local_id?.Length is >0 and <=120,"Missing material identity.");
+        Vector(f!.base_color_linear,4,0,1);Vector(f.emissive_linear,3,0,1);
+        Vector([f.metallic_factor,f.roughness_factor,f.alpha_cutoff],3,0,1);
+        Require(f.alpha_mode is "OPAQUE" or "MASK" or "BLEND","Unsupported material alpha mode.");
+    }
+    public static void ValidateCollision(ContentCollision c)
+    {
+        Require(c.shape is "box" or "none","Unsupported collision shape.");
+        if(c.shape=="none")Require(c.minimum==null&&c.maximum==null,"Noncolliding parts cannot declare a hull.");
+        else
+        {
+            Vector(c.minimum!,3,-.5,.5);Vector(c.maximum!,3,-.5,.5);
+            Require(c.minimum!.Zip(c.maximum!,(low,high)=>high-low>=.001).All(v=>v),"Collision hull must have three positive extents.");
+        }
+    }
+    static bool SafePayloadName(string s)=>s is {Length:>0 and <=80}&&!s.Contains('/')&&!s.Contains('\\')&&!s.Contains("..");
     static void SafeFile(string path,bool directory){var info=directory?(FileSystemInfo)new DirectoryInfo(path):new FileInfo(path);Require(info.Exists&&(info.Attributes&FileAttributes.ReparsePoint)==0,"Missing or linked catalog file.");}
     static byte[] Read(string path,int limit){Require(new FileInfo(path).Length is >0&&new FileInfo(path).Length<=limit,"Catalog payload size exceeded.");return File.ReadAllBytes(path);}
     static bool IsHash(string s)=>s is {Length:64}&&s.All(c=>c is >= '0' and <= '9' or >= 'a' and <= 'f');
@@ -126,7 +191,7 @@ public sealed class ContentKernel
         ContentCatalog.Require(pending.TryGetValue(id,out var plan)&&plan.actor_id==actor&&plan.expires_at>DateTimeOffset.UtcNow,"Approval is missing, expired or belongs to another session.");
         world.Check(plan!);pending.Remove(id);
         var entry=new ContentEntry(Guid.NewGuid().ToString(),"intent",DateTimeOffset.UtcNow,plan!,null,null);Append(entry);
-        try {var fp=world.Create(plan!,catalog.Get(plan!.package.package_id,plan.package.version).meshes);entry=entry with{status="committed",fingerprint=fp};Append(entry);return entry;}
+        try {var assets=catalog.Get(plan!.package.package_id,plan.package.version);var fp=world.Create(plan!,assets.meshes,assets.materials);entry=entry with{status="committed",fingerprint=fp};Append(entry);return entry;}
         catch(Exception){
             // Unknown partial insertion is never blindly deleted or replayed.
             bool absent=false;
@@ -141,6 +206,7 @@ public sealed class ContentKernel
         var old=entries.LastOrDefault(e=>e.plan.plan_id==id&&e.plan.actor_id==actor&&e.status=="committed");
         ContentCatalog.Require(old!=null&&!entries.Any(e=>e.plan.plan_id==id&&e.status=="undone"),"No active import owned by this actor.");
         ContentCatalog.Require(world.MatchesFingerprint(old!.plan,old.fingerprint!),"Imported object changed; Undo refuses to erase later edits.");
+        world.CheckDelete(old.plan);
         var entry=old with{operation_id=Guid.NewGuid().ToString(),timestamp=DateTimeOffset.UtcNow,status="intent"};Append(entry);
         try{world.Delete(old.plan);ContentCatalog.Require(world.Fingerprint(old.plan)==null,"Deletion was not confirmed.");entry=entry with{status="undone"};Append(entry);return entry;}
         catch(Exception){RecoveryRequired=true;Append(entry with{status="recovery_required",error="Undo could not be confirmed."});throw;}
@@ -153,7 +219,7 @@ public sealed class ContentKernel
         var i=Array.IndexOf(entry.plan.entity_ids,id);var part=entry.plan.package.parts[i];
         var metadata=part.semantics;
         var relationships=(metadata?.relationships??[]).Select(r=>new{r.type,target=entry.plan.entity_ids[Array.FindIndex(entry.plan.package.parts,p=>p.local_id==r.target)]}).ToArray();
-        return new{entity_id=id,structure_id=entry.plan.entity_ids[0],part.local_id,part.semantic_type,part.description,tags=metadata?.tags??[],affordances=metadata?.affordances??[],relationships,semantic_metadata_available=metadata!=null,package_id=entry.plan.package.package_id,package_version=entry.plan.package.version,entry.plan.package.manifest_sha256,mesh_sha256=part.mesh_sha256,license=entry.plan.package.license,owner_id=entry.plan.actor_id,entry.operation_id,entry.timestamp,version=1,provenance="Operator-approved original Starter Library; no external authoring code executed"};
+        return new{entity_id=id,structure_id=entry.plan.entity_ids[0],part.local_id,part.semantic_type,part.description,tags=metadata?.tags??[],affordances=metadata?.affordances??[],relationships,seat=part.seat,semantic_metadata_available=metadata!=null,package_id=entry.plan.package.package_id,package_version=entry.plan.package.version,entry.plan.package.manifest_sha256,mesh_sha256=part.mesh_sha256,license=entry.plan.package.license,owner_id=entry.plan.actor_id,entry.operation_id,entry.timestamp,version=1,provenance="Operator-approved original Starter Library; no external authoring code executed"};
     }
     void Append(ContentEntry entry)
     {

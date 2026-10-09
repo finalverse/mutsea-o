@@ -6,8 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
     <Compile Include="../../Finalverse/World/ContentKernel.cs" Link="ContentKernel.cs" />
     <Compile Include="../../Finalverse/World/ContentFingerprint.cs" Link="ContentFingerprint.cs" />
+    <Compile Include="../../Finalverse/World/ContentMaterialAsset.cs" Link="ContentMaterialAsset.cs" />
     <Reference Include="MutSea.Framework">
       <HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath>
     </Reference>

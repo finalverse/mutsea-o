@@ -4,6 +4,8 @@ using OpenMetaverse;
 using MutSea.Framework;
 using MutSea.Region.Framework.Scenes;
 using MutSea.Region.Framework.Scenes.Serialization;
+using OpenMetaverse.StructuredData;
+using System.Text.Json;
 
 int passed = 0;
 void Test(string name, Action action) { action(); passed++; Console.WriteLine("PASS " + name); }
@@ -42,4 +44,118 @@ Test("later mesh and material edits block undo", () => {
     var te = new Primitive.TextureEntry(Primitive.TextureEntry.WHITE_TEXTURE); te.DefaultTexture.RGBA = new Color4(.2f, .3f, .4f, 1);
     child.Shape.TextureEntry = te.GetBytes(); Assert(!ContentFingerprint.Matches(group, hash)); child.Shape.TextureEntry = texture;
 });
+var factors=new ContentMaterialFactors("wood",[.31,.12,.04,1],0,.72,[0,0,0],"OPAQUE",.5,false);
+Test("native material wrapper carries linear factors and no external resource",()=>{
+    var bytes=ContentMaterialAsset.Build(factors);
+    Assert(ContentMaterialAsset.Matches(bytes,factors));
+    var wrapper=(OSDMap)OSDParser.DeserializeLLSDBinary(bytes);
+    using var json=JsonDocument.Parse(wrapper["data"].AsString());
+    var material=json.RootElement.GetProperty("materials")[0];
+    Assert(material.GetProperty("pbrMetallicRoughness").GetProperty("baseColorFactor")[0].GetDouble()==.31);
+    Assert(!json.RootElement.TryGetProperty("textures",out _)&&!json.RootElement.TryGetProperty("images",out _));
+    Assert(!ContentMaterialAsset.Matches(bytes,factors with{roughness_factor=.1}));
+    wrapper["data"]=OSD.FromString(wrapper["data"].AsString().Replace("\"name\":\"wood\"","\"name\":\"wood\",\"extensions\":{}"));
+    Assert(!ContentMaterialAsset.Matches(OSDParser.SerializeLLSDBinary(wrapper,true),factors));
+});
+Test("PBR face bindings persist and later binding edits block undo",()=>{
+    var id=UUID.Random();
+    child.Shape.RenderMaterials=new Primitive.RenderMaterials {entries=[new(){te_index=0,id=id}]};
+    var boundHash=ContentFingerprint.Hash(group);
+    var restored=SceneObjectSerializer.FromXml2Format(SceneObjectSerializer.ToXml2Format(group));
+    Assert(restored!=null&&ContentFingerprint.Hash(restored)==boundHash);
+    Assert(restored!.GetPart(child.UUID).Shape.RenderMaterials.entries[0].id==id);
+    child.Shape.RenderMaterials.entries[0].id=UUID.Random();
+    Assert(!ContentFingerprint.Matches(group,boundHash));
+    child.Shape.RenderMaterials=null;
+});
+Test("native sit target persists and later seat edits block undo",()=>{
+    child.SitTargetPosition=new Vector3(0,0,.7f);child.SitTargetOrientation=Quaternion.Identity;
+    var seatHash=ContentFingerprint.Hash(group);
+    var restored=SceneObjectSerializer.FromXml2Format(SceneObjectSerializer.ToXml2Format(group));
+    Assert(restored!=null&&ContentFingerprint.Hash(restored)==seatHash);
+    child.SitTargetPosition=new Vector3(0,0,.8f);
+    Assert(!ContentFingerprint.Matches(group,seatHash));
+    child.SitTargetPosition=Vector3.Zero;
+});
+Test("noncolliding native child persists and physics edits block undo",()=>{
+    // Set the shape before native linking, as the executor does. Changing a
+    // linked part needs a live physics scene, absent from this serialization test.
+    var foliage=Part("foliage");foliage.PhysicsShapeType=(byte)PhysShapeType.none;
+    var plant=new SceneObjectGroup(Part("trunk"));plant.RootPart.LocalId=1;
+    plant.AddPart(foliage);foliage.ParentID=1;
+    var collisionHash=ContentFingerprint.Hash(plant);var xml=SceneObjectSerializer.ToXml2Format(plant);
+    var restored=SceneObjectSerializer.FromXml2Format(xml);
+    Assert(restored!=null&&restored.GetPart(foliage.UUID).PhysicsShapeType==(byte)PhysShapeType.none&&ContentFingerprint.Hash(restored)==collisionHash);
+    var edited=SceneObjectSerializer.FromXml2Format(xml.Replace("<PhysicsShapeType>1</PhysicsShapeType>","<PhysicsShapeType>2</PhysicsShapeType>"));
+    Assert(edited!=null&&!ContentFingerprint.Matches(edited,collisionHash));
+});
+if(args.Length is not (0 or 1 or 3))throw new ArgumentException("Expected catalog, optionally package ID and version.");
+if(args.Length>0)
+{
+    var catalog=new ContentCatalog(args[0],ContentMaterialAsset.Matches);
+    var compiled=catalog.Get(args.Length==3?args[1]:"mutsea.starter.bench",args.Length==3?args[2]:"0.1.6");
+    Test("actual compiled package material and reduced LOD contract",()=>{
+        Assert(compiled.package.schema_version==3&&compiled.materials.Length>0);
+        if(args.Length==1)
+        {
+            Assert(compiled.package.parts.Length==13&&compiled.materials.Length==2);
+            Assert(compiled.package.parts[0].seat is {capacity:1});
+        }
+        var counts=new int[4];var levels=new[]{"high_lod","medium_lod","low_lod","lowest_lod"};
+        foreach(var bytes in compiled.meshes)
+        {
+            using var stream=new MemoryStream(bytes);var header=(OSDMap)OSDParser.DeserializeLLSDBinary(stream);int start=(int)stream.Position;
+            Assert(levels.Select(level=>((OSDMap)header[level])["offset"].AsInteger()).Distinct().Count()==4);
+            for(int i=0;i<4;i++)
+            {
+                var range=(OSDMap)header[levels[i]];
+                var faces=(OSDArray)Helpers.ZDecompressOSD(bytes.Skip(start+range["offset"].AsInteger()).Take(range["size"].AsInteger()).ToArray());
+                foreach(OSDMap face in faces)
+                {
+                    var indices=face["TriangleList"].AsBinary();Assert(indices.Length>0&&indices.Length%6==0);
+                    counts[i]+=indices.Length/6;
+                    Assert(face["Position"].AsBinary().Length==face["Normal"].AsBinary().Length);
+                }
+            }
+        }
+        Assert(counts.SequenceEqual(compiled.package.lod_triangles!));
+        Console.WriteLine("Verified native LOD triangles: "+string.Join(" / ",counts));
+    });
+    if(compiled.package.parts.Any(p=>p.collision!=null))Test("native explicit hull uses the pinned normalized bounds",()=>{
+        for(int part=0;part<compiled.package.parts.Length;part++)
+        {
+            var collision=compiled.package.parts[part].collision;if(collision?.shape!="box")continue;
+            var bytes=compiled.meshes[part];using var stream=new MemoryStream(bytes);
+            var header=(OSDMap)OSDParser.DeserializeLLSDBinary(stream);var range=(OSDMap)header["physics_convex"];
+            var hull=(OSDMap)Helpers.ZDecompressOSD(bytes.Skip((int)stream.Position+range["offset"].AsInteger()).Take(range["size"].AsInteger()).ToArray());
+            Assert(hull["Min"].AsVector3()==new Vector3(-.5f,-.5f,-.5f)&&hull["Max"].AsVector3()==new Vector3(.5f,.5f,.5f));
+            var points=hull["BoundingVerts"].AsBinary();Assert(points.Length==48);
+            for(int corner=0;corner<8;corner++)for(int axis=0;axis<3;axis++)
+            {
+                double normalized=BitConverter.ToUInt16(points,corner*6+axis*2)/65535.0-.5;
+                double expected=(corner&(1<<axis))==0?collision.minimum![axis]:collision.maximum![axis];
+                Assert(Math.Abs(normalized-expected)<=1.0/65535.0);
+            }
+        }
+    });
+    if(compiled.package.parts.Any(p=>p.collision?.shape=="box"))Test("compiled collision cannot contradict its original manifest",()=>{
+        var temp=Path.Combine(Path.GetTempPath(),"mutsea-collision-"+Guid.NewGuid());Directory.CreateDirectory(temp);
+        try
+        {
+            var folder=Path.Combine(temp,"package");Directory.CreateDirectory(folder);
+            var original=Directory.GetDirectories(args[0]).Single(dir=>File.ReadAllText(Path.Combine(dir,"compiled.json")).Contains(compiled.package.manifest_sha256,StringComparison.Ordinal));
+            foreach(var file in Directory.GetFiles(original))File.Copy(file,Path.Combine(folder,Path.GetFileName(file)));
+            var parts=compiled.package.parts.ToArray();int index=Array.FindIndex(parts,p=>p.collision?.shape=="box");
+            var bounds=parts[index].collision!.minimum!.ToArray();bounds[0]+=.001;
+            parts[index]=parts[index] with{collision=parts[index].collision! with{minimum=bounds}};
+            File.WriteAllText(Path.Combine(folder,"compiled.json"),JsonSerializer.Serialize(compiled.package with{parts=parts}));
+            try{new ContentCatalog(temp,ContentMaterialAsset.Matches);throw new Exception("Accepted altered collision.");}catch(InvalidDataException){}
+        }
+        finally{Directory.Delete(temp,true);}
+    });
+    Test("PBR catalog requires native payload validation",()=>{
+        try{new ContentCatalog(args[0]);throw new Exception("Accepted without native validator.");}catch(InvalidDataException){}
+        try{new ContentCatalog(args[0],(_,_)=>false);throw new Exception("Accepted mismatched native material.");}catch(InvalidDataException){}
+    });
+}
 Console.WriteLine($"{passed} native content fingerprint tests passed");

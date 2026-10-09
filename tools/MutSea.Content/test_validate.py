@@ -86,5 +86,49 @@ class PackageTests(unittest.TestCase):
     def test_unknown_executable_field(self):
         self.data['python']='arbitrary execution'
         with self.assertRaises(InvalidPackage):validate(self.write())
+    def pbr(self):
+        self.data['definition'].update(materials=[dict(local_id='wood',base_color_linear=[.31,.12,.04,1],
+            metallic_factor=0,roughness_factor=.72,emissive_linear=[0,0,0],alpha_mode='OPAQUE',alpha_cutoff=.5,double_sided=False)],
+            material_bindings={'chair':['wood']})
+    def test_pbr_valid(self):
+        self.pbr();self.assertEqual(validate(self.write())['definition']['materials'][0]['base_color_linear'][0],.31)
+    def test_pbr_reject_nonfinite_unknown_external_and_unbound(self):
+        self.pbr()
+        for mutate in (lambda d:d['definition']['materials'][0].update(roughness_factor=float('nan')),
+                       lambda d:d['definition']['materials'][0].update(base_color_linear=[1,1,1,True]),
+                       lambda d:d['definition']['materials'][0].update(texture_uri='https://example.invalid/a.png'),
+                       lambda d:d['definition'].update(material_bindings={'chair':['missing']}),
+                       lambda d:d['definition'].update(material_bindings={}),
+                       lambda d:d['definition']['materials'].append(copy.deepcopy(d['definition']['materials'][0]))):
+            data=copy.deepcopy(self.data);mutate(data)
+            with self.subTest(data=data),self.assertRaises(InvalidPackage):validate(self.write(data))
+    def test_native_seat_contract(self):
+        self.pbr();self.data['definition']['seating']={'chair':dict(capacity=1,position=[0,0,.1],rotation=[0,0,0,1])}
+        validate(self.write())
+        for mutate in (lambda d:d['definition']['seating']['chair'].update(capacity=2),
+                       lambda d:d['definition']['seating']['chair'].update(position=[0,0,0]),
+                       lambda d:d['definition']['seating']['chair'].update(rotation=[0,0,0,0]),
+                       lambda d:d['entities'][0].update(affordances=['inspect'])):
+            data=copy.deepcopy(self.data);mutate(data)
+            with self.subTest(data=data),self.assertRaises(InvalidPackage):validate(self.write(data))
+    def test_reduced_lods_require_pinned_payloads_and_reduction(self):
+        self.data['definition']['lods']={key:dict(path='missing.dae',triangles=count) for key,count in [('medium',8),('low',4),('lowest',2)]}
+        with self.assertRaises(InvalidPackage):validate(self.write())
+        for value in self.data['definition']['lods'].values():value['path']='mesh.glb'
+        validate(self.write())
+        self.data['definition']['lods']['low']['triangles']=8
+        with self.assertRaises(InvalidPackage):validate(self.write())
+
+    def test_collision_hulls_are_bounded_and_cannot_hide_unknown_parts(self):
+        self.pbr();self.data['definition']['collision']={'chair':dict(shape='box',minimum=[-.1,-.1,-.5],maximum=[.1,.1,.5])}
+        validate(self.write())
+        for shape in (dict(shape='box',minimum=[-.6,-.1,-.5],maximum=[.1,.1,.5]),
+                      dict(shape='box',minimum=[float('nan'),0,0],maximum=[.1,.1,.1]),
+                      dict(shape='box',minimum=[0,0,0],maximum=[0,.1,.1]),
+                      dict(shape='none',minimum=[0,0,0]),dict(shape='mesh')):
+            data=copy.deepcopy(self.data);data['definition']['collision']['chair']=shape
+            with self.subTest(shape=shape),self.assertRaises(InvalidPackage):validate(self.write(data))
+        self.data['definition']['collision']['missing']=dict(shape='none')
+        with self.assertRaises(InvalidPackage):validate(self.write())
 
 if __name__=='__main__': unittest.main()

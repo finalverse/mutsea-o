@@ -9,6 +9,7 @@
     <Reference Include="MutSea.Region.Framework"><HintPath>$(MutSeaBin)/MutSea.Region.Framework.dll</HintPath></Reference>
     <Reference Include="OpenMetaverse"><HintPath>$(MutSeaBin)/OpenMetaverse.dll</HintPath></Reference>
     <Reference Include="OpenMetaverseTypes"><HintPath>$(MutSeaBin)/OpenMetaverseTypes.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverse.StructuredData"><HintPath>$(MutSeaBin)/OpenMetaverse.StructuredData.dll</HintPath></Reference>
     <Reference Include="Mono.Addins"><HintPath>$(MutSeaBin)/Mono.Addins.dll</HintPath></Reference>
     <Reference Include="Nini"><HintPath>$(MutSeaBin)/Nini.dll</HintPath></Reference>
     <Reference Include="System.Drawing.Common"><HintPath>$(MutSeaBin)/System.Drawing.Common.dll</HintPath></Reference>

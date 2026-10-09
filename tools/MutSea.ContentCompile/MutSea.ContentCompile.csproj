@@ -5,6 +5,7 @@
     <MutSeaBin Condition="'$(MutSeaBin)' == ''">../../bin</MutSeaBin>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="../../Finalverse/World/Finalverse.World.csproj" />
     <Reference Include="OpenMetaverse"><HintPath>$(MutSeaBin)/OpenMetaverse.dll</HintPath></Reference>
     <Reference Include="OpenMetaverseTypes"><HintPath>$(MutSeaBin)/OpenMetaverseTypes.dll</HintPath></Reference>
     <Reference Include="OpenMetaverse.StructuredData"><HintPath>$(MutSeaBin)/OpenMetaverse.StructuredData.dll</HintPath></Reference>

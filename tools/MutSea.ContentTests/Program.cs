@@ -17,6 +17,41 @@ try{
  var catalog=new ContentCatalog(Path.Combine(root,"catalog"));var world=new Fake();var actor=Guid.NewGuid().ToString();var journal=Path.Combine(root,"journal");var region=Guid.NewGuid().ToString();var kernel=new ContentKernel(world,catalog,journal,region);
  Test("v1 metadata hydrated from pinned manifest",()=>{var p=catalog.Get(package.package_id,package.version).package;Assert(p.parts[0].semantics!.affordances.SequenceEqual(new[]{"inspect"}));});
  Test("v2 metadata omission fails closed",()=>Reject(()=>ContentCatalog.Validate(package with{schema_version=2})));
+ var material=new ContentMaterialFactors("wood",[.3,.12,.04,1],0,.7,[0,0,0],"OPAQUE",.5,false);
+ var pbr=package with{schema_version=3,materials=[new("wood","wood.llmaterial",ContentCatalog.Hash(mesh),material)],parts=[package.parts[0] with{faces=[new([1,1,1,1],false,"wood")],semantics=new([], ["inspect"],[])}]};
+ Test("bounded PBR contract rejects unknown bindings and fullbright",()=>{
+  ContentCatalog.Validate(pbr);
+  Reject(()=>ContentCatalog.Validate(pbr with{parts=[pbr.parts[0] with{faces=[new([1,1,1,1],true,"wood")]}]}));
+  Reject(()=>ContentCatalog.Validate(pbr with{parts=[pbr.parts[0] with{faces=[new([1,1,1,1],false,"missing")]}]}));
+  Reject(()=>ContentCatalog.Validate(pbr with{schema_version=2}));
+ });
+ Test("linear PBR factors reject nonfinite or out of range values",()=>{
+  Reject(()=>ContentCatalog.ValidateMaterial(material with{metallic_factor=double.NaN}));
+  Reject(()=>ContentCatalog.ValidateMaterial(material with{base_color_linear=[1,1,1,2]}));
+  Reject(()=>ContentCatalog.ValidateMaterial(material with{emissive_linear=[-1,0,0]}));
+ });
+ Test("single native seat requires sit semantics and a bounded target",()=>{
+  var seating=pbr with{parts=[pbr.parts[0] with{semantic_type="seating",semantics=new([], ["sit"],[]),seat=new(1,[0,0,.1],[0,0,0,1])}]};
+  ContentCatalog.Validate(seating);
+  Reject(()=>ContentCatalog.Validate(seating with{parts=[seating.parts[0] with{seat=new(2,[0,0,.1],[0,0,0,1])}]}));
+  Reject(()=>ContentCatalog.Validate(seating with{parts=[seating.parts[0] with{semantics=new([], ["inspect"],[])}]}));
+  Reject(()=>ContentCatalog.Validate(seating with{parts=[seating.parts[0] with{seat=new(1,[0,0,0],[0,0,0,1])}]}));
+ });
+ Test("reported LOD totals must reduce and match high geometry",()=>{
+  Reject(()=>ContentCatalog.Validate(pbr with{lod_triangles=[2,2,1,1]}));
+  Reject(()=>ContentCatalog.Validate(pbr with{lod_triangles=[10,5,3,1]}));
+ });
+ Test("explicit small-part collision rejects unsafe hulls and noncolliding roots",()=>{
+  var solid=pbr with{parts=[pbr.parts[0] with{collision=new("box",[-.1,-.1,-.5],[.1,.1,.5])}]};
+  ContentCatalog.Validate(solid);
+  Reject(()=>ContentCatalog.Validate(solid with{parts=[solid.parts[0] with{collision=new("box",[-.6,-.1,-.5],[.1,.1,.5])}]}));
+  Reject(()=>ContentCatalog.Validate(solid with{parts=[solid.parts[0] with{collision=new("box",[0,0,0],[0,.1,.1])}]}));
+  Reject(()=>ContentCatalog.Validate(solid with{parts=[solid.parts[0] with{collision=new("none")}]}));
+  Reject(()=>ContentCatalog.ValidateCollision(new("none",[0,0,0],[.1,.1,.1])));
+  Reject(()=>ContentCatalog.ValidateCollision(new("box",[double.NaN,0,0],[.1,.1,.1])));
+  var child=solid.parts[0] with{local_id="canopy",collision=new("none")};
+  ContentCatalog.Validate(solid with{parts=[solid.parts[0],child]});
+ });
  Test("unsupported affordance and dangling relationship rejected",()=>{Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{semantics=new(["starter"],["execute_code"],[])}]}));Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{semantics=new([], ["inspect"],[new("part_of","missing")])}]}));});
  Test("compiled metadata cannot contradict source manifest",()=>{Save(package with{parts=[package.parts[0] with{semantics=new(["starter"],["sit"],[])}]});Reject(()=>new ContentCatalog(Path.Combine(root,"catalog")));Save(package);});
  Test("v2 relationships map to canonical IDs and survive restart",()=>{
@@ -43,6 +78,7 @@ try{
  Test("intent precedes mutation and no replay",()=>{world.BeforeCreate=()=>Assert(File.ReadAllText(Path.Combine(journal,region+".content.worldline.jsonl")).Contains("\"status\":\"intent\""));var result=kernel.Commit(plan.plan_id,actor);Assert(result.status=="committed");Reject(()=>kernel.Commit(plan.plan_id,actor));});
  Test("semantic mapping and restart projection",()=>{Assert(JsonSerializer.Serialize(kernel.Semantic(plan.entity_ids[0],actor)).Contains("lighting"));kernel=new ContentKernel(world,catalog,journal,region);Assert(kernel.History(actor).Last().status=="committed"&&!kernel.RecoveryRequired);Assert(kernel.Semantic(plan.entity_ids[0],actor)!=null);});
  Test("undo protects later edits and owner",()=>{world.Value="edited";Reject(()=>kernel.Undo(plan.plan_id,actor));world.Value="original";Reject(()=>kernel.Undo(plan.plan_id,Guid.NewGuid().ToString()));});
+ Test("native deletion denial precedes intent and leaves writes available",()=>{var count=kernel.History(actor).Length;world.DenyDelete=true;Reject(()=>kernel.Undo(plan.plan_id,actor));Assert(!kernel.RecoveryRequired&&kernel.History(actor).Length==count);world.DenyDelete=false;});
  Test("undo durable and idempotent",()=>{Assert(kernel.Undo(plan.plan_id,actor).status=="undone");Assert(kernel.Semantic(plan.entity_ids[0],actor)==null);Reject(()=>kernel.Undo(plan.plan_id,actor));});
  Test("failed import without scene insertion is recorded and retryable",()=>{var k=new ContentKernel(world,catalog,Path.Combine(root,"failure"),region);world.FailCreate=true;var p=k.Preview(package.package_id,package.version,[1,1,1],actor);Reject(()=>k.Commit(p.plan_id,actor));Assert(!k.RecoveryRequired&&k.History(actor).Last().status=="failed");world.FailCreate=false;});
  Test("partial insertion blocks writes and preserves evidence",()=>{var k=new ContentKernel(world,catalog,Path.Combine(root,"partial"),region);world.FailCreate=true;world.PartialCreate=true;var p=k.Preview(package.package_id,package.version,[1,1,1],actor);Reject(()=>k.Commit(p.plan_id,actor));Assert(k.RecoveryRequired&&world.Value=="partial"&&k.History(actor).Last().status=="recovery_required");Reject(()=>k.Preview(package.package_id,package.version,[1,1,1],actor));k=new ContentKernel(world,catalog,Path.Combine(root,"partial"),region);Assert(k.RecoveryRequired);world.FailCreate=false;world.PartialCreate=false;world.Value=null;});
@@ -55,4 +91,4 @@ try{
  Test("reject unsigned external license and unknown schema fields",()=>{Reject(()=>ContentCatalog.Validate(package with{license="unknown"}));File.WriteAllText(Path.Combine(directory,"compiled.json"),JsonSerializer.Serialize(package).TrimEnd('}')+",\"exec\":\"bad\"}");try{new ContentCatalog(Path.Combine(root,"catalog"));throw new Exception("Accepted unknown field");}catch(JsonException){}Save(package);});
  Console.WriteLine($"{passed} content tests passed");return 0;
 }finally{Directory.Delete(root,true);}
-sealed class Fake:IContentWorld{public bool Deny,FailCreate,PartialCreate,FailFingerprint;public string? Value;public Action? BeforeCreate;public void Check(ContentPlan plan){if(Deny)throw new InvalidDataException("Native policy denied.");}public string Create(ContentPlan plan,byte[][] meshes){BeforeCreate?.Invoke();if(FailCreate){if(PartialCreate)Value="partial";throw new InvalidDataException("Simulated insertion failure.");}return Value="original";}public string? Fingerprint(ContentPlan plan)=>FailFingerprint?throw new InvalidDataException("State observation failed."):Value;public void Delete(ContentPlan plan){Value=null;}}
+sealed class Fake:IContentWorld{public bool Deny,DenyDelete,FailCreate,PartialCreate,FailFingerprint;public string? Value;public Action? BeforeCreate;public void Check(ContentPlan plan){if(Deny)throw new InvalidDataException("Native policy denied.");}public void CheckDelete(ContentPlan plan){if(DenyDelete)throw new InvalidDataException("Native deletion denied.");}public string Create(ContentPlan plan,byte[][] meshes,byte[][] materials){BeforeCreate?.Invoke();if(FailCreate){if(PartialCreate)Value="partial";throw new InvalidDataException("Simulated insertion failure.");}return Value="original";}public string? Fingerprint(ContentPlan plan)=>FailFingerprint?throw new InvalidDataException("State observation failed."):Value;public void Delete(ContentPlan plan){Value=null;}}

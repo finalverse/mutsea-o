@@ -35,9 +35,15 @@ public sealed partial class WorldModule : IContentWorld
             ContentCatalog.Require(CanCreate(plan.actor_id,plan.package.parts.Length,anchor.Zip(part.position,(a,b)=>a+b).ToArray()),"Native parcel rez policy denied the import.");
         ContentCatalog.Require(plan.entity_ids.All(id=>scene.GetSceneObjectPart(new UUID(id))==null),"Imported ID already exists.");
     }
-    string IContentWorld.Create(ContentPlan plan,byte[][] meshes)
+    string IContentWorld.Create(ContentPlan plan,byte[][] meshes,byte[][] materials)
     {
         var owner=new UUID(plan.actor_id);SceneObjectGroup? group=null;
+        for(int i=0;i<(plan.package.materials?.Length??0);i++)
+        {
+            var source=plan.package.materials![i];var id=ContentMaterialAsset.Id(plan,source.local_id);
+            var asset=new AssetBase(id,source.local_id,(sbyte)AssetType.Material,owner.ToString()){Data=materials[i]};
+            ContentCatalog.Require(scene.AssetService.Store(asset)==id.ToString(),"Native PBR material storage was not acknowledged.");
+        }
         Vector3 rootPosition=Vector3.Zero;Quaternion rootRotation=Quaternion.Identity;
         for(int i=0;i<plan.package.parts.Length;i++)
         {
@@ -53,12 +59,18 @@ public sealed partial class WorldModule : IContentWorld
                 f.RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);f.Fullbright=source.faces[face].fullbright;
             }
             shape.TextureEntry=te.GetBytes(source.faces.Length);
+            ContentMaterialAsset.Bind(shape,plan,source);
             var position=ToV(plan.anchor)+ToV(source.position);
             var rotation=new Quaternion((float)source.rotation[0],(float)source.rotation[1],(float)source.rotation[2],(float)source.rotation[3]);
             var part=new SceneObjectPart(owner,shape,position,Quaternion.Identity,Vector3.Zero){UUID=new UUID(plan.entity_ids[i]),CreatorID=owner,OwnerID=owner,
                 Name=i==0?plan.package.title:source.name,Description=source.description,BaseMask=(uint)Permissions.All,OwnerMask=(uint)Permissions.All,
                 EveryoneMask=0,GroupMask=0,NextOwnerMask=(uint)(Permissions.Copy|Permissions.Modify|Permissions.Transfer)};
-            part.PhysicsShapeType=(byte)PhysShapeType.convex;
+            part.PhysicsShapeType=(byte)(source.collision?.shape=="none"?PhysShapeType.none:PhysShapeType.convex);
+            if(source.seat is {} seat)
+            {
+                part.SitTargetPosition=ToV(seat.position);
+                part.SitTargetOrientation=new Quaternion((float)seat.rotation[0],(float)seat.rotation[1],(float)seat.rotation[2],(float)seat.rotation[3]);
+            }
             if(group==null){rootPosition=position;rootRotation=rotation;part.RotationOffset=rotation;group=new SceneObjectGroup(part);}
             else{part.OffsetPosition=(position-rootPosition)*Quaternion.Inverse(rootRotation);part.RotationOffset=rotation*Quaternion.Inverse(rootRotation);group.AddPart(part);}
         }
@@ -78,10 +90,16 @@ public sealed partial class WorldModule : IContentWorld
         var group=scene.GetSceneObjectGroup(new UUID(plan.entity_ids[0]));
         return group!=null&&!group.IsDeleted&&ContentFingerprint.Matches(group,fingerprint);
     }
-    void IContentWorld.Delete(ContentPlan plan)
+    void IContentWorld.CheckDelete(ContentPlan plan)
     {
         var group=scene.GetSceneObjectGroup(new UUID(plan.entity_ids[0]));
         ContentCatalog.Require(group!=null&&group.RootPart.OwnerID==new UUID(plan.actor_id)&&scene.Permissions.CanDeleteObject(group.UUID,new UUID(plan.actor_id)),"Native ownership/delete policy changed.");
+        ContentCatalog.Require(group!.GetSittingAvatars().Count==0,"Stand up before undoing occupied seating.");
+    }
+    void IContentWorld.Delete(ContentPlan plan)
+    {
+        ((IContentWorld)this).CheckDelete(plan);
+        var group=scene.GetSceneObjectGroup(new UUID(plan.entity_ids[0]));
         scene.DeleteSceneObject(group!,false);
     }
 }

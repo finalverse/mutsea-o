@@ -49,7 +49,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         scene=s;
         if(!enabled)return;
         kernel=new Kernel(this,directory);
-        content=new ContentKernel(this,new ContentCatalog(contentDirectory),directory,RegionId);
+        content=new ContentKernel(this,new ContentCatalog(contentDirectory,ContentMaterialAsset.Matches),directory,RegionId);
         kernel.ContentSemantics=content.Semantic;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
     }

@@ -5,8 +5,8 @@ using MutSea.Region.Framework.Scenes;
 
 namespace Finalverse.World;
 
-// SQLite preserves numeric values but loses IEEE signed zero and does not store
-// link numbers. Compare canonical persisted content, retaining every edit guard.
+// Native persistence can normalize signed zero and link numbering. Compare
+// canonical content, including native material/light parameters and sit targets.
 public static class ContentFingerprint
 {
     static double Number(double value) => value == 0 ? 0 : value;
@@ -36,12 +36,25 @@ public static class ContentFingerprint
         return JsonSerializer.SerializeToUtf8Bytes(view);
     }
 
-    public static string Hash(SceneObjectGroup group) => "v1:" + ContentCatalog.Hash(Snapshot(group, false));
+    static byte[] SnapshotV2(SceneObjectGroup group)=>JsonSerializer.SerializeToUtf8Bytes(new {
+        baseline=JsonSerializer.Deserialize<JsonElement>(Snapshot(group,false)),
+        native=group.Parts.OrderBy(p=>p.UUID.ToString(),StringComparer.Ordinal).Select(p=>new {
+            id=p.UUID.ToString(),extra=Convert.ToBase64String(p.Shape.ExtraParamsToBytes()),
+            overrides=Convert.ToBase64String(p.Shape.RenderMaterialsOvrToRawBin()??Array.Empty<byte>()),
+            sit_position=Vector(p.SitTargetPosition,false),
+            sit_rotation=new[]{Number(p.SitTargetOrientation.X),Number(p.SitTargetOrientation.Y),Number(p.SitTargetOrientation.Z),Number(p.SitTargetOrientation.W)} }) });
+    public static string Hash(SceneObjectGroup group) => "v2:" + ContentCatalog.Hash(SnapshotV2(group));
 
     public static bool Matches(SceneObjectGroup group, string fingerprint)
     {
-        if (fingerprint.StartsWith("v1:", StringComparison.Ordinal))
+        if (fingerprint.StartsWith("v2:", StringComparison.Ordinal))
             return Hash(group) == fingerprint;
+        // Historical imports had neither PBR bindings nor explicit sit targets.
+        // New edits in these channels must not bypass an old receipt's guard.
+        if(group.Parts.Any(p=>p.IsSitTargetSet||p.Shape.LightEntry||
+            p.Shape.RenderMaterials?.entries is {Length:>0}||p.Shape.RenderMaterials?.overrides is {Length:>0}))return false;
+        if (fingerprint.StartsWith("v1:", StringComparison.Ordinal))
+            return "v1:"+ContentCatalog.Hash(Snapshot(group,false)) == fingerprint;
         // First development receipts used raw JSON. Their only accepted alternate
         // representation is linked-child quaternion signed zero, verified from
         // native before/after SQLite snapshots. No other field is relaxed.
