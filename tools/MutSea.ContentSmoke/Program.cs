@@ -6,14 +6,16 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using Finalverse.World;
 using System.Collections.Concurrent;
-if(args.Length is <3 or >5||args[2] is not ("import" or "verify" or "undo" or "verify_undo"))throw new ArgumentException("Expected private account path, NEW receipt path and import|verify|undo|verify_undo, optional approved package ID and version.");
+if((args.Length is <3 or >5&&args.Length!=8)||args[2] is not ("import" or "verify" or "undo" or "verify_undo"))throw new ArgumentException("Expected private account path, receipt path and import|verify|undo|verify_undo, optional package ID/version, optional explicit loopback import XYZ.");
 var account=JsonDocument.Parse(File.ReadAllBytes(args[0])).RootElement;
 var grid=new Uri(account.GetProperty("grid_url").GetString()!);
 // A remote test must be explicitly named in the private operator account file.
 // No request, model output or simulator metadata can expand this authorization.
 if(!grid.IsLoopback&&!(grid.Scheme=="https"&&grid.UserInfo==""&&grid.Query==""&&grid.Fragment==""&&account.TryGetProperty("content_test_grid",out var allowed)&&allowed.GetString()==grid.AbsoluteUri))throw new InvalidDataException("Use loopback or explicitly authorize one HTTPS development grid in the private account file.");
 string packageId=args.Length>=4?args[3]:"mutsea.starter.path-lantern";
-string packageVersion=args.Length==5?args[4]:"0.1.0";
+string packageVersion=args.Length>=5?args[4]:"0.1.0";
+double[]? explicitAnchor=args.Length==8?args.Skip(5).Select(x=>double.Parse(x,System.Globalization.CultureInfo.InvariantCulture)).ToArray():null;
+if(explicitAnchor!=null&&(!grid.IsLoopback||args[2]!="import"||explicitAnchor.Any(x=>!double.IsFinite(x)||x<1||x>255)))throw new InvalidDataException("Explicit import coordinates are bounded isolated-fixture setup only.");
 Settings.LOG_LEVEL=Helpers.LogLevel.Error;
 var client=new GridClient();client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();
 client.Settings.OBJECT_TRACKING=true;client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
@@ -50,16 +52,18 @@ try{
   // This is acceptance setup, not destination/product coordinate routing.
   var teleport=new OpenMetaverse.Packets.TeleportLocationRequestPacket();
   teleport.AgentData.AgentID=client.Self.AgentID;teleport.AgentData.SessionID=client.Self.SessionID;
-  teleport.Info.RegionHandle=client.Network.CurrentSim.Handle;teleport.Info.Position=new Vector3(168,128,27);teleport.Info.LookAt=Vector3.UnitY;client.Network.SendPacket(teleport);
+  var setup=explicitAnchor==null?new Vector3(168,128,27):new Vector3((float)explicitAnchor[0],(float)explicitAnchor[1]+4,(float)explicitAnchor[2]+2);
+  teleport.Info.RegionHandle=client.Network.CurrentSim.Handle;teleport.Info.Position=setup;teleport.Info.LookAt=Vector3.UnitY;client.Network.SendPacket(teleport);
   deadline=DateTime.UtcNow.AddSeconds(15);
-  while(DateTime.UtcNow<deadline){await Task.Delay(250);var location=await World(new{op="inspect"});var v=location.GetProperty("avatar").GetProperty("position");if(Math.Abs(v[0].GetDouble()-168)<1&&Math.Abs(v[1].GetDouble()-128)<1)break;}
+  while(DateTime.UtcNow<deadline){await Task.Delay(250);var location=await World(new{op="inspect"});var v=location.GetProperty("avatar").GetProperty("position");if(Math.Abs(v[0].GetDouble()-setup.X)<1&&Math.Abs(v[1].GetDouble()-setup.Y)<1)break;}
   var before=await World(new{op="inspect"});var pos=before.GetProperty("avatar").GetProperty("position");
   var site=args[1]+".site-before.json";File.WriteAllText(site,before.GetRawText());if(!OperatingSystem.IsWindows())File.SetUnixFileMode(site,UnixFileMode.UserRead|UnixFileMode.UserWrite);
   JsonElement plan=default;bool found=false;
   // Bounded site search around the authenticated avatar; the server validates
   // every candidate against terrain, all objects/paths and native parcel policy.
-  foreach(var delta in new[]{new[]{8d,8d},new[]{-8d,8d},new[]{8d,-8d},new[]{-8d,-8d},new[]{12d,0d},new[]{-12d,0d},new[]{0d,12d},new[]{0d,-12d}}){
-   try{plan=await World(new{op="content_preview",package_id=packageId,version=packageVersion,anchor=new[]{pos[0].GetDouble()+delta[0],pos[1].GetDouble()+delta[1],before.GetProperty("terrain").GetProperty("height").GetDouble()}});found=true;break;}catch(InvalidDataException){}
+  var candidates=explicitAnchor!=null?new[]{explicitAnchor}:new[]{new[]{8d,8d},new[]{-8d,8d},new[]{8d,-8d},new[]{-8d,-8d},new[]{12d,0d},new[]{-12d,0d},new[]{0d,12d},new[]{0d,-12d}}.Select(delta=>new[]{pos[0].GetDouble()+delta[0],pos[1].GetDouble()+delta[1],before.GetProperty("terrain").GetProperty("height").GetDouble()}).ToArray();
+  foreach(var anchor in candidates){
+   try{plan=await World(new{op="content_preview",package_id=packageId,version=packageVersion,anchor});found=true;break;}catch(InvalidDataException){}
   }
   if(!found)throw new InvalidDataException("No clear small-asset site near this avatar. Move the test avatar to dry clear ground.");
   var entry=await World(new{op="content_commit",plan_id=plan.GetProperty("plan_id").GetString()});
@@ -76,7 +80,7 @@ try{
  var semantic=await World(new{op="semantic",entity_id=ids[0].ToString()});
  if(exists&&semantic.GetProperty("package_id").GetString()!=savedPlan.GetProperty("package").GetProperty("package_id").GetString())throw new InvalidDataException("Missing canonical content semantics.");
  int semanticComponents=0;
- int materialFaces=0,materialAssets=0,meshAssets=0,collisionShapes=0;bool seatResponse=false,occupiedUndoDenied=false;
+ int materialFaces=0,materialAssets=0,meshAssets=0,collisionShapes=0,nativeLights=0;bool seatResponse=false,occupiedUndoDenied=false;
  if(exists){
   var parts=savedPlan.GetProperty("package").GetProperty("parts");
   for(int i=0;i<ids.Length;i++){
@@ -109,6 +113,12 @@ try{
     if(ContentCatalog.Hash(payload)!=plan.package.parts[i].mesh_sha256)throw new InvalidDataException("Native mesh/LOD delivery mismatch.");
     meshAssets++;
     var primitive=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Single(p=>p.ID==ids[i]);
+    if(plan.package.parts[i].light is {} light)
+    {
+     var observed=primitive.Light;
+     if(observed==null||Math.Abs(observed.Radius-light.radius)>.0001||Math.Abs(observed.Falloff-light.falloff)>.0001||Math.Abs(observed.Intensity-light.intensity)>1d/255||Math.Abs(observed.Color.R-light.color_linear[0])>1d/255||Math.Abs(observed.Color.G-light.color_linear[1])>1d/255||Math.Abs(observed.Color.B-light.color_linear[2])>1d/255)throw new InvalidDataException("Native linear light extra parameter mismatch.");
+     nativeLights++;
+    }
     client.Objects.RequestObject(client.Network.CurrentSim,primitive.LocalID);
     deadline=DateTime.UtcNow.AddSeconds(10);
     while(!extraParams.ContainsKey(ids[i])&&DateTime.UtcNow<deadline)await Task.Delay(100);
@@ -167,9 +177,9 @@ try{
  var after=await World(new{op="inspect"});var history=await World(new{op="content_history"});
  // Citizen inspection is controller-only and is tested separately with its
  // controller account. Ordinary content creators do not need that privilege.
- var output=new{mode=args[2],udp_mesh_parts_verified=ids.Length,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,exists,semantic,content_history=history,world_inspect=after};
+ var output=new{mode=args[2],udp_mesh_parts_verified=ids.Length,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_lights_verified=nativeLights,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,exists,semantic,content_history=history,world_inspect=after};
  var evidence=args[1]+"."+args[2]+".json";File.WriteAllText(evidence,JsonSerializer.Serialize(output,new JsonSerializerOptions{WriteIndented=true})+"\n");if(!OperatingSystem.IsWindows())File.SetUnixFileMode(evidence,UnixFileMode.UserRead|UnixFileMode.UserWrite);
- Console.WriteLine(JsonSerializer.Serialize(new{mode=args[2],verified=true,parts=ids.Length,exists,semantic=exists,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,worldline_entries=history.GetArrayLength()}));
+ Console.WriteLine(JsonSerializer.Serialize(new{mode=args[2],verified=true,parts=ids.Length,exists,semantic=exists,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_lights_verified=nativeLights,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,worldline_entries=history.GetArrayLength()}));
  return 0;
 }catch(Exception error){
  var diagnostic=args[1]+"."+args[2]+".diagnostic";File.WriteAllText(diagnostic,error.ToString());if(!OperatingSystem.IsWindows())File.SetUnixFileMode(diagnostic,UnixFileMode.UserRead|UnixFileMode.UserWrite);

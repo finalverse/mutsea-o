@@ -104,6 +104,7 @@ var materialDefinitions=root.GetProperty("definition").TryGetProperty("materials
  ? declaredMaterials.Deserialize<ContentMaterialFactors[]>(ContentCatalog.Json)! : Array.Empty<ContentMaterialFactors>();
 var materialBindings=materialDefinitions.Length>0?root.GetProperty("definition").GetProperty("material_bindings").Deserialize<Dictionary<string,string[]>>(ContentCatalog.Json)!:null;
 var seats=root.GetProperty("definition").TryGetProperty("seating",out var declaredSeats)?declaredSeats.Deserialize<Dictionary<string,ContentSeat>>(ContentCatalog.Json)!:new();
+var lights=root.GetProperty("definition").TryGetProperty("lighting",out var declaredLights)?declaredLights.Deserialize<Dictionary<string,ContentLight>>(ContentCatalog.Json)!:new();
 var materials=new List<ContentMaterial>();
 foreach(var definition in materialDefinitions)
 {
@@ -120,7 +121,7 @@ foreach(var p in prims){
  parts.Add(new {local_id=p.ID,name=semantic.GetProperty("name").GetString(),semantic_type=semantic.GetProperty("semantic_type").GetString(),description=semantic.GetProperty("description").GetString(),
   position=new[]{(double)p.Position.X,p.Position.Y,p.Position.Z},scale=new[]{(double)p.Scale.X,p.Scale.Y,p.Scale.Z},rotation=new[]{(double)p.Rotation.X,p.Rotation.Y,p.Rotation.Z,p.Rotation.W},
   faces=p.Faces.Select((f,i)=>new {color=new[]{(double)f.Material.DiffuseColor.R,f.Material.DiffuseColor.G,f.Material.DiffuseColor.B,f.Material.DiffuseColor.A},fullbright=bindings==null&&f.Material.ID.Contains("light",StringComparison.OrdinalIgnoreCase),material_id=bindings?[i]}).ToArray(),
-  mesh_path=file,mesh_sha256=Hash(bytes),triangles=p.Faces.Sum(f=>f.Indices.Count/3),semantics=new{tags=semantic.GetProperty("tags"),affordances=semantic.GetProperty("affordances"),relationships=semantic.GetProperty("relationships")},seat=seats.GetValueOrDefault(p.ID),collision=collisionDefinitions.GetValueOrDefault(p.ID)});
+  mesh_path=file,mesh_sha256=Hash(bytes),triangles=p.Faces.Sum(f=>f.Indices.Count/3),semantics=new{tags=semantic.GetProperty("tags"),affordances=semantic.GetProperty("affordances"),relationships=semantic.GetProperty("relationships")},seat=seats.GetValueOrDefault(p.ID),collision=collisionDefinitions.GetValueOrDefault(p.ID),light=lights.GetValueOrDefault(p.ID)});
 }
 var compiled=new {schema_version=materials.Count>0?3:2,package_id=root.GetProperty("package_id").GetString(),version=root.GetProperty("version").GetString(),title=root.GetProperty("title").GetString(),
  manifest_sha256=Hash(manifest),license=root.GetProperty("license").GetProperty("spdx").GetString(),parts,materials=materials.Count>0?materials.ToArray():null,

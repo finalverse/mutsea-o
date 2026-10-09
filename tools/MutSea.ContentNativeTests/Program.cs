@@ -90,6 +90,18 @@ Test("noncolliding native child persists and physics edits block undo",()=>{
     Assert(edited!=null&&!ContentFingerprint.Matches(edited,collisionHash));
 });
 if(args.Length is not (0 or 1 or 3))throw new ArgumentException("Expected catalog, optionally package ID and version.");
+Test("native linear point light persists and later light edits block undo",()=>{
+    ContentLightAdapter.Bind(child.Shape,new([1,.7454,.4179],.8,3.5,1));
+    var lightHash=ContentFingerprint.Hash(group);
+    var restored=SceneObjectSerializer.FromXml2Format(SceneObjectSerializer.ToXml2Format(group));
+    Assert(restored!=null&&ContentFingerprint.Hash(restored)==lightHash);
+    var observed=restored!.GetPart(child.UUID).Shape;
+    Assert(observed.LightEntry&&Math.Abs(observed.LightColorG-.7454)<.0001&&Math.Abs(observed.LightIntensity-.8)<.0001&&observed.LightRadius==3.5f);
+    var wire=new PrimitiveBaseShape();wire.ReadInExtraParamsBytes(child.Shape.ExtraParamsToBytes());
+    Assert(wire.LightEntry&&Math.Abs(wire.LightColorG-.7454)<1d/255&&Math.Abs(wire.LightIntensity-.8)<1d/255&&wire.LightRadius==3.5f);
+    child.Shape.LightRadius=3;
+    Assert(!ContentFingerprint.Matches(group,lightHash));child.Shape.LightEntry=false;
+});
 if(args.Length>0)
 {
     var catalog=new ContentCatalog(args[0],ContentMaterialAsset.Matches);
@@ -150,6 +162,20 @@ if(args.Length>0)
             parts[index]=parts[index] with{collision=parts[index].collision! with{minimum=bounds}};
             File.WriteAllText(Path.Combine(folder,"compiled.json"),JsonSerializer.Serialize(compiled.package with{parts=parts}));
             try{new ContentCatalog(temp,ContentMaterialAsset.Matches);throw new Exception("Accepted altered collision.");}catch(InvalidDataException){}
+        }
+        finally{Directory.Delete(temp,true);}
+    });
+    if(compiled.package.parts.Any(p=>p.light!=null))Test("compiled light cannot contradict its original manifest",()=>{
+        var temp=Path.Combine(Path.GetTempPath(),"mutsea-light-"+Guid.NewGuid());Directory.CreateDirectory(temp);
+        try
+        {
+            var folder=Path.Combine(temp,"package");Directory.CreateDirectory(folder);
+            var original=Directory.GetDirectories(args[0]).Single(dir=>File.ReadAllText(Path.Combine(dir,"compiled.json")).Contains(compiled.package.manifest_sha256,StringComparison.Ordinal));
+            foreach(var file in Directory.GetFiles(original))File.Copy(file,Path.Combine(folder,Path.GetFileName(file)));
+            var parts=compiled.package.parts.ToArray();int index=Array.FindIndex(parts,p=>p.light!=null);
+            parts[index]=parts[index] with{light=parts[index].light! with{radius=3.4}};
+            File.WriteAllText(Path.Combine(folder,"compiled.json"),JsonSerializer.Serialize(compiled.package with{parts=parts}));
+            try{new ContentCatalog(temp,ContentMaterialAsset.Matches);throw new Exception("Accepted altered lighting.");}catch(InvalidDataException){}
         }
         finally{Directory.Delete(temp,true);}
     });

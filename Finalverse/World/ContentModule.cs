@@ -60,6 +60,7 @@ public sealed partial class WorldModule : IContentWorld
             }
             shape.TextureEntry=te.GetBytes(source.faces.Length);
             ContentMaterialAsset.Bind(shape,plan,source);
+            ContentLightAdapter.Bind(shape,source.light);
             var position=ToV(plan.anchor)+ToV(source.position);
             var rotation=new Quaternion((float)source.rotation[0],(float)source.rotation[1],(float)source.rotation[2],(float)source.rotation[3]);
             var part=new SceneObjectPart(owner,shape,position,Quaternion.Identity,Vector3.Zero){UUID=new UUID(plan.entity_ids[i]),CreatorID=owner,OwnerID=owner,

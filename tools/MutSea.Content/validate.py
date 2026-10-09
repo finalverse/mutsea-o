@@ -130,7 +130,7 @@ def validate(manifest, catalog=None, stack=None):
             require(relationship['target'] in ids, 'Dangling semantic relationship')
     definition = data['definition']
     keys(definition, {'scale', 'units', 'up_axis', 'minimum_client_version'},
-        {'spawn_points', 'required_slots', 'components', 'environment', 'materials', 'material_bindings', 'seating', 'lods', 'collision'})
+        {'spawn_points', 'required_slots', 'components', 'environment', 'materials', 'material_bindings', 'seating', 'lods', 'collision', 'lighting'})
     choice(definition['scale'], {'asset', 'prefab', 'building', 'place', 'neighborhood', 'community', 'city', 'world'}, 'Invalid composition scale')
     require(definition['units'] == 'meters' and definition['up_axis'] == 'Z', 'Unsupported authoring coordinates')
     text(definition['minimum_client_version'], 64)
@@ -170,6 +170,16 @@ def validate(manifest, catalog=None, stack=None):
                 for key in ('minimum','maximum'):
                     require(isinstance(shape.get(key),list) and len(shape[key])==3 and all(type(v) in (int,float) and math.isfinite(v) and -.5<=v<=.5 for v in shape[key]),'Collision hull must stay inside the normalized visual bounds')
                 require(all(high-low>=.001 for low,high in zip(shape['minimum'],shape['maximum'])),'Collision hull must have positive extents')
+    if 'lighting' in definition:
+        lights=definition['lighting']
+        require('materials' in definition and isinstance(lights,dict) and 0<len(lights)<=2 and set(lights)<=ids,'At most two native point lights in a material package')
+        for local_id,light in lights.items():
+            keys(light,{'color_linear','intensity','radius','falloff'})
+            entity=next(e for e in data['entities'] if e['local_id']==local_id)
+            require(entity['semantic_type'] in {'lighting','wayfinding'},'Native light needs explicit lighting semantics')
+            require(isinstance(light['color_linear'],list) and len(light['color_linear'])==3 and all(type(v) in (int,float) and math.isfinite(v) and 0<=v<=1 for v in light['color_linear']) and any(light['color_linear']),'Invalid linear light color')
+            for key,low,high in [('intensity',.01,1),('radius',.1,4),('falloff',0,2)]:
+                require(type(light[key]) in (int,float) and math.isfinite(light[key]) and low<=light[key]<=high,'Unbounded native light')
     if 'lods' in definition:
         lods=definition['lods'];keys(lods,{'medium','low','lowest'})
         previous=data['budget']['triangles']

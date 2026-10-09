@@ -37,6 +37,14 @@ try{
   Reject(()=>ContentCatalog.Validate(seating with{parts=[seating.parts[0] with{semantics=new([], ["inspect"],[])}]}));
   Reject(()=>ContentCatalog.Validate(seating with{parts=[seating.parts[0] with{seat=new(1,[0,0,0],[0,0,0,1])}]}));
  });
+ Test("native lights require bounded factors, explicit semantics and v3",()=>{
+  var lit=pbr with{parts=[pbr.parts[0] with{light=new([1,.7,.4],.8,3.5,1)}]};ContentCatalog.Validate(lit);
+  Reject(()=>ContentCatalog.Validate(lit with{parts=[lit.parts[0] with{semantic_type="component"}]}));
+  Reject(()=>ContentCatalog.ValidateLight(new([1,.7,.4],.8,4.1,1)));
+  Reject(()=>ContentCatalog.ValidateLight(new([1,.7,.4],double.NaN,3,1)));
+  Reject(()=>ContentCatalog.ValidateLight(new([0,0,0],.8,3,1)));
+  Reject(()=>ContentCatalog.Validate(lit with{parts=Enumerable.Range(0,3).Select(i=>lit.parts[0] with{local_id="light"+i}).ToArray()}));
+ });
  Test("reported LOD totals must reduce and match high geometry",()=>{
   Reject(()=>ContentCatalog.Validate(pbr with{lod_triangles=[2,2,1,1]}));
   Reject(()=>ContentCatalog.Validate(pbr with{lod_triangles=[10,5,3,1]}));

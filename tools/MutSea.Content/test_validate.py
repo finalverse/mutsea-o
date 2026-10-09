@@ -119,6 +119,18 @@ class PackageTests(unittest.TestCase):
         self.data['definition']['lods']['low']['triangles']=8
         with self.assertRaises(InvalidPackage):validate(self.write())
 
+    def test_native_lights_reject_unbounded_unknown_and_nonsemantic_sources(self):
+        self.pbr();self.data['entities'][0]['semantic_type']='lighting'
+        self.data['definition']['lighting']={'chair':dict(color_linear=[1,.7,.4],intensity=.8,radius=3.5,falloff=1)}
+        validate(self.write())
+        for mutate in (lambda d:d['definition']['lighting']['chair'].update(radius=4.1),
+                       lambda d:d['definition']['lighting']['chair'].update(color_linear=[1,True,.4]),
+                       lambda d:d['definition']['lighting']['chair'].update(color_linear=[0,0,0]),
+                       lambda d:d['definition']['lighting']['chair'].update(intensity=float('nan')),
+                       lambda d:d['definition']['lighting']['chair'].update(projector_uri='https://example.invalid'),
+                       lambda d:d['entities'][0].update(semantic_type='seating')):
+            data=copy.deepcopy(self.data);mutate(data)
+            with self.subTest(data=data),self.assertRaises(InvalidPackage):validate(self.write(data))
     def test_collision_hulls_are_bounded_and_cannot_hide_unknown_parts(self):
         self.pbr();self.data['definition']['collision']={'chair':dict(shape='box',minimum=[-.1,-.1,-.5],maximum=[.1,.1,.5])}
         validate(self.write())

@@ -12,7 +12,8 @@ public sealed record ContentRelationship(string type,string target);
 public sealed record ContentMetadata(string[] tags,string[] affordances,ContentRelationship[] relationships);
 public sealed record ContentSeat(int capacity,double[] position,double[] rotation);
 public sealed record ContentCollision(string shape,double[]? minimum=null,double[]? maximum=null);
-public sealed record ContentPart(string local_id,string name,string semantic_type,string description,double[] position,double[] scale,double[] rotation,ContentFace[] faces,string mesh_path,string mesh_sha256,int triangles,ContentMetadata? semantics=null,ContentSeat? seat=null,ContentCollision? collision=null);
+public sealed record ContentLight(double[] color_linear,double intensity,double radius,double falloff);
+public sealed record ContentPart(string local_id,string name,string semantic_type,string description,double[] position,double[] scale,double[] rotation,ContentFace[] faces,string mesh_path,string mesh_sha256,int triangles,ContentMetadata? semantics=null,ContentSeat? seat=null,ContentCollision? collision=null,ContentLight? light=null);
 public sealed record ContentPackage(int schema_version,string package_id,string version,string title,string manifest_sha256,string license,ContentPart[] parts,string lod_policy,string collision_policy,ContentMaterial[]? materials=null,int[]? lod_triangles=null);
 public sealed record ContentPlan(string plan_id,string actor_id,DateTimeOffset expires_at,ContentPackage package,double[] anchor,string[] entity_ids,string[] asset_ids);
 public sealed record ContentEntry(string operation_id,string status,DateTimeOffset timestamp,ContentPlan plan,string? fingerprint,string? error);
@@ -76,6 +77,8 @@ public sealed class ContentCatalog
                 Require(seating.Count==package.parts.Count(p=>p.seat!=null)&&package.parts.All(p=>p.seat==null?!seating.ContainsKey(p.local_id):seating.TryGetValue(p.local_id,out var seat)&&JsonSerializer.Serialize(p.seat)==JsonSerializer.Serialize(seat)),"Native seating contradicts the pinned manifest.");
                 var collision=definition.TryGetProperty("collision",out var collisionMap)?collisionMap.Deserialize<Dictionary<string,ContentCollision>>(Json)!:new();
                 Require(collision.Count==package.parts.Count(p=>p.collision!=null)&&package.parts.All(p=>p.collision==null?!collision.ContainsKey(p.local_id):collision.TryGetValue(p.local_id,out var shape)&&JsonSerializer.Serialize(p.collision)==JsonSerializer.Serialize(shape)),"Native collision contradicts the pinned manifest.");
+                var lights=definition.TryGetProperty("lighting",out var lightMap)?lightMap.Deserialize<Dictionary<string,ContentLight>>(Json)!:new();
+                Require(lights.Count==package.parts.Count(p=>p.light!=null)&&package.parts.All(p=>p.light==null?!lights.ContainsKey(p.local_id):lights.TryGetValue(p.local_id,out var light)&&JsonSerializer.Serialize(p.light)==JsonSerializer.Serialize(light)),"Native lighting contradicts the pinned manifest.");
             }
             var meshes=package.parts.Select(p=>{
                 var file=Path.Combine(directory,p.mesh_path);SafeFile(file,false);var bytes=Read(file,2*1024*1024);
@@ -94,6 +97,7 @@ public sealed class ContentCatalog
         Require(p!=null&&p.schema_version is 1 or 2 or 3&&p.license=="CC0-1.0"&&p.parts is {Length:>0 and <=32},"Only small original CC0 asset packages are enabled in this first adapter.");
         Require(p!.package_id?.Length is >0 and <=120&&p.version?.Length is >0 and <=40&&p.title?.Length is >0 and <=120&&IsHash(p.manifest_sha256),"Invalid package identity.");
         Require(p.parts.Select(x=>x.local_id).Distinct().Count()==p.parts.Length,"Duplicate local IDs.");
+        Require(p.parts.Count(x=>x.light!=null)<=2,"At most two bounded native point lights per small asset.");
         Require(p.parts.Sum(x=>x.triangles) is >0 and <=4096,"Initial small-asset triangle budget exceeded.");
         if(p.lod_triangles is {} lodCounts)Require(lodCounts.Length==4&&lodCounts[0]==p.parts.Sum(x=>x.triangles)&&lodCounts.All(n=>n>0)&&lodCounts.Zip(lodCounts.Skip(1),(a,b)=>a>b).All(v=>v),"Invalid reduced LOD metrics.");
         Require(p.schema_version==3?p.materials is {Length:>0 and <=8}:p.materials==null,"Material assets require the explicit v3 contract.");
@@ -125,6 +129,11 @@ public sealed class ContentCatalog
                 Require(collision.shape!="none"||part!=p.parts[0],"A native linked root must retain a collision shape.");
                 ValidateCollision(collision);
             }
+            if(part.light is {} light)
+            {
+                Require(p.schema_version==3&&part.semantic_type is "lighting" or "wayfinding","Native lights require explicit lighting or wayfinding semantics in v3.");
+                ValidateLight(light);
+            }
             if(part.semantics is {} metadata)
             {
                 Require(metadata.tags is {Length:<=64}&&metadata.tags.All(t=>t is {Length:>0 and <=64}&&!t.Any(char.IsControl)),"Invalid semantic tags.");
@@ -149,6 +158,14 @@ public sealed class ContentCatalog
             Vector(c.minimum!,3,-.5,.5);Vector(c.maximum!,3,-.5,.5);
             Require(c.minimum!.Zip(c.maximum!,(low,high)=>high-low>=.001).All(v=>v),"Collision hull must have three positive extents.");
         }
+    }
+    public static void ValidateLight(ContentLight light)
+    {
+        Vector(light.color_linear,3,0,1);
+        Vector([light.intensity],1,.01,1);
+        Vector([light.radius],1,.1,4);
+        Vector([light.falloff],1,0,2);
+        Require(light.color_linear.Any(v=>v>0),"Native light must have a nonzero linear color.");
     }
     static bool SafePayloadName(string s)=>s is {Length:>0 and <=80}&&!s.Contains('/')&&!s.Contains('\\')&&!s.Contains("..");
     static void SafeFile(string path,bool directory){var info=directory?(FileSystemInfo)new DirectoryInfo(path):new FileInfo(path);Require(info.Exists&&(info.Attributes&FileAttributes.ReparsePoint)==0,"Missing or linked catalog file.");}
@@ -219,7 +236,7 @@ public sealed class ContentKernel
         var i=Array.IndexOf(entry.plan.entity_ids,id);var part=entry.plan.package.parts[i];
         var metadata=part.semantics;
         var relationships=(metadata?.relationships??[]).Select(r=>new{r.type,target=entry.plan.entity_ids[Array.FindIndex(entry.plan.package.parts,p=>p.local_id==r.target)]}).ToArray();
-        return new{entity_id=id,structure_id=entry.plan.entity_ids[0],part.local_id,part.semantic_type,part.description,tags=metadata?.tags??[],affordances=metadata?.affordances??[],relationships,seat=part.seat,semantic_metadata_available=metadata!=null,package_id=entry.plan.package.package_id,package_version=entry.plan.package.version,entry.plan.package.manifest_sha256,mesh_sha256=part.mesh_sha256,license=entry.plan.package.license,owner_id=entry.plan.actor_id,entry.operation_id,entry.timestamp,version=1,provenance="Operator-approved original Starter Library; no external authoring code executed"};
+        return new{entity_id=id,structure_id=entry.plan.entity_ids[0],part.local_id,part.semantic_type,part.description,tags=metadata?.tags??[],affordances=metadata?.affordances??[],relationships,seat=part.seat,light=part.light,semantic_metadata_available=metadata!=null,package_id=entry.plan.package.package_id,package_version=entry.plan.package.version,entry.plan.package.manifest_sha256,mesh_sha256=part.mesh_sha256,license=entry.plan.package.license,owner_id=entry.plan.actor_id,entry.operation_id,entry.timestamp,version=1,provenance="Operator-approved original Starter Library; no external authoring code executed"};
     }
     void Append(ContentEntry entry)
     {
