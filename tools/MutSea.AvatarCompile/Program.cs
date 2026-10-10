@@ -218,6 +218,16 @@ foreach(var b in blocks){header[b.name]=new OSDMap{["offset"]=OSD.FromInteger(of
 var meshBytes=OSDParser.SerializeLLSDBinary(header,false).Concat(blocks.SelectMany(b=>b.data)).ToArray();
 Require(meshBytes.Length<=AvatarCatalog.MaxMeshBytes,"Compiled avatar mesh exceeds its byte budget.");
 
+// Package motions: strictly validated native keyframes on pinned-skeleton joints, before any output.
+var validatedMotions=new List<(string id,byte[] bytes,NativeKeyframe.Summary summary)>();
+if(def.TryGetProperty("animation_assets",out var declaredMotions))
+    foreach(var motion in declaredMotions.EnumerateArray())
+    {
+        string id=motion.GetProperty("local_id").GetString()!;var bytes=Payload(motion.GetProperty("path").GetString()!);
+        var summary=NativeKeyframe.Validate(bytes,nativeParent.Keys.ToHashSet());
+        Require(Math.Abs(summary.duration-motion.GetProperty("duration").GetDouble())<1e-3&&summary.loop==motion.GetProperty("loop").GetBoolean(),"Motion metadata differs from its payload: "+id);
+        validatedMotions.Add((id,bytes,summary));
+    }
 Directory.CreateDirectory(output);
 File.WriteAllBytes(Path.Combine(output,"package.json"),manifestBytes);
 File.WriteAllBytes(Path.Combine(output,"avatar.llmesh"),meshBytes);
@@ -228,12 +238,18 @@ foreach(var f in materialDefs)
     File.WriteAllBytes(Path.Combine(output,file),bytes);materials.Add(new(f.local_id,file,Hash(bytes),f));
 }
 var animations=def.GetProperty("animations").Deserialize<Dictionary<string,string>>()!;
-var compiled=new AvatarCompiled(1,"avatar",m.GetProperty("package_id").GetString()!,m.GetProperty("version").GetString()!,m.GetProperty("title").GetString()!,
+var motions=new List<AvatarAnimationAsset>();
+foreach(var (id,bytes,summary) in validatedMotions)
+{
+    var file="motion-"+motions.Count+".anim";File.WriteAllBytes(Path.Combine(output,file),bytes);
+    motions.Add(new(id,file,Hash(bytes),summary.duration,summary.loop));
+}
+var compiled=new AvatarCompiled(motions.Count>0?2:1,"avatar",m.GetProperty("package_id").GetString()!,m.GetProperty("version").GetString()!,m.GetProperty("title").GetString()!,
     Hash(manifestBytes),"CC0-1.0","animated_object",AvatarCatalog.SkeletonSha256,joints.Length,rootHeight,scale,"avatar.llmesh",Hash(meshBytes),lodTriangles,
     materialDefs.Select(f=>new AvatarFace(f.local_id,new[]{1d,1,1,1})).ToArray(),materials.ToArray(),animations,hull,
-    "Four independent surface LODs sharing one skin and normalized domain; live transition acceptance pending");
+    "Four independent surface LODs sharing one skin and normalized domain; live transition acceptance pending",motions.Count>0?motions.ToArray():null);
 AvatarCatalog.Validate(compiled);
-File.WriteAllText(Path.Combine(output,"compiled.json"),JsonSerializer.Serialize(compiled,new JsonSerializerOptions{WriteIndented=true})+"\n");
+File.WriteAllText(Path.Combine(output,"compiled.json"),JsonSerializer.Serialize(compiled,new JsonSerializerOptions{WriteIndented=true,DefaultIgnoreCondition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull})+"\n");
 AvatarCatalog.Load(output);
 Console.WriteLine(JsonSerializer.Serialize(new{compiled=true,compiled.package_id,compiled.version,joints=joints.Length,lod_triangles=lodTriangles,scale,mesh_bytes=meshBytes.Length,mesh_sha256=compiled.mesh_sha256}));
 

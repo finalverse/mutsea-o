@@ -105,11 +105,11 @@ try
   // Timed human greeting through the authenticated viewer relay; samples server animation state.
   var at=DateTimeOffset.FromUnixTimeMilliseconds((long)(double.Parse(Environment.GetEnvironmentVariable("FINALVERSE_GREET_AT")!,System.Globalization.CultureInfo.InvariantCulture)*1000));
   var wait=at-DateTimeOffset.UtcNow;if(wait>TimeSpan.Zero)await Task.Delay(wait);
-  var samples=new List<object>();var reply=Citizen("say","Hello Lumi!");var sent=DateTimeOffset.UtcNow;
+  var samples=new List<object>();var reply=Citizen("say",Environment.GetEnvironmentVariable("FINALVERSE_SAY") is {Length:>0} said?said:"Hello Lumi!");var sent=DateTimeOffset.UtcNow;
   for(int i=0;i<10;i++){await Task.Delay(260);var b=await World(new{op="lumi"});samples.Add(new{ms=(DateTimeOffset.UtcNow-sent).TotalMilliseconds,animation=b.GetProperty("avatar_binding").GetProperty("animation").GetString()});}
   var answer=(await reply).GetProperty("answer").GetString();
-  Save(new{representation,sent,samples,answer});Assert(samples.Any(x=>x.ToString()!.Contains("greet")),"No native wave on greeting");
-  Console.WriteLine("CITIZEN_SMOKE greet PASS: "+string.Join(",",samples.Select(x=>x.ToString())));
+  Save(new{representation,sent,samples,answer});string expect=Environment.GetEnvironmentVariable("FINALVERSE_EXPECT") is {Length:>0} e?e:"greet";Assert(samples.Any(x=>x.ToString()!.Contains(expect)),"Expected native gesture missing: "+expect);
+  Console.WriteLine("CITIZEN_SMOKE greet PASS ("+expect+"): "+string.Join(",",samples.Select(x=>x.ToString())));
  }
  else if(args[2]=="displace")
  {

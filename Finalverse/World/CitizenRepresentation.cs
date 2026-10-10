@@ -23,8 +23,8 @@ public sealed partial class WorldModule
     string representation="linked_primitive_citizen";
     string representationDirectory="",representationPin="",representationRollback="";
     bool representationRecovery;
-    AvatarCompiled? avatar;byte[]? avatarMesh;byte[][]? avatarMaterials;
-    UUID avatarMeshId=UUID.Zero;UUID[] avatarMaterialIds=[];
+    AvatarCompiled? avatar;byte[]? avatarMesh;byte[][]? avatarMaterials,avatarMotions;
+    UUID avatarMeshId=UUID.Zero;UUID[] avatarMaterialIds=[],avatarMotionIds=[];
     readonly List<JsonElement> representationRecords=new();
     string animationState="idle";DateTimeOffset animationUntil=DateTimeOffset.MaxValue;DateTimeOffset turnUntil=DateTimeOffset.MinValue,faceUntil=DateTimeOffset.MinValue;double faceYaw;
 
@@ -53,7 +53,7 @@ public sealed partial class WorldModule
         {
             StoreAvatarAssets();
             if(body!=null&&!IsAvatarBody(body))Migrate(body);
-            else if(body!=null)UseAvatarProfile();
+            else if(body!=null){UseAvatarProfile();RecordPackageUpdate(body);}
             if(representation=="animated_object")Animate("idle",null);
             return;
         }
@@ -72,9 +72,10 @@ public sealed partial class WorldModule
     {
         var bytes=File.ReadAllBytes(Path.Combine(representationDirectory,"compiled.json"));
         if(ContentCatalog.Hash(bytes)!=representationPin)throw new InvalidDataException("Compiled avatar differs from its configuration pin.");
-        (avatar,avatarMesh,avatarMaterials)=AvatarCatalog.Load(representationDirectory);
+        (avatar,avatarMesh,avatarMaterials,avatarMotions)=AvatarCatalog.Load(representationDirectory);
         avatarMeshId=DerivedId("mesh",avatar.mesh_sha256);
         avatarMaterialIds=avatar.materials.Select(m=>DerivedId("material",m.asset_sha256)).ToArray();
+        avatarMotionIds=(avatar.animation_assets??[]).Select(m=>DerivedId("animation",m.asset_sha256)).ToArray();
     }
 
     void StoreAvatarAssets()
@@ -87,6 +88,7 @@ public sealed partial class WorldModule
         }
         Store(avatarMeshId,avatar!.title+" "+avatar.version,(sbyte)AssetType.Mesh,avatarMesh!);
         for(int i=0;i<avatarMaterialIds.Length;i++)Store(avatarMaterialIds[i],avatar.materials[i].local_id,(sbyte)AssetType.Material,avatarMaterials![i]);
+        for(int i=0;i<avatarMotionIds.Length;i++)Store(avatarMotionIds[i],avatar.animation_assets![i].local_id,(sbyte)AssetType.Animation,avatarMotions![i]);
     }
 
     // Mesh and every bound material must match, so material-only package upgrades also migrate.
@@ -95,6 +97,17 @@ public sealed partial class WorldModule
     // A small companion walks at a child's pace; the linked primitive keeps its historic 2 m/s.
     const double AnimatedWalkSpeed=1.2;
     void UseAvatarProfile(){representation="animated_object";citizenLift=avatar!.root_height;citizenYaw=0;citizenSpeed=AnimatedWalkSpeed;}
+
+    // Same body, newer pinned package (e.g. motions only): record it so the WorldLine stays truthful.
+    void RecordPackageUpdate(SceneObjectGroup body)
+    {
+        var last=representationRecords.LastOrDefault(r=>r.GetProperty("kind").GetString()=="representation_result"&&r.GetProperty("result").TryGetProperty("compiled_sha256",out _));
+        if(last.ValueKind==JsonValueKind.Object&&last.GetProperty("result").GetProperty("compiled_sha256").GetString()==representationPin)return;
+        string action=Guid.NewGuid().ToString();
+        RecordCitizen(action,"representation_result",new{status="package_updated",avatar!.package_id,avatar.version,compiled_sha256=representationPin,mesh_asset_id=avatarMeshId.ToString(),
+            material_asset_ids=avatarMaterialIds.Select(x=>x.ToString()).ToArray(),motion_asset_ids=avatarMotionIds.Select(x=>x.ToString()).ToArray(),avatar.root_height,identity=Kernel.LumiId,after=Summary(body)});
+        representationRecords.Add(JsonSerializer.SerializeToElement(new{kind="representation_result",action_id=action,result=new{compiled_sha256=representationPin,mesh_asset_id=avatarMeshId.ToString(),avatar.root_height}}));
+    }
 
     object Summary(SceneObjectGroup g)
     {
@@ -149,9 +162,9 @@ public sealed partial class WorldModule
             body.HasGroupChanged=true;scene.ForceSceneObjectBackup(body);body.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);
             UseAvatarProfile();
             RecordCitizen(action,"representation_result",new{status="migrated",avatar.package_id,avatar.version,compiled_sha256=representationPin,mesh_asset_id=avatarMeshId.ToString(),
-                material_asset_ids=avatarMaterialIds.Select(x=>x.ToString()).ToArray(),avatar.root_height,yaw_offset=0,identity=Kernel.LumiId,
+                material_asset_ids=avatarMaterialIds.Select(x=>x.ToString()).ToArray(),motion_asset_ids=avatarMotionIds.Select(x=>x.ToString()).ToArray(),avatar.root_height,yaw_offset=0,identity=Kernel.LumiId,
                 mapping=new{preserved=new[]{Kernel.LumiId},retired},after=Summary(body),snapshot=Path.GetFileName(snapshot)});
-            representationRecords.Add(JsonSerializer.SerializeToElement(new{kind="representation_result",action_id=action,result=new{mesh_asset_id=avatarMeshId.ToString(),avatar.root_height}}));
+            representationRecords.Add(JsonSerializer.SerializeToElement(new{kind="representation_result",action_id=action,result=new{compiled_sha256=representationPin,mesh_asset_id=avatarMeshId.ToString(),avatar.root_height}}));
             log.Info(JsonSerializer.Serialize(new{@event="citizen_representation_migrated",action_id=action,avatar.package_id,avatar.version}));
         }
         catch(Exception ex)
@@ -208,7 +221,9 @@ public sealed partial class WorldModule
     {
         if(representation!="animated_object"||avatar==null)return;
         var part=scene.GetSceneObjectGroup(new UUID(Kernel.LumiId))?.RootPart;if(part==null)return;
-        var target=new UUID(avatar.animations[role]);
+        if(!avatar.animations.TryGetValue(role,out var value))return;
+        var asset=Array.FindIndex(avatar.animation_assets??[],x=>"package:"+x.local_id==value);
+        var target=asset>=0?avatarMotionIds[asset]:new UUID(value);
         if(part.Animations!=null)foreach(var id in part.Animations.Keys.ToArray())if(id!=target)part.RemoveAnimation(id);
         part.AddAnimation(target,role);
         animationState=role;animationUntil=duration is {} d?DateTimeOffset.UtcNow+d:DateTimeOffset.MaxValue;
@@ -227,7 +242,14 @@ public sealed partial class WorldModule
         return Greetings.Any(g=>lower.StartsWith(g)&&(lower.Length==g.Length||!char.IsLetter(lower[g.Length])));
     }
     // A person greeting Lumi gets an immediate native wave while the reply is prepared.
-    void HearGesture(string text){if(navigation is not {status:"moving"}&&IsGreeting(text))Animate("greet",TimeSpan.FromSeconds(1.8));}
+    // A person greeting Lumi gets an immediate wave; any other message gets an attentive listening
+    // pose until her reply (talk) replaces it, bounded so a failed reply still returns to idle.
+    void HearGesture(string text)
+    {
+        if(navigation is {status:"moving"})return;
+        if(IsGreeting(text))Animate("greet",TimeSpan.FromSeconds(1.8));
+        else if(avatar?.animations.ContainsKey("listen")==true)Animate("listen",TimeSpan.FromSeconds(20));
+    }
     void SpeechGesture(string text)
     {
         if(navigation is {status:"moving"})return;

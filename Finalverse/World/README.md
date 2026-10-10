@@ -136,3 +136,9 @@ Live verification uses `tools/Finalverse.CitizenSmoke` modes:
 - `observe` / `verify`: representation-aware; `verify` encodes the runtime's eight-goal retention.
 - `animesh compiled.json`: binding, UDP root/scale, ViewerAsset mesh hash, and animation states during a real walk (optional `FINALVERSE_WALK_FROM=x,y` native owner move) and a reply.
 - `displace`, `greet` (timed with `FINALVERSE_GREET_AT`), and `animwatch`: `ObjectAnimation` packets on the wire.
+
+### Package motions (compiled schema 2)
+
+A schema-2 package may bind roles to its own validated native keyframe motions, `"package:<local_id>"`, instead of the native library motion. Every required role must be covered; `listen` is an optional extra role. `NativeKeyframe` accepts only LLKeyframeMotion v1.0 with priority 0–4, at most 30 s, at most 64 joints and 1,024 keys per channel, pelvis-only translation, and no emote, hand pose, constraints or trailing bytes. The compiler additionally checks joint names against the pinned skeleton.
+
+Motions are stored as native animation assets under content-derived IDs. A package change that keeps the same mesh and materials is journaled as `package_updated` rather than migrated. A human greeting through the viewer relay plays `greet`; other messages play `listen` (at most 20 s) until the reply plays `talk`.

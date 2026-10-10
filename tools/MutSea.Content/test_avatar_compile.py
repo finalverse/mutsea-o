@@ -103,6 +103,55 @@ class AvatarCompileRejections(unittest.TestCase):
         pkg, out = self.mutate(lambda m: m["license"].__setitem__("spdx", "CC-BY-4.0"))
         self.expect_reject(pkg, out, "CC0")
 
+    def motion_case(self, edit, needle, edit_manifest=None):
+        manifest = json.loads((self.package / "package.json").read_text())
+        motions = manifest["definition"].get("animation_assets")
+        if not motions:
+            self.skipTest("package has no package motions")
+        first = motions[0]["path"]
+
+        def change(m):
+            path = self._pkg / first
+            data = bytearray(path.read_bytes())
+            edit(data)
+            path.write_bytes(bytes(data))
+            for f in m["files"]:
+                if f["path"] == first:
+                    f["sha256"] = hashlib.sha256(data).hexdigest()
+            if edit_manifest:
+                edit_manifest(m)
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp)
+        self._pkg = tmp / "pkg"
+        shutil.copytree(self.package, self._pkg)
+        m = json.loads((self._pkg / "package.json").read_text())
+        change(m)
+        (self._pkg / "package.json").write_text(json.dumps(m))
+        self.expect_reject(self._pkg, tmp / "out", needle)
+
+    def test_motion_emote_rejected(self):
+        self.motion_case(lambda b: b.__setitem__(slice(12, 13), b"x\0"), "emotes")
+
+    def test_motion_hand_pose_rejected(self):
+        self.motion_case(lambda b: struct.pack_into("<I", b, 33, 1), "hand poses")
+
+    def test_motion_trailing_bytes_rejected(self):
+        self.motion_case(lambda b: b.extend(b"\0"), "trailing")
+
+    def test_motion_constraints_rejected(self):
+        self.motion_case(lambda b: struct.pack_into("<i", b, len(b) - 4, 1), "constraints")
+
+    def test_motion_unknown_joint_rejected(self):
+        def rename(b):
+            i = b.find(b"mShoulderLeft\0")
+            self.assertGreater(i, 0)
+            b[i:i + 13] = b"mShoulderLefX"
+        self.motion_case(rename, "Unknown or duplicate motion joint")
+
+    def test_motion_metadata_mismatch_rejected(self):
+        self.motion_case(lambda b: None, "Motion metadata differs",
+                         lambda m: m["definition"]["animation_assets"][0].__setitem__("duration", 9.0))
+
     def test_truncated_glb(self):
         def cut(b):
             del b[-64:]
