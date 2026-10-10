@@ -152,6 +152,34 @@ class AvatarCompileRejections(unittest.TestCase):
         self.motion_case(lambda b: None, "Motion metadata differs",
                          lambda m: m["definition"]["animation_assets"][0].__setitem__("duration", 9.0))
 
+    def worn(self):
+        worn = os.environ.get("AVATAR_WORN_PACKAGE")
+        if not worn:
+            self.skipTest("AVATAR_WORN_PACKAGE not set")
+        return Path(worn)
+
+    def test_worn_avatar_compiles_with_alpha(self):
+        source = self.worn()
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp)
+        code, text = self.compile(source, tmp / "out")
+        self.assertEqual(code, 0, text[-400:])
+        compiled = json.loads((tmp / "out/compiled.json").read_text())
+        self.assertEqual(compiled["representation"], "attachment")
+        self.assertEqual(compiled["animations"], {})
+        alpha = (tmp / "out" / compiled["alpha_asset_path"]).read_text()
+        self.assertTrue(alpha.startswith("LLWearable version 22") and "type 13" in alpha)
+        self.assertEqual(alpha.count("3a367d1c-bef1-6d43-7595-e88c1e3aadb3"), 5)
+
+    def test_worn_avatar_rejects_unknown_alpha_region(self):
+        source = self.worn()
+        saved, self.package = self.package, source
+        try:
+            pkg, out = self.mutate(lambda m: m["definition"]["attachment"]["alpha"].append("tail"))
+        finally:
+            self.package = saved
+        self.expect_reject(pkg, out, "alpha layer regions")
+
     def test_truncated_glb(self):
         def cut(b):
             del b[-64:]

@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport")||(args[2]=="animesh")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport | animesh compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport | animesh|wearer compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -89,6 +89,25 @@ try
   if(exists)Save(new{udp_components=components,garden_udp_verified=true,committed,state,recall});
   else{File.WriteAllText(args[1]+".undo",JsonSerializer.Serialize(new{garden_undo_udp_verified=true,state,recall}));if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1]+".undo",UnixFileMode.UserRead|UnixFileMode.UserWrite);}
   Console.WriteLine("CITIZEN_SMOKE "+args[2]+" PASS: real UDP garden state, goal/memory, kernel WorldLine and grounded recall.");
+ }
+ else if(args[2]=="wearer")
+ {
+  // Second observer: another avatar wearing a Genesis attachment, as seen over real UDP.
+  var compiled=JsonDocument.Parse(File.ReadAllText(args[3])).RootElement;
+  var meshId=new UUID(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes("finalverse-avatar:mesh:"+compiled.GetProperty("mesh_sha256").GetString())).Take(16).ToArray(),0);
+  string wearer=Environment.GetEnvironmentVariable("FINALVERSE_WEARER") is {Length:>0} w?w:"MutSea FirstLook";
+  deadline=DateTime.UtcNow.AddSeconds(30);Avatar? avatar=null;Primitive? worn=null;
+  do
+  {
+   await Task.Delay(500);
+   avatar=client.Network.CurrentSim.ObjectsAvatars.Copy().Values.FirstOrDefault(a=>a.Name==wearer);
+   if(avatar!=null)worn=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.FirstOrDefault(p=>p.ParentID==avatar.LocalID&&p.Sculpt!=null&&p.Sculpt.Type==SculptType.Mesh&&p.Sculpt.SculptTexture==meshId);
+  }while((avatar==null||worn==null)&&DateTime.UtcNow<deadline);
+  Assert(avatar!=null,"Wearer is not visible to the observer");Assert(worn!=null,"Observer does not receive the Genesis attachment mesh");
+  var attachments=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Count(p=>p.ParentID==avatar!.LocalID);
+  var textures=avatar!.Textures;string? lowerBake=textures?.FaceTextures.Length>10?textures.FaceTextures[10]?.TextureID.ToString():null;
+  Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,lower_bake=lowerBake});
+  Console.WriteLine($"CITIZEN_SMOKE wearer PASS: {wearer} seen with {attachments} attachment(s) including Genesis mesh {meshId} at point {(int)worn.PrimData.AttachmentPoint}.");
  }
  else if(args[2]=="teleport")
  {

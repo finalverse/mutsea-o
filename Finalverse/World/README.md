@@ -142,3 +142,26 @@ Live verification uses `tools/Finalverse.CitizenSmoke` modes:
 A schema-2 package may bind roles to its own validated native keyframe motions, `"package:<local_id>"`, instead of the native library motion. Every required role must be covered; `listen` is an optional extra role. `NativeKeyframe` accepts only LLKeyframeMotion v1.0 with priority 0–4, at most 30 s, at most 64 joints and 1,024 keys per channel, pelvis-only translation, and no emote, hand pose, constraints or trailing bytes. The compiler additionally checks joint names against the pinned skeleton.
 
 Motions are stored as native animation assets under content-derived IDs. A package change that keeps the same mesh and materials is journaled as `package_updated` rather than migrated. A human greeting through the viewer relay plays `greet`; other messages play `listen` (at most 20 s) until the reply plays `talk`.
+
+## Genesis wardrobe (worn humanoid avatars)
+
+Worn Genesis avatars are compiled packages with `representation: attachment`: one rigged mesh skinned to the pinned skeleton, joint position overrides, an attach point and a generated alpha wearable (`IMG_INVISIBLE` on the selected head/upper/lower/eyes/hair regions). They have no motions or collision of their own; the wearer's agent animates and collides. The high-LOD budget is 40,000 triangles; animesh avatars keep 20,000.
+
+```ini
+[FinalverseGenesis]
+Enabled = true
+HostRegion = <region UUID that performs provisioning>
+Assignments = <user UUID>|/config/genesis/<package>|<compiled.json SHA-256>; ...
+; or, alone: Rollback = <wardrobe action id>
+```
+
+After prims load on the host region, each assignment is provisioned once while the wearer is offline, using the native services:
+
+1. Content-derived mesh, material, alpha-wearable and object assets.
+2. A `Genesis · <title> <version>` inventory folder holding the rigged object and the alpha item.
+3. Current Outfit links to both.
+4. Appearance with the Alpha wearable slot and the attachment appended on its point.
+
+Adding items does not bump folder versions in this service, and viewers trust their inventory cache by version. The wardrobe therefore bumps the Current Outfit, Clothing and Genesis folder versions itself.
+
+The journal (`genesis.wardrobe.jsonl`) stores the appearance before provisioning. Rollback restores it, removes the Current Outfit links and bumps the folder version; the user keeps the items. `Finalverse.CitizenSmoke wearer <compiled.json>` checks from a second account that the wearer's attachment carries the Genesis mesh.

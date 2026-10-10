@@ -31,7 +31,8 @@ using var manifestDoc=JsonDocument.Parse(manifestBytes,new JsonDocumentOptions{M
 var m=manifestDoc.RootElement;var def=m.GetProperty("definition");var rig=def.GetProperty("rig");
 Require(m.GetProperty("schema_version").GetInt32()==1&&m.GetProperty("kind").GetString()=="avatar","Only v1 avatar packages are supported.");
 Require(m.GetProperty("license").GetProperty("spdx").GetString()=="CC0-1.0","Only original CC0 avatars are enabled.");
-Require(def.GetProperty("representation").GetString()=="animated_object"&&!def.GetProperty("selectable").GetBoolean(),"Only non-selectable animated-object citizens are enabled.");
+var representation=def.GetProperty("representation").GetString();bool worn=representation=="attachment";
+Require(representation is "animated_object" or "attachment"&&!def.GetProperty("selectable").GetBoolean(),"Only non-selectable animated-object citizens or worn avatars are enabled.");
 Require(def.GetProperty("skeleton").GetProperty("sha256").GetString()==AvatarCatalog.SkeletonSha256,"Package skeleton pin mismatch.");
 Require(rig.GetProperty("root_joint").GetString()=="mPelvis"&&rig.GetProperty("lock_scale").GetBoolean(),"Rig must root at mPelvis with scale lock.");
 byte[] Payload(string name)
@@ -151,7 +152,7 @@ foreach(var lodName in lodNames)
     lods.Add(subs.ToArray());
 }
 var lodTriangles=lods.Select(l=>l.Sum(s=>s.tri.Length/3)).ToArray();
-Require(lodTriangles[0]<=AvatarCatalog.MaxHighTriangles&&lodTriangles.Zip(lodTriangles.Skip(1)).All(p=>p.First>p.Second),"LODs must strictly reduce within the avatar budget.");
+Require(lodTriangles[0]<=(worn?AvatarCatalog.MaxAttachmentTriangles:AvatarCatalog.MaxHighTriangles)&&lodTriangles.Zip(lodTriangles.Skip(1)).All(p=>p.First>p.Second),"LODs must strictly reduce within the avatar budget.");
 
 // Symmetric domain about the runtime root so unrigged bounds match the rest pose.
 var extent=new double[3];
@@ -200,10 +201,16 @@ var skinBlock=Helpers.ZCompressOSD(new OSDMap{
     ["alt_inverse_bind_matrix"]=new OSDArray(joints.Select(x=>(OSD)Matrix(1,1,1,x=="mPelvis"?Vector3d.Zero:local[x])).ToList()),
     ["pelvis_offset"]=OSD.FromReal(0),["lock_scale_if_joint_position"]=OSD.FromBoolean(true)});
 
-var collision=def.GetProperty("collision");
-var boxMin=collision.GetProperty("minimum").EnumerateArray().Select((x,i)=>Math.Round(x.GetDouble()/scale[i],4)).ToArray();
-var boxMax=collision.GetProperty("maximum").EnumerateArray().Select((x,i)=>Math.Round(x.GetDouble()/scale[i],4)).ToArray();
-var hull=new ContentCollision("box",boxMin,boxMax);ContentCatalog.ValidateCollision(hull);
+// A worn avatar has no collision of its own (the wearer's agent collides); keep a nominal hull block.
+double[] boxMin,boxMax;
+if(worn){boxMin=[-.5,-.5,-.5];boxMax=[.5,.5,.5];}
+else
+{
+    var collision=def.GetProperty("collision");
+    boxMin=collision.GetProperty("minimum").EnumerateArray().Select((x,i)=>Math.Round(x.GetDouble()/scale[i],4)).ToArray();
+    boxMax=collision.GetProperty("maximum").EnumerateArray().Select((x,i)=>Math.Round(x.GetDouble()/scale[i],4)).ToArray();
+}
+var hull=worn?new ContentCollision("none"):new ContentCollision("box",boxMin,boxMax);ContentCatalog.ValidateCollision(hull);
 byte[] physics;
 using(var corners=new MemoryStream())
 {
@@ -237,7 +244,21 @@ foreach(var f in materialDefs)
     var bytes=ContentMaterialAsset.Build(f);var file="material-"+materials.Count+".llmaterial";
     File.WriteAllBytes(Path.Combine(output,file),bytes);materials.Add(new(f.local_id,file,Hash(bytes),f));
 }
-var animations=def.GetProperty("animations").Deserialize<Dictionary<string,string>>()!;
+var animations=worn?new Dictionary<string,string>():def.GetProperty("animations").Deserialize<Dictionary<string,string>>()!;
+// Worn avatars hide the wearer's system body with a native alpha wearable (IMG_INVISIBLE layers).
+string? attachPoint=null,alphaPath=null,alphaHash=null;
+if(worn)
+{
+    var attachment=def.GetProperty("attachment");attachPoint=attachment.GetProperty("point").GetString();
+    var slots=new Dictionary<string,AvatarTextureIndex>{["head"]=AvatarTextureIndex.HeadAlpha,["upper"]=AvatarTextureIndex.UpperAlpha,
+        ["lower"]=AvatarTextureIndex.LowerAlpha,["eyes"]=AvatarTextureIndex.EyesAlpha,["hair"]=AvatarTextureIndex.HairAlpha};
+    var hidden=attachment.GetProperty("alpha").EnumerateArray().Select(x=>x.GetString()!).ToArray();
+    Require(hidden.Length is >0 and <=5&&hidden.Distinct().Count()==hidden.Length&&hidden.All(slots.ContainsKey),"Invalid alpha layer regions.");
+    var alpha=new OpenMetaverse.Assets.AssetClothing{Name=m.GetProperty("title").GetString()+" body alpha",Description="Finalverse Genesis",WearableType=WearableType.Alpha,
+        Permissions=new Permissions((uint)PermissionMask.All,0,0,(uint)(PermissionMask.Copy|PermissionMask.Modify|PermissionMask.Transfer),(uint)PermissionMask.All),
+        Params=new Dictionary<int,float>(),Textures=hidden.ToDictionary(x=>slots[x],_=>new UUID("3a367d1c-bef1-6d43-7595-e88c1e3aadb3"))};
+    alpha.Encode();alphaPath="alpha.wearable";File.WriteAllBytes(Path.Combine(output,alphaPath),alpha.AssetData);alphaHash=Hash(alpha.AssetData);
+}
 var motions=new List<AvatarAnimationAsset>();
 foreach(var (id,bytes,summary) in validatedMotions)
 {
@@ -245,9 +266,10 @@ foreach(var (id,bytes,summary) in validatedMotions)
     motions.Add(new(id,file,Hash(bytes),summary.duration,summary.loop));
 }
 var compiled=new AvatarCompiled(motions.Count>0?2:1,"avatar",m.GetProperty("package_id").GetString()!,m.GetProperty("version").GetString()!,m.GetProperty("title").GetString()!,
-    Hash(manifestBytes),"CC0-1.0","animated_object",AvatarCatalog.SkeletonSha256,joints.Length,rootHeight,scale,"avatar.llmesh",Hash(meshBytes),lodTriangles,
+    Hash(manifestBytes),"CC0-1.0",representation!,AvatarCatalog.SkeletonSha256,joints.Length,rootHeight,scale,"avatar.llmesh",Hash(meshBytes),lodTriangles,
     materialDefs.Select(f=>new AvatarFace(f.local_id,new[]{1d,1,1,1})).ToArray(),materials.ToArray(),animations,hull,
-    "Four independent surface LODs sharing one skin and normalized domain; live transition acceptance pending",motions.Count>0?motions.ToArray():null);
+    "Four independent surface LODs sharing one skin and normalized domain; live transition acceptance pending",motions.Count>0?motions.ToArray():null,
+    attachPoint,alphaPath,alphaHash);
 AvatarCatalog.Validate(compiled);
 File.WriteAllText(Path.Combine(output,"compiled.json"),JsonSerializer.Serialize(compiled,new JsonSerializerOptions{WriteIndented=true,DefaultIgnoreCondition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull})+"\n");
 AvatarCatalog.Load(output);

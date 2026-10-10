@@ -43,6 +43,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         directory=c?.GetString("DataDirectory","/data/finalverse")??"/data/finalverse";
         contentDirectory=c?.GetString("ContentLibraryDirectory","")??"";
         InitialiseCitizen(config);
+        InitialiseGenesis(config);
     }
     public void AddRegion(Scene s)
     {
@@ -53,9 +54,10 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         kernel.ContentSemantics=content.Semantic;
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
+        s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled)s.EventManager.OnRegisterCaps-=RegisterCaps; lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {
