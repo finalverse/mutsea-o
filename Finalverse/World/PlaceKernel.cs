@@ -15,7 +15,9 @@ public sealed record PlaceEntrance(string local_id,double[] position,double yaw_
 public sealed record PlaceTemplate(int schema_version,string kind,string place_id,string version,string title,string description,string license,
     double[] half_extent,string[] tags,string[] affordances,PlacePlacement[] placements,PlaceEntrance[] entrances,string? manifest_sha256=null);
 public sealed record PlaceRetirement(string group_id,string? snapshot_sha256=null);
-public sealed record PlacePlan(string plan_id,string actor_id,PlaceTemplate place,double[] anchor,double yaw_degrees,ContentPlan[] placements,PlaceRetirement[] retired);
+// accepted: existing objects the operator explicitly allows inside the footprint (for example a ground path
+// running beneath a deck); recorded in the plan for audit, never modified.
+public sealed record PlacePlan(string plan_id,string actor_id,PlaceTemplate place,double[] anchor,double yaw_degrees,ContentPlan[] placements,PlaceRetirement[] retired,string[]? accepted=null);
 public sealed record PlaceEntry(string operation_id,string status,DateTimeOffset timestamp,PlacePlan plan,string[]? fingerprints,string? error);
 
 // The world adapter for places. Overlap between sibling placements is by design,
@@ -50,7 +52,10 @@ public sealed class PlaceCatalog
     public IEnumerable<PlaceTemplate> All=>places.Values;
 
     static bool Text(string? s,int max)=>s is {Length:>0}&&s.Length<=max&&!s.Any(char.IsControl);
-    public static double Radius(ContentPackage p)=>p.parts.Max(x=>Math.Sqrt(x.position[0]*x.position[0]+x.position[1]*x.position[1])+Math.Sqrt(x.scale.Sum(s=>s*s))/2)+.25;
+    // Horizontal footprint radius about the asset anchor. A part turned only about Z cannot reach
+    // beyond its XY diagonal; a tilted part may, so it keeps the full 3D diagonal.
+    public static double Radius(ContentPackage p)=>p.parts.Max(x=>Math.Sqrt(x.position[0]*x.position[0]+x.position[1]*x.position[1])
+        +(Math.Abs(x.rotation[0])<1e-6&&Math.Abs(x.rotation[1])<1e-6?Math.Sqrt(x.scale[0]*x.scale[0]+x.scale[1]*x.scale[1]):Math.Sqrt(x.scale.Sum(s=>s*s)))/2)+.25;
     public static void Validate(PlaceTemplate t,ContentCatalog content)
     {
         ContentCatalog.Require(t!=null&&t.schema_version==1&&t.kind=="place"&&t.license=="CC0-1.0","Only original CC0 place templates (schema 1) are enabled.");
@@ -103,18 +108,19 @@ public sealed class PlaceKernel
         return [v[0]*c-v[1]*s,v[0]*s+v[1]*c,v[2]];
     }
 
-    public PlacePlan Plan(string placeId,string version,double[] anchor,double yawDegrees,string actor,string[]? retire=null)
+    public PlacePlan Plan(string placeId,string version,double[] anchor,double yawDegrees,string actor,string[]? retire=null,string[]? accept=null)
     {
         ContentCatalog.Require(!RecoveryRequired,"Place recovery required.");ContentCatalog.Require(Guid.TryParse(actor,out _),"Invalid operator actor.");
         ContentCatalog.Vector(anchor,3,0,4096);ContentCatalog.Vector([yawDegrees],1,-360,360);
         ContentCatalog.Require((retire??[]).All(id=>Guid.TryParse(id,out _))&&(retire??[]).Distinct().Count()==(retire??[]).Length&&(retire??[]).Length<=128,"Invalid retirement list.");
+        ContentCatalog.Require((accept??[]).All(id=>Guid.TryParse(id,out _))&&(accept??[]).Length<=32&&!(accept??[]).Intersect(retire??[]).Any(),"Invalid accepted-overlap list.");
         var place=places.Get(placeId,version);string plan=Guid.NewGuid().ToString();
         var plans=place.placements.Select((p,i)=>{
             var asset=content.Get(p.package_id,p.version).package;var offset=Rotate(p.offset,yawDegrees);
             return new ContentPlan(Id(plan,i,"plan"),actor,DateTimeOffset.UtcNow.AddMinutes(10),asset,anchor.Zip(offset,(a,o)=>a+o).ToArray(),
                 asset.parts.Select((_,j)=>Id(plan,i*64+j,"entity")).ToArray(),asset.parts.Select((_,j)=>Id(plan,i*64+j,"asset")).ToArray(),yawDegrees+p.yaw_degrees);
         }).ToArray();
-        var result=new PlacePlan(plan,actor,place,anchor.ToArray(),yawDegrees,plans,(retire??[]).Select(id=>new PlaceRetirement(id)).ToArray());
+        var result=new PlacePlan(plan,actor,place,anchor.ToArray(),yawDegrees,plans,(retire??[]).Select(id=>new PlaceRetirement(id)).ToArray(),(accept??[]).ToArray());
         world.CheckPlace(result);return result;
     }
 

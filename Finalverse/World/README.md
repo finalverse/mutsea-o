@@ -205,7 +205,7 @@ Each placement pins `package_id@version` with the asset's manifest SHA-256, and 
 Enabled = true
 HostRegion = <region UUID>
 Catalog = /config/places
-Provision = "place_id@version|x,y,z|yaw|retire-group-id,retire-group-id; ..."
+Provision = "place_id@version|x,y,z|yaw|retire-group-id,...|accept-group-id,...; ..."
 ; or, alone: Rollback = <place plan id>
 ```
 
@@ -217,6 +217,15 @@ Provision = "place_id@version|x,y,z|yaw|retire-group-id,retire-group-id; ..."
 
 If any step fails, the operation compensates: it removes what it created and restores what it retired. Anything unconfirmed, or an interrupted intent, fences further place writes for an operator.
 
+Accepted groups are existing objects the operator explicitly allows inside the footprint, such as a ground path running beneath a deck. They are recorded in the plan and never modified. Placement footprints use the horizontal extent of each part; a part tilted off vertical keeps its full 3D diagonal.
+
 Rollback refuses if any placement changed since provisioning. Otherwise it deletes the placements and restores the retired objects with their original IDs.
 
 Agents see each placed part's own semantics plus its place context (place identity, role and entrances in world coordinates) through the same semantic lookup as content imports. Provisioning runs as the estate owner, on the host region's prims-loaded hook, and is idempotent per `place_id@version`.
+
+Offline checks before deploying a place:
+
+- `MutSea.ContentNativeTests <catalog> --places <place root>` loads the real catalog, with the native material validator, and every place.
+- `Finalverse.CitizenSmoke semantic` (with `FINALVERSE_ENTITIES`) shows what an agent learns about placed parts through the World relay.
+
+**First place: Harbor Pavilion v2.** It was provisioned at (128,192) over the v1 sandbox pavilion, which it retires (12 groups), and accepts the North Promenade. Rollback and re-provision were rehearsed on the live fixture. See the viewer's `docs/finalverse/art/harbor-pavilion-validation.md`.

@@ -102,6 +102,18 @@ Test("native linear point light persists and later light edits block undo",()=>{
     child.Shape.LightRadius=3;
     Assert(!ContentFingerprint.Matches(group,lightHash));child.Shape.LightEntry=false;
 });
+if(args.Length==3&&args[1]=="--places")
+{
+    // Approved-catalog place check: every pin, footprint and budget against the real native catalog.
+    var approved=new ContentCatalog(args[0],ContentMaterialAsset.Matches);var places=new PlaceCatalog(args[2],approved);
+    foreach(var place in places.All)
+    {
+        int triangles=place.placements.Sum(x=>approved.Get(x.package_id,x.version).package.parts.Sum(part=>part.triangles));
+        int lights=place.placements.Sum(x=>approved.Get(x.package_id,x.version).package.parts.Count(part=>part.light!=null));
+        Console.WriteLine(JsonSerializer.Serialize(new{place.place_id,place.version,placements=place.placements.Length,triangles,lights,place.manifest_sha256}));
+    }
+    Console.WriteLine("PLACES_VALID");Environment.Exit(0);
+}
 if(args.Length>0)
 {
     var catalog=new ContentCatalog(args[0],ContentMaterialAsset.Matches);

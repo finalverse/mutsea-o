@@ -18,12 +18,12 @@ namespace Finalverse.World;
 //   Enabled = true
 //   HostRegion = <region UUID>
 //   Catalog = /config/places
-//   Provision = "place_id@version|x,y,z|yaw|retire-id,retire-id; ..."
+//   Provision = "place_id@version|x,y,z|yaw|retire-id,...|accept-id,...; ..."
 //   ; or, alone: Rollback = <place plan id>
 public sealed partial class WorldModule : IPlaceWorld
 {
     bool placesEnabled;string placesHost="",placesCatalog="",placesRollback="";
-    readonly List<(string id,string version,double[] anchor,double yaw,string[] retire)> placeRequests=new();
+    readonly List<(string id,string version,double[] anchor,double yaw,string[] retire,string[] accept)> placeRequests=new();
     PlaceKernel? places;
     string PlaceSnapshots=>Path.Combine(directory,RegionId+".places");
 
@@ -36,11 +36,12 @@ public sealed partial class WorldModule : IPlaceWorld
         foreach(var entry in c.GetString("Provision","").Split(';',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries))
         {
             var parts=entry.Split('|',StringSplitOptions.TrimEntries);
-            var at=parts.Length is 3 or 4?parts[0].Split('@'):[];
+            var at=parts.Length is >=3 and <=5?parts[0].Split('@'):[];
             var anchor=parts.Length>1?parts[1].Split(',').Select(v=>double.TryParse(v,NumberStyles.Float,CultureInfo.InvariantCulture,out var d)?d:double.NaN).ToArray():[];
             if(at.Length!=2||anchor.Length!=3||anchor.Any(double.IsNaN)||!double.TryParse(parts[2],NumberStyles.Float,CultureInfo.InvariantCulture,out var yaw))
-                throw new InvalidDataException("Place provisioning must be place_id@version|x,y,z|yaw[|retire-id,...].");
-            placeRequests.Add((at[0],at[1],anchor,yaw,parts.Length==4?parts[3].Split(',',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries):[]));
+                throw new InvalidDataException("Place provisioning must be place_id@version|x,y,z|yaw[|retire-id,...[|accept-id,...]].");
+            string[] Ids(int i)=>parts.Length>i?parts[i].Split(',',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries):[];
+            placeRequests.Add((at[0],at[1],anchor,yaw,Ids(3),Ids(4)));
         }
         if(!Guid.TryParse(placesHost,out _)||placesRollback!=""&&(!Guid.TryParse(placesRollback,out _)||placeRequests.Count>0))
             throw new InvalidDataException("Places need a host region; rollback names one plan and excludes provisioning.");
@@ -67,10 +68,10 @@ public sealed partial class WorldModule : IPlaceWorld
                     {var done=places.Rollback(placesRollback);log.Info(JsonSerializer.Serialize(new{@event="place_rolled_back",plan_id=placesRollback,done.plan.place.place_id,done.plan.place.version}));}
                     return;
                 }
-                foreach(var (id,version,anchor,yaw,retire) in placeRequests)
+                foreach(var (id,version,anchor,yaw,retire,accept) in placeRequests)
                 {
                     if(places.Active(id,version) is {} active){log.Info(JsonSerializer.Serialize(new{@event="place_already_provisioned",place_id=id,version,plan_id=active.plan.plan_id}));continue;}
-                    var plan=places.Plan(id,version,anchor,yaw,PlaceOperator,retire);
+                    var plan=places.Plan(id,version,anchor,yaw,PlaceOperator,retire,accept);
                     var done=places.Provision(plan);
                     log.Info(JsonSerializer.Serialize(new{@event="place_provisioned",plan_id=plan.plan_id,place_id=id,version,placements=plan.placements.Length,retired=plan.retired.Length,operation_id=done.operation_id}));
                 }
@@ -81,7 +82,8 @@ public sealed partial class WorldModule : IPlaceWorld
 
     void IPlaceWorld.CheckPlace(PlacePlan plan)
     {
-        var owner=new UUID(plan.actor_id);var retire=plan.retired.Select(r=>new UUID(r.group_id)).ToHashSet();
+        var retire=plan.retired.Select(r=>new UUID(r.group_id)).Concat((plan.accepted??[]).Select(id=>new UUID(id))).ToHashSet();
+        foreach(var id in plan.accepted??[])ContentCatalog.Require(scene.GetSceneObjectGroup(new UUID(id)) is {IsDeleted:false,IsAttachment:false},"An accepted overlap is missing or worn.");
         // The place rectangle in region coordinates (rotated bounds' AABB) must lie inside the region on dry ground.
         double a=plan.yaw_degrees*Math.PI/180,hx=plan.place.half_extent[0],hy=plan.place.half_extent[1];
         double ex=Math.Abs(hx*Math.Cos(a))+Math.Abs(hy*Math.Sin(a)),ey=Math.Abs(hx*Math.Sin(a))+Math.Abs(hy*Math.Cos(a));
