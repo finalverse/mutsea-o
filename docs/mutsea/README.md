@@ -11,3 +11,4 @@ MutSea remains the simulator/server brand. Finalverse is the world client. This 
 Server baseline: `13c546ce413e49e957e387547d97e79800cf33ca`. New tools and deployment assets are authored separately; inherited copyright and BSD notices remain in place. Docker images include `LICENSE.txt` and `CONTRIBUTORS.txt`. This is a development deployment, not a production readiness claim.
 
 - [Phase 4B bounded Starter Library runtime import](content-import.md)
+- [Phase 4B passive OAR compatibility](oar-compatibility.md): bounded quarantine, isolated PostgreSQL restore, native delivery and restart evidence.
