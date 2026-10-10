@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch")||(args[2]=="animesh")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch | animesh compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport")||(args[2]=="animesh")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport | animesh compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -89,6 +89,24 @@ try
   if(exists)Save(new{udp_components=components,garden_udp_verified=true,committed,state,recall});
   else{File.WriteAllText(args[1]+".undo",JsonSerializer.Serialize(new{garden_undo_udp_verified=true,state,recall}));if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1]+".undo",UnixFileMode.UserRead|UnixFileMode.UserWrite);}
   Console.WriteLine("CITIZEN_SMOKE "+args[2]+" PASS: real UDP garden state, goal/memory, kernel WorldLine and grounded recall.");
+ }
+ else if(args[2]=="teleport")
+ {
+  // Same-grid teleport to the OpenVCE region and back; counts streamed objects in each region.
+  string target=Environment.GetEnvironmentVariable("FINALVERSE_TELEPORT_REGION") is {Length:>0} t?t:"OpenVCE Plaza";
+  var start=client.Network.CurrentSim.Name;var watch=System.Diagnostics.Stopwatch.StartNew();
+  Assert(client.Self.Teleport(target,new Vector3(128,128,30)),"Teleport to "+target+" failed: "+client.Self.TeleportMessage);
+  var outbound=watch.Elapsed.TotalSeconds;Assert(client.Network.CurrentSim.Name==target,"Arrived in the wrong region");
+  int prims=0,stable=0;deadline=DateTime.UtcNow.AddSeconds(60);
+  while(DateTime.UtcNow<deadline&&stable<6){await Task.Delay(500);int n=client.Network.CurrentSim.ObjectsPrimitives.Count;stable=n==prims?stable+1:0;prims=n;}
+  var names=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>p.ParentID==0).Select(p=>p.Properties?.Name).Where(n=>n!=null).Take(5).ToArray();
+  var position=client.Self.SimPosition;watch.Restart();
+  Assert(client.Self.Teleport(start,new Vector3(172,146,26)),"Teleport back failed: "+client.Self.TeleportMessage);
+  var inbound=watch.Elapsed.TotalSeconds;deadline=DateTime.UtcNow.AddSeconds(30);bool lumiBack=false;
+  do{await Task.Delay(300);lumiBack=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Any(p=>p.ID==lumi);}while(!lumiBack&&DateTime.UtcNow<deadline);
+  Save(new{from=start,to=target,outbound_seconds=outbound,inbound_seconds=inbound,target_primitives=prims,arrival_position=new[]{position.X,position.Y,position.Z},named_roots=names,lumi_visible_after_return=lumiBack});
+  Assert(prims>=4000&&lumiBack,"Unexpected stream after teleport");
+  Console.WriteLine($"CITIZEN_SMOKE teleport PASS: {start} -> {target} in {outbound:F1}s ({prims} primitives streamed), back in {inbound:F1}s, Lumi visible.");
  }
  else if(args[2]=="animwatch")
  {

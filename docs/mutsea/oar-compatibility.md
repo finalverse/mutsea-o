@@ -73,3 +73,20 @@ The first staging grid file lacked native `keyname`. The packaged viewer rejecte
 | WorldTemplate transaction/versioning/provisioning/rollback | Not implemented by this restore |
 
 Next: select a rights-cleared reusable component, verify all its dependencies, semantics, collision/LOD/materials and native interaction, then package it through the existing content registry and transaction boundary. Imported content is input to that review; a successful archive restore does not make it production Starter Library content. Genesis nonhuman Lumi and humanoid Elara must independently pass native skinning/animation/persistence gates.
+
+## OpenVCE as a second Harbor region (local fixture, 2026-10-10)
+
+At the owner's request, the script-free derivative (`openvce-passive-v010-release-check/staging.oar`, SHA-256 `30ed5f94…`) now runs as a second, non-adjacent region of the local Harbor grid. That makes it reachable by teleport. It is not published, and whole-archive redistribution clearance remains open.
+
+- **Region.** `OpenVCE Plaza` (`fc6342cb-6166-4d4e-b04a-b50701f398e8`), Location 1010,1000 (Harbor is 1000,1000), UDP 18096 on loopback. It joined the existing default estate.
+- **Safe import.** A console `load oar` with no region selected applies to *every* region of an instance, so the archive was not loaded into the running Harbor instance. A temporary instance hosted only the new region, against the same PostgreSQL, with Finalverse modules disabled and `startup.txt` = the load.
+  - Result: 283 assets restored (7 already present), 459 groups / 4,090 prims, terrain, settings and 1 parcel; 0 scripts.
+  - The simulator persists loaded objects on its periodic backup and exits on SIGTERM without a final backup. Wait for the prims count before stopping.
+- **Harbor startup file.** Harbor's `startup.txt` still replayed `terrain load` and `load xml2`; with two regions both would apply to every region. It is now empty, as the deployment guide requires. The old content is kept as `startup.txt.pre-openvce` in the config volume.
+- **Container.** Recreated from a `docker commit` snapshot (`mutsea-finalverse-phase4b:harbor-r4-20261010`, which preserves module overlays and `config-include`), adding UDP 18096. The previous container is kept stopped as `…-pre-openvce`.
+- **Verification.** The real protocol (`Finalverse.CitizenSmoke teleport`) passed: Harbor → OpenVCE Plaza in 0.3 s with all 4,090 primitives streamed, back in 0.3 s with Lumi visible.
+- **Native viewer.** The visual harness still pins Harbor's region in C++ (`llfinalversevisualbenchmark.cpp`). Use the World Map to teleport manually until that is generalized.
+- **Rollback.**
+  1. Stop the simulator and remove `Regions/OpenVCE.ini`.
+  2. Restore `before-openvce-all.sql` (private `openvce-region-20261010/`), or delete the region's rows.
+  3. Restart the `…-pre-openvce` container.
