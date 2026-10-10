@@ -51,6 +51,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         kernel=new Kernel(this,directory);
         content=new ContentKernel(this,new ContentCatalog(contentDirectory,ContentMaterialAsset.Matches),directory,RegionId);
         kernel.ContentSemantics=content.Semantic;
+        kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
@@ -140,7 +141,9 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var p=g.RootPart;var q=p.RotationOffset;var te=new Primitive.TextureEntry(p.Shape.TextureEntry,0,p.Shape.TextureEntry.Length);var color=te.DefaultTexture.RGBA;
         g.GetAxisAlignedBoundingBoxRaw(out var minX,out var maxX,out var minY,out var maxY,out _,out _);
         double clearance=Math.Sqrt(Math.Pow(Math.Max(Math.Abs(minX),Math.Abs(maxX)),2)+Math.Pow(Math.Max(Math.Abs(minY),Math.Abs(maxY)),2));
-        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0;
+        // The citizen embodiment is owned by the representation adapter, never by generic plans
+        // (the historic seven-part body was excluded implicitly by its prim count).
+        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0&&g.UUID.ToString()!=Kernel.LumiId;
         var shape=p.Shape;
         string kind=shape.ProfileShape==ProfileShape.Square&&shape.PathCurve==(byte)Extrusion.Straight?"box":shape.ProfileShape==ProfileShape.HalfCircle&&shape.PathCurve==(byte)Extrusion.Curve1?"sphere":"other";
         // Deletion/restoration and cloning must round-trip every supported attribute.

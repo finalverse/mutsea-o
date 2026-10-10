@@ -104,3 +104,35 @@ dotnet /private/citizen-smoke/Finalverse.CitizenSmoke.dll /private/account.json 
 ```
 
 If only a newer .NET host is installed, prefix the .NET 8 probe with `DOTNET_ROLL_FORWARD=Major`; the simulator image uses native .NET 8. Protocol SDK assemblies come from its documented SDK build, not unrelated simulator binaries. Receipts contain private world/controller state and stay outside Git. Complete service-specific docs are in `~/Finalverse/services/agent-runtime/docs/finalverse/agents/`.
+
+## Citizen representation (Genesis animated embodiment)
+
+The citizen's logical identity and root entity ID never change. Its *representation* can move from the historic seven-part linked primitive to one native animated mesh (animesh), skinned to the viewer's pinned avatar skeleton and driven by native library animations. This is an operator action set in private configuration; it is never a model tool:
+
+```ini
+[FinalverseCitizens]
+Representation = /config/representations/lumi-v0.1.1
+RepresentationSha256 = <sha256 of that compiled.json>
+```
+
+Build the directory with Studio's `scripts/build_lumi.py`, then `tools/MutSea.AvatarCompile`. Verify it independently with `tools/MutSea.Content/verify_avatar_mesh.py`. `AvatarCatalog` accepts only original CC0, non-selectable `animated_object` packages. They must bind the pinned 133-bone skeleton (≤110 joints), have four strictly reducing LODs within an explicit avatar budget, 1–8 factor-PBR materials, and map every role to its native library animation. The small-asset 32-part/4,096-triangle limits are unchanged.
+
+After persisted prims load (region modules load before prims), the adapter:
+
+1. Stores the mesh and materials under content-derived IDs. Existing IDs must hold identical bytes.
+2. Writes an exact native XML snapshot (`<region>.citizen-representation/<action>.before.xml`, mode 0600).
+3. Journals `representation_intent` in the citizen WorldLine.
+4. Replaces the body with the same root ID, owner, permissions and heading, at ground + `root_height`.
+5. Journals `representation_result`, with an explicit preserved/retired component mapping.
+
+A failure after deletion compensates from the snapshot. An unresolved intent is completed only if the world observably matches one side of it; otherwise citizen writes are blocked for an operator. A matching body is never re-migrated. A mesh or material change migrates again.
+
+Rollback is explicit: unset `Representation`, set `RepresentationRollback = <migration action id>` and restart. The snapshot hash is checked; only the body created by that migration is replaced. Without configuration, a migrated body stays as journaled; nothing rolls back implicitly.
+
+The animated profile roots at the pelvis, so navigation uses a representation-specific lift and walking pace: 0.9 m and 2 m/s for the linked primitive, `root_height` and 1.2 m/s for animesh. Obstacle checks stay ground-relative, so the historic behaviour is unchanged. Animation roles are `idle`, `walk`, `turn_left`/`turn_right` (turn in place before walking, and face outward after arriving home), `talk` (scaled to reply length) and `greet` (a human greeting through the viewer relay, or a greeting reply). They use exactly one native object animation at a time; PostgreSQL persists the set and startup resets it to idle. `lumi.avatar_binding` reports the representation, package, mesh asset, root height and current animation. The embodiment is excluded from generic WorldPlan edits.
+
+Live verification uses `tools/Finalverse.CitizenSmoke` modes:
+
+- `observe` / `verify`: representation-aware; `verify` encodes the runtime's eight-goal retention.
+- `animesh compiled.json`: binding, UDP root/scale, ViewerAsset mesh hash, and animation states during a real walk (optional `FINALVERSE_WALK_FROM=x,y` native owner move) and a reply.
+- `displace`, `greet` (timed with `FINALVERSE_GREET_AT`), and `animwatch`: `ObjectAnimation` packets on the wire.

@@ -41,6 +41,7 @@ public sealed class Kernel
     readonly HashSet<string> undone = new();
     public bool RecoveryRequired { get; private set; }
     public Func<string,string,object?>? ContentSemantics { get; set; }
+    public Func<object?>? AvatarBinding { get; set; }
     public const int MaxActions = 8, MaxCreates = 24;
     public const double MaxVolume = 120, MaxMove = 12, MaxScale = 12;
     public static readonly string LumiId = "b151468b-cbcc-4af2-ae2d-6967e8938bb4";
@@ -61,7 +62,7 @@ public sealed class Kernel
     public object Lumi(string actor)
     {
         var home = entries.LastOrDefault(e => e.actor_id == actor && e.status == "committed" && e.owner_agent_id == LumiId && !undone.Contains(e.plan_id));
-        return new { agent_id = LumiId, display_name = "Lumi", avatar_binding = (string?)null,
+        return new { agent_id = LumiId, display_name = "Lumi", avatar_binding = AvatarBinding?.Invoke(),
             home_entity_id = home?.steps.FirstOrDefault(s => s.type == "create")?.id,
             memory = home == null ? Array.Empty<string>() : new[] { home.proposal.request },
             profile = "Persistent semantic citizen identity; autonomous navigation is not enabled." };
