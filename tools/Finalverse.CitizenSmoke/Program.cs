@@ -24,6 +24,8 @@ try
 {
  var animPackets=new List<object>();var loginAt=DateTime.UtcNow;
  client.Network.RegisterCallback(OpenMetaverse.Packets.PacketType.ObjectAnimation,(sender,e)=>{var p=(OpenMetaverse.Packets.ObjectAnimationPacket)e.Packet;if(p.Sender.ID!=lumi)return;lock(animPackets)animPackets.Add(new{ms=(DateTime.UtcNow-loginAt).TotalMilliseconds,anims=p.AnimationList.Select(a=>a.AnimID.ToString()[..8]+"#"+a.AnimSequenceID).ToArray()});});
+ var appearances=new System.Collections.Concurrent.ConcurrentDictionary<UUID,(Primitive.TextureEntryFace? def,Primitive.TextureEntryFace[]? faces)>();
+ client.Avatars.AvatarAppearance+=(sender,e)=>appearances[e.AvatarID]=(e.DefaultTexture,e.FaceTextures);
  Assert(client.Network.Login(account.GetProperty("first_name").GetString(),account.GetProperty("last_name").GetString(),account.GetProperty("password").GetString(),"Finalverse.CitizenSmoke","home","0.1"),"Sandbox login failed");
  var seed=new OSDArray{OSD.FromString("FinalverseWorld"),OSD.FromString("ViewerAsset"),OSD.FromString("ObjectAnimation")};var content=new StringContent(OSDParser.SerializeLLSDXmlString(seed),Encoding.UTF8);content.Headers.ContentType=new System.Net.Http.Headers.MediaTypeHeaderValue("application/llsd+xml");
  var seedReply=await http.PostAsync(client.Network.CurrentSim.Caps.SeedCapsURI,content);var caps=(OSDMap)OSDParser.DeserializeLLSDXml(await seedReply.Content.ReadAsStringAsync());cap=caps["FinalverseWorld"].AsString();Assert(cap.Length>0,"World capability missing");viewerAsset=caps.ContainsKey("ViewerAsset")?caps["ViewerAsset"].AsString():"";
@@ -105,8 +107,21 @@ try
   }while((avatar==null||worn==null)&&DateTime.UtcNow<deadline);
   Assert(avatar!=null,"Wearer is not visible to the observer");Assert(worn!=null,"Observer does not receive the Genesis attachment mesh");
   var attachments=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Count(p=>p.ParentID==avatar!.LocalID);
-  var textures=avatar!.Textures;string? lowerBake=textures?.FaceTextures.Length>10?textures.FaceTextures[10]?.TextureID.ToString():null;
-  Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,lower_bake=lowerBake});
+  // Appearance (baked slots) arrives in its own packet, possibly after the attachment.
+  var appearanceBy=DateTime.UtcNow.AddSeconds(20);
+  (Primitive.TextureEntryFace? def,Primitive.TextureEntryFace[]? faces) packet=default;
+  while(!appearances.TryGetValue(avatar!.ID,out packet))
+  {
+   if(DateTime.UtcNow>appearanceBy)break;await Task.Delay(500);
+  }
+  var faces=packet.faces??avatar!.Textures?.FaceTextures;var fallback=packet.def??avatar!.Textures?.DefaultTexture;
+  // A slot equal to the entry's default texture is stored as null (TextureEntry compaction).
+  string? Bake(int i)=>faces!=null&&faces.Length>i&&faces[i]!=null?faces[i].TextureID.ToString():fallback?.TextureID.ToString();
+  // Baked slots as observers receive them; an alpha-hidden region must arrive as IMG_INVISIBLE.
+  var bakes=new Dictionary<string,string?>{["head"]=Bake(8),["upper"]=Bake(9),["lower"]=Bake(10),["eyes"]=Bake(11),["skirt"]=Bake(19),["hair"]=Bake(20)};
+  const string invisible="3a367d1c-bef1-6d43-7595-e88c1e3aadb3";
+  Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,
+   lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray()});
   Console.WriteLine($"CITIZEN_SMOKE wearer PASS: {wearer} seen with {attachments} attachment(s) including Genesis mesh {meshId} at point {(int)worn.PrimData.AttachmentPoint}.");
  }
  else if(args[2]=="teleport")

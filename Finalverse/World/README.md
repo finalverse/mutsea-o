@@ -171,6 +171,12 @@ After prims load on the host region, each assignment is provisioned once while t
 
 Adding items does not bump folder versions in this service, and viewers trust their inventory cache by version. The wardrobe therefore bumps the Current Outfit, Clothing and Genesis folder versions itself.
 
+Current Outfit links carry the order code viewers validate: `@` followed by wearable type × 100 plus the layer, so the alpha link is `@1300`. Attachment links carry none. Folder names add the form when it differs from the title, for example `Genesis · Ignis 0.2.0 (ignis-female)`. Folders made before this rule keep their names.
+
+**Retired templates.** `AvatarCatalog.Retired` maps each retired package id to its successor. Today that is `finalverse.genesis.elara-male` → `finalverse.genesis.auren`, because Elara is exclusively female. Provisioning and the gallery refuse a retired package and name the successor; nothing is silently substituted. To move a wearer, assign the successor: the replace rule rolls back the old outfit, and items already in the inventory stay. The Studio registry `manifests/genesis-templates-v0.2.json` lists the active `package_id@version` templates and their pins.
+
+**Alpha-hidden regions** are published by the viewer as `IMG_INVISIBLE` in the baked slots (viewer fix `6adb096935`). `CitizenSmoke wearer` reports, from a second account, the baked slots it receives and which regions arrive hidden.
+
 The journal (`genesis.wardrobe.jsonl`) stores the appearance before provisioning. Rollback restores it, removes the Current Outfit links and bumps the folder version; the user keeps the items. `Finalverse.CitizenSmoke wearer <compiled.json>` checks from a second account that the wearer's attachment carries the Genesis mesh.
 
 The QA gallery rezzes each pinned package (worn or animated) as a standing animated-mesh mannequin, in a row along the mannequins' left, on the host region. Each mannequin:

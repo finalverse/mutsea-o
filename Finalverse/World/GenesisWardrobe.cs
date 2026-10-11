@@ -95,6 +95,7 @@ public sealed partial class WorldModule
         var compiledBytes=File.ReadAllBytes(Path.Combine(dir,"compiled.json"));
         ContentCatalog.Require(ContentCatalog.Hash(compiledBytes)==pin,"Compiled avatar differs from its configuration pin.");
         var (package,mesh,materials,_)=AvatarCatalog.Load(dir,out var alpha);
+        AvatarCatalog.RequireCurrent(package);
         ContentCatalog.Require(package.representation=="attachment"&&alpha!=null,"Only worn Genesis avatars can be provisioned to accounts.");
         var appearance=scene.AvatarService.GetAppearance(user)??throw new InvalidDataException("The wearer has no stored appearance.");
         var inventory=scene.InventoryService;
@@ -126,7 +127,8 @@ public sealed partial class WorldModule
         var objectAsset=DerivedId("object",ContentCatalog.Hash(objectXml));Store(objectAsset,part.Name,(sbyte)AssetType.Object,objectXml);
 
         // Inventory: a Genesis folder with the object and alpha items, then Current Outfit links.
-        var folder=new InventoryFolderBase(WardrobeId(user,pin,"folder"),"Genesis · "+package.title+" "+package.version,user,clothing.ID){Type=(short)FolderType.None,Version=1};
+        string form=package.package_id.Replace("finalverse.genesis.","");
+        var folder=new InventoryFolderBase(WardrobeId(user,pin,"folder"),"Genesis · "+package.title+" "+package.version+(form!=package.title.ToLowerInvariant()?" ("+form+")":""),user,clothing.ID){Type=(short)FolderType.None,Version=1};
         if(inventory.GetFolder(user,folder.ID)==null)ContentCatalog.Require(inventory.AddFolder(folder),"Genesis folder creation failed.");
         InventoryItemBase Item(string role,string name,UUID asset,AssetType type,InventoryType inv,uint flags)=>new()
         {
@@ -140,7 +142,9 @@ public sealed partial class WorldModule
         foreach(var item in new[]{objectItem,alphaItem})
         {
             if(inventory.GetItem(user,item.ID)==null)ContentCatalog.Require(inventory.AddItem(item),"Genesis item creation failed.");
-            var link=new InventoryItemBase{ID=WardrobeId(user,pin,"link-"+item.ID),Owner=user,CreatorId=user.ToString(),Name=item.Name,Description="@"+item.ID,AssetID=item.ID,
+            // Current Outfit link order as viewers validate it: "@" + wearable type × 100 + layer.
+            string order=item.InvType==(int)InventoryType.Wearable?"@"+((int)item.Flags*100):"";
+            var link=new InventoryItemBase{ID=WardrobeId(user,pin,"link-"+item.ID),Owner=user,CreatorId=user.ToString(),Name=item.Name,Description=order,AssetID=item.ID,
                 AssetType=(int)AssetType.Link,InvType=item.InvType,Flags=item.Flags,Folder=cof.ID,BasePermissions=(uint)Permissions.All,CurrentPermissions=(uint)Permissions.All,
                 NextPermissions=(uint)Permissions.All,CreationDate=item.CreationDate};
             if(inventory.GetItem(user,link.ID)==null)ContentCatalog.Require(inventory.AddItem(link),"Current Outfit link failed.");
@@ -179,6 +183,7 @@ public sealed partial class WorldModule
         var compiledBytes=File.ReadAllBytes(Path.Combine(dir,"compiled.json"));
         ContentCatalog.Require(ContentCatalog.Hash(compiledBytes)==pin,"Compiled avatar differs from its gallery pin.");
         var (package,mesh,materials,_)=AvatarCatalog.Load(dir,out _);
+        AvatarCatalog.RequireCurrent(package);
         var owner=scene.RegionInfo.EstateSettings.EstateOwner;
         ContentCatalog.Require(owner!=UUID.Zero,"The gallery needs an estate owner.");
         var id=DerivedId("gallery",pin);

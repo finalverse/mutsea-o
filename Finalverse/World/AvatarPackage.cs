@@ -20,6 +20,12 @@ public static class AvatarCatalog
     public const int MaxJoints=110,MaxHighTriangles=20000,MaxAttachmentTriangles=40000,MaxMeshBytes=4<<20;
     // Worn humanoids hide the system body with a generated alpha layer on these native attach points.
     public static readonly IReadOnlySet<string> AttachmentPoints=new HashSet<string>{"Pelvis","Chest","Spine"};
+    // Retired provisional templates (package id → successor). Existing inventory is left as is;
+    // they are never provisioned or shown again, and wearers move to the successor by assignment.
+    public static readonly IReadOnlyDictionary<string,string> Retired=new Dictionary<string,string>{
+        ["finalverse.genesis.elara-male"]="finalverse.genesis.auren"};
+    public static void RequireCurrent(AvatarCompiled a)=>
+        ContentCatalog.Require(!Retired.TryGetValue(a.package_id,out var next),"Template "+a.package_id+" is retired; use "+next+".");
     // Native library animations only; package-supplied motion assets are a later contract.
     public static readonly IReadOnlyDictionary<string,string> NativeAnimations=new Dictionary<string,string>{
         ["idle"]="2408fe9e-df1d-1d7d-f4ff-1384fa7b350f",["walk"]="6ed24bd8-91aa-4b12-ccc7-c97c857ab4e0",
