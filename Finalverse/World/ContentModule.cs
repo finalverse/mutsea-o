@@ -61,8 +61,9 @@ public sealed partial class WorldModule : IContentWorld
             shape.TextureEntry=te.GetBytes(source.faces.Length);
             ContentMaterialAsset.Bind(shape,plan,source);
             ContentLightAdapter.Bind(shape,source.light);
-            var position=ToV(plan.anchor)+ToV(source.position);
-            var rotation=new Quaternion((float)source.rotation[0],(float)source.rotation[1],(float)source.rotation[2],(float)source.rotation[3]);
+            var yaw=Quaternion.CreateFromAxisAngle(Vector3.UnitZ,(float)(plan.yaw_degrees*Math.PI/180));
+            var position=ToV(plan.anchor)+ToV(source.position)*yaw;
+            var rotation=new Quaternion((float)source.rotation[0],(float)source.rotation[1],(float)source.rotation[2],(float)source.rotation[3])*yaw;
             var part=new SceneObjectPart(owner,shape,position,Quaternion.Identity,Vector3.Zero){UUID=new UUID(plan.entity_ids[i]),CreatorID=owner,OwnerID=owner,
                 Name=i==0?plan.package.title:source.name,Description=source.description,BaseMask=(uint)Permissions.All,OwnerMask=(uint)Permissions.All,
                 EveryoneMask=0,GroupMask=0,NextOwnerMask=(uint)(Permissions.Copy|Permissions.Modify|Permissions.Transfer)};

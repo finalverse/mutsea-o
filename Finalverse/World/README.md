@@ -187,3 +187,36 @@ The QA gallery rezzes each pinned package (worn or animated) as a standing anima
 - is excluded from WorldPlans edits.
 
 It is never attached to backup. Removing `GalleryPackages` and restarting removes it, and nothing is written to the region database. Worn and animated bodies share the skinned asset, so the gallery shows the same mesh, materials and skin a wearer would show, posed on its own native skeleton. It is the cheap way to look at a whole family at once in the native viewer.
+
+## Places (PlaceTemplate composition)
+
+A PlaceTemplate (`kind: place`, schema 1, CC0) composes operator-approved small assets. It has no meshes of its own and leaves the 32-part / 4,096-triangle asset limits untouched.
+
+Each placement pins `package_id@version` with the asset's manifest SHA-256, and sets an offset and yaw inside the place's half extent (at most 32 m). The template also carries place semantics (title, description, tags, affordances) and entrances.
+
+`PlaceCatalog` loads `<Catalog>/<dir>/place.json` and checks:
+
+- every pin against the content catalog;
+- every placement footprint against the bounds;
+- totals: at most 96 placements, 65,536 triangles and 12 native lights.
+
+```ini
+[FinalversePlaces]
+Enabled = true
+HostRegion = <region UUID>
+Catalog = /config/places
+Provision = "place_id@version|x,y,z|yaw|retire-group-id,retire-group-id; ..."
+; or, alone: Rollback = <place plan id>
+```
+
+`PlaceKernel` turns a template into one journaled operation (`<region>.places.worldline.jsonl`):
+
+1. **Check the place as a whole:** region bounds, dry ground, native rez permission and fresh IDs; no foreign object may intrude. Siblings overlap by design.
+2. **Retire** the listed sandbox groups: write an XML2 snapshot with its SHA-256, then delete.
+3. **Create every placement** through the same native content adapter, with the yaw applied about the anchor.
+
+If any step fails, the operation compensates: it removes what it created and restores what it retired. Anything unconfirmed, or an interrupted intent, fences further place writes for an operator.
+
+Rollback refuses if any placement changed since provisioning. Otherwise it deletes the placements and restores the retired objects with their original IDs.
+
+Agents see each placed part's own semantics plus its place context (place identity, role and entrances in world coordinates) through the same semantic lookup as content imports. Provisioning runs as the estate owner, on the host region's prims-loaded hook, and is idempotent per `place_id@version`.

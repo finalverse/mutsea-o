@@ -97,6 +97,62 @@ try{
  Test("reject traversal and nonfinite transform",()=>{Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{mesh_path="../mesh"}]}));Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{position=[0,double.NaN,0]}]}));});
  Test("reject semantic omission and overbudget content",()=>{Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{semantic_type=""}]}));Reject(()=>ContentCatalog.Validate(package with{parts=[package.parts[0] with{triangles=4097}]}));});
  Test("reject unsigned external license and unknown schema fields",()=>{Reject(()=>ContentCatalog.Validate(package with{license="unknown"}));File.WriteAllText(Path.Combine(directory,"compiled.json"),JsonSerializer.Serialize(package).TrimEnd('}')+",\"exec\":\"bad\"}");try{new ContentCatalog(Path.Combine(root,"catalog"));throw new Exception("Accepted unknown field");}catch(JsonException){}Save(package);});
+ // ---- PlaceTemplate: composition of approved small assets in one journaled operation.
+ var placeRoot=Path.Combine(root,"places");var pinned=catalog.Get(package.package_id,package.version).package.manifest_sha256;
+ PlaceTemplate Place(int n,double spread=3)=>new(1,"place","mutsea.test.pavilion","0.1.0","Test Pavilion","An original test gathering place","CC0-1.0",[8,8],["social"],["walk","gather","sit"],
+  Enumerable.Range(0,n).Select(i=>new PlacePlacement("lamp"+i,package.package_id,package.version,pinned,[spread*Math.Cos(i),spread*Math.Sin(i),0],i*45,"lighting")).ToArray(),[new("north",[0,9,0],180)]);
+ void SavePlace(PlaceTemplate t){var d=Path.Combine(placeRoot,"pavilion");Directory.CreateDirectory(d);File.WriteAllText(Path.Combine(d,"place.json"),JsonSerializer.Serialize(t));}
+ Test("place catalog pins assets, bounds footprints and budgets",()=>{
+  SavePlace(Place(4));var pc=new PlaceCatalog(placeRoot,catalog);Assert(pc.Get("mutsea.test.pavilion","0.1.0").placements.Length==4);
+  Reject(()=>PlaceCatalog.Validate(Place(4) with{placements=[Place(1).placements[0] with{manifest_sha256=new string('0',64)}]},catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1,7.8),catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1) with{placements=[Place(1).placements[0] with{package_id="unknown"}]},catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1) with{half_extent=[40,8]},catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1) with{affordances=["execute"]},catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1) with{entrances=[new("far",[0,20,0],0)]},catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(2) with{placements=[Place(1).placements[0],Place(1).placements[0]]},catalog));
+ });
+ Test("yaw rotates offsets about the anchor",()=>{var r=PlaceKernel.Rotate([1,0,2],90);Assert(Math.Abs(r[0])<1e-9&&Math.Abs(r[1]-1)<1e-9&&r[2]==2);});
+ var placeCatalog=new PlaceCatalog(placeRoot,catalog);var pw=new FakePlace();var operatorId=Guid.NewGuid().ToString();var retiredId=Guid.NewGuid().ToString();
+ Test("provision creates every placement, retires replaced objects and answers place semantics",()=>{
+  pw.Existing.Add(retiredId);var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-ok"),region);
+  var plan=k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],90,operatorId,[retiredId]);var done=k.Provision(plan);
+  Assert(done.status=="committed"&&done.fingerprints!.Length==4&&pw.Live.Count==4&&!pw.Existing.Contains(retiredId)&&k.Active("mutsea.test.pavilion","0.1.0")!=null);
+  Assert(plan.placements.All(p=>p.yaw_degrees==90+p.yaw_degrees-90)&&Math.Abs(plan.placements[0].anchor[1]-103)<1e-9);
+  var semantic=JsonSerializer.Serialize(k.Semantic(plan.placements[1].entity_ids[0],operatorId));Assert(semantic.Contains("\"role\":\"lighting\"")&&semantic.Contains("Test Pavilion")&&semantic.Contains("north"));
+  Reject(()=>k.Rollback(Guid.NewGuid().ToString()));
+  pw.Live[plan.placements[0].entity_ids[0]]="edited";Reject(()=>k.Rollback(plan.plan_id));pw.Live[plan.placements[0].entity_ids[0]]="fp";
+  Assert(k.Rollback(plan.plan_id).status=="rolled_back"&&pw.Live.Count==0&&pw.Existing.Contains(retiredId)&&k.Active("mutsea.test.pavilion","0.1.0")==null);
+  Assert(!new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-ok"),region).RecoveryRequired);
+ });
+ Test("a failed placement compensates the whole place and restores retirements",()=>{
+  var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-fail"),region);pw.FailAt=2;
+  var plan=k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId,[retiredId]);Reject(()=>k.Provision(plan));
+  Assert(!k.RecoveryRequired&&pw.Live.Count==0&&pw.Existing.Contains(retiredId)&&k.Entries.Last().status=="compensated");pw.FailAt=-1;
+ });
+ Test("unconfirmed compensation fences writes, also after restart",()=>{
+  var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-stuck"),region);pw.FailAt=2;pw.StuckDelete=true;
+  var plan=k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId);Reject(()=>k.Provision(plan));
+  Assert(k.RecoveryRequired&&k.Entries.Last().status=="recovery_required");Reject(()=>k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));
+  Assert(new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-stuck"),region).RecoveryRequired);pw.FailAt=-1;pw.StuckDelete=false;pw.Live.Clear();
+ });
+ Test("an interrupted place intent fences writes after restart",()=>{
+  // A process loss leaves the intent as the operation's last record.
+  var dir=Path.Combine(root,"place-cut");var k=new PlaceKernel(pw,catalog,placeCatalog,dir,region);Assert(!k.RecoveryRequired);
+  var plan=k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId);
+  File.AppendAllText(Path.Combine(dir,region+".places.worldline.jsonl"),JsonSerializer.Serialize(new PlaceEntry(Guid.NewGuid().ToString(),"intent",DateTimeOffset.UtcNow,plan,null,null),ContentCatalog.Json)+"\n");
+  var reloaded=new PlaceKernel(pw,catalog,placeCatalog,dir,region);Assert(reloaded.RecoveryRequired);Reject(()=>reloaded.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));
+ });
+ Test("place checks run before any write",()=>{var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-deny"),region);pw.Deny=true;Reject(()=>k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));pw.Deny=false;Assert(k.Entries.Count==0);});
  Console.WriteLine($"{passed} content tests passed");return 0;
 }finally{Directory.Delete(root,true);}
 sealed class Fake:IContentWorld{public bool Deny,DenyDelete,FailCreate,PartialCreate,FailFingerprint;public string? Value;public Action? BeforeCreate;public void Check(ContentPlan plan){if(Deny)throw new InvalidDataException("Native policy denied.");}public void CheckDelete(ContentPlan plan){if(DenyDelete)throw new InvalidDataException("Native deletion denied.");}public string Create(ContentPlan plan,byte[][] meshes,byte[][] materials){BeforeCreate?.Invoke();if(FailCreate){if(PartialCreate)Value="partial";throw new InvalidDataException("Simulated insertion failure.");}return Value="original";}public string? Fingerprint(ContentPlan plan)=>FailFingerprint?throw new InvalidDataException("State observation failed."):Value;public void Delete(ContentPlan plan){Value=null;}}
+
+sealed class FakePlace:IPlaceWorld{public bool Deny,StuckDelete;public int FailAt=-1;public Dictionary<string,string> Live=new();public HashSet<string> Existing=new();
+ public void Check(ContentPlan plan){}
+ public void CheckPlace(PlacePlan plan){if(Deny)throw new InvalidDataException("Native place policy denied.");}
+ public string Create(ContentPlan plan,byte[][] meshes,byte[][] materials){if(FailAt>=0&&Live.Count==FailAt)throw new InvalidDataException("Simulated placement failure.");return Live[plan.entity_ids[0]]="fp";}
+ public string? Fingerprint(ContentPlan plan)=>Live.TryGetValue(plan.entity_ids[0],out var v)?v:null;
+ public void Delete(ContentPlan plan){if(!StuckDelete)Live.Remove(plan.entity_ids[0]);}
+ public PlaceRetirement[] Retire(PlacePlan plan){foreach(var r in plan.retired)Existing.Remove(r.group_id);return plan.retired.Select(r=>r with{snapshot_sha256=new string('a',64)}).ToArray();}
+ public void Restore(PlacePlan plan){foreach(var r in plan.retired)Existing.Add(r.group_id);}}

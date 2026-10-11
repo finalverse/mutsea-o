@@ -15,7 +15,8 @@ public sealed record ContentCollision(string shape,double[]? minimum=null,double
 public sealed record ContentLight(double[] color_linear,double intensity,double radius,double falloff);
 public sealed record ContentPart(string local_id,string name,string semantic_type,string description,double[] position,double[] scale,double[] rotation,ContentFace[] faces,string mesh_path,string mesh_sha256,int triangles,ContentMetadata? semantics=null,ContentSeat? seat=null,ContentCollision? collision=null,ContentLight? light=null);
 public sealed record ContentPackage(int schema_version,string package_id,string version,string title,string manifest_sha256,string license,ContentPart[] parts,string lod_policy,string collision_policy,ContentMaterial[]? materials=null,int[]? lod_triangles=null);
-public sealed record ContentPlan(string plan_id,string actor_id,DateTimeOffset expires_at,ContentPackage package,double[] anchor,string[] entity_ids,string[] asset_ids);
+// yaw_degrees rotates the whole linked asset about its anchor (place placements); direct imports keep 0.
+public sealed record ContentPlan(string plan_id,string actor_id,DateTimeOffset expires_at,ContentPackage package,double[] anchor,string[] entity_ids,string[] asset_ids,double yaw_degrees=0);
 public sealed record ContentEntry(string operation_id,string status,DateTimeOffset timestamp,ContentPlan plan,string? fingerprint,string? error);
 public interface IContentWorld
 {
