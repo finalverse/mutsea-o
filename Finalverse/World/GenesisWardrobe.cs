@@ -22,6 +22,7 @@ public sealed partial class WorldModule
 {
     bool genesisEnabled;string genesisHost="",genesisRollback="";
     readonly List<(UUID user,string directory,string pin)> genesisAssignments=new();
+    double[]? galleryRow;readonly List<(string directory,string pin)> galleryPackages=new();readonly HashSet<string> galleryIds=new();
     string GenesisJournal=>Path.Combine(directory,"genesis.wardrobe.jsonl");
 
     void InitialiseGenesis(IConfigSource source)
@@ -36,6 +37,18 @@ public sealed partial class WorldModule
             if(parts.Length!=3||!UUID.TryParse(parts[0],out var user)||!Path.IsPathRooted(parts[1])||parts[2].Length!=64)throw new InvalidDataException("Genesis assignment must be user|absolute compiled directory|compiled.json SHA-256.");
             genesisAssignments.Add((user,parts[1],parts[2].ToLowerInvariant()));
         }
+        foreach(var entry in c.GetString("GalleryPackages","").Split(';',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries))
+        {
+            var parts=entry.Split('|',StringSplitOptions.TrimEntries);
+            if(parts.Length!=2||!Path.IsPathRooted(parts[0])||parts[1].Length!=64)throw new InvalidDataException("Genesis gallery entry must be absolute compiled directory|compiled.json SHA-256.");
+            galleryPackages.Add((parts[0],parts[1].ToLowerInvariant()));
+        }
+        if(galleryPackages.Count>0)
+        {
+            var row=c.GetString("Gallery","").Split(',',StringSplitOptions.TrimEntries).Select(x=>double.TryParse(x,System.Globalization.NumberStyles.Float,System.Globalization.CultureInfo.InvariantCulture,out var v)?v:double.NaN).ToArray();
+            if(row.Length!=5||row.Any(double.IsNaN)||row[4]<0.5||row[4]>10||galleryPackages.Count>16)throw new InvalidDataException("Genesis gallery needs Gallery = x,y,floor z,facing degrees,spacing and at most 16 packages.");
+            galleryRow=row;
+        }
         if(!Guid.TryParse(genesisHost,out _)||genesisRollback!=""&&(!Guid.TryParse(genesisRollback,out _)||genesisAssignments.Count>0))throw new InvalidDataException("Genesis needs a host region; rollback names one action and excludes assignments.");
     }
 
@@ -47,10 +60,15 @@ public sealed partial class WorldModule
             try
             {
                 var records=File.Exists(GenesisJournal)?File.ReadAllLines(GenesisJournal).Select(l=>JsonDocument.Parse(l).RootElement.Clone()).ToList():new List<JsonElement>();
-                if(genesisRollback!=""){GenesisRollback(records,genesisRollback);return;}
-                foreach(var (user,dir,pin) in genesisAssignments)GenesisProvision(records,user,dir,pin);
+                if(genesisRollback!="")GenesisRollback(records,genesisRollback);
+                else foreach(var (user,dir,pin) in genesisAssignments)GenesisProvision(records,user,dir,pin);
             }
             catch(Exception ex){log.Error(JsonSerializer.Serialize(new{@event="genesis_wardrobe_failed",exception_type=ex.GetType().Name,error=ex.Message}));}
+            foreach(var (dir,pin) in galleryPackages)
+            {
+                try{GenesisGallery(dir,pin,galleryIds.Count);}
+                catch(Exception ex){log.Error(JsonSerializer.Serialize(new{@event="genesis_gallery_failed",exception_type=ex.GetType().Name,error=ex.Message}));}
+            }
         }
     }
 
@@ -82,13 +100,7 @@ public sealed partial class WorldModule
         string snapshot=OSDParser.SerializeJsonString(appearance.Pack(new EntityTransferContext()));
         GenesisRecord(action,"wardrobe_intent",new{user=user.ToString(),package.package_id,package.version,compiled_sha256=pin,appearance_before=snapshot});
 
-        // Assets: content-derived IDs; existing IDs must hold identical bytes.
-        void Store(UUID id,string name,sbyte type,byte[] data)
-        {
-            var existing=scene.AssetService.Get(id.ToString());
-            if(existing!=null){ContentCatalog.Require(existing.Data!=null&&existing.Data.AsSpan().SequenceEqual(data),"Genesis asset ID conflicts with different stored data.");return;}
-            ContentCatalog.Require(scene.AssetService.Store(new AssetBase(id,name,type,user.ToString()){Data=data})==id.ToString(),"Genesis asset storage was not acknowledged.");
-        }
+        void Store(UUID id,string name,sbyte type,byte[] data)=>StoreGenesisAsset(id,name,type,data,user);
         var meshId=DerivedId("mesh",package.mesh_sha256);Store(meshId,package.title+" "+package.version,(sbyte)AssetType.Mesh,mesh);
         var materialIds=package.materials.Select(m=>DerivedId("material",m.asset_sha256)).ToArray();
         for(int i=0;i<materialIds.Length;i++)Store(materialIds[i],package.materials[i].local_id,(sbyte)AssetType.Material,materials[i]);
@@ -142,6 +154,58 @@ public sealed partial class WorldModule
             folder=folder.ID.ToString(),object_item=objectItem.ID.ToString(),object_asset=objectAsset.ToString(),alpha_item=alphaItem.ID.ToString(),alpha_asset=alphaAsset.ToString(),
             mesh_asset=meshId.ToString(),attachment_point=point,cof_links=links.Select(x=>x.ToString()).ToArray()});
         log.Info(JsonSerializer.Serialize(new{@event="genesis_wardrobe_provisioned",action_id=action,package.package_id,package.version}));
+    }
+
+    // Assets: content-derived IDs; existing IDs must hold identical bytes.
+    void StoreGenesisAsset(UUID id,string name,sbyte type,byte[] data,UUID creator)
+    {
+        var existing=scene.AssetService.Get(id.ToString());
+        if(existing!=null){ContentCatalog.Require(existing.Data!=null&&existing.Data.AsSpan().SequenceEqual(data),"Genesis asset ID conflicts with different stored data.");return;}
+        ContentCatalog.Require(scene.AssetService.Store(new AssetBase(id,name,type,creator.ToString()){Data=data})==id.ToString(),"Genesis asset storage was not acknowledged.");
+    }
+
+    // QA gallery: each pinned package as a standing animated-mesh mannequin in a
+    // row, owned by the estate owner and never persisted (it is not attached to
+    // backup, so removing the configuration and restarting removes it). Worn
+    // and animated meshes share the skin, so this is the same rigged asset a
+    // wearer would show, posed by the native stand on its own skeleton.
+    void GenesisGallery(string dir,string pin,int slot)
+    {
+        var compiledBytes=File.ReadAllBytes(Path.Combine(dir,"compiled.json"));
+        ContentCatalog.Require(ContentCatalog.Hash(compiledBytes)==pin,"Compiled avatar differs from its gallery pin.");
+        var (package,mesh,materials,_)=AvatarCatalog.Load(dir,out _);
+        var owner=scene.RegionInfo.EstateSettings.EstateOwner;
+        ContentCatalog.Require(owner!=UUID.Zero,"The gallery needs an estate owner.");
+        var id=DerivedId("gallery",pin);
+        if(scene.GetSceneObjectGroup(id)!=null){galleryIds.Add(id.ToString());return;}
+        var meshId=DerivedId("mesh",package.mesh_sha256);StoreGenesisAsset(meshId,package.title+" "+package.version,(sbyte)AssetType.Mesh,mesh,owner);
+        var materialIds=package.materials.Select(m=>DerivedId("material",m.asset_sha256)).ToArray();
+        for(int i=0;i<materialIds.Length;i++)StoreGenesisAsset(materialIds[i],package.materials[i].local_id,(sbyte)AssetType.Material,materials[i],owner);
+        var shape=PrimitiveBaseShape.CreateMesh(package.faces.Length,meshId);shape.Scale=ToV(package.scale);
+        var te=new Primitive.TextureEntry(Primitive.TextureEntry.WHITE_TEXTURE);
+        for(uint f=0;f<package.faces.Length;f++){var c=package.faces[f].color;te.CreateFace(f).RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);}
+        shape.TextureEntry=te.GetBytes(package.faces.Length);
+        shape.RenderMaterials=new Primitive.RenderMaterials{entries=materialIds.Select((m,i)=>new Primitive.RenderMaterials.RenderMaterialEntry{te_index=(byte)i,id=m}).ToArray()};
+        shape.AnimeshEnabled=true;
+        ContentCatalog.Require(shape.AnimeshEnabled,"Native animated-mesh flag was not accepted.");
+        double yaw=galleryRow![3]*Math.PI/180,step=galleryRow[4]*slot;
+        // The row runs along the mannequins' left, so slot 0 is on the viewer's left.
+        var position=new Vector3((float)(galleryRow[0]-Math.Sin(yaw)*step),(float)(galleryRow[1]+Math.Cos(yaw)*step),(float)(galleryRow[2]+package.root_height));
+        ContentCatalog.Require(position.X>=0&&position.Y>=0&&position.X<SizeX&&position.Y<SizeY,"Gallery slot lies outside the region.");
+        var part=new SceneObjectPart(owner,shape,position,Quaternion.Identity,Vector3.Zero){UUID=id,CreatorID=owner,OwnerID=owner,LastOwnerID=owner,
+            Name=package.title+" (Genesis gallery)",Description="Finalverse Genesis gallery "+package.package_id+" "+package.version,
+            Text=package.package_id.Replace("finalverse.genesis.","")+" "+package.version,Color=System.Drawing.Color.FromArgb(255,214,236,226),
+            BaseMask=(uint)Permissions.All,OwnerMask=(uint)Permissions.All,GroupMask=0,EveryoneMask=0,NextOwnerMask=(uint)(Permissions.Copy|Permissions.Modify|Permissions.Transfer)};
+        part.RotationOffset=YawRotation(yaw);
+        part.PhysicsShapeType=(byte)PhysShapeType.convex;
+        part.AddFlag(PrimFlags.Phantom);
+        var group=new SceneObjectGroup(part);
+        ContentCatalog.Require(scene.AddNewSceneObject(group,false),"Simulator rejected the gallery mannequin.");
+        galleryIds.Add(id.ToString());
+        string idle=package.animations.TryGetValue("idle",out var v)&&!v.StartsWith("package:")?v:"2408fe9e-df1d-1d7d-f4ff-1384fa7b350f";
+        part.AddAnimation(new UUID(idle),"idle");
+        group.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);
+        log.Info(JsonSerializer.Serialize(new{@event="genesis_gallery_rezzed",package.package_id,package.version,object_id=id.ToString(),position=V(position),persisted=false}));
     }
 
     void BumpFolders(UUID user,params UUID[] folders)

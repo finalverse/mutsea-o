@@ -145,7 +145,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         double clearance=Math.Sqrt(Math.Pow(Math.Max(Math.Abs(minX),Math.Abs(maxX)),2)+Math.Pow(Math.Max(Math.Abs(minY),Math.Abs(maxY)),2));
         // The citizen embodiment is owned by the representation adapter, never by generic plans
         // (the historic seven-part body was excluded implicitly by its prim count).
-        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0&&g.UUID.ToString()!=Kernel.LumiId;
+        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0&&g.UUID.ToString()!=Kernel.LumiId&&!galleryIds.Contains(g.UUID.ToString());
         var shape=p.Shape;
         string kind=shape.ProfileShape==ProfileShape.Square&&shape.PathCurve==(byte)Extrusion.Straight?"box":shape.ProfileShape==ProfileShape.HalfCircle&&shape.PathCurve==(byte)Extrusion.Curve1?"sphere":"other";
         // Deletion/restoration and cloning must round-trip every supported attribute.

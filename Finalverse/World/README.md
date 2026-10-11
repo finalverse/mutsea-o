@@ -151,9 +151,14 @@ Worn Genesis avatars are compiled packages with `representation: attachment`: on
 [FinalverseGenesis]
 Enabled = true
 HostRegion = <region UUID that performs provisioning>
-Assignments = <user UUID>|/config/genesis/<package>|<compiled.json SHA-256>; ...
+Assignments = "<user UUID>|/config/genesis/<package>|<compiled.json SHA-256>; ..."
 ; or, alone: Rollback = <wardrobe action id>
+; optional QA gallery (independent of assignments and rollback):
+Gallery = <x>,<y>,<floor z>,<facing degrees>,<spacing m>
+GalleryPackages = "/config/genesis/<package>|<compiled.json SHA-256>; ..."
 ```
+
+Quote list values. The INI reader treats an unquoted `;` as the start of a comment, so everything after the first entry would be silently dropped.
 
 After prims load on the host region, each assignment is provisioned once while the wearer is offline, using the native services:
 
@@ -165,3 +170,12 @@ After prims load on the host region, each assignment is provisioned once while t
 Adding items does not bump folder versions in this service, and viewers trust their inventory cache by version. The wardrobe therefore bumps the Current Outfit, Clothing and Genesis folder versions itself.
 
 The journal (`genesis.wardrobe.jsonl`) stores the appearance before provisioning. Rollback restores it, removes the Current Outfit links and bumps the folder version; the user keeps the items. `Finalverse.CitizenSmoke wearer <compiled.json>` checks from a second account that the wearer's attachment carries the Genesis mesh.
+
+The QA gallery rezzes each pinned package (worn or animated) as a standing animated-mesh mannequin, in a row along the mannequins' left, on the host region. Each mannequin:
+
+- is owned by the estate owner and is phantom;
+- uses the package's own idle, or the native `stand` for worn packages, which carry no motions;
+- has a content-derived object ID;
+- is excluded from WorldPlans edits.
+
+It is never attached to backup. Removing `GalleryPackages` and restarting removes it, and nothing is written to the region database. Worn and animated bodies share the skinned asset, so the gallery shows the same mesh, materials and skin a wearer would show, posed on its own native skeleton. It is the cheap way to look at a whole family at once in the native viewer.
