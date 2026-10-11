@@ -264,3 +264,34 @@ Place rectangles may overlap in the catalog, because they include empty margins.
 **First starter world: `mutsea.starter.harbor-world@0.2.0`.** It holds Harbor Arrival, the pavilion, the Lake Overlook, and the North and Lake walks, on Harbor's exported terrain (`b70f57ee…`) with water at 20 m. It was provisioned into the fresh "Harbor Template" region: 180 groups and 669 parts. A second account teleported there in 0.3 s and received all 669 primitives. The world was rolled back (region emptied, terrain restored) and re-provisioned.
 
 **Running the simulator container.** The console reads stdin. Without `-it` (OpenStdin and TTY), it prints prompts in a tight loop, which floods the container log until the disk fills. Recreate the container only with `-it`, attached to both the database network and `bridge`, with the same volumes and user.
+
+## Newcomers (account → appearance)
+
+An operator can prepare new local accounts that arrive already wearing a chosen Genesis template:
+
+```ini
+[FinalverseAccounts]
+Enabled = true
+HostRegion = <region UUID>                     ; the arrival region
+Newcomers = /config/accounts/newcomers.json    ; owner-only (0600)
+Home = 128,128                                 ; optional arrival x,y; default the region centre
+```
+
+```json
+{"accounts":[{"first_name":"…","last_name":"…","password":"…","genesis":"/config/genesis/kai-female-v0.1.0","genesis_sha256":"<compiled.json SHA-256>"}]}
+```
+
+On the host region's `PrimsLoaded`, each newcomer is processed in turn:
+
+1. **Account.** A missing account is created through the inherited account service, the same path as the console `create user`. That covers the password, inventory and starter appearance, with activation only after the appearance is verified. A failed creation stays stored and inactive for operator repair.
+2. **Home.** A newcomer without a home gets the host arrival. While regions are still loading, the account service finds no default region and leaves the home unset.
+3. **Genesis outfit.** The chosen template is applied through the [Genesis wardrobe](#genesis-wardrobe-worn-humanoid-avatars) before the first login.
+
+Each step is journaled to `accounts.newcomers.jsonl`, with account ID, name, provisioning state and level. Passwords are never logged or journaled, and file-validation errors never quote the file.
+
+Re-running is safe:
+- An existing account is never re-keyed or re-levelled, and its home is never moved.
+- The Genesis assignment is idempotent.
+- No rollback deletes an account. The Genesis outfit is rolled back through the wardrobe.
+
+The newcomer file must not be committed. Use the console `create user` for interactive accounts. A command script would echo its arguments, including the password, into the log.

@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle | animesh|wearer compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer | animesh|wearer compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -26,7 +26,7 @@ try
  client.Network.RegisterCallback(OpenMetaverse.Packets.PacketType.ObjectAnimation,(sender,e)=>{var p=(OpenMetaverse.Packets.ObjectAnimationPacket)e.Packet;if(p.Sender.ID!=lumi)return;lock(animPackets)animPackets.Add(new{ms=(DateTime.UtcNow-loginAt).TotalMilliseconds,anims=p.AnimationList.Select(a=>a.AnimID.ToString()[..8]+"#"+a.AnimSequenceID).ToArray()});});
  var appearances=new System.Collections.Concurrent.ConcurrentDictionary<UUID,(Primitive.TextureEntryFace? def,Primitive.TextureEntryFace[]? faces)>();
  client.Avatars.AvatarAppearance+=(sender,e)=>appearances[e.AvatarID]=(e.DefaultTexture,e.FaceTextures);
- Assert(client.Network.Login(account.GetProperty("first_name").GetString(),account.GetProperty("last_name").GetString(),account.GetProperty("password").GetString(),"Finalverse.CitizenSmoke","home","0.1"),"Sandbox login failed");
+ Assert(client.Network.Login(account.GetProperty("first_name").GetString(),account.GetProperty("last_name").GetString(),account.GetProperty("password").GetString(),"Finalverse.CitizenSmoke","home","0.1"),"Sandbox login failed");var loggedInAt=DateTime.UtcNow;
  var seed=new OSDArray{OSD.FromString("FinalverseWorld"),OSD.FromString("ViewerAsset"),OSD.FromString("ObjectAnimation")};var content=new StringContent(OSDParser.SerializeLLSDXmlString(seed),Encoding.UTF8);content.Headers.ContentType=new System.Net.Http.Headers.MediaTypeHeaderValue("application/llsd+xml");
  var seedReply=await http.PostAsync(client.Network.CurrentSim.Caps.SeedCapsURI,content);var caps=(OSDMap)OSDParser.DeserializeLLSDXml(await seedReply.Content.ReadAsStringAsync());cap=caps["FinalverseWorld"].AsString();Assert(cap.Length>0,"World capability missing");viewerAsset=caps.ContainsKey("ViewerAsset")?caps["ViewerAsset"].AsString():"";
  var deadline=DateTime.UtcNow.AddSeconds(30);Primitive? rootBody=null;
@@ -36,7 +36,9 @@ try
  // Representation-aware: the historic linked primitive (7 parts) or one native animated-mesh root.
  bool animesh=rootBody!.Sculpt!=null&&rootBody.Sculpt.Type==SculptType.Mesh;string representation=animesh?"animated_object":"linked_primitive_citizen";
  Assert(animesh?components==1:components==7,animesh?"Animated-mesh embodiment must be a single UDP root":"Lumi's seven linked components are missing from UDP");
- var state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");
+ // Lumi's relay is controller-only; a newcomer sees and hears Lumi but does not command her.
+ JsonElement state=default;
+ if(args[2]!="newcomer"){state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");}
  if(args[2]=="questions")
  {
   var results=new List<object>();foreach(string text in new[]{"Lumi, who are you?","Where is your home?","What do you remember about your home?"}){var watch=System.Diagnostics.Stopwatch.StartNew();var reply=await Citizen("say",text);Assert(!reply.GetProperty("answer").GetString()!.Contains("unavailable",StringComparison.OrdinalIgnoreCase),"Grounded question unavailable");results.Add(new{text,latency_ms=watch.ElapsedMilliseconds,reply});}
@@ -154,6 +156,89 @@ try
   Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,
    lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray()});
   Console.WriteLine($"CITIZEN_SMOKE wearer PASS: {wearer} seen with {attachments} attachment(s) including Genesis mesh {meshId} at point {(int)worn.PrimData.AttachmentPoint}.");
+ }
+ else if(args[2]=="newcomer")
+ {
+  // A new account's first minutes over real UDP, timed from the login request: where it lands, what it can
+  // learn about the place, a visit to the starter world and back, then a walk to the pavilion and a seat.
+  // It ends at the pavilion, so the next login resumes there.
+  var milestones=new List<object>();
+  void Mark(string milestone,object? detail=null){milestones.Add(new{milestone,seconds=Math.Round((DateTime.UtcNow-loginAt).TotalSeconds,1),detail});Console.WriteLine($"  {milestone} at {(DateTime.UtcNow-loginAt).TotalSeconds:F1}s");}
+  Mark("logged_in",new{login_seconds=Math.Round((loggedInAt-loginAt).TotalSeconds,1)});
+  Vector3 Here()=>client.Self.SimPosition;
+  deadline=DateTime.UtcNow.AddSeconds(15);while(Here()==Vector3.Zero&&DateTime.UtcNow<deadline)await Task.Delay(200);
+  var landed=Here();double spawnDistance=Math.Sqrt(Math.Pow(landed.X-128,2)+Math.Pow(landed.Y-128,2));
+  Mark("landed",new{region=client.Network.CurrentSim.Name,position=new[]{landed.X,landed.Y,landed.Z},distance_to_arrival_compass=Math.Round(spawnDistance,2)});
+  Assert(client.Network.CurrentSim.Name=="MutSea Harbor"&&spawnDistance<=6,"A newcomer must land at the Harbor arrival");
+  Mark("lumi_visible",new{distance=Math.Round(Vector3.Distance(landed,rootBody!.Position),1)});
+  // "What is this?": place semantics of whatever stands near a point, through the newcomer's own relay.
+  async Task<JsonElement?> Describe(float x,float y,float radius,Func<JsonElement,bool> want)
+  {
+   foreach(var p in client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>Math.Sqrt(Math.Pow(p.Position.X-x,2)+Math.Pow(p.Position.Y-y,2))<=radius&&p.ParentID==0)
+           .OrderBy(p=>Math.Pow(p.Position.X-x,2)+Math.Pow(p.Position.Y-y,2)).Take(12))
+   {var r=await World(new{op="semantic",entity_id=p.ID.ToString()});if(r.TryGetProperty("place",out _)&&want(r))return r;}
+   return null;
+  }
+  string Of(JsonElement e,params string[] path){foreach(var k in path)e=e.GetProperty(k);return e.ToString();}
+  var beacon=await Describe(128,138,1.5f,r=>Of(r,"place","role")=="landmark");var stele=await Describe(135.5f,138,1.5f,r=>Of(r,"place","role")=="information");
+  Assert(beacon!=null&&stele!=null,"The arrival landmarks carry no place semantics for a newcomer");
+  Mark("arrival_understood",new{place=Of(beacon!.Value,"place","title"),beacon=Of(beacon.Value,"description"),welcome_stone=Of(stele!.Value,"description"),
+   entrances=beacon.Value.GetProperty("place").GetProperty("entrances").EnumerateArray().Select(e=>e.GetProperty("local_id").GetString()).ToArray()});
+  string target=Environment.GetEnvironmentVariable("FINALVERSE_TELEPORT_REGION") is {Length:>0} t?t:"Harbor Template";
+  Assert(client.Self.Teleport(target,new Vector3(128,128,30)),"Teleport to "+target+" failed: "+client.Self.TeleportMessage);
+  int prims=0,stable=0;deadline=DateTime.UtcNow.AddSeconds(60);
+  while(DateTime.UtcNow<deadline&&stable<6){await Task.Delay(500);int n=client.Network.CurrentSim.ObjectsPrimitives.Count;stable=n==prims?stable+1:0;prims=n;}
+  Mark("world_visited",new{region=client.Network.CurrentSim.Name,primitives=prims,position=new[]{Here().X,Here().Y,Here().Z}});
+  Assert(client.Self.Teleport("MutSea Harbor",new Vector3(128,128,30)),"Return teleport failed: "+client.Self.TeleportMessage);
+  deadline=DateTime.UtcNow.AddSeconds(15);while((Here()==Vector3.Zero||Math.Sqrt(Math.Pow(Here().X-128,2)+Math.Pow(Here().Y-128,2))>6)&&DateTime.UtcNow<deadline)await Task.Delay(200);
+  // Each region entry registers a fresh World capability; the pre-teleport URL is gone.
+  var reseed=new StringContent(OSDParser.SerializeLLSDXmlString(new OSDArray{OSD.FromString("FinalverseWorld")}),Encoding.UTF8);reseed.Headers.ContentType=new System.Net.Http.Headers.MediaTypeHeaderValue("application/llsd+xml");
+  var recaps=(OSDMap)OSDParser.DeserializeLLSDXml(await (await http.PostAsync(client.Network.CurrentSim.Caps.SeedCapsURI,reseed)).Content.ReadAsStringAsync());cap=recaps["FinalverseWorld"].AsString();Assert(cap.Length>0,"World capability missing after return");
+  Mark("returned",new{region=client.Network.CurrentSim.Name,position=new[]{Here().X,Here().Y,Here().Z}});
+  Assert(client.Network.CurrentSim.Name=="MutSea Harbor"&&Math.Sqrt(Math.Pow(Here().X-128,2)+Math.Pow(Here().Y-128,2))<=6,"The return did not reach the Harbor arrival");
+  // Walk: west of the beacon, up the north walk's centre line, up the pavilion's south steps.
+  Utils.LongToUInts(client.Network.CurrentSim.Handle,out uint gx,out uint gy);
+  async Task Walk(float x,float y)
+  {
+   var lastProgress=DateTime.UtcNow;float best=float.MaxValue;var stop=DateTime.UtcNow.AddSeconds(45);
+   // A ground-level target: a target above terrain + avatar height makes the server autopilot fly.
+   client.Self.AutoPilot(gx+x,gy+y,0);
+   while(DateTime.UtcNow<stop)
+   {
+    await Task.Delay(250);var d=(float)Math.Sqrt(Math.Pow(Here().X-x,2)+Math.Pow(Here().Y-y,2));
+    if(d<1.2f)return;
+    if(d<best-0.2f){best=d;lastProgress=DateTime.UtcNow;}
+    if(DateTime.UtcNow-lastProgress>TimeSpan.FromSeconds(6))throw new Exception($"Walk stalled at {Here()} toward {x},{y}");
+   }
+   throw new Exception($"Walk timed out at {Here()} toward {x},{y}");
+  }
+  foreach(var (x,y) in new[]{(126f,133f),(126f,142.5f),(128f,146f),(128f,165f),(128f,184.5f),(128f,188.5f)})await Walk(x,y);
+  client.Self.AutoPilotCancel();
+  Mark("reached_pavilion",new{position=new[]{Here().X,Here().Y,Here().Z}});
+  var bench=await Describe(130.05f,189.95f,1.6f,r=>r.TryGetProperty("seat",out var seat)&&seat.ValueKind==JsonValueKind.Object);
+  if(bench==null)
+  {
+   // The seat may be a child part of the bench: ask about every part near the bench.
+   foreach(var p in client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>p.ParentID!=0))
+   {
+    var parent=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.FirstOrDefault(r=>r.LocalID==p.ParentID);
+    if(parent==null||Math.Sqrt(Math.Pow(parent.Position.X-130.05,2)+Math.Pow(parent.Position.Y-189.95,2))>1.6)continue;
+    var r=await World(new{op="semantic",entity_id=p.ID.ToString()});if(r.TryGetProperty("seat",out var seat)&&seat.ValueKind==JsonValueKind.Object){bench=r;break;}
+   }
+  }
+  Assert(bench!=null,"No seat found at the pavilion bench");
+  var seatId=new UUID(Of(bench!.Value,"entity_id"));
+  client.Self.RequestSit(seatId,Vector3.Zero);await Task.Delay(400);client.Self.Sit();
+  deadline=DateTime.UtcNow.AddSeconds(12);while(client.Self.SittingOn==0&&DateTime.UtcNow<deadline)await Task.Delay(200);
+  Assert(client.Self.SittingOn!=0,"The newcomer could not sit on the pavilion bench");
+  Mark("seated",new{seat=Of(bench.Value,"package_id"),place=Of(bench.Value,"place","title")});
+  await Task.Delay(2000);client.Self.Stand();
+  deadline=DateTime.UtcNow.AddSeconds(10);while(client.Self.SittingOn!=0&&DateTime.UtcNow<deadline)await Task.Delay(200);
+  Assert(client.Self.SittingOn==0,"The newcomer could not stand up");Mark("stood");
+  double total=(DateTime.UtcNow-loginAt).TotalSeconds;
+  Save(new{account=client.Self.Name,total_seconds=Math.Round(total,1),budget_seconds=300,milestones});
+  Assert(total<=300,"The newcomer path exceeded five minutes");
+  Console.WriteLine($"CITIZEN_SMOKE newcomer PASS: {milestones.Count} milestones in {total:F1}s (budget 300s).");
  }
  else if(args[2]=="teleport")
  {

@@ -46,6 +46,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialiseGenesis(config);
         InitialisePlaces(config);
         InitialiseWorlds(config);
+        InitialiseAccounts(config);
     }
     public void AddRegion(Scene s)
     {
@@ -62,9 +63,10 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=AccountsPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;} lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {

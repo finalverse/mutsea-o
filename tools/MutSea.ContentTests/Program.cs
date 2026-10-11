@@ -175,6 +175,19 @@ try{
   try{k.Provision("mutsea.test.world","0.1.0");throw new Exception("Expected failure.");}catch(InvalidDataException){}
   Assert(!k.RecoveryRequired&&k.Entries.Last().status=="compensated"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10);
  });
+ Test("newcomer file: valid accounts and Genesis choices parse",()=>{
+  var ok=NewcomerFile.Parse(Encoding.UTF8.GetBytes("{\"accounts\":[{\"first_name\":\"Harbor\",\"last_name\":\"Newcomer\",\"password\":\"correct-horse-1\",\"genesis\":\"/config/genesis/kai-female-v0.1.0\",\"genesis_sha256\":\""+new string('a',64)+"\"},{\"first_name\":\"Second\",\"last_name\":\"Visitor2\",\"password\":\"correct-horse-2\"}]}"));
+  Assert(ok.accounts.Length==2&&ok.accounts[1].genesis==null);
+ });
+ Test("newcomer file: bad names, weak passwords, half choices and duplicates are refused without echoing content",()=>{
+  string One(string first,string last,string password,string extra="")=>"{\"accounts\":[{\"first_name\":\""+first+"\",\"last_name\":\""+last+"\",\"password\":\""+password+"\""+extra+"}]}";
+  foreach(var bad in new[]{One("1Harbor","Newcomer","correct-horse-1"),One("Harbor","New comer","correct-horse-1"),One("Harbor","Newcomer","short"),
+   One("Harbor","Newcomer","correct-horse-1",",\"genesis\":\"/config/genesis/x\""),One("Harbor","Newcomer","correct-horse-1",",\"genesis\":\"relative\",\"genesis_sha256\":\""+new string('a',64)+"\""),
+   "{\"accounts\":[]}","{\"accounts\":[{\"first_name\":\"A\",\"last_name\":\"B\",\"password\":\"correct-horse-1\"},{\"first_name\":\"a\",\"last_name\":\"b\",\"password\":\"correct-horse-2\"}]}"})
+   Reject(()=>NewcomerFile.Parse(Encoding.UTF8.GetBytes(bad)));
+  try{NewcomerFile.Parse(Encoding.UTF8.GetBytes("{\"accounts\":[{\"password\":\"secret-value-xyz\""));throw new Exception("Expected rejection.");}
+  catch(InvalidDataException ex){Assert(!ex.Message.Contains("secret-value-xyz"));}
+ });
  Console.WriteLine($"{passed} content tests passed");return 0;
 }finally{Directory.Delete(root,true);}
 sealed class Fake:IContentWorld{public bool Deny,DenyDelete,FailCreate,PartialCreate,FailFingerprint;public string? Value;public Action? BeforeCreate;public void Check(ContentPlan plan){if(Deny)throw new InvalidDataException("Native policy denied.");}public void CheckDelete(ContentPlan plan){if(DenyDelete)throw new InvalidDataException("Native deletion denied.");}public string Create(ContentPlan plan,byte[][] meshes,byte[][] materials){BeforeCreate?.Invoke();if(FailCreate){if(PartialCreate)Value="partial";throw new InvalidDataException("Simulated insertion failure.");}return Value="original";}public string? Fingerprint(ContentPlan plan)=>FailFingerprint?throw new InvalidDataException("State observation failed."):Value;public void Delete(ContentPlan plan){Value=null;}}
