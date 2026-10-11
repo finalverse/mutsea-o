@@ -77,6 +77,13 @@ Test("citizen rejects missing/invalid coordinates",()=>Reject(()=>CitizenNavigat
 Test("citizen rejects region boundary",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[0,100,25.9])));
 Test("citizen rejects water",()=>{navWorld.Terrain=18;Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd));navWorld.Terrain=25;});
 Test("citizen avoids obstacle",()=>{navWorld.Objects[cube]=original with {position=[106,100,26],scale=[2,2,2]};var route=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);Check(route.Any(p=>Math.Abs(p[1]-100)>=2)&&route.All(p=>CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,p)));});
+Test("body footprint: overhead canopy passes, trunk blocks",()=>{
+ navWorld.Objects[cube]=original with {position=[106,100,25],scale=[6,6,6],clearance_radius=3,body_radius=0};
+ var open=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);Check(open.All(p=>Math.Abs(p[1]-100)<.01));
+ navWorld.Objects[cube]=original with {position=[106,100,25],scale=[6,6,6],clearance_radius=3,body_radius=.3};
+ var around=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);Check(around.Any(p=>Math.Abs(p[1]-100)>=2));
+ Check(!CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,100.5,25.9]));Check(CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,101.5,25.9]));
+ navWorld.Objects[cube]=original with {position=[106,100,26],scale=[2,2,2]};});
 Test("citizen refuses blocked destination",()=>Reject(()=>CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,[106,100,25.9])));
 Test("citizen detects new route obstacle",()=>{navWorld.Objects.Clear();var route=CitizenNavigator.Route(navWorld,actor,Kernel.LumiId,navStart,navEnd);var next=route[0];navWorld.Objects[cube]=original with {position=next,scale=[1,1,2]};Check(!CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,next));});
 Test("citizen ignores own embodiment",()=>{navWorld.Objects.Clear();navWorld.Objects[Kernel.LumiId]=original with {id=Kernel.LumiId,position=navStart};Check(CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,navStart));});

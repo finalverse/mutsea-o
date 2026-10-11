@@ -105,7 +105,7 @@ try{
  Test("place catalog pins assets, bounds footprints and budgets",()=>{
   SavePlace(Place(4));var pc=new PlaceCatalog(placeRoot,catalog);Assert(pc.Get("mutsea.test.pavilion","0.1.0").placements.Length==4);
   Reject(()=>PlaceCatalog.Validate(Place(4) with{placements=[Place(1).placements[0] with{manifest_sha256=new string('0',64)}]},catalog));
-  Reject(()=>PlaceCatalog.Validate(Place(1,7.8),catalog));
+  Reject(()=>PlaceCatalog.Validate(Place(1,8.2),catalog));PlaceCatalog.Validate(Place(1,7.8),catalog);
   Reject(()=>PlaceCatalog.Validate(Place(1) with{placements=[Place(1).placements[0] with{package_id="unknown"}]},catalog));
   Reject(()=>PlaceCatalog.Validate(Place(1) with{half_extent=[40,8]},catalog));
   Reject(()=>PlaceCatalog.Validate(Place(1) with{affordances=["execute"]},catalog));

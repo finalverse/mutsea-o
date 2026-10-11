@@ -229,3 +229,9 @@ Offline checks before deploying a place:
 - `Finalverse.CitizenSmoke semantic` (with `FINALVERSE_ENTITIES`) shows what an agent learns about placed parts through the World relay.
 
 **First place: Harbor Pavilion v2.** It was provisioned at (128,192) over the v1 sandbox pavilion, which it retires (12 groups), and accepts the North Promenade. Rollback and re-provision were rehearsed on the live fixture. See the viewer's `docs/finalverse/art/harbor-pavilion-validation.md`.
+
+**Citizen navigation footprint.** World snapshots carry `body_radius`, the horizontal reach of the parts that collide at body height (0.35–1.8 m above ground). An upright part uses its XY extent; a tilted part uses its 3D diagonal. The citizen navigator uses it when present. Tree canopies without collision, and roofs overhead, no longer close walking corridors, while trunks, benches, walls and columns still block. Sources that cannot tell keep the original root-based rule. Placement safety (`clearance_radius`) is unchanged.
+
+Verified on Harbor with the cottage garden around Lumi's home: Lumi walks home from the front-west (7 waypoints), from directly behind the house (20) and from the back-west (13).
+
+**Operator probes.** `CitizenSmoke hold` keeps the controller avatar present for human-gated controller commands, such as Lumi's garden proposal and approval; it performs no action itself. `CitizenSmoke restyle` submits operator-authored `set_color` plans through the guarded prepare/commit path; the plans are journaled and undoable.

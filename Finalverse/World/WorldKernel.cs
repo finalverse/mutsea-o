@@ -9,7 +9,10 @@ namespace Finalverse.World;
 public sealed record ActionSpec(string type, string? target_id, JsonElement parameters);
 public sealed record Plan(int schema_version, string request, string provider, string model, ActionSpec[] actions);
 public sealed record Entity(string id, string name, string description, string owner_id, string shape,
-    double[] position, double[] rotation, double[] scale, double[] color, bool editable, bool copyable, bool deletable, double clearance_radius = 0);
+    double[] position, double[] rotation, double[] scale, double[] color, bool editable, bool copyable, bool deletable, double clearance_radius = 0,
+    // Navigation footprint: horizontal reach of the parts that collide at body height
+    // (0.35–1.8 m above ground). Null for sources that cannot tell, which keep the root-based rule.
+    double? body_radius = null);
 public sealed record Step(string type, string id, Entity? before, Entity? after);
 public sealed record Prepared(string plan_id, string actor_id, DateTimeOffset expires_at, Plan proposal, Step[] steps, string scene_revision, string summary);
 public sealed record Entry(string operation_id, string plan_id, string actor_id, DateTimeOffset timestamp,

@@ -147,6 +147,19 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var p=g.RootPart;var q=p.RotationOffset;var te=new Primitive.TextureEntry(p.Shape.TextureEntry,0,p.Shape.TextureEntry.Length);var color=te.DefaultTexture.RGBA;
         g.GetAxisAlignedBoundingBoxRaw(out var minX,out var maxX,out var minY,out var maxY,out _,out _);
         double clearance=Math.Sqrt(Math.Pow(Math.Max(Math.Abs(minX),Math.Abs(maxX)),2)+Math.Pow(Math.Max(Math.Abs(minY),Math.Abs(maxY)),2));
+        // Only colliding parts at body height obstruct a walker: a canopy without collision or a roof
+        // overhead does not. An upright part (turned only about Z) reaches its XY half-diagonal and
+        // spans its Z half-height; a tilted part keeps its full 3D half-diagonal both ways.
+        var root=g.AbsolutePosition;double ground=Height(Math.Clamp(root.X,0,SizeX-1),Math.Clamp(root.Y,0,SizeY-1)),body=0;
+        foreach(var part in g.Parts)
+        {
+            if(part.PhysicsShapeType==(byte)PhysShapeType.none)continue;
+            var c=part.AbsolutePosition;var s=part.Scale;var r=part.GetWorldRotation();
+            bool upright=Math.Abs(r.X)<1e-3&&Math.Abs(r.Y)<1e-3;double diagonal=Math.Sqrt(s.X*s.X+s.Y*s.Y+s.Z*s.Z)/2;
+            double reach=upright?Math.Sqrt(s.X*s.X+s.Y*s.Y)/2:diagonal,height=upright?s.Z/2:diagonal;
+            if(c.Z+height<ground+.35||c.Z-height>ground+1.8)continue;
+            body=Math.Max(body,Math.Sqrt((c.X-root.X)*(c.X-root.X)+(c.Y-root.Y)*(c.Y-root.Y))+reach);
+        }
         // The citizen embodiment is owned by the representation adapter, never by generic plans
         // (the historic seven-part body was excluded implicitly by its prim count).
         bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0&&g.UUID.ToString()!=Kernel.LumiId&&!galleryIds.Contains(g.UUID.ToString());
@@ -162,7 +175,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         return new(g.UUID.ToString(),p.Name,p.Description,p.OwnerID.ToString(),kind,
             V(g.AbsolutePosition),[q.X,q.Y,q.Z,q.W],V(p.Scale),[color.R,color.G,color.B,color.A],
             safe&&scene.Permissions.CanEditObject(g.UUID,new UUID(actor)),plain&&p.BaseMask==(uint)Permissions.All&&p.OwnerMask==(uint)Permissions.All&&p.EveryoneMask==0&&p.GroupMask==0&&p.NextOwnerMask==(uint)(Permissions.Copy|Permissions.Modify|Permissions.Transfer),
-            safe&&scene.Permissions.CanDeleteObject(g.UUID,new UUID(actor)),clearance);
+            safe&&scene.Permissions.CanDeleteObject(g.UUID,new UUID(actor)),clearance,body);
     }
     public double Height(double x,double y)
     {

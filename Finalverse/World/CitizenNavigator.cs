@@ -14,6 +14,13 @@ public static class CitizenNavigator
         foreach(var e in world.Entities(owner))
         {
             if(e.id==embodiment)continue;
+            if(e.body_radius is double reach)
+            {
+                // The source already measured what collides at body height around the root.
+                if(reach<=0)continue;
+                if(Math.Abs(e.position[0]-point[0])<reach+.45&&Math.Abs(e.position[1]-point[1])<reach+.45)return false;
+                continue;
+            }
             // Roads/ground surfaces are traversable; solids at body height are obstacles.
             double ground=point[2]-lift;
             if(e.position[2]+e.scale[2]/2<ground+.35||e.position[2]-e.scale[2]/2>ground+1.8)continue;

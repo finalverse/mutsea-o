@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic | animesh|wearer compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle | animesh|wearer compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -91,6 +91,28 @@ try
   if(exists)Save(new{udp_components=components,garden_udp_verified=true,committed,state,recall});
   else{File.WriteAllText(args[1]+".undo",JsonSerializer.Serialize(new{garden_undo_udp_verified=true,state,recall}));if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1]+".undo",UnixFileMode.UserRead|UnixFileMode.UserWrite);}
   Console.WriteLine("CITIZEN_SMOKE "+args[2]+" PASS: real UDP garden state, goal/memory, kernel WorldLine and grounded recall.");
+ }
+ else if(args[2]=="restyle")
+ {
+  // Operator-authored restyle (FINALVERSE_RESTYLE: {"plans":[World API plans]}): each plan goes through the
+  // same guarded prepare/commit path as any edit, is journaled, and stays undoable. Only set_color is accepted here.
+  var spec=JsonDocument.Parse(File.ReadAllText(Environment.GetEnvironmentVariable("FINALVERSE_RESTYLE")!)).RootElement;
+  var results=new List<object>();
+  foreach(var plan in spec.GetProperty("plans").EnumerateArray())
+  {
+   Assert(plan.GetProperty("actions").EnumerateArray().All(a=>a.GetProperty("type").GetString()=="set_color"),"Restyle accepts only set_color actions");
+   var prepared=await World(new{op="prepare",plan});var id=prepared.GetProperty("plan_id").GetString()!;
+   var committed=await World(new{op="commit",plan_id=id});
+   results.Add(new{plan_id=id,request=plan.GetProperty("request").GetString(),status=committed.GetProperty("status").GetString()});
+  }
+  Save(new{results});Console.WriteLine($"CITIZEN_SMOKE restyle PASS: {results.Count} plan(s) committed.");
+ }
+ else if(args[2]=="hold")
+ {
+  // Keep the controller's avatar present (FINALVERSE_HOLD_SECONDS, at most 300) for human-gated
+  // controller commands that require it; performs no world or citizen action itself.
+  int seconds=Math.Clamp(int.Parse(Environment.GetEnvironmentVariable("FINALVERSE_HOLD_SECONDS")??"60"),1,300);
+  Save(new{held_seconds=seconds,from=DateTimeOffset.UtcNow});Console.WriteLine($"CITIZEN_SMOKE hold: present for {seconds}s.");await Task.Delay(seconds*1000);
  }
  else if(args[2]=="semantic")
  {
