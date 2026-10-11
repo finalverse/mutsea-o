@@ -235,3 +235,32 @@ Offline checks before deploying a place:
 Verified on Harbor with the cottage garden around Lumi's home: Lumi walks home from the front-west (7 waypoints), from directly behind the house (20) and from the back-west (13).
 
 **Operator probes.** `CitizenSmoke hold` keeps the controller avatar present for human-gated controller commands, such as Lumi's garden proposal and approval; it performs no action itself. `CitizenSmoke restyle` submits operator-authored `set_color` plans through the guarded prepare/commit path; the plans are journaled and undoable.
+
+## Worlds (WorldTemplate provisioning)
+
+A WorldTemplate (`world.json`, `kind: world`, schema 1, CC0) is a reusable starter world. It composes approved places, each pinned to the SHA-256 of its exact `place.json`, with an anchor that may follow the terrain and a yaw. It also carries water height, spawn and an environment preset reference, plus an optional region-sized R32 heightmap (`terrain.r32`), pinned by SHA-256.
+
+```ini
+[FinalverseWorlds]
+Enabled = true
+HostRegion = <empty target region UUID>
+Catalog = /config/worlds
+Provision = world_id@version              ; or, alone: Rollback = <world operation id>
+ExportRegion = <region UUID>              ; optional: export that region's terrain once
+ExportTerrain = /data/finalverse/<name>.r32
+```
+
+`WorldTemplateKernel` provisions into an **empty** region as one journaled operation (`<region>.worlds.worldline.jsonl`):
+
+1. Snapshot the region's terrain (R32 plus its SHA-256) and water height.
+2. Apply the template terrain and water.
+3. Provision every place, in order, through that region's PlaceKernel. Each place keeps its own journal and rollback.
+4. Set the landing point.
+
+If a place fails, the operation rolls back the places already provisioned and restores terrain and water. Rollback does the same for a committed world, after checking that the terrain snapshot is unchanged.
+
+Place rectangles may overlap in the catalog, because they include empty margins. The live check refuses any existing object inside each new place's footprint, including the parts of earlier places. Order places from large to small.
+
+**First starter world: `mutsea.starter.harbor-world@0.2.0`.** It holds Harbor Arrival, the pavilion, the Lake Overlook, and the North and Lake walks, on Harbor's exported terrain (`b70f57ee…`) with water at 20 m. It was provisioned into the fresh "Harbor Template" region: 180 groups and 669 parts. A second account teleported there in 0.3 s and received all 669 primitives. The world was rolled back (region emptied, terrain restored) and re-provisioned.
+
+**Running the simulator container.** The console reads stdin. Without `-it` (OpenStdin and TTY), it prints prompts in a tight loop, which floods the container log until the disk fills. Recreate the container only with `-it`, attached to both the database network and `bridge`, with the same volumes and user.

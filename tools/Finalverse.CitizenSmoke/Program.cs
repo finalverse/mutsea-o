@@ -170,7 +170,8 @@ try
   var inbound=watch.Elapsed.TotalSeconds;deadline=DateTime.UtcNow.AddSeconds(30);bool lumiBack=false;
   do{await Task.Delay(300);lumiBack=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Any(p=>p.ID==lumi);}while(!lumiBack&&DateTime.UtcNow<deadline);
   Save(new{from=start,to=target,outbound_seconds=outbound,inbound_seconds=inbound,target_primitives=prims,arrival_position=new[]{position.X,position.Y,position.Z},named_roots=names,lumi_visible_after_return=lumiBack});
-  Assert(prims>=4000&&lumiBack,"Unexpected stream after teleport");
+  int expected=int.Parse(Environment.GetEnvironmentVariable("FINALVERSE_TELEPORT_MIN_PRIMS") is {Length:>0} m?m:"4000");
+  Assert(prims>=expected&&lumiBack,"Unexpected stream after teleport");
   Console.WriteLine($"CITIZEN_SMOKE teleport PASS: {start} -> {target} in {outbound:F1}s ({prims} primitives streamed), back in {inbound:F1}s, Lumi visible.");
  }
  else if(args[2]=="animwatch")

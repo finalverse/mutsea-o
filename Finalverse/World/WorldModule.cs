@@ -45,6 +45,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialiseCitizen(config);
         InitialiseGenesis(config);
         InitialisePlaces(config);
+        InitialiseWorlds(config);
     }
     public void AddRegion(Scene s)
     {
@@ -54,14 +55,16 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var catalog=new ContentCatalog(contentDirectory,ContentMaterialAsset.Matches);
         content=new ContentKernel(this,catalog,directory,RegionId);
         StartPlaces(catalog);
-        kernel.ContentSemantics=(id,actor)=>content.Semantic(id,actor)??places?.Semantic(id,actor);
+        StartWorlds(catalog);
+        kernel.ContentSemantics=(id,actor)=>content.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
         s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;} lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {

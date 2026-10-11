@@ -144,6 +144,37 @@ try{
   var reloaded=new PlaceKernel(pw,catalog,placeCatalog,dir,region);Assert(reloaded.RecoveryRequired);Reject(()=>reloaded.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));
  });
  Test("place checks run before any write",()=>{var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-deny"),region);pw.Deny=true;Reject(()=>k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));pw.Deny=false;Assert(k.Entries.Count==0);});
+ // ---- WorldTemplate: places + terrain + water + spawn into an empty region, one journaled operation.
+ var worldRoot=Path.Combine(root,"worlds");var placePin=placeCatalog.Get("mutsea.test.pavilion","0.1.0").manifest_sha256!;
+ byte[] Flat(float h){var b=new byte[256*256*4];for(int i=0;i<b.Length;i+=4)BitConverter.GetBytes(h).CopyTo(b,i);return b;}
+ var terrain=Flat(25f);
+ WorldTemplateManifest World(params (string id,double x,double y)[] at)=>new(1,"world","mutsea.test.world","0.1.0","Test World","An original test starter world","CC0-1.0",[256,256],20,ContentCatalog.Hash(terrain),
+  "mutsea.starter.harbor-environments@0.1.0#day",new([128,128,25.3],[128,140,25]),at.Select(a=>new WorldPlace(a.id,"mutsea.test.pavilion","0.1.0",placePin,[a.x,a.y,0],0,true)).ToArray());
+ void SaveWorld(WorldTemplateManifest w){var d=Path.Combine(worldRoot,"test");Directory.CreateDirectory(d);File.WriteAllText(Path.Combine(d,"world.json"),JsonSerializer.Serialize(w));File.WriteAllBytes(Path.Combine(d,"terrain.r32"),terrain);}
+ Test("world catalog pins places and terrain, keeps places apart and inside the region",()=>{
+  SaveWorld(World(("a",60,60),("b",120,60)));var wc=new WorldTemplateCatalog(worldRoot,placeCatalog);Assert(wc.Get("mutsea.test.world","0.1.0").world.places.Length==2);
+  WorldTemplateCatalog.Validate(World(("a",60,60),("b",70,60)),terrain,placeCatalog);// margins may overlap; live place checks guard parts
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60),("a",120,60)),terrain,placeCatalog));
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",5,60)),terrain,placeCatalog));
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)) with{places=[World(("a",60,60)).places[0] with{manifest_sha256=new string('0',64)}]},terrain,placeCatalog));
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)),Flat(float.NaN),placeCatalog));
+  File.WriteAllBytes(Path.Combine(worldRoot,"test","terrain.r32"),Flat(26f));Reject(()=>new WorldTemplateCatalog(worldRoot,placeCatalog));SaveWorld(World(("a",60,60),("b",120,60)));
+ });
+ var worldCatalog=new WorldTemplateCatalog(worldRoot,placeCatalog);
+ FakeRegion Region(string dir){var fp=new FakePlace();return new FakeRegion(new PlaceKernel(fp,catalog,placeCatalog,Path.Combine(root,dir,"places"),region),fp);}
+ Test("world provisions terrain, water, places and landing in one operation, then rolls back",()=>{
+  var r=Region("world-ok");var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-ok"));var done=k.Provision("mutsea.test.world","0.1.0");
+  Assert(done.status=="committed"&&done.place_plans.Length==2&&r.Terrain.SequenceEqual(terrain)&&r.WaterHeight==20&&r.Landing!=null&&r.Fake.Live.Count==8&&k.Active("mutsea.test.world","0.1.0")!=null);
+  Assert(r.Places.Entries.Where(e=>e.status=="committed").All(e=>Math.Abs(e.plan.anchor[2]-25)<1e-6));
+  Assert(k.Rollback(done.operation_id).status=="rolled_back"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10);
+  Assert(!new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-ok")).RecoveryRequired);
+ });
+ Test("a world only provisions into an empty region, before any write",()=>{var r=Region("world-busy");r.Empty=false;var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-busy"));Reject(()=>k.Provision("mutsea.test.world","0.1.0"));Assert(k.Entries.Count==0&&r.Terrain.SequenceEqual(Flat(21f)));});
+ Test("a failed place compensates the whole world",()=>{
+  var r=Region("world-fail");r.Fake.FailAt=6;var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-fail"));
+  try{k.Provision("mutsea.test.world","0.1.0");throw new Exception("Expected failure.");}catch(InvalidDataException){}
+  Assert(!k.RecoveryRequired&&k.Entries.Last().status=="compensated"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10);
+ });
  Console.WriteLine($"{passed} content tests passed");return 0;
 }finally{Directory.Delete(root,true);}
 sealed class Fake:IContentWorld{public bool Deny,DenyDelete,FailCreate,PartialCreate,FailFingerprint;public string? Value;public Action? BeforeCreate;public void Check(ContentPlan plan){if(Deny)throw new InvalidDataException("Native policy denied.");}public void CheckDelete(ContentPlan plan){if(DenyDelete)throw new InvalidDataException("Native deletion denied.");}public string Create(ContentPlan plan,byte[][] meshes,byte[][] materials){BeforeCreate?.Invoke();if(FailCreate){if(PartialCreate)Value="partial";throw new InvalidDataException("Simulated insertion failure.");}return Value="original";}public string? Fingerprint(ContentPlan plan)=>FailFingerprint?throw new InvalidDataException("State observation failed."):Value;public void Delete(ContentPlan plan){Value=null;}}
@@ -156,3 +187,11 @@ sealed class FakePlace:IPlaceWorld{public bool Deny,StuckDelete;public int FailA
  public void Delete(ContentPlan plan){if(!StuckDelete)Live.Remove(plan.entity_ids[0]);}
  public PlaceRetirement[] Retire(PlacePlan plan){foreach(var r in plan.retired)Existing.Remove(r.group_id);return plan.retired.Select(r=>r with{snapshot_sha256=new string('a',64)}).ToArray();}
  public void Restore(PlacePlan plan){foreach(var r in plan.retired)Existing.Add(r.group_id);}}
+
+sealed class FakeRegion(PlaceKernel places,FakePlace fake):IWorldTemplateRegion{
+ public string RegionId{get;}=Guid.NewGuid().ToString();public bool Empty=true;public byte[] Terrain=Flat(21f);public double WaterHeight{get;private set;}=10;public double[]? Landing;
+ public FakePlace Fake=>fake;public PlaceKernel Places=>places;public string Operator{get;}=Guid.NewGuid().ToString();
+ static byte[] Flat(float h){var b=new byte[256*256*4];for(int i=0;i<b.Length;i+=4)BitConverter.GetBytes(h).CopyTo(b,i);return b;}
+ public bool IsEmpty()=>Empty;public string SnapshotTerrain(string path){File.WriteAllBytes(path,Terrain);return ContentCatalog.Hash(Terrain);}
+ public void LoadTerrain(byte[] r32)=>Terrain=r32.ToArray();public void SetWaterHeight(double h)=>WaterHeight=h;public void SetLanding(double[] p,double[] l)=>Landing=p;
+ public double Ground(double x,double y)=>BitConverter.ToSingle(Terrain,((int)y*256+(int)x)*4);}
