@@ -160,6 +160,8 @@ GalleryPackages = "/config/genesis/<package>|<compiled.json SHA-256>; ..."
 
 Quote list values. The INI reader treats an unquoted `;` as the start of a comment, so everything after the first entry would be silently dropped.
 
+There is one assignment per wearer. A new pin for a wearer who already has an active Genesis outfit replaces it: the previous action is rolled back (journaled) before the new one is provisioned, so a swap needs a single restart.
+
 After prims load on the host region, each assignment is provisioned once while the wearer is offline, using the native services:
 
 1. Content-derived mesh, material, alpha-wearable and object assets.

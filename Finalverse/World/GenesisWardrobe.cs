@@ -35,6 +35,7 @@ public sealed partial class WorldModule
         {
             var parts=entry.Split('|',StringSplitOptions.TrimEntries);
             if(parts.Length!=3||!UUID.TryParse(parts[0],out var user)||!Path.IsPathRooted(parts[1])||parts[2].Length!=64)throw new InvalidDataException("Genesis assignment must be user|absolute compiled directory|compiled.json SHA-256.");
+            if(genesisAssignments.Any(a=>a.user==user))throw new InvalidDataException("One Genesis assignment per wearer.");
             genesisAssignments.Add((user,parts[1],parts[2].ToLowerInvariant()));
         }
         foreach(var entry in c.GetString("GalleryPackages","").Split(';',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries))
@@ -84,9 +85,13 @@ public sealed partial class WorldModule
     void GenesisProvision(List<JsonElement> records,UUID user,string dir,string pin)
     {
         // Idempotent: a provisioned, not rolled-back assignment is left alone.
-        var done=records.Where(r=>r.GetProperty("kind").GetString()=="wardrobe_result"&&r.GetProperty("result").GetProperty("user").GetString()==user.ToString()&&r.GetProperty("result").GetProperty("compiled_sha256").GetString()==pin).Select(r=>r.GetProperty("action_id").GetString()).ToHashSet();
-        if(done.Any(a=>!records.Any(r=>r.GetProperty("kind").GetString()=="wardrobe_rollback"&&r.GetProperty("action_id").GetString()==a)))return;
+        bool RolledBack(string? a)=>records.Any(r=>r.GetProperty("kind").GetString()=="wardrobe_rollback"&&r.GetProperty("action_id").GetString()==a);
+        var active=records.Where(r=>r.GetProperty("kind").GetString()=="wardrobe_result"&&r.GetProperty("result").GetProperty("user").GetString()==user.ToString()&&!RolledBack(r.GetProperty("action_id").GetString())).ToList();
+        if(active.Any(r=>r.GetProperty("result").GetProperty("compiled_sha256").GetString()==pin))return;
         ContentCatalog.Require(scene.GetScenePresence(user)==null,"Provision Genesis wardrobes while the wearer is offline.");
+        // A new assignment replaces the wearer's previous Genesis outfit: journaled rollback first, so
+        // the snapshot below is the wearer's own appearance again.
+        foreach(var previous in active)GenesisRollback(records,previous.GetProperty("action_id").GetString()!);
         var compiledBytes=File.ReadAllBytes(Path.Combine(dir,"compiled.json"));
         ContentCatalog.Require(ContentCatalog.Hash(compiledBytes)==pin,"Compiled avatar differs from its configuration pin.");
         var (package,mesh,materials,_)=AvatarCatalog.Load(dir,out var alpha);
