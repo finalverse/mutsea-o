@@ -186,7 +186,8 @@ try
    }
   }
   Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,
-   lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray(),native_surface_ids=surfaceIds,surface_hashes_verified=surfaceIds.Count});
+   lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray(),native_surface_ids=surfaceIds,surface_hashes_verified=surfaceIds.Count,
+   collision_plane=new[]{avatar.CollisionPlane.X,avatar.CollisionPlane.Y,avatar.CollisionPlane.Z,avatar.CollisionPlane.W}});
   Console.WriteLine($"CITIZEN_SMOKE wearer PASS: {wearer} seen with {attachments} attachment(s) including Genesis mesh {meshId} at point {(int)worn.PrimData.AttachmentPoint}.");
  }
  else if(args[2]=="newcomer")
@@ -287,8 +288,20 @@ try
   var here=client.Self.SimPosition;var objectsBefore=client.Network.CurrentSim.ObjectsPrimitives.Count;
   var context=new{region=new{id=client.Network.CurrentSim.ID.ToString()},avatar=new{position=new[]{here.X,here.Y,here.Z}},terrain=new{height=here.Z-0.9},selected_object=(object?)null,nearby_entities=Array.Empty<object>()};
   var watch=System.Diagnostics.Stopwatch.StartNew();
-  using var gateway=new HttpClient(new HttpClientHandler{UseProxy=false}){Timeout=TimeSpan.FromSeconds(120)};
-  var planned=await gateway.PostAsync("http://127.0.0.1:18765/v1/world/plan",new StringContent(JsonSerializer.Serialize(new{request=ask,world_context=context}),Encoding.UTF8,"application/json"));
+  using var gateway=new HttpClient(new HttpClientHandler{UseProxy=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(120)};
+  string route="http://127.0.0.1:18765/v1/world/plan";
+  string payload=JsonSerializer.Serialize(new{request=ask,world_context=context});
+  if(Environment.GetEnvironmentVariable("FINALVERSE_WORLD_SPEC_FILE") is {Length:>0} recipe)
+  {
+   var f=new FileInfo(recipe);Assert(f.Exists&&f.Length is >0 and <=4096&&(f.Attributes&FileAttributes.ReparsePoint)==0,"Expected a bounded regular WorldSpec fixture");
+   var spec=JsonDocument.Parse(File.ReadAllText(recipe)).RootElement;
+   payload=JsonSerializer.Serialize(new{world_spec=spec});
+   // Optional isolated development gateway, never an arbitrary remote endpoint.
+   string port=Environment.GetEnvironmentVariable("FINALVERSE_SPEC_GATEWAY_PORT")??"18765";
+   Assert(port is "18765" or "18767","Expected the loopback WorldSpec fixture gateway");
+   route="http://127.0.0.1:"+port+"/v1/world/spec/plan";
+  }
+  var planned=await gateway.PostAsync(route,new StringContent(payload,Encoding.UTF8,"application/json"));
   var generated=JsonDocument.Parse(await planned.Content.ReadAsStringAsync()).RootElement.Clone();var gatewayMs=watch.ElapsedMilliseconds;
   Assert(planned.IsSuccessStatusCode&&generated.GetProperty("plan").ValueKind==JsonValueKind.Object,"The gateway proposed no place: "+generated.ToString()[..Math.Min(300,generated.ToString().Length)]);
   watch.Restart();var prepared=await World(new{op="prepare",plan=generated.GetProperty("plan")});var prepareMs=watch.ElapsedMilliseconds;
