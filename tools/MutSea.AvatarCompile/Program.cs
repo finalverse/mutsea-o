@@ -117,6 +117,45 @@ var gltfMaterials=g.GetProperty("materials").EnumerateArray().Select(x=>x.GetPro
 Require(gltfMaterials.SequenceEqual(materialDefs.Select(x=>x.local_id)),"glTF materials differ from the manifest order.");
 foreach(var f in materialDefs)ContentCatalog.ValidateMaterial(f);
 
+// Optional original RGB surfaces: package-local PNG for interchange, bounded
+// native JPEG2000 for delivery. No external image URL or changed skin contract.
+var textures=new List<(AvatarTexture texture,byte[] bytes)>();
+var bindings=def.TryGetProperty("material_textures",out var bound)
+    ?bound.Deserialize<Dictionary<string,string>>()!:new Dictionary<string,string>();
+if(def.TryGetProperty("textures",out var declaredTextures))
+    foreach(var t in declaredTextures.EnumerateArray())
+    {
+        string id=t.GetProperty("local_id").GetString()!,path=t.GetProperty("path").GetString()!;
+        var bytes=Payload(path);
+        var texture=new AvatarTexture(id,"texture-"+textures.Count+".j2c",Hash(bytes),t.GetProperty("width").GetInt32(),t.GetProperty("height").GetInt32());
+        AvatarTextureAsset.Validate(bytes,texture);
+        Require(textures.Count<8&&textures.All(x=>x.texture.local_id!=id),"Duplicate/excessive avatar surfaces.");
+        textures.Add((texture,bytes));
+        string preview=t.GetProperty("source_path").GetString()!;
+        var png=Payload(preview);
+        Require(png.Length is >=33 and <=AvatarTextureAsset.MaxBytes&&png.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10})
+            &&System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(8,4))==13
+            &&png.AsSpan(12,4).SequenceEqual("IHDR"u8)&&png[24]==8&&png[25]==2&&png[26]==0&&png[27]==0&&png[28]==0
+            &&System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(16,4))==(uint)texture.width
+            &&System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(png.AsSpan(20,4))==(uint)texture.height,"Texture authoring dimensions differ.");
+        var image=g.GetProperty("images")[textures.Count-1];
+        Require(image.GetProperty("uri").GetString()==preview&&!image.TryGetProperty("bufferView",out _),"Interchange texture must be the pinned package-local PNG.");
+        Require(g.GetProperty("textures")[textures.Count-1].GetProperty("source").GetInt32()==textures.Count-1,"Interchange texture index differs.");
+    }
+Require(textures.Sum(x=>x.bytes.Length)<=AvatarTextureAsset.MaxTotalBytes,"Avatar surface download budget exceeded.");
+Require((g.TryGetProperty("images",out var images)?images.GetArrayLength():0)==textures.Count
+    &&(g.TryGetProperty("textures",out var gltfTextures)?gltfTextures.GetArrayLength():0)==textures.Count,"Interchange surfaces must exactly match the package.");
+Require((textures.Count==0)==(bindings.Count==0)&&bindings.Keys.All(k=>materialDefs.Any(f=>f.local_id==k))
+    &&bindings.Values.All(id=>textures.Any(x=>x.texture.local_id==id))&&textures.All(x=>bindings.ContainsValue(x.texture.local_id)),"Avatar surface bindings do not close.");
+for(int i=0;i<materialDefs.Length;i++)
+{
+    var pbr=g.GetProperty("materials")[i].GetProperty("pbrMetallicRoughness");
+    bool image=pbr.TryGetProperty("baseColorTexture",out var reference);
+    Require(image==bindings.ContainsKey(materialDefs[i].local_id),"glTF/manifest surface binding differs.");
+    if(image)Require(reference.GetProperty("index").GetInt32()==textures.FindIndex(x=>x.texture.local_id==bindings[materialDefs[i].local_id])
+        &&(!reference.TryGetProperty("texCoord",out var coord)||coord.GetInt32()==0),"Only matching UV0 surfaces are supported.");
+}
+
 // ------------------------------------------------------------------ LODs
 var lodNames=new[]{"LOD0","LOD1","LOD2","LOD3"};var meshes=g.GetProperty("meshes");
 var lods=new List<Sub[]>();var declaredLods=def.GetProperty("lods");
@@ -241,10 +280,12 @@ File.WriteAllBytes(Path.Combine(output,"avatar.llmesh"),meshBytes);
 var materials=new List<ContentMaterial>();
 foreach(var f in materialDefs)
 {
-    var bytes=ContentMaterialAsset.Build(f);var file="material-"+materials.Count+".llmaterial";
+    var texture=bindings.TryGetValue(f.local_id,out var textureName)?AvatarTextureAsset.Id(textures.Single(x=>x.texture.local_id==textureName).texture):(UUID?)null;
+    var bytes=ContentMaterialAsset.Build(f,texture);var file="material-"+materials.Count+".llmaterial";
     File.WriteAllBytes(Path.Combine(output,file),bytes);materials.Add(new(f.local_id,file,Hash(bytes),f));
 }
 var animations=worn?new Dictionary<string,string>():def.GetProperty("animations").Deserialize<Dictionary<string,string>>()!;
+foreach(var (texture,bytes) in textures)File.WriteAllBytes(Path.Combine(output,texture.asset_path),bytes);
 // Worn avatars hide the wearer's system body with a native alpha wearable (IMG_INVISIBLE layers).
 string? attachPoint=null,alphaPath=null,alphaHash=null;
 if(worn)
@@ -265,11 +306,11 @@ foreach(var (id,bytes,summary) in validatedMotions)
     var file="motion-"+motions.Count+".anim";File.WriteAllBytes(Path.Combine(output,file),bytes);
     motions.Add(new(id,file,Hash(bytes),summary.duration,summary.loop));
 }
-var compiled=new AvatarCompiled(motions.Count>0?2:1,"avatar",m.GetProperty("package_id").GetString()!,m.GetProperty("version").GetString()!,m.GetProperty("title").GetString()!,
+var compiled=new AvatarCompiled(textures.Count>0?3:motions.Count>0?2:1,"avatar",m.GetProperty("package_id").GetString()!,m.GetProperty("version").GetString()!,m.GetProperty("title").GetString()!,
     Hash(manifestBytes),"CC0-1.0",representation!,AvatarCatalog.SkeletonSha256,joints.Length,rootHeight,scale,"avatar.llmesh",Hash(meshBytes),lodTriangles,
-    materialDefs.Select(f=>new AvatarFace(f.local_id,new[]{1d,1,1,1})).ToArray(),materials.ToArray(),animations,hull,
+    materialDefs.Select(f=>new AvatarFace(f.local_id,new[]{1d,1,1,1},bindings.GetValueOrDefault(f.local_id))).ToArray(),materials.ToArray(),animations,hull,
     "Four independent surface LODs sharing one skin and normalized domain; live transition acceptance pending",motions.Count>0?motions.ToArray():null,
-    attachPoint,alphaPath,alphaHash);
+    attachPoint,alphaPath,alphaHash,textures.Count>0?textures.Select(x=>x.texture).ToArray():null);
 AvatarCatalog.Validate(compiled);
 File.WriteAllText(Path.Combine(output,"compiled.json"),JsonSerializer.Serialize(compiled,new JsonSerializerOptions{WriteIndented=true,DefaultIgnoreCondition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull})+"\n");
 AvatarCatalog.Load(output);

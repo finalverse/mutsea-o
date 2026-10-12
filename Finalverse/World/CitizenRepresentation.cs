@@ -88,6 +88,8 @@ public sealed partial class WorldModule
         }
         Store(avatarMeshId,avatar!.title+" "+avatar.version,(sbyte)AssetType.Mesh,avatarMesh!);
         for(int i=0;i<avatarMaterialIds.Length;i++)Store(avatarMaterialIds[i],avatar.materials[i].local_id,(sbyte)AssetType.Material,avatarMaterials![i]);
+        var textures=AvatarCatalog.LoadTextures(representationDirectory,avatar);
+        for(int i=0;i<textures.Length;i++)Store(AvatarTextureAsset.Id(avatar.textures![i]),avatar.textures[i].local_id,(sbyte)AssetType.Texture,textures[i]);
         for(int i=0;i<avatarMotionIds.Length;i++)Store(avatarMotionIds[i],avatar.animation_assets![i].local_id,(sbyte)AssetType.Animation,avatarMotions![i]);
     }
 
@@ -124,7 +126,7 @@ public sealed partial class WorldModule
     {
         var shape=PrimitiveBaseShape.CreateMesh(avatar!.faces.Length,avatarMeshId);shape.Scale=ToV(avatar.scale);
         var te=new Primitive.TextureEntry(Primitive.TextureEntry.WHITE_TEXTURE);
-        for(uint i=0;i<avatar.faces.Length;i++){var c=avatar.faces[i].color;te.CreateFace(i).RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);}
+        for(uint i=0;i<avatar.faces.Length;i++){var c=avatar.faces[i].color;var face=te.CreateFace(i);face.RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);face.TextureID=AvatarCatalog.TextureId(avatar,(int)i)??Primitive.TextureEntry.WHITE_TEXTURE;}
         shape.TextureEntry=te.GetBytes(avatar.faces.Length);
         shape.RenderMaterials=new Primitive.RenderMaterials{entries=avatarMaterialIds.Select((id,i)=>new Primitive.RenderMaterials.RenderMaterialEntry{te_index=(byte)i,id=id}).ToArray()};
         shape.AnimeshEnabled=true;

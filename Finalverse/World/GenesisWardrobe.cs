@@ -110,12 +110,14 @@ public sealed partial class WorldModule
         var meshId=DerivedId("mesh",package.mesh_sha256);Store(meshId,package.title+" "+package.version,(sbyte)AssetType.Mesh,mesh);
         var materialIds=package.materials.Select(m=>DerivedId("material",m.asset_sha256)).ToArray();
         for(int i=0;i<materialIds.Length;i++)Store(materialIds[i],package.materials[i].local_id,(sbyte)AssetType.Material,materials[i]);
+        var surfaces=AvatarCatalog.LoadTextures(dir,package);
+        for(int i=0;i<surfaces.Length;i++)Store(AvatarTextureAsset.Id(package.textures![i]),package.textures[i].local_id,(sbyte)AssetType.Texture,surfaces[i]);
         var alphaAsset=DerivedId("wearable",package.alpha_asset_sha256!);Store(alphaAsset,package.title+" body alpha",(sbyte)AssetType.Clothing,alpha!);
 
         // The worn object: one rigged mesh prim, owned by the wearer.
         var shape=PrimitiveBaseShape.CreateMesh(package.faces.Length,meshId);shape.Scale=new Vector3((float)package.scale[0],(float)package.scale[1],(float)package.scale[2]);
         var te=new Primitive.TextureEntry(Primitive.TextureEntry.WHITE_TEXTURE);
-        for(uint f=0;f<package.faces.Length;f++)te.CreateFace(f).RGBA=Color4.White;
+        for(uint f=0;f<package.faces.Length;f++){var face=te.CreateFace(f);face.RGBA=Color4.White;face.TextureID=AvatarCatalog.TextureId(package,(int)f)??Primitive.TextureEntry.WHITE_TEXTURE;}
         shape.TextureEntry=te.GetBytes(package.faces.Length);
         shape.RenderMaterials=new Primitive.RenderMaterials{entries=materialIds.Select((id,i)=>new Primitive.RenderMaterials.RenderMaterialEntry{te_index=(byte)i,id=id}).ToArray()};
         var part=new SceneObjectPart(user,shape,Vector3.Zero,Quaternion.Identity,Vector3.Zero){UUID=WardrobeId(user,pin,"part"),CreatorID=user,OwnerID=user,LastOwnerID=user,
@@ -191,9 +193,11 @@ public sealed partial class WorldModule
         var meshId=DerivedId("mesh",package.mesh_sha256);StoreGenesisAsset(meshId,package.title+" "+package.version,(sbyte)AssetType.Mesh,mesh,owner);
         var materialIds=package.materials.Select(m=>DerivedId("material",m.asset_sha256)).ToArray();
         for(int i=0;i<materialIds.Length;i++)StoreGenesisAsset(materialIds[i],package.materials[i].local_id,(sbyte)AssetType.Material,materials[i],owner);
+        var surfaces=AvatarCatalog.LoadTextures(dir,package);
+        for(int i=0;i<surfaces.Length;i++)StoreGenesisAsset(AvatarTextureAsset.Id(package.textures![i]),package.textures[i].local_id,(sbyte)AssetType.Texture,surfaces[i],owner);
         var shape=PrimitiveBaseShape.CreateMesh(package.faces.Length,meshId);shape.Scale=ToV(package.scale);
         var te=new Primitive.TextureEntry(Primitive.TextureEntry.WHITE_TEXTURE);
-        for(uint f=0;f<package.faces.Length;f++){var c=package.faces[f].color;te.CreateFace(f).RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);}
+        for(uint f=0;f<package.faces.Length;f++){var c=package.faces[f].color;var face=te.CreateFace(f);face.RGBA=new Color4((float)c[0],(float)c[1],(float)c[2],(float)c[3]);face.TextureID=AvatarCatalog.TextureId(package,(int)f)??Primitive.TextureEntry.WHITE_TEXTURE;}
         shape.TextureEntry=te.GetBytes(package.faces.Length);
         shape.RenderMaterials=new Primitive.RenderMaterials{entries=materialIds.Select((m,i)=>new Primitive.RenderMaterials.RenderMaterialEntry{te_index=(byte)i,id=m}).ToArray()};
         shape.AnimeshEnabled=true;

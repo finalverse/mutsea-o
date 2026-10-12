@@ -8,7 +8,7 @@ using OpenMetaverse.StructuredData;
 if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer" or "compose" or "compose_undo")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer|compose|compose_undo | animesh|wearer compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
-using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
+using var http=new HttpClient(new HttpClientHandler{AllowAutoRedirect=false}) {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
 void Assert(bool ok,string why){if(!ok)throw new Exception(why);}
 async Task<JsonElement> Citizen(string command,string text="")
 {
@@ -39,7 +39,9 @@ try
  Assert(animesh?components==1:components==7,animesh?"Animated-mesh embodiment must be a single UDP root":"Lumi's seven linked components are missing from UDP");
  // Lumi's relay is controller-only; a newcomer sees and hears Lumi but does not command her.
  JsonElement state=default;
- if(args[2] is not ("newcomer" or "compose" or "compose_undo")){state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");}
+ // Read-only region/appearance checks must still work with AI services offline
+ // and for accounts that are not Lumi's controller.
+ if(args[2] is not ("newcomer" or "compose" or "compose_undo" or "teleport" or "wearer")){state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");}
  if(args[2]=="questions")
  {
   var results=new List<object>();foreach(string text in new[]{"Lumi, who are you?","Where is your home?","What do you remember about your home?"}){var watch=System.Diagnostics.Stopwatch.StartNew();var reply=await Citizen("say",text);Assert(!reply.GetProperty("answer").GetString()!.Contains("unavailable",StringComparison.OrdinalIgnoreCase),"Grounded question unavailable");results.Add(new{text,latency_ms=watch.ElapsedMilliseconds,reply});}
@@ -142,20 +144,49 @@ try
   Assert(avatar!=null,"Wearer is not visible to the observer");Assert(worn!=null,"Observer does not receive the Genesis attachment mesh");
   var attachments=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Count(p=>p.ParentID==avatar!.LocalID);
   // Appearance (baked slots) arrives in its own packet, possibly after the attachment.
-  var appearanceBy=DateTime.UtcNow.AddSeconds(20);
-  (Primitive.TextureEntryFace? def,Primitive.TextureEntryFace[]? faces) packet=default;
-  while(!appearances.TryGetValue(avatar!.ID,out packet))
-  {
-   if(DateTime.UtcNow>appearanceBy)break;await Task.Delay(500);
-  }
-  var faces=packet.faces??avatar!.Textures?.FaceTextures;var fallback=packet.def??avatar!.Textures?.DefaultTexture;
-  // A slot equal to the entry's default texture is stored as null (TextureEntry compaction).
-  string? Bake(int i)=>faces!=null&&faces.Length>i&&faces[i]!=null?faces[i].TextureID.ToString():fallback?.TextureID.ToString();
-  // Baked slots as observers receive them; an alpha-hidden region must arrive as IMG_INVISIBLE.
-  var bakes=new Dictionary<string,string?>{["head"]=Bake(8),["upper"]=Bake(9),["lower"]=Bake(10),["eyes"]=Bake(11),["skirt"]=Bake(19),["hair"]=Bake(20)};
   const string invisible="3a367d1c-bef1-6d43-7595-e88c1e3aadb3";
+  var appearanceBy=DateTime.UtcNow.AddSeconds(60);
+  var bakes=new Dictionary<string,string?>();
+  do
+  {
+   appearances.TryGetValue(avatar!.ID,out var packet);
+   var faces=packet.faces??avatar!.Textures?.FaceTextures;var fallback=packet.def??avatar!.Textures?.DefaultTexture;
+   // TextureEntry compacts slots equal to its default; appearance may arrive
+   // before wearable assets have finished loading. Wait for the final alpha.
+   string? Bake(int i)=>faces!=null&&faces.Length>i&&faces[i]!=null?faces[i].TextureID.ToString():fallback?.TextureID.ToString();
+   bakes=new(){["head"]=Bake(8),["upper"]=Bake(9),["lower"]=Bake(10),["eyes"]=Bake(11),["skirt"]=Bake(19),["hair"]=Bake(20)};
+   if(new[]{"head","upper","lower","eyes","hair"}.All(k=>bakes[k]==invisible))break;
+   await Task.Delay(500);
+  }while(DateTime.UtcNow<appearanceBy);
+  Assert(new[]{"head","upper","lower","eyes","hair"}.All(k=>bakes[k]==invisible),"Wearer's final body/hair alpha is not invisible");
+  var surfaceIds=new List<string>();
+  if(compiled.TryGetProperty("textures",out var surfaces))
+  {
+   var declared=surfaces.EnumerateArray().ToDictionary(t=>t.GetProperty("local_id").GetString()!);
+   UUID SurfaceId(JsonElement t)=>new(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes("finalverse-avatar:texture:"+t.GetProperty("asset_sha256").GetString())).Take(16).ToArray(),0);
+   var surfaceFaces=compiled.GetProperty("faces").EnumerateArray().ToArray();
+   for(int i=0;i<surfaceFaces.Length;i++)if(surfaceFaces[i].TryGetProperty("base_color_texture",out var name))
+   {
+    var id=SurfaceId(declared[name.GetString()!]);
+    var actual=worn!.Textures.FaceTextures[i]?.TextureID??worn.Textures.DefaultTexture.TextureID;
+    Assert(actual==id,"Native attachment surface binding differs");
+   }
+   var textureCap=client.Network.CurrentSim.Caps.CapabilityURI("GetTexture");
+   Assert(textureCap!=null&&textureCap.Scheme=="http"&&textureCap.Host=="127.0.0.1"&&textureCap.Port==18094,"Expected native loopback texture capability");
+   foreach(var t in declared.Values)
+   {
+    var id=SurfaceId(t);var url=new UriBuilder(textureCap!){Query="texture_id="+id}.Uri;
+    using var response=await http.GetAsync(url,HttpCompletionOption.ResponseHeadersRead);response.EnsureSuccessStatusCode();
+    using var input=await response.Content.ReadAsStreamAsync();using var buffer=new MemoryStream();
+    byte[] bytes=new byte[8192];int n;
+    using var deadlineTexture=new CancellationTokenSource(TimeSpan.FromSeconds(20));
+    while((n=await input.ReadAsync(bytes,deadlineTexture.Token))>0){buffer.Write(bytes,0,n);Assert(buffer.Length<=1<<20,"Oversized native surface response");}
+    Assert(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(buffer.ToArray())).ToLowerInvariant()==t.GetProperty("asset_sha256").GetString(),"Native surface payload hash differs");
+    surfaceIds.Add(id.ToString());
+   }
+  }
   Save(new{wearer,avatar_position=new[]{avatar.Position.X,avatar.Position.Y,avatar.Position.Z},attachments,genesis_mesh=meshId.ToString(),attach_point=(int)worn!.PrimData.AttachmentPoint,
-   lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray()});
+   lower_bake=bakes["lower"],bakes,hidden_regions=bakes.Where(kv=>kv.Value==invisible).Select(kv=>kv.Key).ToArray(),native_surface_ids=surfaceIds,surface_hashes_verified=surfaceIds.Count});
   Console.WriteLine($"CITIZEN_SMOKE wearer PASS: {wearer} seen with {attachments} attachment(s) including Genesis mesh {meshId} at point {(int)worn.PrimData.AttachmentPoint}.");
  }
  else if(args[2]=="newcomer")
@@ -296,6 +327,9 @@ try
   var start=client.Network.CurrentSim.Name;var watch=System.Diagnostics.Stopwatch.StartNew();
   Assert(client.Self.Teleport(target,new Vector3(128,128,30)),"Teleport to "+target+" failed: "+client.Self.TeleportMessage);
   var outbound=watch.Elapsed.TotalSeconds;Assert(client.Network.CurrentSim.Name==target,"Arrived in the wrong region");
+  var targetId=client.Network.CurrentSim.RegionID;
+  if(Environment.GetEnvironmentVariable("FINALVERSE_TELEPORT_REGION_ID") is {Length:>0} expectedId)
+   Assert(targetId==new UUID(expectedId),"Arrived in the wrong region identity");
   int prims=0,stable=0;deadline=DateTime.UtcNow.AddSeconds(60);
   while(DateTime.UtcNow<deadline&&stable<6){await Task.Delay(500);int n=client.Network.CurrentSim.ObjectsPrimitives.Count;stable=n==prims?stable+1:0;prims=n;}
   var names=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>p.ParentID==0).Select(p=>p.Properties?.Name).Where(n=>n!=null).Take(5).ToArray();
@@ -303,7 +337,7 @@ try
   Assert(client.Self.Teleport(start,new Vector3(172,146,26)),"Teleport back failed: "+client.Self.TeleportMessage);
   var inbound=watch.Elapsed.TotalSeconds;deadline=DateTime.UtcNow.AddSeconds(30);bool lumiBack=false;
   do{await Task.Delay(300);lumiBack=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Any(p=>p.ID==lumi);}while(!lumiBack&&DateTime.UtcNow<deadline);
-  Save(new{from=start,to=target,outbound_seconds=outbound,inbound_seconds=inbound,target_primitives=prims,arrival_position=new[]{position.X,position.Y,position.Z},named_roots=names,lumi_visible_after_return=lumiBack});
+  Save(new{from=start,to=target,target_region_id=targetId.ToString(),outbound_seconds=outbound,inbound_seconds=inbound,target_primitives=prims,arrival_position=new[]{position.X,position.Y,position.Z},named_roots=names,lumi_visible_after_return=lumiBack});
   int expected=int.Parse(Environment.GetEnvironmentVariable("FINALVERSE_TELEPORT_MIN_PRIMS") is {Length:>0} m?m:"4000");
   Assert(prims>=expected&&lumiBack,"Unexpected stream after teleport");
   Console.WriteLine($"CITIZEN_SMOKE teleport PASS: {start} -> {target} in {outbound:F1}s ({prims} primitives streamed), back in {inbound:F1}s, Lumi visible.");
@@ -400,4 +434,14 @@ try
  return 0;
 }
 catch(Exception ex){Console.Error.WriteLine("CITIZEN_SMOKE FAIL: "+ex.Message);return 1;}
-finally{if(client.Network.Connected)client.Network.Logout();}
+finally
+{
+ if(client.Network.Connected)
+ {
+  client.Network.Logout();
+  // Logout is asynchronous. Let the simulator remove this presence before
+  // exiting so the next probe does not inherit an "already logged in" refusal.
+  var end=DateTime.UtcNow.AddSeconds(5);
+  while(client.Network.Connected&&DateTime.UtcNow<end)await Task.Delay(50);
+ }
+}

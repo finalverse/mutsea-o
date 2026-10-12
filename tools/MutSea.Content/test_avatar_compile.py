@@ -188,5 +188,68 @@ class AvatarCompileRejections(unittest.TestCase):
         self.expect_reject(pkg, out, "BIN chunk")
 
 
+class AvatarSurfaceRejections(unittest.TestCase):
+    compile = AvatarCompileRejections.compile
+    expect_reject = AvatarCompileRejections.expect_reject
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dll,cls.package,cls.skeleton=env('AVATAR_COMPILE_DLL'),Path(env('AVATAR_SURFACE_PACKAGE')),env('VIEWER_SKELETON')
+        cls.dotnet=os.environ.get('DOTNET','dotnet')
+
+    def changed(self,edit_bytes=None,edit_manifest=None,edit_gltf=None,edit_png=None,rehash=True):
+        tmp=Path(tempfile.mkdtemp());self.addCleanup(shutil.rmtree,tmp)
+        pkg=tmp/'pkg';shutil.copytree(self.package,pkg)
+        m=json.loads((pkg/'package.json').read_text())
+        if edit_bytes:
+            path=pkg/m['definition']['textures'][0]['path'];b=bytearray(path.read_bytes());edit_bytes(b);path.write_bytes(b)
+            if rehash:
+                next(f for f in m['files'] if f['path']==path.name)['sha256']=hashlib.sha256(b).hexdigest()
+        if edit_png:
+            path=pkg/m['definition']['textures'][0]['source_path'];b=bytearray(path.read_bytes());edit_png(b);path.write_bytes(b)
+            next(f for f in m['files'] if f['path']==path.name)['sha256']=hashlib.sha256(b).hexdigest()
+        if edit_gltf:
+            path=pkg/'runtime.glb';data=path.read_bytes();length=struct.unpack_from('<I',data,12)[0]
+            g=json.loads(data[20:20+length]);edit_gltf(g)
+            js=json.dumps(g,separators=(',',':')).encode();js+=b' '*((-len(js))%4)
+            tail=data[20+length:];glb=struct.pack('<III',0x46546c67,2,20+len(js)+len(tail))+struct.pack('<II',len(js),0x4e4f534a)+js+tail
+            path.write_bytes(glb);next(f for f in m['files'] if f['path']=='runtime.glb')['sha256']=hashlib.sha256(glb).hexdigest()
+        if edit_manifest:edit_manifest(m)
+        (pkg/'package.json').write_text(json.dumps(m));return pkg,tmp/'out'
+
+    def test_surface_baseline(self):
+        p,out=self.changed();code,text=self.compile(p,out);self.assertEqual(code,0,text[-400:])
+        a=json.loads((out/'compiled.json').read_text());self.assertEqual(a['schema_version'],3);self.assertEqual(len(a['textures']),3)
+        self.assertTrue(all((out/t['asset_path']).is_file() for t in a['textures']))
+
+    def test_texture_hash_changed(self):
+        self.expect_reject(*self.changed(edit_bytes=lambda b:b.__setitem__(-3,b[-3]^1),rehash=False),'Payload hash changed')
+
+    def test_texture_header_and_end_marker(self):
+        for index,needle in [(0,'SOC/SIZ'),(-1,'end marker')]:
+            self.expect_reject(*self.changed(edit_bytes=lambda b,i=index:b.__setitem__(i,0)),needle)
+
+    def test_texture_dimensions_and_precision(self):
+        self.expect_reject(*self.changed(edit_manifest=lambda m:m['definition']['textures'][0].__setitem__('width',512)),'dimensions differ')
+        self.expect_reject(*self.changed(edit_bytes=lambda b:b.__setitem__(42,135)),'unsigned 8-bit RGB')
+
+    def test_texture_bytes_bounded(self):
+        self.expect_reject(*self.changed(edit_bytes=lambda b:b.extend(bytes((1<<20)+1-len(b)))),'Bounded JPEG2000')
+
+    def test_authoring_png_is_bounded_rgb8(self):
+        for index in [8,12,24,25,26,27,28]:
+            self.expect_reject(*self.changed(edit_png=lambda b,i=index:b.__setitem__(i,b[i]^1)), 'authoring dimensions differ')
+        self.expect_reject(*self.changed(edit_png=lambda b:b.extend(bytes((1<<20)+1-len(b)))), 'authoring dimensions differ')
+
+    def test_unresolved_surface_binding(self):
+        self.expect_reject(*self.changed(edit_manifest=lambda m:m['definition']['material_textures'].__setitem__('FV_Auren_Slate','missing')),'bindings do not close')
+
+    def test_external_interchange_image_rejected(self):
+        self.expect_reject(*self.changed(edit_gltf=lambda g:g['images'][0].__setitem__('uri','https://example.invalid/image.png')),'package-local PNG')
+
+    def test_extra_image_rejected(self):
+        self.expect_reject(*self.changed(edit_gltf=lambda g:g['images'].append({'uri':'unused.png'})),'exactly match')
+
+
 if __name__ == "__main__":
     unittest.main()
