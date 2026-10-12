@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer | animesh|wearer compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer" or "compose" or "compose_undo")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer|compose|compose_undo | animesh|wearer compiled.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -17,7 +17,8 @@ async Task<JsonElement> Citizen(string command,string text="")
 async Task<JsonElement> World(object request)
 {
  await Task.Delay(160);var response=await http.PostAsync(cap,new StringContent(JsonSerializer.Serialize(request),Encoding.UTF8,"application/json"));var root=JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
- Assert(response.IsSuccessStatusCode&&root.GetProperty("ok").GetBoolean(),"Authenticated citizen relay failed");return root.GetProperty("result").Clone();
+ // Relay refusals are written for people; show them rather than a generic failure.
+ Assert(response.IsSuccessStatusCode&&root.GetProperty("ok").GetBoolean(),"Authenticated citizen relay failed"+(root.TryGetProperty("error",out var why)?": "+why.GetString():""));return root.GetProperty("result").Clone();
 }
 void Save(object result){File.WriteAllText(args[1],JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true}));if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1],UnixFileMode.UserRead|UnixFileMode.UserWrite);}
 try
@@ -38,7 +39,7 @@ try
  Assert(animesh?components==1:components==7,animesh?"Animated-mesh embodiment must be a single UDP root":"Lumi's seven linked components are missing from UDP");
  // Lumi's relay is controller-only; a newcomer sees and hears Lumi but does not command her.
  JsonElement state=default;
- if(args[2]!="newcomer"){state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");}
+ if(args[2] is not ("newcomer" or "compose" or "compose_undo")){state=await Citizen("inspect");Assert(state.GetProperty("citizen").GetProperty("identity").GetProperty("agent_id").GetString()==lumi.ToString(),"Persistent identity mismatch");}
  if(args[2]=="questions")
  {
   var results=new List<object>();foreach(string text in new[]{"Lumi, who are you?","Where is your home?","What do you remember about your home?"}){var watch=System.Diagnostics.Stopwatch.StartNew();var reply=await Citizen("say",text);Assert(!reply.GetProperty("answer").GetString()!.Contains("unavailable",StringComparison.OrdinalIgnoreCase),"Grounded question unavailable");results.Add(new{text,latency_ms=watch.ElapsedMilliseconds,reply});}
@@ -239,6 +240,54 @@ try
   Save(new{account=client.Self.Name,total_seconds=Math.Round(total,1),budget_seconds=300,milestones});
   Assert(total<=300,"The newcomer path exceeded five minutes");
   Console.WriteLine($"CITIZEN_SMOKE newcomer PASS: {milestones.Count} milestones in {total:F1}s (budget 300s).");
+ }
+ else if(args[2]=="compose")
+ {
+  // A person asks for a place: walk to FINALVERSE_COMPOSE_AT (x,y), face FINALVERSE_COMPOSE_FACE (x,y), ask the local
+  // gateway (FINALVERSE_COMPOSE_REQUEST), then preview, build and check the result over real UDP and the World relay.
+  float[] At(string name)=>Environment.GetEnvironmentVariable(name)!.Split(',').Select(v=>float.Parse(v,System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+  var stand=At("FINALVERSE_COMPOSE_AT");var face=At("FINALVERSE_COMPOSE_FACE");string ask=Environment.GetEnvironmentVariable("FINALVERSE_COMPOSE_REQUEST")!;
+  Utils.LongToUInts(client.Network.CurrentSim.Handle,out uint gx,out uint gy);
+  deadline=DateTime.UtcNow.AddSeconds(15);while(client.Self.SimPosition==Vector3.Zero&&DateTime.UtcNow<deadline)await Task.Delay(200);
+  client.Self.AutoPilot(gx+stand[0],gy+stand[1],0);deadline=DateTime.UtcNow.AddSeconds(60);
+  while(Math.Sqrt(Math.Pow(client.Self.SimPosition.X-stand[0],2)+Math.Pow(client.Self.SimPosition.Y-stand[1],2))>1.2&&DateTime.UtcNow<deadline)await Task.Delay(250);
+  client.Self.AutoPilotCancel();await Task.Delay(500);
+  client.Self.Movement.TurnToward(new Vector3(face[0],face[1],client.Self.SimPosition.Z));client.Self.Movement.SendUpdate(true);await Task.Delay(1500);
+  var here=client.Self.SimPosition;var objectsBefore=client.Network.CurrentSim.ObjectsPrimitives.Count;
+  var context=new{region=new{id=client.Network.CurrentSim.ID.ToString()},avatar=new{position=new[]{here.X,here.Y,here.Z}},terrain=new{height=here.Z-0.9},selected_object=(object?)null,nearby_entities=Array.Empty<object>()};
+  var watch=System.Diagnostics.Stopwatch.StartNew();
+  using var gateway=new HttpClient(new HttpClientHandler{UseProxy=false}){Timeout=TimeSpan.FromSeconds(120)};
+  var planned=await gateway.PostAsync("http://127.0.0.1:18765/v1/world/plan",new StringContent(JsonSerializer.Serialize(new{request=ask,world_context=context}),Encoding.UTF8,"application/json"));
+  var generated=JsonDocument.Parse(await planned.Content.ReadAsStringAsync()).RootElement.Clone();var gatewayMs=watch.ElapsedMilliseconds;
+  Assert(planned.IsSuccessStatusCode&&generated.GetProperty("plan").ValueKind==JsonValueKind.Object,"The gateway proposed no place: "+generated.ToString()[..Math.Min(300,generated.ToString().Length)]);
+  watch.Restart();var prepared=await World(new{op="prepare",plan=generated.GetProperty("plan")});var prepareMs=watch.ElapsedMilliseconds;
+  string planId=prepared.GetProperty("plan_id").GetString()!;
+  watch.Restart();var committed=await World(new{op="commit",plan_id=planId});var commitMs=watch.ElapsedMilliseconds;
+  Assert(committed.GetProperty("status").GetString()=="committed","Build did not commit");
+  int parts=generated.GetProperty("plan").GetProperty("actions")[0].GetProperty("parameters").GetProperty("draft").GetProperty("placements").GetArrayLength();
+  deadline=DateTime.UtcNow.AddSeconds(30);int stable=0,count=0;
+  while(DateTime.UtcNow<deadline&&stable<6){await Task.Delay(500);int n=client.Network.CurrentSim.ObjectsPrimitives.Count;stable=n==count?stable+1:0;count=n;}
+  // Ask the relay what one of the new things is.
+  var fresh=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>p.ParentID==0&&Vector3.Distance(p.Position,here)<30).OrderBy(p=>Vector3.Distance(p.Position,here)).Take(40).ToArray();
+  JsonElement? known=null;foreach(var p in fresh){var r=await World(new{op="semantic",entity_id=p.ID.ToString()});if(r.TryGetProperty("place",out var pl)&&pl.GetProperty("place_id").GetString()!.StartsWith("user.")){known=r;break;}}
+  Assert(known!=null,"No composed part carries place semantics");
+  Save(new{request=ask,answer=generated.GetProperty("answer").GetString(),stand=new[]{here.X,here.Y,here.Z},plan_id=planId,operation_id=committed.GetProperty("operation_id").GetString(),
+    gateway_ms=gatewayMs,prepare_ms=prepareMs,commit_ms=commitMs,placements=parts,objects_before=objectsBefore,objects_after=count,
+    summary=prepared.GetProperty("summary").GetString(),steps=prepared.GetProperty("steps").GetArrayLength(),
+    place=known.Value.GetProperty("place").GetProperty("title").GetString(),place_id=known.Value.GetProperty("place").GetProperty("place_id").GetString(),owner=known.Value.GetProperty("owner_id").GetString(),
+    proposal=generated.GetProperty("plan").GetProperty("actions")[0].GetProperty("parameters").GetProperty("provenance")});
+  Console.WriteLine($"CITIZEN_SMOKE compose PASS: '{ask}' -> {parts} placements built ({count-objectsBefore} new objects in UDP); gateway {gatewayMs} ms, prepare {prepareMs} ms, build {commitMs} ms.");
+ }
+ else if(args[2]=="compose_undo")
+ {
+  // Undo a composition recorded in an earlier compose receipt (FINALVERSE_COMPOSE_RECEIPT), as its builder.
+  var receipt=JsonDocument.Parse(File.ReadAllText(Environment.GetEnvironmentVariable("FINALVERSE_COMPOSE_RECEIPT")!)).RootElement;
+  await Task.Delay(3000);var before=client.Network.CurrentSim.ObjectsPrimitives.Count;
+  var undone=await World(new{op="undo",plan_id=receipt.GetProperty("plan_id").GetString()});
+  Assert(undone.GetProperty("status").GetString()=="undone","Undo did not complete");
+  await Task.Delay(4000);var after=client.Network.CurrentSim.ObjectsPrimitives.Count;
+  Save(new{plan_id=receipt.GetProperty("plan_id").GetString(),undo_operation=undone.GetProperty("operation_id").GetString(),objects_before=before,objects_after=after});
+  Console.WriteLine($"CITIZEN_SMOKE compose_undo PASS: {before} -> {after} objects in UDP.");
  }
  else if(args[2]=="teleport")
  {

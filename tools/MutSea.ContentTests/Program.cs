@@ -143,6 +143,20 @@ try{
   File.AppendAllText(Path.Combine(dir,region+".places.worldline.jsonl"),JsonSerializer.Serialize(new PlaceEntry(Guid.NewGuid().ToString(),"intent",DateTimeOffset.UtcNow,plan,null,null),ContentCatalog.Json)+"\n");
   var reloaded=new PlaceKernel(pw,catalog,placeCatalog,dir,region);Assert(reloaded.RecoveryRequired);Reject(()=>reloaded.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));
  });
+ Test("a composed draft is validated like an approved place, provisioned as its actor and rolled back",()=>{
+  var actor=Guid.NewGuid().ToString();var k=new PlaceKernel(pw,catalog,new PlaceCatalog("",catalog),Path.Combine(root,"place-draft"),region);
+  var draft=Place(3) with{place_id="user.0712bdf9.reading-nook",version="0.1.20261012120000"};
+  var plan=k.PlanDraft(draft,[100,100,25],30,actor);
+  Assert(plan.actor_id==actor&&plan.retired.Length==0&&plan.place.manifest_sha256!.Length==64&&plan.placements.All(p=>p.actor_id==actor));
+  Assert(k.PlanDraft(draft,[100,100,25],30,actor).place.manifest_sha256==plan.place.manifest_sha256);  // canonical, deterministic pin
+  var done=k.Provision(plan);Assert(done.status=="committed"&&pw.Live.Count==3);
+  Assert(k.Rollback(plan.plan_id).status=="rolled_back"&&pw.Live.Count==0);
+  Reject(()=>k.PlanDraft(Place(1),[100,100,25],0,actor));  // not a user identity
+  Reject(()=>k.PlanDraft(draft with{placements=[draft.placements[0] with{manifest_sha256=new string('0',64)}]},[100,100,25],0,actor));
+  Reject(()=>k.PlanDraft(draft with{half_extent=[40,8]},[100,100,25],0,actor));
+  try{JsonSerializer.Deserialize<PlaceTemplate>("{\"schema_version\":1,\"kind\":\"place\",\"script\":\"x\"}",ContentCatalog.Json);throw new Exception("Expected an unknown field to be refused.");}
+  catch(JsonException){}  // the relay answers 400; unknown draft fields never reach the kernel
+ });
  Test("place checks run before any write",()=>{var k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-deny"),region);pw.Deny=true;Reject(()=>k.Plan("mutsea.test.pavilion","0.1.0",[100,100,25],0,operatorId));pw.Deny=false;Assert(k.Entries.Count==0);});
  // ---- WorldTemplate: places + terrain + water + spawn into an empty region, one journaled operation.
  var worldRoot=Path.Combine(root,"worlds");var placePin=placeCatalog.Get("mutsea.test.pavilion","0.1.0").manifest_sha256!;

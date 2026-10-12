@@ -295,3 +295,25 @@ Re-running is safe:
 - No rollback deletes an account. The Genesis outfit is rolled back through the wardrobe.
 
 The newcomer file must not be committed. Use the console `create user` for interactive accounts. A command script would echo its arguments, including the password, into the log.
+
+## Composed places (R&D: AI Place Composer)
+
+A person asks for a place ("make a picnic spot for six people"). The local AI gateway's model chooses only enumerated options, and its deterministic solver lays out a draft `place.json` from approved Starter Library packages. The gateway returns one `compose_place` World-plan action carrying the draft, the site rule `in_front_of_actor` and provenance (solver version, intent, adjustments). The viewer's Create panel passes it through, unchanged, to `prepare`.
+
+```ini
+[FinalverseComposer]
+Enabled = true
+Regions = <region UUID>[,<region UUID>...]
+```
+
+`ComposerBridge` treats the draft as untrusted data:
+
+- **Identity.** The place ID is rewritten to `user.<actor>.<slug>` with a timestamp version. The draft must have exactly PlaceTemplate's fields; unknown fields are refused.
+- **Validation.** It is validated exactly like an approved place (`PlaceCatalog.Validate`): every package pinned to the approved manifest SHA-256, plus the bounds, the 96-placement / 65,536-triangle / 12-light budgets and the semantics vocabulary.
+- **Site.** MutSea computes it, never the model or gateway: the place's entrance faces the person, just in front of them. The ground across the footprint must be level within 0.6 m.
+- **Rights and space.** PlaceKernel's site check runs with the person's own rights: the native parcel rez policy for every part, dry ground, inside the region, and no existing object in the footprint (refused with its name).
+- **Preview.** `prepare` returns one step per kind of piece, plus a summary built from the validated draft and any adjustments the solver made. It expires after 2 minutes.
+- **Build and undo.** `commit` provisions the place as the person, so they own the pieces; it is journaled in the place journal. `undo` runs PlaceKernel's fingerprint-guarded rollback.
+- **Limits.** At most 12 compositions per person per hour, and 64 pending previews. The relay body limit is now 64 KB, so the largest drafts fit.
+
+Composed places get place semantics like any other: the World relay's `semantic` op returns their title, roles and entrances.

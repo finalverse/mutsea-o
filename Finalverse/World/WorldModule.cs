@@ -47,6 +47,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialisePlaces(config);
         InitialiseWorlds(config);
         InitialiseAccounts(config);
+        InitialiseComposer(config);
     }
     public void AddRegion(Scene s)
     {
@@ -57,6 +58,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         content=new ContentKernel(this,catalog,directory,RegionId);
         StartPlaces(catalog);
         StartWorlds(catalog);
+        StartComposer(catalog);
         kernel.ContentSemantics=(id,actor)=>content.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
@@ -77,11 +79,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
             var timer=Stopwatch.StartNew(); string operation="invalid"; object? output=null;
             try
             {
-                if(request.HttpMethod!="POST"||request.ContentLength<1||request.ContentLength>32768)throw new InvalidDataException("Expected a bounded JSON POST.");
+                if(request.HttpMethod!="POST"||request.ContentLength<1||request.ContentLength>65536)throw new InvalidDataException("Expected a bounded JSON POST.");
                 // Hard byte bound also covers chunked/truncated bodies.
                 using var memory=new MemoryStream();
                 byte[] buffer=new byte[4096]; int n;
-                while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>32768)throw new InvalidDataException("Request too large."); }
+                while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>65536)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
                 if(data.GetProperty("op").GetString()=="citizen")
@@ -110,9 +112,9 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                         "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),
                         "content_history"=>content!.History(actor),
                         "inspect"=>kernel.Inspect(actor,data.TryGetProperty("selected_id",out var selected)&&selected.ValueKind==JsonValueKind.String?selected.GetString():null),
-                        "prepare"=>kernel.Prepare(data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)!,actor),
-                        "commit"=>kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),
-                        "undo"=>kernel.Undo(data.GetProperty("plan_id").GetString()!,actor),
+                        "prepare"=>data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)! is var proposal&&IsComposition(proposal)?ComposePrepare(proposal,actor):kernel.Prepare(proposal,actor),
+                        "commit"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeCommit(data.GetProperty("plan_id").GetString()!,actor):kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),
+                        "undo"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeUndo(data.GetProperty("plan_id").GetString()!,actor):kernel.Undo(data.GetProperty("plan_id").GetString()!,actor),
                         "journal"=>kernel.History(actor), "lumi"=>kernel.Lumi(actor),
                         "semantic"=>kernel.Semantic(data.GetProperty("entity_id").GetString()!,actor)??new { found=false },
                         _=>throw new InvalidDataException("Unknown World API operation.")};

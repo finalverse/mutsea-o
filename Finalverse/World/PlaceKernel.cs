@@ -114,7 +114,23 @@ public sealed class PlaceKernel
         ContentCatalog.Vector(anchor,3,0,4096);ContentCatalog.Vector([yawDegrees],1,-360,360);
         ContentCatalog.Require((retire??[]).All(id=>Guid.TryParse(id,out _))&&(retire??[]).Distinct().Count()==(retire??[]).Length&&(retire??[]).Length<=128,"Invalid retirement list.");
         ContentCatalog.Require((accept??[]).All(id=>Guid.TryParse(id,out _))&&(accept??[]).Length<=32&&!(accept??[]).Intersect(retire??[]).Any(),"Invalid accepted-overlap list.");
-        var place=places.Get(placeId,version);string plan=Guid.NewGuid().ToString();
+        return Build(places.Get(placeId,version),anchor,yawDegrees,actor,retire,accept);
+    }
+
+    // A composed (non-catalog) place: validated exactly like an approved place, never retiring anything.
+    public PlacePlan PlanDraft(PlaceTemplate draft,double[] anchor,double yawDegrees,string actor)
+    {
+        ContentCatalog.Require(!RecoveryRequired,"Place recovery required.");ContentCatalog.Require(Guid.TryParse(actor,out _),"Invalid actor.");
+        ContentCatalog.Vector(anchor,3,0,4096);ContentCatalog.Vector([yawDegrees],1,-360,360);
+        ContentCatalog.Require(draft!=null&&draft.place_id.StartsWith("user.",StringComparison.Ordinal),"Composed places carry a user place identity.");
+        draft=draft! with{manifest_sha256=ContentCatalog.Hash(JsonSerializer.SerializeToUtf8Bytes(draft with{manifest_sha256=null},ContentCatalog.Json))};
+        PlaceCatalog.Validate(draft,content);
+        return Build(draft,anchor,yawDegrees,actor,null,null);
+    }
+
+    PlacePlan Build(PlaceTemplate place,double[] anchor,double yawDegrees,string actor,string[]? retire,string[]? accept)
+    {
+        string plan=Guid.NewGuid().ToString();
         var plans=place.placements.Select((p,i)=>{
             var asset=content.Get(p.package_id,p.version).package;var offset=Rotate(p.offset,yawDegrees);
             return new ContentPlan(Id(plan,i,"plan"),actor,DateTimeOffset.UtcNow.AddMinutes(10),asset,anchor.Zip(offset,(a,o)=>a+o).ToArray(),
