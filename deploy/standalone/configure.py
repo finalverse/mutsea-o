@@ -14,6 +14,10 @@ p.add_argument('--output', type=Path, required=True)
 p.add_argument('--host', required=True, help='Advertised hostname or IPv4 address')
 p.add_argument('--port', type=int, default=19000, help='UDP region port; also HTTP port when TLS is off')
 p.add_argument('--public-tls', action='store_true', help='Native TLS on container port 443 with /config/mutsea.p12')
+p.add_argument('--database', choices=('postgresql', 'sqlite'), default='postgresql',
+    help='PostgreSQL is the default; SQLite is an explicit development/rollback option')
+p.add_argument('--database-config', type=Path,
+    help='Private JSON: host, database, user, password, optional port; PostgreSQL must already exist')
 a = p.parse_args()
 labels = a.host.split('.')
 valid_host = len(a.host) <= 253 and all(re.fullmatch(r'[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?', label) for label in labels)
@@ -22,9 +26,35 @@ if re.fullmatch(r'[0-9.]+', a.host):
     except ValueError: valid_host = False
 if not valid_host or not 1024 <= a.port <= 65535:
     p.error('Invalid host or port')
+db_connection = None
+if a.database == 'postgresql':
+    if not a.database_config:
+        p.error('PostgreSQL requires --database-config; no silent SQLite fallback')
+    try:
+        if os.name != 'nt' and a.database_config.stat().st_mode & 0o077:
+            raise ValueError()
+        db = json.loads(a.database_config.read_text())
+        # Restrict the fresh-instance format to generated URL-safe passwords.
+        # This prevents INI/Npgsql delimiter injection without printing secrets.
+        db_host = db['host']
+        if not isinstance(db_host, str) or not re.fullmatch(r'[A-Za-z0-9.-]{1,253}', db_host):
+            raise ValueError()
+        for field in ('database', 'user'):
+            if not isinstance(db[field], str) or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]{0,62}', db[field]):
+                raise ValueError()
+        if not isinstance(db['password'], str) or not re.fullmatch(r'[A-Za-z0-9_-]{24,256}', db['password']):
+            raise ValueError()
+        db_port = db.get('port', 5432)
+        if type(db_port) is not int or not 1 <= db_port <= 65535:
+            raise ValueError()
+        db_connection = f"Host={db_host};Port={db_port};Database={db['database']};Username={db['user']};Password={db['password']}"
+    except (KeyError, ValueError, TypeError, OSError):
+        p.error('Invalid private database configuration; see PostgreSQL deployment documentation')
 if a.output.exists() and any(a.output.iterdir()):
     p.error('Output must be empty; existing configuration and world data are preserved')
 a.output.mkdir(parents=True, exist_ok=True, mode=0o700)
+if os.name != 'nt':
+    a.output.chmod(0o700)
 (a.output/'Regions').mkdir(mode=0o700)
 owner, region = str(uuid.uuid4()), str(uuid.uuid4())
 password, cert_password = secrets.token_urlsafe(24), secrets.token_urlsafe(24)
@@ -51,6 +81,8 @@ BaseURL = {base}
 PublicPort = {public_port}
 [Startup]
 console = basic
+logfile = /data/MutSea.log
+StatsLogFile = /data/MutSeaStats.log
 physics = ubODE
 meshing = ubODEMeshmerizer
 ConsoleHistoryFileEnabled = false
@@ -80,16 +112,34 @@ CacheDirectory = /data/maptiles
 [YEngine]
 ScriptEnginesPath = /data/ScriptEngines
 ''')
-common = '''[DatabaseService]
+if db_connection:
+    common = ''
+    for section in ('DatabaseService', 'SimulationDataStore', 'EstateDataStore',
+        'AssetService', 'InventoryService', 'AvatarService', 'AuthenticationService',
+        'UserAccountService', 'GridUserService', 'FriendsService', 'PresenceService',
+        'UserProfilesService', 'AgentPreferencesService'):
+        # Nini treats unquoted semicolons as comments. Quote the entire value.
+        common += f'[{section}]\nStorageProvider = MutSea.Data.PGSQL.dll\nConnectionString = "{db_connection}"\n'
+        if section == 'AssetService':
+            common += 'DefaultAssetLoader = MutSea.Framework.AssetLoader.Filesystem.dll\nAssetLoaderArgs = assets/AssetSets.xml\n'
+        if section == 'UserAccountService':
+            common += 'CreateDefaultAvatarEntries = true\n'
+else:
+    common = '''[DatabaseService]
 StorageProvider = MutSea.Data.SQLite.dll
 ConnectionString = "URI=file:/data/MutSea.db;UseUTF16Encoding=True"
-[AssetService]
-DefaultAssetLoader = MutSea.Framework.AssetLoader.Filesystem.dll
-AssetLoaderArgs = assets/AssetSets.xml
-ConnectionString = "URI=file:/data/Asset.db"
-[Modules]
+'''
+    for section, name in [('AssetService','Asset'), ('InventoryService','inventory'),
+        ('AvatarService','avatars'), ('AuthenticationService','auth'),
+        ('UserAccountService','userprofiles'), ('GridUserService','griduser'), ('FriendsService','friends')]:
+        common += f'[{section}]\nConnectionString = "URI=file:/data/{name}.db"\n'
+        if section == 'AssetService':
+            common += 'DefaultAssetLoader = MutSea.Framework.AssetLoader.Filesystem.dll\nAssetLoaderArgs = assets/AssetSets.xml\n'
+        if section == 'UserAccountService':
+            common += 'CreateDefaultAvatarEntries = true\n'
+common += '''[Modules]
 AssetCaching = FlotsamAssetCache
-[FlotsamCache]
+[AssetCache]
 CacheDirectory = /data/assetcache
 [GridService]
 StorageProvider = MutSea.Data.Null.dll:NullRegionData
@@ -98,14 +148,6 @@ Region_MutSea_Harbor = DefaultRegion, FallbackRegion
 WelcomeMessage = Welcome to MutSea Harbor
 MapTileURL = ${Const|BaseURL}:${Const|PublicPort}/
 '''
-for section, name in [('InventoryService','inventory'),('AvatarService','avatars'),
-    ('AuthenticationService','auth'),('UserAccountService','userprofiles'),
-    ('GridUserService','griduser'),('FriendsService','friends')]:
-    common += f'[{section}]\nConnectionString = "URI=file:/data/{name}.db"\n'
-    if section == 'UserAccountService':
-        # Reuse inherited wearable/COF/appearance provisioning for fresh users.
-        # This is an initial bundle, not an atomic public registration service.
-        common += 'CreateDefaultAvatarEntries = true\n'
 write('StandaloneCommon.ini', common)
 write('Regions/Harbor.ini', f'''[MutSea Harbor]
 RegionUUID = {region}

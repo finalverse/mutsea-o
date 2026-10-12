@@ -35,10 +35,15 @@ try {
         if(prims.Length >= names.Count) break;
         Thread.Sleep(250);
     } while(DateTime.UtcNow < deadline);
-    foreach(var prim in prims) client.Objects.RequestObjectPropertiesFamily(client.Network.CurrentSim,prim.ID);
+    // Added/imported components can satisfy the initial count before every
+    // original fixture object arrives. Request properties once for each newly
+    // streamed UUID throughout the bounded verification window.
+    var requestedProperties = new HashSet<UUID>();
     deadline = DateTime.UtcNow.AddSeconds(45);
     do {
         prims = client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.ToArray();
+        foreach(var prim in prims)
+            if(requestedProperties.Add(prim.ID)) client.Objects.RequestObjectPropertiesFamily(client.Network.CurrentSim,prim.ID);
         if(names.All(name=>prims.Any(prim=>prim.Properties?.Name==name))) break;
         Thread.Sleep(250);
     } while(DateTime.UtcNow < deadline);

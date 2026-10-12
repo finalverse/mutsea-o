@@ -9,7 +9,10 @@ namespace Finalverse.World;
 public sealed record ActionSpec(string type, string? target_id, JsonElement parameters);
 public sealed record Plan(int schema_version, string request, string provider, string model, ActionSpec[] actions);
 public sealed record Entity(string id, string name, string description, string owner_id, string shape,
-    double[] position, double[] rotation, double[] scale, double[] color, bool editable, bool copyable, bool deletable, double clearance_radius = 0);
+    double[] position, double[] rotation, double[] scale, double[] color, bool editable, bool copyable, bool deletable, double clearance_radius = 0,
+    // Navigation footprint: horizontal reach of the parts that collide at body height
+    // (0.35–1.8 m above ground). Null for sources that cannot tell, which keep the root-based rule.
+    double? body_radius = null);
 public sealed record Step(string type, string id, Entity? before, Entity? after);
 public sealed record Prepared(string plan_id, string actor_id, DateTimeOffset expires_at, Plan proposal, Step[] steps, string scene_revision, string summary);
 public sealed record Entry(string operation_id, string plan_id, string actor_id, DateTimeOffset timestamp,
@@ -40,6 +43,8 @@ public sealed class Kernel
     readonly List<Entry> entries = new();
     readonly HashSet<string> undone = new();
     public bool RecoveryRequired { get; private set; }
+    public Func<string,string,object?>? ContentSemantics { get; set; }
+    public Func<object?>? AvatarBinding { get; set; }
     public const int MaxActions = 8, MaxCreates = 24;
     public const double MaxVolume = 120, MaxMove = 12, MaxScale = 12;
     public static readonly string LumiId = "b151468b-cbcc-4af2-ae2d-6967e8938bb4";
@@ -60,13 +65,15 @@ public sealed class Kernel
     public object Lumi(string actor)
     {
         var home = entries.LastOrDefault(e => e.actor_id == actor && e.status == "committed" && e.owner_agent_id == LumiId && !undone.Contains(e.plan_id));
-        return new { agent_id = LumiId, display_name = "Lumi", avatar_binding = (string?)null,
+        return new { agent_id = LumiId, display_name = "Lumi", avatar_binding = AvatarBinding?.Invoke(),
             home_entity_id = home?.steps.FirstOrDefault(s => s.type == "create")?.id,
             memory = home == null ? Array.Empty<string>() : new[] { home.proposal.request },
             profile = "Persistent semantic citizen identity; autonomous navigation is not enabled." };
     }
     public object? Semantic(string id, string actor)
     {
+        var content = ContentSemantics?.Invoke(id, actor);
+        if (content != null) return content;
         var operation = entries.LastOrDefault(e => e.actor_id == actor && e.status == "committed" && !undone.Contains(e.plan_id) && e.steps.Any(s => s.id == id && s.type == "create"));
         if (operation == null || world.Find(id, actor) == null) return null;
         return new { entity_id = id, structure_id = operation.steps.First(s => s.type == "create").id,

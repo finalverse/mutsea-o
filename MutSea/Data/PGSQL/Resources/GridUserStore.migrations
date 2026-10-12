@@ -58,3 +58,15 @@ DROP TABLE GridUser;
 
 alter table GridUser_tmp rename to GridUser;
 
+:VERSION 3
+BEGIN;
+-- Preserve native string values without fixed-width PostgreSQL padding.
+ALTER TABLE GridUser
+    ALTER COLUMN "HomePosition" TYPE varchar(64) USING rtrim("HomePosition"),
+    ALTER COLUMN "HomeLookAt" TYPE varchar(64) USING rtrim("HomeLookAt"),
+    ALTER COLUMN "LastPosition" TYPE varchar(64) USING rtrim("LastPosition"),
+    ALTER COLUMN "LastLookAt" TYPE varchar(64) USING rtrim("LastLookAt"),
+    ALTER COLUMN "Online" TYPE varchar(5) USING rtrim("Online"),
+    ALTER COLUMN "Login" TYPE varchar(16) USING rtrim("Login"),
+    ALTER COLUMN "Logout" TYPE varchar(16) USING rtrim("Logout");
+COMMIT;

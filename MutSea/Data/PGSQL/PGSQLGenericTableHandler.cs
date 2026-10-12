@@ -51,6 +51,7 @@ namespace MutSea.Data.PGSQL
         protected Dictionary<string, string> m_FieldTypes = new Dictionary<string, string>();
 
         protected List<string> m_ColumnNames = null;
+        private readonly object m_ColumnNamesGate = new object();
         protected string m_Realm;
         protected FieldInfo m_DataField = null;
 
@@ -123,24 +124,22 @@ namespace MutSea.Data.PGSQL
             }
         }
 
-        private void CheckColumnNames(NpgsqlDataReader reader)
+        private void CheckColumnNames(IDataReader reader)
         {
-            if (m_ColumnNames != null)
-                return;
-
-            m_ColumnNames = new List<string>();
-
-            DataTable schemaTable = reader.GetSchemaTable();
-
-            foreach (DataRow row in schemaTable.Rows)
+            lock (m_ColumnNamesGate)
             {
-                if (row["ColumnName"] == null)
-                    continue;
-
-                string col = row["ColumnName"].ToString();
-
-                if (!m_Fields.ContainsKey(col))
-                    m_ColumnNames.Add(col);
+                if (m_ColumnNames != null)
+                    return;
+                List<string> columns = new List<string>();
+                foreach (DataRow row in reader.GetSchemaTable().Rows)
+                {
+                    if (row["ColumnName"] == null)
+                        continue;
+                    string column = row["ColumnName"].ToString();
+                    if (!m_Fields.ContainsKey(column))
+                        columns.Add(column);
+                }
+                m_ColumnNames = columns;
             }
         }
 

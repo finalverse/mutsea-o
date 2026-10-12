@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MutSea.Data.PGSQL"><HintPath>$(MutSeaComponents)/MutSea.Data.PGSQL/bin/MutSea.Data.PGSQL.dll</HintPath></Reference>
+    <Reference Include="MutSea.Data"><HintPath>$(MutSeaBin)/MutSea.Data.dll</HintPath></Reference>
+    <Reference Include="MutSea.Framework"><HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath></Reference>
+    <Reference Include="Npgsql"><HintPath>$(MutSeaBin)/Npgsql.dll</HintPath></Reference>
+    <Reference Include="log4net"><HintPath>$(MutSeaBin)/log4net.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

@@ -31,6 +31,7 @@ public sealed partial class WorldModule
         string tokenFile=c.GetString("TokenFile","");
         if(!Guid.TryParse(citizenOwner,out _)||!Uri.TryCreate(runtimeUrl,UriKind.Absolute,out var url)||url.Scheme!="http"||url.Query!=""||url.UserInfo!="")throw new InvalidDataException("Invalid private citizen configuration.");
         citizenToken=File.ReadAllText(tokenFile).Trim();if(citizenToken.Length<32||citizenToken.Length>128)throw new InvalidDataException("Citizen service token must be 32–128 characters.");
+        InitialiseRepresentation(c);
     }
     void StartCitizen()
     {
@@ -40,6 +41,7 @@ public sealed partial class WorldModule
         {
             var record=JsonDocument.Parse(line).RootElement;
             string action=record.GetProperty("action_id").GetString()!;
+            if(record.GetProperty("kind").GetString()!.StartsWith("representation"))representationRecords.Add(record.Clone());
             if(record.GetProperty("kind").GetString()=="intent")citizenIntents.Add(action);
             if(record.GetProperty("kind").GetString()=="result")
             {
@@ -51,12 +53,24 @@ public sealed partial class WorldModule
         // No motion replay on startup: world position is restored by inherited backup.
         bridgePath="/finalverse/citizen/"+RegionId;
         MainServer.Instance.AddSimpleStreamHandler(new SimpleStreamHandler(bridgePath,CitizenHttp));
+        // Region modules load before persisted prims; resolve the embodiment once they exist.
+        scene.EventManager.OnPrimsLoaded+=CitizenPrimsLoaded;
         scene.EventManager.OnFrame+=CitizenFrame;
+    }
+    bool representationReady;
+    void CitizenPrimsLoaded(Scene s)
+    {
+        lock(gate)
+        {
+            try{StartRepresentation();}
+            catch(Exception ex){representationRecovery=true;log.Error(JsonSerializer.Serialize(new{@event="citizen_representation_start_failed",exception_type=ex.GetType().Name,error=ex.Message}));}
+            representationReady=true;
+        }
     }
     void StopCitizen()
     {
         if(!citizensEnabled||string.IsNullOrEmpty(bridgePath))return;
-        scene.EventManager.OnFrame-=CitizenFrame;MainServer.Instance.RemoveSimpleStreamHandler(bridgePath);bridgePath="";
+        scene.EventManager.OnFrame-=CitizenFrame;scene.EventManager.OnPrimsLoaded-=CitizenPrimsLoaded;MainServer.Instance.RemoveSimpleStreamHandler(bridgePath);bridgePath="";
         lock(gate)if(navigation is {status:"moving"})FinishNavigation("blocked","Simulator stopped during navigation.");
     }
     void CitizenHttp(IOSHttpRequest request,IOSHttpResponse response)
@@ -84,6 +98,7 @@ public sealed partial class WorldModule
         if(command is not ("inspect" or "say" or "pause" or "resume" or "cancel" or "approve" or "undo"))throw new InvalidDataException("Unknown citizen command.");
         string text=data.TryGetProperty("text",out var t)?t.GetString()??"":"";
         if(text.Length>2048)throw new InvalidDataException("Citizen message exceeds limit.");
+        if(command=="say")lock(gate)HearGesture(text);
         using var message=new HttpRequestMessage(HttpMethod.Post,runtimeUrl.TrimEnd('/')+"/v1/citizens/"+Kernel.LumiId+"/command");
         message.Headers.Authorization=new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",citizenToken);
         message.Content=new StringContent(JsonSerializer.Serialize(new{controller_id=actor,command,text}),Encoding.UTF8,"application/json");
@@ -97,7 +112,10 @@ public sealed partial class WorldModule
         string op=data.GetProperty("op").GetString()!;
         if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden"))throw new InvalidDataException("Tool capability denied.");
         lease=DateTimeOffset.UtcNow;
+        if(!representationReady)throw new InvalidDataException("Citizen embodiment is still loading.");
         if(op=="observe")return ObserveCitizen();
+        if(WorldRecoveryRequired&&op!="stop")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
+        if(representationRecovery&&op!="stop")throw new InvalidDataException("Citizen representation requires administrator recovery.");
         string action=data.GetProperty("action_id").GetString()!;if(!Guid.TryParse(action,out _))throw new InvalidDataException("Invalid action correlation.");
         if(citizenReceipts.TryGetValue(action,out var receipt))return receipt;
         if(citizenIntents.Contains(action))throw new InvalidDataException("Tool has an unresolved durable intent; do not replay uncertain actions.");
@@ -148,6 +166,8 @@ public sealed partial class WorldModule
         Part(new(.18f,.22f,.5f),new(.16f,0,-.5f),new(.2f,.15f,.3f,1));
         if(!scene.Permissions.CanRezObject(group.PrimCount,new UUID(citizenOwner),ToV(spawn))||!scene.AddNewSceneObject(group,true))throw new InvalidDataException("Embodiment creation denied.");
         group.HasGroupChanged=true;scene.ForceSceneObjectBackup(group);group.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);
+        // A configured representation is applied through the same journaled, snapshot-backed migration.
+        if(avatar!=null){Migrate(group);Animate("idle",null);var body=Body();return new{status="present",position=V(body.AbsolutePosition),embodiment_id=Kernel.LumiId,representation};}
         return new{status="present",position=spawn,embodiment_id=Kernel.LumiId,representation="linked_primitive_citizen"};
     }
     (Entity floor,JsonElement semantic) Home()
@@ -161,7 +181,7 @@ public sealed partial class WorldModule
     {
         double yaw=2*Math.Atan2(floor.rotation[2],floor.rotation[3]);double dy=-floor.scale[1]/2-1.4;
         double x=floor.position[0]-dy*Math.Sin(yaw),y=floor.position[1]+dy*Math.Cos(yaw);
-        return[x,y,Height(x,y)+.9];
+        return[x,y,Height(x,y)+citizenLift];
     }
     object ObserveCitizen()
     {
@@ -175,14 +195,24 @@ public sealed partial class WorldModule
     object NavigateHome(string action)
     {
         if(navigation is {status:"moving"})throw new InvalidDataException("Navigation is already active.");
-        var body=Body();var (floor,_)=Home();var end=Door(floor);var route=CitizenNavigator.Route(this,citizenOwner,Kernel.LumiId,V(body.AbsolutePosition),end);
-        navigation=new(action,"moving",floor.id,end,route,0,DateTimeOffset.UtcNow);return navigation;
+        var body=Body();var (floor,_)=Home();var end=Door(floor);var route=CitizenNavigator.Route(this,citizenOwner,Kernel.LumiId,V(body.AbsolutePosition),end,citizenLift);
+        navigation=new(action,"moving",floor.id,end,route,0,DateTimeOffset.UtcNow);
+        if(representation=="animated_object")
+        {
+            // Face the route before walking: a native turn, then walk.
+            var start=V(body.AbsolutePosition);var first=route[0];
+            double diff=Math.IEEERemainder(Math.Atan2(first[1]-start[1],first[0]-start[0])+citizenYaw-Yaw(body.GroupRotation),2*Math.PI);
+            if(Math.Abs(diff)>Math.PI/4){turnUntil=DateTimeOffset.UtcNow.AddSeconds(.8);Animate(diff>0?"turn_left":"turn_right",TimeSpan.FromSeconds(.8));}
+            else Animate("walk",null);
+        }
+        return navigation;
     }
     object StopMovement(){if(navigation is {status:"moving"})FinishNavigation("cancelled","Human/runtime stopped motion.");return new{status="stopped"};}
     object SpeakCitizen(string text)
     {
         if(string.IsNullOrWhiteSpace(text)||text.Length>1024)throw new InvalidDataException("Speech exceeds limit.");var body=Body();
-        scene.EventManager.TriggerOnChatFromWorld(this,new OSChatMessage {Channel=0,From="Lumi",Message=text,Position=body.AbsolutePosition,Type=ChatTypeEnum.Say,SenderUUID=new UUID(Kernel.LumiId),SenderObject=body,Scene=scene});return new{status="spoken"};
+        scene.EventManager.TriggerOnChatFromWorld(this,new OSChatMessage {Channel=0,From="Lumi",Message=text,Position=body.AbsolutePosition,Type=ChatTypeEnum.Say,SenderUUID=new UUID(Kernel.LumiId),SenderObject=body,Scene=scene});
+        SpeechGesture(text);return new{status="spoken"};
     }
     object PrepareGarden()
     {
@@ -190,7 +220,8 @@ public sealed partial class WorldModule
         // Creation remains assisted and uses the existing world kernel. Position is derived from home.
         double yaw=2*Math.Atan2(floor.rotation[2],floor.rotation[3]);var actions=new List<ActionSpec>();
         for(int i=0;i<3;i++){double x=-1.4+i*1.4,y=-floor.scale[1]/2-2.7;double px=floor.position[0]+x*Math.Cos(yaw)-y*Math.Sin(yaw),py=floor.position[1]+x*Math.Sin(yaw)+y*Math.Cos(yaw);double[] pos=[px,py,Height(px,py)+.22];
-            if(!CitizenNavigator.Clear(this,citizenOwner,Kernel.LumiId,pos.Select((v,k)=>k==2?v+.7:v).ToArray()))throw new InvalidDataException("Garden site is obstructed.");
+            double siteZ=representation=="animated_object"?Height(px,py)+citizenLift:pos[2]+.7;
+            if(!CitizenNavigator.Clear(this,citizenOwner,Kernel.LumiId,[px,py,siteZ],citizenLift))throw new InvalidDataException("Garden site is obstructed.");
             actions.Add(new("create_primitive",null,JsonSerializer.SerializeToElement(new{position=pos,scale=new[]{.65,.65,.45},color=new[]{.2,.6,.32,1},shape="sphere",name="Lumi Garden · shrub "+(i+1)})));}
         return kernel.Prepare(new(1,"Lumi requests a small three-shrub garden near her home.","deterministic-recipe","garden-v1",actions.ToArray()),citizenOwner);
     }
@@ -198,23 +229,34 @@ public sealed partial class WorldModule
     {
         if(navigation==null)return;navigation=navigation with {status=status,error=error};var body=scene.GetSceneObjectGroup(new UUID(Kernel.LumiId));if(body!=null){body.HasGroupChanged=true;scene.ForceSceneObjectBackup(body);}
         RecordCitizen(navigation.action_id,"navigation_result",navigation);
+        turnUntil=DateTimeOffset.MinValue;Animate("idle",null);
+        if(status=="arrived")FaceOutward();
     }
     void CitizenFrame()
     {
         lock(gate)
         {
             var now=DateTimeOffset.UtcNow;if(now-lastTick<TimeSpan.FromMilliseconds(200))return;double dt=Math.Min(.25,(now-lastTick).TotalSeconds);lastTick=now;
+            AnimationFrame(now);FaceFrame(now,dt);
             if(navigation is not {status:"moving"})return;
             try
             {
+                if(WorldRecoveryRequired){FinishNavigation("blocked","World transaction requires administrator recovery.");return;}
                 if(now-lease>TimeSpan.FromSeconds(5)){FinishNavigation("blocked","Runtime navigation lease expired.");return;}
-                if(now-navigation.started_at>TimeSpan.FromSeconds(90)){FinishNavigation("blocked","Navigation time budget exhausted.");return;}
+                if(now-navigation.started_at>TimeSpan.FromSeconds(90*2/citizenSpeed)){FinishNavigation("blocked","Navigation time budget exhausted.");return;}
                 var (home,_)=Home();if(home.id!=navigation.home_id||CitizenNavigator.Distance(Door(home),navigation.target)>.1){FinishNavigation("blocked","Home changed while navigating.");return;}
                 var body=Body();var current=V(body.AbsolutePosition);var target=navigation.route[navigation.waypoint];double distance=CitizenNavigator.Distance(current,target);
+                if(now<turnUntil)
+                {
+                    // Turn in place toward the first waypoint while the native turn animation plays.
+                    double heading=Math.Atan2(target[1]-current[1],target[0]-current[0])+citizenYaw,yawNow=Yaw(body.GroupRotation);
+                    double step=Math.Clamp(Math.IEEERemainder(heading-yawNow,2*Math.PI),-Math.PI*dt/.6,Math.PI*dt/.6);
+                    body.UpdateGroupRotationR(YawRotation(yawNow+step));body.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);return;
+                }
                 if(distance<.12){int next=navigation.waypoint+1;if(next>=navigation.route.Length){FinishNavigation("arrived",null);return;}navigation=navigation with {waypoint=next};return;}
-                double fraction=Math.Min(1,2*dt/distance);var position=current.Zip(target,(a,b)=>a+(b-a)*fraction).ToArray();
-                if(!CitizenNavigator.Clear(this,citizenOwner,Kernel.LumiId,position)||!scene.Permissions.CanObjectEntry(body,false,ToV(position))||!scene.Permissions.CanEditObject(body.UUID,new UUID(citizenOwner))){FinishNavigation("blocked","Route or permission changed.");return;}
-                double yaw=Math.Atan2(target[1]-current[1],target[0]-current[0])+Math.PI/2;body.UpdateGroupRotationR(new Quaternion(0,0,(float)Math.Sin(yaw/2),(float)Math.Cos(yaw/2)));body.UpdateGroupPosition(ToV(position));body.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);
+                double fraction=Math.Min(1,citizenSpeed*dt/distance);var position=current.Zip(target,(a,b)=>a+(b-a)*fraction).ToArray();
+                if(!CitizenNavigator.Clear(this,citizenOwner,Kernel.LumiId,position,citizenLift)||!scene.Permissions.CanObjectEntry(body,false,ToV(position))||!scene.Permissions.CanEditObject(body.UUID,new UUID(citizenOwner))){FinishNavigation("blocked","Route or permission changed.");return;}
+                double yaw=Math.Atan2(target[1]-current[1],target[0]-current[0])+citizenYaw;body.UpdateGroupRotationR(new Quaternion(0,0,(float)Math.Sin(yaw/2),(float)Math.Cos(yaw/2)));body.UpdateGroupPosition(ToV(position));body.ScheduleGroupForUpdate(PrimUpdateFlags.FullUpdate);
                 if(now-lastBackup>TimeSpan.FromSeconds(2)){body.HasGroupChanged=true;scene.ForceSceneObjectBackup(body);lastBackup=now;}
             }
             catch(Exception){FinishNavigation("blocked","World state unavailable during navigation.");}

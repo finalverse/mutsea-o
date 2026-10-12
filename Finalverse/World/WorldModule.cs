@@ -26,6 +26,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     readonly Dictionary<UUID,DateTimeOffset> lastRequest = new();
     Scene scene = null!;
     Kernel kernel = null!;
+    bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true;
     bool enabled;
     string directory = "";
     public string Name => "FinalverseWorldModule";
@@ -40,32 +41,49 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var c=config.Configs["FinalverseWorld"];
         enabled=c?.GetBoolean("Enabled",false)??false;
         directory=c?.GetString("DataDirectory","/data/finalverse")??"/data/finalverse";
+        contentDirectory=c?.GetString("ContentLibraryDirectory","")??"";
         InitialiseCitizen(config);
+        InitialiseGenesis(config);
+        InitialisePlaces(config);
+        InitialiseWorlds(config);
+        InitialiseAccounts(config);
+        InitialiseComposer(config);
     }
     public void AddRegion(Scene s)
     {
         scene=s;
         if(!enabled)return;
         kernel=new Kernel(this,directory);
+        var catalog=new ContentCatalog(contentDirectory,ContentMaterialAsset.Matches);
+        content=new ContentKernel(this,catalog,directory,RegionId);
+        StartPlaces(catalog);
+        StartWorlds(catalog);
+        StartComposer(catalog);
+        kernel.ContentSemantics=(id,actor)=>content.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
+        kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
+        s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=AccountsPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled)s.EventManager.OnRegisterCaps-=RegisterCaps; lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
     void RegisterCaps(UUID agent,Caps caps)
     {
-        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); sessions[agent]=session; }
+        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); content?.Invalidate(agent.ToString()); sessions[agent]=session; }
         caps.RegisterSimpleHandler("FinalverseWorld",new SimpleStreamHandler("/"+UUID.Random(),(request,response)=>
         {
             response.ContentType="application/json";
             var timer=Stopwatch.StartNew(); string operation="invalid"; object? output=null;
             try
             {
-                if(request.HttpMethod!="POST"||request.ContentLength<1||request.ContentLength>32768)throw new InvalidDataException("Expected a bounded JSON POST.");
+                if(request.HttpMethod!="POST"||request.ContentLength<1||request.ContentLength>65536)throw new InvalidDataException("Expected a bounded JSON POST.");
                 // Hard byte bound also covers chunked/truncated bodies.
                 using var memory=new MemoryStream();
                 byte[] buffer=new byte[4096]; int n;
-                while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>32768)throw new InvalidDataException("Request too large."); }
+                while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>65536)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
                 if(data.GetProperty("op").GetString()=="citizen")
@@ -85,12 +103,18 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                     if(lastRequest.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
                     lastRequest[agent]=DateTimeOffset.UtcNow;
                     string actor=agent.ToString(); string op=data.GetProperty("op").GetString()!;
+                    if(WorldRecoveryRequired && op is "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
                     if(op is "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
+                    if(op.StartsWith("content_",StringComparison.Ordinal))operation=op;
                     object result=op switch {
+                        "content_preview"=>content!.Preview(data.GetProperty("package_id").GetString()!,data.GetProperty("version").GetString()!,data.GetProperty("anchor").Deserialize<double[]>()!,actor),
+                        "content_commit"=>content!.Commit(data.GetProperty("plan_id").GetString()!,actor),
+                        "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),
+                        "content_history"=>content!.History(actor),
                         "inspect"=>kernel.Inspect(actor,data.TryGetProperty("selected_id",out var selected)&&selected.ValueKind==JsonValueKind.String?selected.GetString():null),
-                        "prepare"=>kernel.Prepare(data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)!,actor),
-                        "commit"=>kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),
-                        "undo"=>kernel.Undo(data.GetProperty("plan_id").GetString()!,actor),
+                        "prepare"=>data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)! is var proposal&&IsComposition(proposal)?ComposePrepare(proposal,actor):kernel.Prepare(proposal,actor),
+                        "commit"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeCommit(data.GetProperty("plan_id").GetString()!,actor):kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),
+                        "undo"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeUndo(data.GetProperty("plan_id").GetString()!,actor):kernel.Undo(data.GetProperty("plan_id").GetString()!,actor),
                         "journal"=>kernel.History(actor), "lumi"=>kernel.Lumi(actor),
                         "semantic"=>kernel.Semantic(data.GetProperty("entity_id").GetString()!,actor)??new { found=false },
                         _=>throw new InvalidDataException("Unknown World API operation.")};
@@ -130,7 +154,22 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         var p=g.RootPart;var q=p.RotationOffset;var te=new Primitive.TextureEntry(p.Shape.TextureEntry,0,p.Shape.TextureEntry.Length);var color=te.DefaultTexture.RGBA;
         g.GetAxisAlignedBoundingBoxRaw(out var minX,out var maxX,out var minY,out var maxY,out _,out _);
         double clearance=Math.Sqrt(Math.Pow(Math.Max(Math.Abs(minX),Math.Abs(maxX)),2)+Math.Pow(Math.Max(Math.Abs(minY),Math.Abs(maxY)),2));
-        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0;
+        // Only colliding parts at body height obstruct a walker: a canopy without collision or a roof
+        // overhead does not. An upright part (turned only about Z) reaches its XY half-diagonal and
+        // spans its Z half-height; a tilted part keeps its full 3D half-diagonal both ways.
+        var root=g.AbsolutePosition;double ground=Height(Math.Clamp(root.X,0,SizeX-1),Math.Clamp(root.Y,0,SizeY-1)),body=0;
+        foreach(var part in g.Parts)
+        {
+            if(part.PhysicsShapeType==(byte)PhysShapeType.none)continue;
+            var c=part.AbsolutePosition;var s=part.Scale;var r=part.GetWorldRotation();
+            bool upright=Math.Abs(r.X)<1e-3&&Math.Abs(r.Y)<1e-3;double diagonal=Math.Sqrt(s.X*s.X+s.Y*s.Y+s.Z*s.Z)/2;
+            double reach=upright?Math.Sqrt(s.X*s.X+s.Y*s.Y)/2:diagonal,height=upright?s.Z/2:diagonal;
+            if(c.Z+height<ground+.35||c.Z-height>ground+1.8)continue;
+            body=Math.Max(body,Math.Sqrt((c.X-root.X)*(c.X-root.X)+(c.Y-root.Y)*(c.Y-root.Y))+reach);
+        }
+        // The citizen embodiment is owned by the representation adapter, never by generic plans
+        // (the historic seven-part body was excluded implicitly by its prim count).
+        bool safe=g.PrimCount==1&&!g.IsAttachment&&!g.UsesPhysics&&p.Inventory.GetInventoryItems().Count==0&&g.UUID.ToString()!=Kernel.LumiId&&!galleryIds.Contains(g.UUID.ToString());
         var shape=p.Shape;
         string kind=shape.ProfileShape==ProfileShape.Square&&shape.PathCurve==(byte)Extrusion.Straight?"box":shape.ProfileShape==ProfileShape.HalfCircle&&shape.PathCurve==(byte)Extrusion.Curve1?"sphere":"other";
         // Deletion/restoration and cloning must round-trip every supported attribute.
@@ -143,7 +182,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         return new(g.UUID.ToString(),p.Name,p.Description,p.OwnerID.ToString(),kind,
             V(g.AbsolutePosition),[q.X,q.Y,q.Z,q.W],V(p.Scale),[color.R,color.G,color.B,color.A],
             safe&&scene.Permissions.CanEditObject(g.UUID,new UUID(actor)),plain&&p.BaseMask==(uint)Permissions.All&&p.OwnerMask==(uint)Permissions.All&&p.EveryoneMask==0&&p.GroupMask==0&&p.NextOwnerMask==(uint)(Permissions.Copy|Permissions.Modify|Permissions.Transfer),
-            safe&&scene.Permissions.CanDeleteObject(g.UUID,new UUID(actor)),clearance);
+            safe&&scene.Permissions.CanDeleteObject(g.UUID,new UUID(actor)),clearance,body);
     }
     public double Height(double x,double y)
     {

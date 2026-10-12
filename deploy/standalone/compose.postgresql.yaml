@@ -1,0 +1,11 @@
+# Connect to an operator-provisioned PostgreSQL network. The database itself
+# has a separate lifecycle and backup; this overlay publishes no database port.
+services:
+  mutsea:
+    networks:
+      - default
+      - database
+networks:
+  database:
+    external: true
+    name: ${MUTSEA_DATABASE_NETWORK:?Set the existing private PostgreSQL network}
