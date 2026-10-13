@@ -70,7 +70,13 @@ try{
   receipt=JsonSerializer.SerializeToElement(new{entry,before});File.WriteAllText(args[1],receipt.GetRawText()+"\n");if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[1],UnixFileMode.UserRead|UnixFileMode.UserWrite);
  }else receipt=JsonDocument.Parse(File.ReadAllBytes(args[1])).RootElement.Clone();
  var saved=receipt.GetProperty("entry");var savedPlan=saved.GetProperty("plan");var ids=savedPlan.GetProperty("entity_ids").EnumerateArray().Select(x=>new UUID(x.GetString())).ToArray();var assets=savedPlan.GetProperty("asset_ids").EnumerateArray().Select(x=>new UUID(x.GetString())).ToArray();
- if(args[2]=="undo")await World(new{op="content_undo",plan_id=savedPlan.GetProperty("plan_id").GetString()});
+ // A verified asset can be one placement inside a canonical PlaceKernel
+ // transaction. Its containing plan owns Undo and the human WorldLine.
+ string? containingPlace=receipt.TryGetProperty("containing_place_plan_id",out var container)?container.GetString():null;
+ if(containingPlace!=null&&!Guid.TryParse(containingPlace,out _))throw new InvalidDataException("Invalid containing place plan.");
+ string historyOp=containingPlace==null?"content_history":"journal";
+ object UndoRequest()=>containingPlace==null?(object)new{op="content_undo",plan_id=savedPlan.GetProperty("plan_id").GetString()}:new{op="undo",plan_id=containingPlace};
+ if(args[2]=="undo")await World(UndoRequest());
  bool exists=args[2] is "import" or "verify";
  foreach(var id in ids){deadline=DateTime.UtcNow.AddSeconds(20);Primitive? prim;
   do{prim=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.FirstOrDefault(x=>x.ID==id);if((prim!=null)==exists)break;await Task.Delay(200);}while(DateTime.UtcNow<deadline);
@@ -159,25 +165,33 @@ try{
     var ready=await Task.WhenAny(sit.Task,Task.Delay(10000));
     if(ready!=sit.Task)throw new InvalidDataException("Native sit response timed out.");
     var result=await sit.Task;
-    if(result.ObjectID!=ids[0]||Vector3.Distance(result.SitPosition,new Vector3((float)seat.position[0],(float)seat.position[1],(float)seat.position[2]))>.002f)throw new InvalidDataException("Native sit target mismatch.");
-    double alignment=Math.Abs(result.SitRotation.X*seat.rotation[0]+result.SitRotation.Y*seat.rotation[1]+result.SitRotation.Z*seat.rotation[2]+result.SitRotation.W*seat.rotation[3]);
+    var rootPrim=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Single(p=>p.ID==ids[0]);
+    var seatPrim=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Single(p=>p.ID==ids[seatIndex]);
+    var target=new Vector3((float)seat.position[0],(float)seat.position[1],(float)seat.position[2]);
+    var orientation=new Quaternion((float)seat.rotation[0],(float)seat.rotation[1],(float)seat.rotation[2],(float)seat.rotation[3]);
+    // ScenePresence.SendSitResponse returns a root-relative position but a
+    // world orientation. Include native child/root rotations for placed assets.
+    if(seatIndex!=0){target=target*seatPrim.Rotation+seatPrim.Position;orientation=seatPrim.Rotation*orientation;}
+    orientation=rootPrim.Rotation*orientation;
+    if(result.ObjectID!=ids[0]||Vector3.Distance(result.SitPosition,target)>.002f)throw new InvalidDataException("Native sit target mismatch.");
+    double alignment=Math.Abs(result.SitRotation.X*orientation.X+result.SitRotation.Y*orientation.Y+result.SitRotation.Z*orientation.Z+result.SitRotation.W*orientation.W);
     if(Math.Abs(alignment-1)>.002)throw new InvalidDataException("Native sit orientation mismatch.");
     deadline=DateTime.UtcNow.AddSeconds(10);while(client.Self.SittingOn==0&&DateTime.UtcNow<deadline)await Task.Delay(100);
     if(client.Self.SittingOn==0)throw new InvalidDataException("Native avatar did not sit.");
     seatResponse=true;
-    var historyBefore=await World(new{op="content_history"});
-    try{await World(new{op="content_undo",plan_id=plan.plan_id});throw new InvalidDataException("Occupied seating Undo was accepted.");}
+    var historyBefore=await World(new{op=historyOp});
+    try{await World(UndoRequest());throw new InvalidDataException("Occupied seating Undo was accepted.");}
     catch(InvalidDataException error) when(error.Message=="Stand up before undoing occupied seating."){occupiedUndoDenied=true;}
-    var historyAfter=await World(new{op="content_history"});
+    var historyAfter=await World(new{op=historyOp});
     if(historyBefore.GetArrayLength()!=historyAfter.GetArrayLength())throw new InvalidDataException("Occupied seating denial wrote an undo intent.");
     client.Self.Stand();await Task.Delay(300);
    }
   }
  }
- var after=await World(new{op="inspect"});var history=await World(new{op="content_history"});
+ var after=await World(new{op="inspect"});var history=await World(new{op=historyOp});
  // Citizen inspection is controller-only and is tested separately with its
  // controller account. Ordinary content creators do not need that privilege.
- var output=new{mode=args[2],udp_mesh_parts_verified=ids.Length,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_lights_verified=nativeLights,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,exists,semantic,content_history=history,world_inspect=after};
+ var output=new{mode=args[2],containing_place_plan_id=containingPlace,history_operation=historyOp,udp_mesh_parts_verified=ids.Length,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_lights_verified=nativeLights,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,exists,semantic,content_history=history,world_inspect=after};
  var evidence=args[1]+"."+args[2]+".json";File.WriteAllText(evidence,JsonSerializer.Serialize(output,new JsonSerializerOptions{WriteIndented=true})+"\n");if(!OperatingSystem.IsWindows())File.SetUnixFileMode(evidence,UnixFileMode.UserRead|UnixFileMode.UserWrite);
  Console.WriteLine(JsonSerializer.Serialize(new{mode=args[2],verified=true,parts=ids.Length,exists,semantic=exists,semantic_components_verified=semanticComponents,material_faces_verified=materialFaces,material_assets_verified=materialAssets,mesh_lod_assets_verified=meshAssets,native_collision_shapes_verified=collisionShapes,native_lights_verified=nativeLights,native_seat_verified=seatResponse,occupied_seat_undo_denied=occupiedUndoDenied,worldline_entries=history.GetArrayLength()}));
  return 0;

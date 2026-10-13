@@ -31,12 +31,18 @@ try
  var seed=new OSDArray{OSD.FromString("FinalverseWorld"),OSD.FromString("ViewerAsset"),OSD.FromString("ObjectAnimation")};var content=new StringContent(OSDParser.SerializeLLSDXmlString(seed),Encoding.UTF8);content.Headers.ContentType=new System.Net.Http.Headers.MediaTypeHeaderValue("application/llsd+xml");
  var seedReply=await http.PostAsync(client.Network.CurrentSim.Caps.SeedCapsURI,content);var caps=(OSDMap)OSDParser.DeserializeLLSDXml(await seedReply.Content.ReadAsStringAsync());cap=caps["FinalverseWorld"].AsString();Assert(cap.Length>0,"World capability missing");viewerAsset=caps.ContainsKey("ViewerAsset")?caps["ViewerAsset"].AsString():"";
  var deadline=DateTime.UtcNow.AddSeconds(30);Primitive? rootBody=null;
- do{rootBody=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.FirstOrDefault(p=>p.ID==lumi);if(rootBody!=null)break;await Task.Delay(200);}while(DateTime.UtcNow<deadline);
- Assert(rootBody!=null,"No Lumi embodiment in real UDP stream");await Task.Delay(500);
- int components=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Count(p=>p.ID==lumi||p.ParentID==rootBody!.LocalID);
- // Representation-aware: the historic linked primitive (7 parts) or one native animated-mesh root.
- bool animesh=rootBody!.Sculpt!=null&&rootBody.Sculpt.Type==SculptType.Mesh;string representation=animesh?"animated_object":"linked_primitive_citizen";
- Assert(animesh?components==1:components==7,animesh?"Animated-mesh embodiment must be a single UDP root":"Lumi's seven linked components are missing from UDP");
+ int components=0;bool animesh=false;string representation="not_required_for_composition";
+ // World composition is a human World API operation. Its isolated fixture
+ // must not require provisioning or controlling an unrelated AI citizen.
+ if(args[2] is not ("compose" or "compose_undo"))
+ {
+  do{rootBody=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.FirstOrDefault(p=>p.ID==lumi);if(rootBody!=null)break;await Task.Delay(200);}while(DateTime.UtcNow<deadline);
+  Assert(rootBody!=null,"No Lumi embodiment in real UDP stream");await Task.Delay(500);
+  components=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Count(p=>p.ID==lumi||p.ParentID==rootBody!.LocalID);
+  // Representation-aware: the historic linked primitive or native animated mesh.
+  animesh=rootBody!.Sculpt!=null&&rootBody.Sculpt.Type==SculptType.Mesh;representation=animesh?"animated_object":"linked_primitive_citizen";
+  Assert(animesh?components==1:components==7,animesh?"Animated-mesh embodiment must be a single UDP root":"Lumi's seven linked components are missing from UDP");
+ }
  // Lumi's relay is controller-only; a newcomer sees and hears Lumi but does not command her.
  JsonElement state=default;
  // Read-only region/appearance checks must still work with AI services offline
@@ -326,14 +332,29 @@ try
   // gateway (FINALVERSE_COMPOSE_REQUEST), then preview, build and check the result over real UDP and the World relay.
   float[] At(string name)=>Environment.GetEnvironmentVariable(name)!.Split(',').Select(v=>float.Parse(v,System.Globalization.CultureInfo.InvariantCulture)).ToArray();
   var stand=At("FINALVERSE_COMPOSE_AT");var face=At("FINALVERSE_COMPOSE_FACE");string ask=Environment.GetEnvironmentVariable("FINALVERSE_COMPOSE_REQUEST")!;
+  Assert(stand.Length==2&&face.Length==2&&stand.Concat(face).All(x=>float.IsFinite(x)&&x>1&&x<255),"Bounded fixture avatar coordinates required");
   Utils.LongToUInts(client.Network.CurrentSim.Handle,out uint gx,out uint gy);
   deadline=DateTime.UtcNow.AddSeconds(15);while(client.Self.SimPosition==Vector3.Zero&&DateTime.UtcNow<deadline)await Task.Delay(200);
-  client.Self.AutoPilot(gx+stand[0],gy+stand[1],0);deadline=DateTime.UtcNow.AddSeconds(60);
-  while(Math.Sqrt(Math.Pow(client.Self.SimPosition.X-stand[0],2)+Math.Pow(client.Self.SimPosition.Y-stand[1],2))>1.2&&DateTime.UtcNow<deadline)await Task.Delay(250);
-  client.Self.AutoPilotCancel();await Task.Delay(500);
+  if(Environment.GetEnvironmentVariable("FINALVERSE_COMPOSE_SETUP")=="teleport")
+  {
+   // Explicit, isolated-loopback acceptance setup moves only the test avatar.
+   // The model never chooses this position or the site's world coordinates.
+   var grid=new Uri(account.GetProperty("grid_url").GetString()!);
+   Assert(grid.Scheme=="http"&&grid.Host=="127.0.0.1"&&grid.Port==18095&&grid.AbsolutePath=="/"&&grid.Query==""&&grid.Fragment==""&&grid.UserInfo=="","Teleport setup is isolated Tropical-only");
+   Assert(float.TryParse(Environment.GetEnvironmentVariable("FINALVERSE_COMPOSE_HEIGHT"),System.Globalization.NumberStyles.Float,System.Globalization.CultureInfo.InvariantCulture,out var z)&&float.IsFinite(z)&&z>1&&z<128,"Bounded fixture height required");
+   Assert(client.Self.Teleport(client.Network.CurrentSim.Name,new Vector3(stand[0],stand[1],z)),"Fixture avatar setup failed");
+  }
+  else
+  {
+   client.Self.AutoPilot(gx+stand[0],gy+stand[1],0);deadline=DateTime.UtcNow.AddSeconds(60);
+   while(Math.Sqrt(Math.Pow(client.Self.SimPosition.X-stand[0],2)+Math.Pow(client.Self.SimPosition.Y-stand[1],2))>1.2&&DateTime.UtcNow<deadline)await Task.Delay(250);
+   client.Self.AutoPilotCancel();
+  }
+  await Task.Delay(500);
+  Assert(Math.Sqrt(Math.Pow(client.Self.SimPosition.X-stand[0],2)+Math.Pow(client.Self.SimPosition.Y-stand[1],2))<=1.2,"Test avatar did not reach its fixture site");
   client.Self.Movement.TurnToward(new Vector3(face[0],face[1],client.Self.SimPosition.Z));client.Self.Movement.SendUpdate(true);await Task.Delay(1500);
   var here=client.Self.SimPosition;var objectsBefore=client.Network.CurrentSim.ObjectsPrimitives.Count;
-  var context=new{region=new{id=client.Network.CurrentSim.ID.ToString()},avatar=new{position=new[]{here.X,here.Y,here.Z}},terrain=new{height=here.Z-0.9},selected_object=(object?)null,nearby_entities=Array.Empty<object>()};
+  var context=await World(new{op="inspect"});
   var watch=System.Diagnostics.Stopwatch.StartNew();
   using var gateway=new HttpClient(new HttpClientHandler{UseProxy=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(120)};
   string route="http://127.0.0.1:18765/v1/world/plan";
@@ -353,21 +374,42 @@ try
   Assert(planned.IsSuccessStatusCode&&generated.GetProperty("plan").ValueKind==JsonValueKind.Object,"The gateway proposed no place: "+generated.ToString()[..Math.Min(300,generated.ToString().Length)]);
   watch.Restart();var prepared=await World(new{op="prepare",plan=generated.GetProperty("plan")});var prepareMs=watch.ElapsedMilliseconds;
   string planId=prepared.GetProperty("plan_id").GetString()!;
+  var site=prepared.GetProperty("site");
+  if(generated.GetProperty("plan").GetProperty("actions")[0].GetProperty("parameters").GetProperty("site").GetString()=="near_water")
+   Assert(site.GetProperty("rule").GetString()=="near_water"&&site.GetProperty("water_distance").GetDouble()<=12,"Runtime did not confirm a shoreline site");
   watch.Restart();var committed=await World(new{op="commit",plan_id=planId});var commitMs=watch.ElapsedMilliseconds;
   Assert(committed.GetProperty("status").GetString()=="committed","Build did not commit");
   int parts=generated.GetProperty("plan").GetProperty("actions")[0].GetProperty("parameters").GetProperty("draft").GetProperty("placements").GetArrayLength();
   deadline=DateTime.UtcNow.AddSeconds(30);int stable=0,count=0;
   while(DateTime.UtcNow<deadline&&stable<6){await Task.Delay(500);int n=client.Network.CurrentSim.ObjectsPrimitives.Count;stable=n==count?stable+1:0;count=n;}
-  // Ask the relay what one of the new things is.
+  // Attribute native parts by this exact transaction. The raw scene can still
+  // be streaming; its total-count delta is not a count of created objects.
   var fresh=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>p.ParentID==0&&Vector3.Distance(p.Position,here)<30).OrderBy(p=>Vector3.Distance(p.Position,here)).Take(40).ToArray();
-  JsonElement? known=null;foreach(var p in fresh){var r=await World(new{op="semantic",entity_id=p.ID.ToString()});if(r.TryGetProperty("place",out var pl)&&pl.GetProperty("place_id").GetString()!.StartsWith("user.")){known=r;break;}}
+  var createdRoots=new List<Primitive>();JsonElement? known=null;
+  foreach(var p in fresh)
+  {
+   var r=await World(new{op="semantic",entity_id=p.ID.ToString()});
+   if(r.TryGetProperty("place",out var pl)&&pl.GetProperty("operation_id").GetString()==committed.GetProperty("operation_id").GetString())
+   {
+    Assert(r.GetProperty("owner_id").GetString()==client.Self.AgentID.ToString(),"Created place ownership mismatch");
+    createdRoots.Add(p);known??=r;
+   }
+  }
+  Assert(createdRoots.Count==parts,"Not all committed placements were identified in native UDP");
+  var createdIds=createdRoots.Select(p=>p.ID).ToHashSet();var parentIds=createdRoots.Select(p=>p.LocalID).ToHashSet();
+  var createdParts=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Where(p=>createdIds.Contains(p.ID)||parentIds.Contains(p.ParentID)).Select(p=>p.ID.ToString()).OrderBy(x=>x).ToArray();
+  Assert(createdParts.Length==prepared.GetProperty("part_count").GetInt32(),"Committed native part count mismatch");
   Assert(known!=null,"No composed part carries place semantics");
+  var knownPlace=known.GetValueOrDefault();
   Save(new{request=ask,answer=generated.GetProperty("answer").GetString(),stand=new[]{here.X,here.Y,here.Z},plan_id=planId,operation_id=committed.GetProperty("operation_id").GetString(),
     gateway_ms=gatewayMs,prepare_ms=prepareMs,commit_ms=commitMs,placements=parts,objects_before=objectsBefore,objects_after=count,
     summary=prepared.GetProperty("summary").GetString(),steps=prepared.GetProperty("steps").GetArrayLength(),
-    place=known.Value.GetProperty("place").GetProperty("title").GetString(),place_id=known.Value.GetProperty("place").GetProperty("place_id").GetString(),owner=known.Value.GetProperty("owner_id").GetString(),
+    place=knownPlace.GetProperty("place").GetProperty("title").GetString(),place_id=knownPlace.GetProperty("place").GetProperty("place_id").GetString(),owner=knownPlace.GetProperty("owner_id").GetString(),
+    site,part_count=prepared.GetProperty("part_count").GetInt32(),world_spec=generated.GetProperty("world_spec"),world_context=context,
+    udp_created_root_ids=createdRoots.Select(p=>p.ID.ToString()).ToArray(),udp_created_part_ids=createdParts,
+    scene_counts_scope="Raw asynchronously streamed totals; do not interpret their delta as created content.",
     proposal=generated.GetProperty("plan").GetProperty("actions")[0].GetProperty("parameters").GetProperty("provenance")});
-  Console.WriteLine($"CITIZEN_SMOKE compose PASS: '{ask}' -> {parts} placements built ({count-objectsBefore} new objects in UDP); gateway {gatewayMs} ms, prepare {prepareMs} ms, build {commitMs} ms.");
+  Console.WriteLine($"CITIZEN_SMOKE compose PASS: '{ask}' -> {parts} placements, {createdParts.Length} transaction-owned parts in UDP; gateway {gatewayMs} ms, prepare {prepareMs} ms, build {commitMs} ms.");
  }
  else if(args[2]=="compose_undo")
  {
@@ -377,8 +419,9 @@ try
   var undone=await World(new{op="undo",plan_id=receipt.GetProperty("plan_id").GetString()});
   Assert(undone.GetProperty("status").GetString()=="undone","Undo did not complete");
   await Task.Delay(4000);var after=client.Network.CurrentSim.ObjectsPrimitives.Count;
-  Save(new{plan_id=receipt.GetProperty("plan_id").GetString(),undo_operation=undone.GetProperty("operation_id").GetString(),objects_before=before,objects_after=after});
-  Console.WriteLine($"CITIZEN_SMOKE compose_undo PASS: {before} -> {after} objects in UDP.");
+  Save(new{plan_id=receipt.GetProperty("plan_id").GetString(),undo_operation=undone.GetProperty("operation_id").GetString(),objects_before=before,objects_after=after,
+    scene_counts_scope="Raw asynchronously streamed totals; deletion must be checked against this exact plan's IDs."});
+  Console.WriteLine($"CITIZEN_SMOKE compose_undo PASS: the named plan was undone; raw streamed totals {before} -> {after} are not deletion counts.");
  }
  else if(args[2]=="teleport")
  {
@@ -440,7 +483,7 @@ try
   Assert(binding.ValueKind==JsonValueKind.Object&&binding.GetProperty("representation").GetString()=="animated_object","Lumi is not bound to the animated-mesh representation");
   string meshId=binding.GetProperty("mesh_asset_id").GetString()!;
   Assert(animesh&&rootBody!.Sculpt!.SculptTexture.ToString()==meshId,"UDP embodiment does not carry the bound mesh asset");
-  var scale=compiled.GetProperty("scale");Assert(Vector3.Distance(rootBody.Scale,new(scale[0].GetSingle(),scale[1].GetSingle(),scale[2].GetSingle()))<.01f,"UDP scale differs from the compiled domain");
+  var scale=compiled.GetProperty("scale");Assert(Vector3.Distance(rootBody!.Scale,new(scale[0].GetSingle(),scale[1].GetSingle(),scale[2].GetSingle()))<.01f,"UDP scale differs from the compiled domain");
   Assert(viewerAsset.Length>0,"Viewer asset capability missing");
   var meshBytes=await http.GetByteArrayAsync(viewerAsset+"?mesh_id="+meshId);
   string meshHash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(meshBytes)).ToLowerInvariant();
