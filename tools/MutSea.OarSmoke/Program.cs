@@ -46,6 +46,10 @@ try {
     if(!client.Network.Login(a.GetProperty("first_name").GetString(),a.GetProperty("last_name").GetString(),a.GetProperty("password").GetString(),"MutSea.OarSmoke","home","0.1.0"))
         throw new InvalidOperationException("Staging login failed");
     login=true;
+    stage="home_arrival";
+    var loginResponse=client.Network.LoginResponseData;
+    if(loginResponse.StartLocation!="home" || loginResponse.AgentID.ToString()!=a.GetProperty("user_id").GetString())
+        throw new InvalidDataException("Home arrival fell back or changed identity");
     stage="region";
     var handshakeDeadline=DateTime.UtcNow.AddSeconds(10);
     while(client.Network.CurrentSim.RegionID==UUID.Zero && DateTime.UtcNow<handshakeDeadline)Thread.Sleep(100);
@@ -113,7 +117,8 @@ try {
     while(client.Network.Connected && DateTime.UtcNow<logoutDeadline)Thread.Sleep(50);
     logout=!client.Network.Connected;
     var receipt=new {schema_version=1,source_sha256=source.RootElement.GetProperty("source_sha256").GetString(),
-        login,logout,region_id=a.GetProperty("region_id").GetString(),expected_parts=expected.Count,received_parts=prims.Length,
+        login,logout,home_login=true,start_location=loginResponse.StartLocation,
+        region_id=a.GetProperty("region_id").GetString(),expected_parts=expected.Count,received_parts=prims.Length,
         matched_parts=expected.Count-mismatches.Count,all_transforms_verified=mismatches.Count==0,
         mismatch_count=mismatches.Count,mismatches=mismatches.Take(30),texture_ids=textures.OrderBy(x=>x.ToString()).Select(x=>x.ToString()),
         delivered_texture_samples=deliveredTextures,appearance_sent=false,texture_bindings=bindings,
