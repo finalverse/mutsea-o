@@ -120,9 +120,13 @@ try{
   Assert(done.status=="committed"&&done.fingerprints!.Length==4&&pw.Live.Count==4&&!pw.Existing.Contains(retiredId)&&k.Active("mutsea.test.pavilion","0.1.0")!=null);
   Assert(plan.placements.All(p=>p.yaw_degrees==90+p.yaw_degrees-90)&&Math.Abs(plan.placements[0].anchor[1]-103)<1e-9);
   var semantic=JsonSerializer.Serialize(k.Semantic(plan.placements[1].entity_ids[0],operatorId));Assert(semantic.Contains("\"role\":\"lighting\"")&&semantic.Contains("Test Pavilion")&&semantic.Contains("north"));
+  Assert(JsonDocument.Parse(semantic).RootElement.GetProperty("semantic_metadata_available").GetBoolean());
+  k=new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-ok"),region);
+  Assert(JsonSerializer.SerializeToElement(k.Semantic(plan.placements[1].entity_ids[0],operatorId)).GetProperty("semantic_metadata_available").GetBoolean());
   Reject(()=>k.Rollback(Guid.NewGuid().ToString()));
   pw.Live[plan.placements[0].entity_ids[0]]="edited";Reject(()=>k.Rollback(plan.plan_id));pw.Live[plan.placements[0].entity_ids[0]]="fp";
   Assert(k.Rollback(plan.plan_id).status=="rolled_back"&&pw.Live.Count==0&&pw.Existing.Contains(retiredId)&&k.Active("mutsea.test.pavilion","0.1.0")==null);
+  Assert(k.Semantic(plan.placements[1].entity_ids[0],operatorId)==null);
   Assert(!new PlaceKernel(pw,catalog,placeCatalog,Path.Combine(root,"place-ok"),region).RecoveryRequired);
  });
  Test("a failed placement compensates the whole place and restores retirements",()=>{

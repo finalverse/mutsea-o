@@ -39,6 +39,7 @@ bool login=false,logout=false;
 string stage="login";
 var mismatches=new List<string>();
 var textures=new HashSet<UUID>();
+var bindings=new List<object>();
 Primitive[] prims=[];
 int deliveredTextures=0;
 try {
@@ -66,8 +67,17 @@ try {
         if(!streamed.TryGetValue(id,out var prim)){mismatches.Add("missing:"+id);continue;}
         var position=Vector(p,prim.ParentID==0?"position":"offset");
         if(Vector3.Distance(position,prim.Position)>.05f||Vector3.Distance(Vector(p,"scale"),prim.Scale)>.02f)mismatches.Add("transform:"+id);
-        if(prim.Textures?.DefaultTexture!=null)textures.Add(prim.Textures.DefaultTexture.TextureID);
-        if(prim.Textures!=null)foreach(var face in prim.Textures.FaceTextures)if(face!=null)textures.Add(face.TextureID);
+        void Binding(Primitive.TextureEntryFace face,int index)
+        {
+            textures.Add(face.TextureID);
+            bindings.Add(new {entity_id=id.ToString(),source_entity_id=p.GetProperty("source_id").GetString(),
+                name=p.GetProperty("name").GetString(),face=index,texture_id=face.TextureID.ToString(),
+                rgba=new[]{face.RGBA.R,face.RGBA.G,face.RGBA.B,face.RGBA.A},
+                declared_binding=true});
+        }
+        if(prim.Textures?.DefaultTexture!=null)Binding(prim.Textures.DefaultTexture,-1);
+        if(prim.Textures!=null)for(int face=0;face<prim.Textures.FaceTextures.Length;face++)
+            if(prim.Textures.FaceTextures[face] is {} value)Binding(value,face);
     }
     stage="texture_delivery";
     var capDeadline=DateTime.UtcNow.AddSeconds(10);
@@ -106,7 +116,8 @@ try {
         login,logout,region_id=a.GetProperty("region_id").GetString(),expected_parts=expected.Count,received_parts=prims.Length,
         matched_parts=expected.Count-mismatches.Count,all_transforms_verified=mismatches.Count==0,
         mismatch_count=mismatches.Count,mismatches=mismatches.Take(30),texture_ids=textures.OrderBy(x=>x.ToString()).Select(x=>x.ToString()),
-        delivered_texture_samples=deliveredTextures,appearance_sent=false};
+        delivered_texture_samples=deliveredTextures,appearance_sent=false,texture_bindings=bindings,
+        texture_dependency_scope="Declared defaults and overrides; face visibility and rendered topology are not inferred."};
     using var outFile=new FileStream(output,FileMode.CreateNew,FileAccess.Write,FileShare.None);
     if(!OperatingSystem.IsWindows())File.SetUnixFileMode(output,UnixFileMode.UserRead|UnixFileMode.UserWrite);
     JsonSerializer.Serialize(outFile,receipt,new JsonSerializerOptions{WriteIndented=true});

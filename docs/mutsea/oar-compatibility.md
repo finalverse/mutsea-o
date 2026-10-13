@@ -89,4 +89,8 @@ At the owner's request, the script-free derivative (`openvce-passive-v010-releas
 - **Rollback.**
   1. Stop the simulator and remove `Regions/OpenVCE.ini`.
   2. Restore `before-openvce-all.sql` (private `openvce-region-20261010/`), or delete the region's rows.
-  3. Restart the `…-pre-openvce` container.
+  3. Restore the matching simulator runtime/configuration from the private recovery set. The former `…-pre-openvce` container was retired during the owner's 2026-10-13 cleanup; it is no longer a runnable rollback target. The active Harbor/OpenVCE PostgreSQL database was retained.
+
+## Tropical dependency curation — 2026-10-13
+
+The separate Tropical fixture retains the passive OAR import and reserved opaque-white texture alias. Its two absent source texture references were isolated to one fire-pit group and replaced with an original, versioned Starter Library asset through the existing PlaceKernel snapshot/commit/rollback path. Full rollback and clean restart passed, with the other 1,431 inherited parts unchanged and all 182 current declared texture IDs resolving. See [Tropical curation](tropical-curation.md) for exact scope, source/compiler evidence and remaining native visual, collision, performance and redistribution gates. Neither Harbor nor its user-created objects were changed by this curation.

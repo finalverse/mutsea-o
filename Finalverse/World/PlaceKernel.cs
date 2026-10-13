@@ -208,7 +208,7 @@ public sealed class PlaceKernel
             var source=e.plan.place.placements[i];var part=placement.package.parts[Array.IndexOf(placement.entity_ids,id)];var metadata=part.semantics;
             var relationships=(metadata?.relationships??[]).Select(r=>new{r.type,target=placement.entity_ids[Array.FindIndex(placement.package.parts,p=>p.local_id==r.target)]}).ToArray();
             return new{entity_id=id,structure_id=placement.entity_ids[0],part.local_id,part.semantic_type,part.description,tags=metadata?.tags??[],affordances=metadata?.affordances??[],relationships,seat=part.seat,light=part.light,
-                package_id=placement.package.package_id,package_version=placement.package.version,placement.package.manifest_sha256,license=placement.package.license,
+                semantic_metadata_available=metadata!=null,package_id=placement.package.package_id,package_version=placement.package.version,placement.package.manifest_sha256,license=placement.package.license,
                 place=new{e.plan.place.place_id,e.plan.place.version,e.plan.place.title,e.plan.place.description,e.plan.place.tags,e.plan.place.affordances,placement=source.local_id,source.role,
                     entrances=e.plan.place.entrances.Select(x=>new{x.local_id,position=e.plan.anchor.Zip(Rotate(x.position,e.plan.yaw_degrees),(a,o)=>a+o).ToArray(),yaw_degrees=e.plan.yaw_degrees+x.yaw_degrees}).ToArray(),
                     manifest_sha256=e.plan.place.manifest_sha256,operation_id=e.operation_id},
