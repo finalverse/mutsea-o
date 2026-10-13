@@ -20,6 +20,7 @@ public sealed partial class WorldModule
     CitizenNavigation? navigation;
     readonly Dictionary<string,JsonElement> citizenReceipts=new();
     readonly HashSet<string> citizenIntents=new(),gardenPlans=new(),gardenCommits=new();
+    readonly HashSet<string> citizenPlacePlans=new(),citizenPlaceCommits=new();
     DateTimeOffset lease,lastTick=DateTimeOffset.UtcNow,lastBackup=DateTimeOffset.UtcNow;
     static readonly HttpClient runtimeHttp=new(new HttpClientHandler {UseProxy=false}) {Timeout=TimeSpan.FromSeconds(100)};
     void InitialiseCitizen(IConfigSource source)
@@ -46,6 +47,11 @@ public sealed partial class WorldModule
             if(record.GetProperty("kind").GetString()=="result")
             {
                 var result=record.GetProperty("result").Clone();citizenReceipts[action]=result;
+                if(result.TryGetProperty("citizen_tool",out var tool)&&result.TryGetProperty("plan_id",out var placeId))
+                {
+                    if(tool.GetString()=="prepare_place")citizenPlacePlans.Add(placeId.GetString()!);
+                    if(tool.GetString()=="commit_place"&&result.TryGetProperty("status",out var state)&&state.GetString()=="committed")citizenPlaceCommits.Add(placeId.GetString()!);
+                }
                 if(result.TryGetProperty("plan_id",out var plan)&&result.TryGetProperty("proposal",out var proposal)&&proposal.TryGetProperty("model",out var model)&&model.GetString()=="garden-v1")
                 {gardenPlans.Add(plan.GetString()!);if(result.TryGetProperty("status",out var status)&&status.GetString()=="committed")gardenCommits.Add(plan.GetString()!);}
             }
@@ -110,7 +116,7 @@ public sealed partial class WorldModule
     object CitizenTool(JsonElement data)
     {
         string op=data.GetProperty("op").GetString()!;
-        if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden"))throw new InvalidDataException("Tool capability denied.");
+        if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden" or "prepare_place" or "commit_place" or "undo_place"))throw new InvalidDataException("Tool capability denied.");
         lease=DateTimeOffset.UtcNow;
         if(!representationReady)throw new InvalidDataException("Citizen embodiment is still loading.");
         if(op=="observe")return ObserveCitizen();
@@ -121,6 +127,8 @@ public sealed partial class WorldModule
         if(citizenIntents.Contains(action))throw new InvalidDataException("Tool has an unresolved durable intent; do not replay uncertain actions.");
         if(op=="commit_garden"&&!gardenPlans.Contains(data.GetProperty("plan_id").GetString()!))throw new InvalidDataException("Only this citizen's approved garden plans are allowed.");
         if(op=="undo_garden"&&!gardenCommits.Contains(data.GetProperty("plan_id").GetString()!))throw new InvalidDataException("Only this citizen's committed garden can be undone.");
+        if(op=="commit_place"&&!citizenPlacePlans.Contains(data.GetProperty("plan_id").GetString()!))throw new InvalidDataException("Only this citizen's prepared places can be approved.");
+        if(op=="undo_place"&&!citizenPlaceCommits.Contains(data.GetProperty("plan_id").GetString()!))throw new InvalidDataException("Only this citizen's committed places can be undone.");
         RecordCitizen(action,"intent",new{op});citizenIntents.Add(action);object result;
         try
         {
@@ -129,12 +137,34 @@ public sealed partial class WorldModule
                 "speak"=>SpeakCitizen(data.GetProperty("text").GetString()!),
                 "prepare_garden"=>PrepareGarden(),"commit_garden"=>kernel.Commit(data.GetProperty("plan_id").GetString()!,citizenOwner),
                 "undo_garden"=>kernel.Undo(data.GetProperty("plan_id").GetString()!,citizenOwner),
+                "prepare_place"=>PrepareCitizenPlace(data.GetProperty("plan")),
+                "commit_place"=>ComposeCommit(data.GetProperty("plan_id").GetString()!,citizenOwner),
+                "undo_place"=>ComposeUndo(data.GetProperty("plan_id").GetString()!,citizenOwner),
                 _=>throw new InvalidDataException("Tool capability denied.")};
         }
         catch(Exception ex){log.Warn(JsonSerializer.Serialize(new{@event="citizen_tool_failed",op,exception_type=ex.GetType().Name,stack=ex.StackTrace}));result=new{status="blocked",error=ex is InvalidDataException?ex.Message:"Citizen execution failed."};}
         if(result is Prepared prepared)gardenPlans.Add(prepared.plan_id);
         if(result is Entry {status:"committed"} entry)gardenCommits.Add(entry.plan_id);
+        if(op is "prepare_place" or "commit_place" or "undo_place")
+        {
+            var node=System.Text.Json.Nodes.JsonNode.Parse(JsonSerializer.Serialize(result))!.AsObject();
+            node["citizen_tool"]=op;
+            if(node["plan_id"] is {} id)
+            {
+                if(op=="prepare_place")citizenPlacePlans.Add(id.GetValue<string>());
+                if(op=="commit_place"&&node["status"]?.GetValue<string>()=="committed")citizenPlaceCommits.Add(id.GetValue<string>());
+            }
+            result=JsonSerializer.SerializeToElement(node);
+        }
         RecordCitizen(action,"result",result);citizenReceipts[action]=JsonSerializer.SerializeToElement(result);return result;
+    }
+    object PrepareCitizenPlace(JsonElement value)
+    {
+        var plan=value.Deserialize<Plan>(Kernel.Json)!;
+        ContentCatalog.Require(plan!=null&&IsComposition(plan),"Lumi can propose only a bounded composed place.");
+        var preview=JsonSerializer.SerializeToElement(ComposePrepare(plan!,citizenOwner));
+        ContentCatalog.Require(preview.GetProperty("part_count").GetInt32() is >0 and <=192,"This creation exceeds Lumi's 192-part co-building budget. Try a smaller recipe.");
+        return preview;
     }
     void RecordCitizen(string action,string kind,object result)
     {

@@ -111,11 +111,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                         "content_commit"=>content!.Commit(data.GetProperty("plan_id").GetString()!,actor),
                         "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),
                         "content_history"=>content!.History(actor),
-                        "inspect"=>kernel.Inspect(actor,data.TryGetProperty("selected_id",out var selected)&&selected.ValueKind==JsonValueKind.String?selected.GetString():null),
+                        "inspect"=>HumanInspect(actor,data.TryGetProperty("selected_id",out var selected)&&selected.ValueKind==JsonValueKind.String?selected.GetString():null),
                         "prepare"=>data.GetProperty("plan").Deserialize<Plan>(Kernel.Json)! is var proposal&&IsComposition(proposal)?ComposePrepare(proposal,actor):kernel.Prepare(proposal,actor),
                         "commit"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeCommit(data.GetProperty("plan_id").GetString()!,actor):kernel.Commit(data.GetProperty("plan_id").GetString()!,actor),
                         "undo"=>ComposedPlan(data.GetProperty("plan_id").GetString()!)?ComposeUndo(data.GetProperty("plan_id").GetString()!,actor):kernel.Undo(data.GetProperty("plan_id").GetString()!,actor),
-                        "journal"=>kernel.History(actor), "lumi"=>kernel.Lumi(actor),
+                        "journal"=>HumanHistory(actor), "lumi"=>kernel.Lumi(actor),
                         "semantic"=>kernel.Semantic(data.GetProperty("entity_id").GetString()!,actor)??new { found=false },
                         _=>throw new InvalidDataException("Unknown World API operation.")};
                     output=result;

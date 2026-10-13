@@ -16,7 +16,8 @@ public sealed partial class WorldModule
 {
     bool composerEnabled;readonly HashSet<string> composerRegions=new();
     PlaceKernel? composerPlaces;
-    readonly Dictionary<string,(PlacePlan plan,DateTimeOffset expires)> composerPending=new();
+    ContentCatalog? composerCatalog;
+    readonly Dictionary<string,(PlacePlan plan,DateTimeOffset expires,string rule)> composerPending=new();
     const int MaxComposedPerHour=12;
 
     void InitialiseComposer(IConfigSource source)
@@ -34,11 +35,24 @@ public sealed partial class WorldModule
     void StartComposer(ContentCatalog catalog)
     {
         if(!composerEnabled||!composerRegions.Contains(RegionId.ToLowerInvariant()))return;
+        composerCatalog=catalog;
         composerPlaces=places??new PlaceKernel(this,catalog,new PlaceCatalog("",catalog),directory,RegionId);
     }
 
     static bool IsComposition(Plan proposal)=>proposal.actions is [{type:"compose_place"}];
     bool ComposedPlan(string planId)=>composerPending.ContainsKey(planId)||composerPlaces?.Entries.Any(e=>e.plan.plan_id==planId)==true;
+
+    object HumanInspect(string actor,string? selected)
+    {
+        var result=JsonSerializer.SerializeToNode(kernel.Inspect(actor,selected),Kernel.Json)!;
+        string? previous=result["undoable_plan_id"]?.GetValue<string>();
+        var timestamp=kernel.History(actor).LastOrDefault(e=>e.plan_id==previous&&e.status=="committed")?.timestamp??DateTimeOffset.MinValue;
+        var latest=ComposerAudit.LatestPlace(composerPlaces?.Entries??[],actor,timestamp);
+        if(latest!=null)result["undoable_plan_id"]=latest;
+        return result;
+    }
+
+    object HumanHistory(string actor)=>ComposerAudit.History(kernel.History(actor),composerPlaces?.Entries??[],actor);
 
     object ComposePrepare(Plan proposal,string actor)
     {
@@ -46,7 +60,8 @@ public sealed partial class WorldModule
         ContentCatalog.Require(proposal.schema_version==1&&proposal.request?.Length is >0 and <=2048&&proposal.provider?.Length is >0 and <=80&&proposal.model?.Length is >0 and <=120,"Invalid request or provenance.");
         var p=proposal.actions[0].parameters;
         ContentCatalog.Require(proposal.actions[0].target_id==null&&p.ValueKind==JsonValueKind.Object&&p.EnumerateObject().All(x=>x.Name is "draft" or "site" or "provenance"),"A composition carries only a draft, a site rule and provenance.");
-        ContentCatalog.Require(!p.TryGetProperty("site",out var site)||site.GetString()=="in_front_of_actor","Composed places are sited in front of you.");
+        string rule=p.TryGetProperty("site",out var site)?site.GetString()??"":"in_front_of_actor";
+        ContentCatalog.Require(rule is "in_front_of_actor" or "near_actor" or "near_water","Unsupported place siting rule.");
         var since=DateTimeOffset.UtcNow.AddHours(-1);
         ContentCatalog.Require(composerPlaces!.Entries.Count(e=>e.status=="committed"&&e.plan.actor_id==actor&&e.timestamp>since)<MaxComposedPerHour,"You have built many places this hour. Undo one or try later.");
         var draft=JsonSerializer.Deserialize<PlaceTemplate>(p.GetProperty("draft").GetRawText(),ContentCatalog.Json)!;
@@ -55,30 +70,20 @@ public sealed partial class WorldModule
         ContentCatalog.Require(slug.Length is >0 and <=40&&slug.All(ch=>ch is >='a' and <='z' or >='0' and <='9' or '-'),"Invalid place name.");
         draft=draft with{place_id="user."+actor.Replace("-","")[..8]+"."+slug,version="0.1."+DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmss")};
 
-        // Site: the entrance faces the person, the place starts just beyond them, on their ground.
-        var at=Avatar(actor);var q=Orientation(actor);
-        double heading=Math.Atan2(2*(q[3]*q[2]+q[0]*q[1]),1-2*(q[1]*q[1]+q[2]*q[2]));
-        var entrance=draft.entrances.FirstOrDefault()?.position??[0,-draft.half_extent[1]-1,0];
-        double toward=Math.Atan2(entrance[1],entrance[0]);
-        double yaw=Math.Atan2(-Math.Sin(heading),-Math.Cos(heading))-toward;
-        double distance=Math.Sqrt(entrance[0]*entrance[0]+entrance[1]*entrance[1])+1.0;
-        double cx=at[0]+distance*Math.Cos(heading),cy=at[1]+distance*Math.Sin(heading);
-        double yawDegrees=Math.Round(Math.IEEERemainder(yaw*180/Math.PI,360),4);
-        var anchor=new[]{Math.Round(cx,3),Math.Round(cy,3),Math.Round(Height(cx,cy),3)};
-        // Level ground across the footprint: parts sit on the anchor plane.
-        double a=yaw,hx=draft.half_extent[0],hy=draft.half_extent[1];
-        foreach(var (u,v) in new[]{(-1d,-1d),(1d,-1d),(-1d,1d),(1d,1d),(0d,-1d),(0d,1d),(-1d,0d),(1d,0d)})
+        PlaceCatalog.Validate(draft,composerCatalog!);
+        PlacePlan? proposed=null;ComposeSite? chosen=null;
+        foreach(var candidate in ComposerSiting.Candidates(this,draft,actor,rule))
         {
-            double px=cx+u*hx*Math.Cos(a)-v*hy*Math.Sin(a),py=cy+u*hx*Math.Sin(a)+v*hy*Math.Cos(a);
-            if(px<=1||py<=1||px>=SizeX-1||py>=SizeY-1)throw new InvalidDataException("The place would cross the region boundary. Turn or move and try again.");
-            ContentCatalog.Require(Math.Abs(Height(px,py)-anchor[2])<=.6,"The ground here is not level enough for this place. Try flatter ground.");
+            try { lock(gate)proposed=composerPlaces.PlanDraft(draft,candidate.anchor,candidate.yaw_degrees,actor);chosen=candidate;break; }
+            catch(InvalidDataException) { if(composerPlaces.RecoveryRequired)throw; }
         }
-        PlacePlan plan;
-        lock(gate)plan=composerPlaces.PlanDraft(draft,anchor,yawDegrees,actor);
+        ContentCatalog.Require(proposed!=null,rule=="near_water"?"No clear, level and permitted shoreline site was found nearby. Move closer to water and try again.":"No clear, level and permitted site was found nearby. Move or turn and try again.");
+        var plan=proposed!;var anchor=chosen!.anchor;var yawDegrees=chosen.yaw_degrees;
+        string siting=rule=="near_water"?"On dry ground near water verified from the region terrain.":rule=="near_actor"?"On clear, level ground nearby.":"On clear ground in front of you.";
         foreach(var stale in composerPending.Where(x=>x.Value.expires<=DateTimeOffset.UtcNow||x.Value.plan.actor_id==actor).Select(x=>x.Key).ToArray())composerPending.Remove(stale);
         ContentCatalog.Require(composerPending.Count<64,"Too many pending compositions. Try again shortly.");
         var expires=DateTimeOffset.UtcNow.AddMinutes(2);
-        composerPending[plan.plan_id]=(plan,expires);
+        composerPending[plan.plan_id]=(plan,expires,rule);
 
         // One preview line per kind of piece; the viewer shows the first six.
         var steps=plan.placements.Select((c,i)=>(c,role:plan.place.placements[i].role)).GroupBy(x=>(x.c.package.package_id,x.role))
@@ -86,18 +91,21 @@ public sealed partial class WorldModule
             .Select(g=>{var first=g.First().c;var title=first.package.title;
                 return new{type="create",id=plan.plan_id,before=(object?)null,after=new{id=first.entity_ids[0],name=(g.Count()>1?g.Count()+" × ":"")+title+" ("+g.Key.role+")",
                     position=first.anchor,rotation=new[]{0d,0,Math.Sin(first.yaw_degrees*Math.PI/360),Math.Cos(first.yaw_degrees*Math.PI/360)},
-                    scale=new[]{1d,1,1},color=new[]{1d,1,1,1}}};}).ToArray();
+                    color=new[]{1d,1,1,1}}};}).ToArray();
         string adjustments="";
         if(p.TryGetProperty("provenance",out var prov)&&prov.ValueKind==JsonValueKind.Object&&prov.TryGetProperty("adjustments",out var adj)&&adj.ValueKind==JsonValueKind.Array)
             adjustments=string.Join(" ",adj.EnumerateArray().Take(6).Select(x=>x.TryGetProperty("reason",out var r)&&r.ValueKind==JsonValueKind.String?"Changed: "+r.GetString()+".":""));
         var summary=(plan.place.title+" — "+plan.place.description+" "+adjustments).Trim()+$" {plan.placements.Length} pieces, built as yours; Undo removes them all.";
         log.Info(JsonSerializer.Serialize(new{@event="composition_prepared",plan.plan_id,actor_id=actor,place_id=plan.place.place_id,placements=plan.placements.Length,anchor,yaw_degrees=yawDegrees,proposal.model}));
-        return new{plan_id=plan.plan_id,actor_id=actor,expires_at=expires,proposal,steps,scene_revision="composition",summary};
+        return new{plan_id=plan.plan_id,actor_id=actor,expires_at=expires,proposal,steps,scene_revision="composition",summary,siting,
+            part_count=plan.placements.Sum(p=>p.package.parts.Length),site=new{rule,anchor,yaw_degrees=yawDegrees,water_distance=chosen.water_distance}};
     }
 
     object ComposeCommit(string planId,string actor)
     {
         ContentCatalog.Require(composerPending.TryGetValue(planId,out var pending)&&pending.plan.actor_id==actor&&pending.expires>DateTimeOffset.UtcNow,"Approval is missing, expired or belongs to another session.");
+        ContentCatalog.Require(ComposerSiting.Fits(this,pending.plan.place,pending.plan.anchor,pending.plan.yaw_degrees)
+            &&(pending.rule!="near_water"||ComposerSiting.WaterDistance(this,pending.plan.anchor)!=null),"The approved terrain or shoreline changed. Preview again before building.");
         composerPending.Remove(planId);
         PlaceEntry entry;
         lock(gate)entry=composerPlaces!.Provision(pending.plan);

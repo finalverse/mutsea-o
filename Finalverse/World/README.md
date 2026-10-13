@@ -317,3 +317,11 @@ Regions = <region UUID>[,<region UUID>...]
 - **Limits.** At most 12 compositions per person per hour, and 64 pending previews. The relay body limit is now 64 KB, so the largest drafts fit.
 
 Composed places get place semantics like any other: the World relay's `semantic` op returns their title, roles and entrances.
+
+## Grounded compositions and citizen tools
+
+ComposerSiting evaluates at most32 nearby candidates against native height/water data, then the existing PlaceKernel checks full object footprints and parcel rights. near_water requires actual submerged terrain within12m; decorative mesh water and names are not shoreline evidence. Commit revalidates the exact approved site. Original in_front_of_actor recipes retain their one forward candidate. Failed searches mutate nothing.
+
+Prepare reports the actual part_count and a human siting rationale. Human inspection/history joins bounded summaries from existing action/place journals, allowing Undo recovery after viewer restart. It does not create another persistence store. `prepare_place`, `commit_place` and `undo_place` are restricted citizen tools over this same executor. The bridge tracks the configured citizen/controller's own prepared and committed IDs and restores those sets from its existing journal. Human approval and the Rust runtime's192-part/180-second goal budget remain mandatory.
+
+`tools/MutSea.ComposerTests` tests deterministic/wet/dry/steep/edge/changed-ground rules and owned journal/Undo selection. With only .NET10 installed, run net8 tools using DOTNET_ROLL_FORWARD=Major. `tools/Finalverse.CitizenSmoke` co_build_verify and co_build_undo_verify take a fourth private committed-place JSON receipt and are read-only; use the separately built portable OpenMetaverse SDK.

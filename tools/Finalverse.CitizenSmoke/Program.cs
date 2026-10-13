@@ -5,7 +5,7 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer" or "compose" or "compose_undo")||(args[2] is "animesh" or "wearer")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer|compose|compose_undo | animesh|wearer compiled.json");return 2;}
+if(args.Length is not (3 or 4)||args[2] is not ("observe" or "questions" or "navigate" or "verify" or "garden_verify" or "garden_undo_verify" or "animesh" or "displace" or "greet" or "animwatch" or "teleport" or "wearer" or "semantic" or "hold" or "restyle" or "newcomer" or "compose" or "compose_undo" or "co_build_verify" or "co_build_undo_verify")||(args[2] is "animesh" or "wearer" or "co_build_verify" or "co_build_undo_verify")!=(args.Length==4)){Console.Error.WriteLine("Usage: CitizenSmoke private-account.json receipt.json observe|questions|navigate|verify|garden_verify|garden_undo_verify|displace|greet|animwatch|teleport|semantic|hold|restyle|newcomer|compose|compose_undo | animesh|wearer compiled.json | co_build_verify|co_build_undo_verify committed-place.json");return 2;}
 var account=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;var client=new GridClient();
 client.Settings.LOGIN_SERVER=account.GetProperty("grid_url").GetString();client.Settings.ALWAYS_DECODE_OBJECTS=true;client.Settings.OBJECT_TRACKING=true;client.Settings.SEND_AGENT_UPDATES=true;client.Settings.SEND_AGENT_APPEARANCE=false;client.Settings.MULTIPLE_SIMS=false;
 using var http=new HttpClient(new HttpClientHandler{AllowAutoRedirect=false}) {Timeout=TimeSpan.FromSeconds(110)};string cap="",viewerAsset="";UUID lumi=new("b151468b-cbcc-4af2-ae2d-6967e8938bb4");
@@ -272,6 +272,53 @@ try
   Save(new{account=client.Self.Name,total_seconds=Math.Round(total,1),budget_seconds=300,milestones});
   Assert(total<=300,"The newcomer path exceeded five minutes");
   Console.WriteLine($"CITIZEN_SMOKE newcomer PASS: {milestones.Count} milestones in {total:F1}s (budget 300s).");
+ }
+ else if(args[2] is "co_build_verify" or "co_build_undo_verify")
+ {
+  // Read-only acceptance of a specific UI-approved place, before/after restart or Undo.
+  var f=new FileInfo(args[3]);Assert(f.Exists&&f.Length is >0 and <=8388608&&(f.Attributes&FileAttributes.ReparsePoint)==0,"Expected a bounded committed-place receipt");
+  Assert(!File.Exists(args[1]),"Receipt output must be new");
+  var entry=JsonDocument.Parse(File.ReadAllText(args[3])).RootElement;var plan=entry.GetProperty("plan");
+  string id=plan.GetProperty("plan_id").GetString()!;
+  Assert(entry.GetProperty("status").GetString()=="committed"&&plan.GetProperty("actor_id").GetString()==client.Self.AgentID.ToString(),"Place receipt must be a committed operation owned by this controller");
+  Assert(client.Network.CurrentSim.RegionID.ToString()==account.GetProperty("region_id").GetString(),"Wrong native region");
+  bool exists=args[2]=="co_build_verify";
+  string? goalId=entry.TryGetProperty("agent_goal_id",out var pinnedGoal)?pinnedGoal.GetString():null;
+  Assert(exists||!string.IsNullOrEmpty(goalId),"Undo verification requires the pinned original goal ID");
+  var goal=state.GetProperty("citizen").GetProperty("goals").EnumerateArray().Single(g=>g.GetProperty("kind").GetString()=="compose_place"&&(goalId!=null?g.GetProperty("goal_id").GetString()==goalId:g.GetProperty("plan_id").GetString()==id));
+  Assert(goal.GetProperty("status").GetString()=="completed"&&(exists?goal.GetProperty("plan_id").GetString()==id:goal.GetProperty("plan_id").ValueKind==JsonValueKind.Null),"Citizen completion/Undo state mismatch");
+  var all=plan.GetProperty("placements").EnumerateArray().ToArray();
+  var ids=all.SelectMany(p=>p.GetProperty("entity_ids").EnumerateArray().Select(e=>new UUID(e.GetString()))).ToArray();
+  Assert(ids.Length is >0 and <=192&&ids.Distinct().Count()==ids.Length,"Part budget/identity mismatch");
+  deadline=DateTime.UtcNow.AddSeconds(20);
+  while(DateTime.UtcNow<deadline){var stream=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.Select(p=>p.ID).ToHashSet();if(exists?ids.All(stream.Contains):ids.All(i=>!stream.Contains(i)))break;await Task.Delay(200);}
+  var observed=client.Network.CurrentSim.ObjectsPrimitives.Copy().Values.ToDictionary(p=>p.ID);
+  Assert(exists?ids.All(observed.ContainsKey):ids.All(i=>!observed.ContainsKey(i)),"Native part existence mismatch");
+  int checkedParts=0;
+  if(exists)foreach(var placement in all)
+  {
+   var anchor=placement.GetProperty("anchor");var yaw=Quaternion.CreateFromAxisAngle(Vector3.UnitZ,(float)(placement.GetProperty("yaw_degrees").GetDouble()*Math.PI/180));
+   Vector3 V(JsonElement v)=>new(v[0].GetSingle(),v[1].GetSingle(),v[2].GetSingle());
+   Quaternion Q(JsonElement v)=>new(v[0].GetSingle(),v[1].GetSingle(),v[2].GetSingle(),v[3].GetSingle());
+   var parts=placement.GetProperty("package").GetProperty("parts");var entityIds=placement.GetProperty("entity_ids");
+   var rootPos=V(anchor)+V(parts[0].GetProperty("position"))*yaw;var rootRot=Q(parts[0].GetProperty("rotation"))*yaw;
+   var root=observed[new UUID(entityIds[0].GetString())];
+   for(int i=0;i<parts.GetArrayLength();i++)
+   {
+    var part=parts[i];var uid=new UUID(entityIds[i].GetString());var native=observed[uid];
+    var worldPos=V(anchor)+V(part.GetProperty("position"))*yaw;
+    var expected=i==0?rootPos:(worldPos-rootPos)*Quaternion.Inverse(rootRot);
+    Assert(Vector3.Distance(native.Position,expected)<.025f&&Vector3.Distance(native.Scale,V(part.GetProperty("scale")))<.025f,"Native part transform mismatch");
+    Assert(i==0?native.ParentID==0:native.ParentID==root.LocalID,"Native link identity mismatch");
+    var semantic=await World(new{op="semantic",entity_id=uid.ToString()});
+    Assert(semantic.GetProperty("owner_id").GetString()==client.Self.AgentID.ToString()&&semantic.GetProperty("place").GetProperty("title").GetString()==plan.GetProperty("place").GetProperty("title").GetString(),"Native ownership/place semantics mismatch");
+    checkedParts++;
+   }
+  }
+  var history=await World(new{op="journal"});
+  Assert(history.EnumerateArray().Any(e=>e.GetProperty("plan_id").GetString()==id&&e.GetProperty("status").GetString()==(exists?"committed":"undone")),"Human WorldLine mismatch");
+  Save(new{plan_id=id,part_count=ids.Length,checked_parts=checkedParts,parts_present=exists,udp_components=components,state,history});
+  Console.WriteLine($"CITIZEN_SMOKE {args[2]} PASS: {ids.Length} actual part identities, {checkedParts} transforms/ownership/semantics, durable goal/memory and WorldLine; no mutation requested.");
  }
  else if(args[2]=="compose")
  {
