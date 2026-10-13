@@ -12,3 +12,5 @@ Server baseline: `13c546ce413e49e957e387547d97e79800cf33ca`. New tools and deplo
 
 - [Phase 4B bounded Starter Library runtime import](content-import.md)
 - [Phase 4B passive OAR compatibility](oar-compatibility.md): bounded quarantine, isolated PostgreSQL restore, native delivery and restart evidence.
+- [Original WorldTemplate provisioning](world-template-provisioning.md): reusable island content, native rollback postconditions, semantic world provenance and safe missing-home provisioning.
+- [Original island native acceptance](original-island-acceptance.md): isolated first-session, restart, rollback and reprovision evidence; product gates remain open.

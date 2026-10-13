@@ -75,12 +75,36 @@ public sealed partial class WorldModule : IWorldTemplateRegion
     PlaceKernel IWorldTemplateRegion.Places=>worldPlaces??throw new InvalidDataException("World places are unavailable.");
     string IWorldTemplateRegion.Operator=>PlaceOperator;
     bool IWorldTemplateRegion.IsEmpty()=>!scene.GetSceneObjectGroups().Any(g=>!g.IsDeleted&&!g.IsAttachment);
+    bool IWorldTemplateRegion.IsEmptyExcept(string[] rootIds)
+    {
+        var allowed=rootIds.ToHashSet(StringComparer.Ordinal);
+        return !scene.GetSceneObjectGroups().Any(g=>!g.IsDeleted&&!g.IsAttachment&&!allowed.Contains(g.UUID.ToString()));
+    }
     double IWorldTemplateRegion.Ground(double x,double y)=>Height(x,y);
+    string IWorldTemplateRegion.TerrainHashFormat=>"mutsea-variable2dgzip-r32-v1";
+    string IWorldTemplateRegion.TerrainHash()
+    {
+        // TerrainData's inherited Variable2DGzip serializer rounds heights to
+        // 3 decimals. Fingerprint the exact persisted representation through
+        // its own roundtrip, not raw source floats or an invented tolerance.
+        var terrain=scene.Heightmap.GetTerrainData();
+        ContentCatalog.Require(terrain.GetDatabaseBlob(out var revision,out var blob)&&blob is byte[],"Native terrain serialization failed.");
+        var persisted=MutSea.Framework.TerrainData.CreateFromDatabaseBlobFactory((int)SizeX,(int)SizeY,(int)MutSea.Framework.Constants.RegionHeight,revision,(byte[])blob);
+        ContentCatalog.Require(persisted!=null,"Native terrain roundtrip failed.");
+        var values=persisted!.GetFloatsSerialized();var bytes=new byte[values.Length*4];
+        for(int i=0;i<values.Length;i++)BitConverter.GetBytes(values[i]).CopyTo(bytes,i*4);
+        return ContentCatalog.Hash(bytes);
+    }
     string IWorldTemplateRegion.SnapshotTerrain(string path){SaveR32(path);return ContentCatalog.Hash(File.ReadAllBytes(path));}
-    void SaveR32(string path)
+    byte[] TerrainBytes()
     {
         int w=(int)SizeX,h=(int)SizeY;var bytes=new byte[w*h*4];
         for(int y=0;y<h;y++)for(int x=0;x<w;x++)BitConverter.GetBytes(scene.Heightmap[x,y]).CopyTo(bytes,(y*w+x)*4);
+        return bytes;
+    }
+    void SaveR32(string path)
+    {
+        var bytes=TerrainBytes();
         using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write)){f.Write(bytes);f.Flush(true);}
         if(!OperatingSystem.IsWindows())File.SetUnixFileMode(path,UnixFileMode.UserRead|UnixFileMode.UserWrite);
     }
@@ -93,11 +117,36 @@ public sealed partial class WorldModule : IWorldTemplateRegion
     void IWorldTemplateRegion.SetWaterHeight(double height){scene.RegionInfo.RegionSettings.WaterHeight=height;scene.RegionInfo.RegionSettings.Save();}
     void IWorldTemplateRegion.SetLanding(double[] position,double[] lookAt)
     {
-        var land=scene.LandChannel?.GetLandObject((float)position[0],(float)position[1]);if(land==null)return;
-        land.LandData.UserLocation=new Vector3((float)position[0],(float)position[1],(float)position[2]);
+        var land=scene.LandChannel?.GetLandObject((float)position[0],(float)position[1]);
+        ContentCatalog.Require(land!=null,"World landing parcel is unavailable.");
+        land!.LandData.UserLocation=new Vector3((float)position[0],(float)position[1],(float)position[2]);
         var facing=new Vector3((float)(lookAt[0]-position[0]),(float)(lookAt[1]-position[1]),0);
         land.LandData.UserLookAt=Vector3.Normalize(in facing);
         land.LandData.LandingType=(byte)LandingType.LandingPoint;
+        scene.SimulationDataService.StoreLandObject(land);
+    }
+
+    WorldLanding IWorldTemplateRegion.CaptureLanding(double[] position)
+    {
+        var land=scene.LandChannel?.GetLandObject((float)position[0],(float)position[1]);
+        ContentCatalog.Require(land!=null,"World landing parcel is unavailable.");
+        return Landing(land!.LandData);
+    }
+    static WorldLanding Landing(MutSea.Framework.LandData land)=>new(land.GlobalID.ToString(),
+        [land.UserLocation.X,land.UserLocation.Y,land.UserLocation.Z],
+        [land.UserLookAt.X,land.UserLookAt.Y,land.UserLookAt.Z],land.LandingType);
+    bool IWorldTemplateRegion.MatchesLanding(WorldLanding expected)
+    {
+        var land=scene.LandChannel?.AllParcels().SingleOrDefault(p=>p.LandData.GlobalID.ToString()==expected.parcel_id);
+        return land!=null&&JsonSerializer.Serialize(Landing(land.LandData))==JsonSerializer.Serialize(expected);
+    }
+    void IWorldTemplateRegion.RestoreLanding(WorldLanding before)
+    {
+        var land=scene.LandChannel?.AllParcels().SingleOrDefault(p=>p.LandData.GlobalID.ToString()==before.parcel_id);
+        ContentCatalog.Require(land!=null,"Original landing parcel is unavailable.");
+        land!.LandData.UserLocation=new Vector3((float)before.position[0],(float)before.position[1],(float)before.position[2]);
+        land.LandData.UserLookAt=new Vector3((float)before.look_at[0],(float)before.look_at[1],(float)before.look_at[2]);
+        land.LandData.LandingType=before.landing_type;
         scene.SimulationDataService.StoreLandObject(land);
     }
 }

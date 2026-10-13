@@ -45,6 +45,7 @@ public sealed partial class WorldModule
     object HumanInspect(string actor,string? selected)
     {
         var result=JsonSerializer.SerializeToNode(kernel.Inspect(actor,selected),Kernel.Json)!;
+        result["recovery_required"]=WorldRecoveryRequired;
         string? previous=result["undoable_plan_id"]?.GetValue<string>();
         var timestamp=kernel.History(actor).LastOrDefault(e=>e.plan_id==previous&&e.status=="committed")?.timestamp??DateTimeOffset.MinValue;
         var latest=ComposerAudit.LatestPlace(composerPlaces?.Entries??[],actor,timestamp);

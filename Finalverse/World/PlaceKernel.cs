@@ -177,7 +177,9 @@ public sealed class PlaceKernel
         }
     }
 
-    public PlaceEntry Rollback(string planId)
+    // Read-only preflight lets a containing world validate every place before
+    // starting its rollback. Rollback repeats it immediately before deletion.
+    public PlaceEntry ValidateRollback(string planId)
     {
         ContentCatalog.Require(!RecoveryRequired,"Place recovery required.");
         var done=entries.LastOrDefault(e=>e.plan.plan_id==planId&&e.status=="committed");
@@ -186,6 +188,13 @@ public sealed class PlaceKernel
         for(int i=0;i<plan.placements.Length;i++)
             ContentCatalog.Require(world.MatchesFingerprint(plan.placements[i],done.fingerprints![i]),"A placement changed after provisioning; rollback refuses to erase later edits.");
         foreach(var placement in plan.placements)world.CheckDelete(placement);
+        return done;
+    }
+
+    public PlaceEntry Rollback(string planId)
+    {
+        var done=ValidateRollback(planId);
+        var plan=done.plan;
         var intent=Append(done with{operation_id=Guid.NewGuid().ToString(),status="rollback_intent",timestamp=DateTimeOffset.UtcNow});
         try
         {

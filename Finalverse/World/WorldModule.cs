@@ -1,6 +1,7 @@
 // Copyright (c) 2026 Finalverse contributors. SPDX-License-Identifier: BSD-3-Clause
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Diagnostics;
 using log4net;
 using Mono.Addins;
@@ -26,7 +27,8 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     readonly Dictionary<UUID,DateTimeOffset> lastRequest = new();
     Scene scene = null!;
     Kernel kernel = null!;
-    bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true;
+    bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true
+        ||places?.RecoveryRequired==true||worldPlaces?.RecoveryRequired==true||composerPlaces?.RecoveryRequired==true||worlds?.RecoveryRequired==true;
     bool enabled;
     string directory = "";
     public string Name => "FinalverseWorldModule";
@@ -59,7 +61,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         StartPlaces(catalog);
         StartWorlds(catalog);
         StartComposer(catalog);
-        kernel.ContentSemantics=(id,actor)=>content.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
+        kernel.ContentSemantics=ContentSemantic;
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
         s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
@@ -70,6 +72,16 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
     public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
+    object? ContentSemantic(string id,string actor)
+    {
+        var metadata=content?.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
+        if(metadata==null||worlds?.EntityContext(id) is not {} context)return metadata;
+        // Sidecar world provenance enriches existing entity/place semantics.
+        // No legacy scene-object structure or identifier is rewritten.
+        var result=JsonSerializer.SerializeToNode(metadata)!.AsObject();
+        result["world_template"]=JsonSerializer.SerializeToNode(context);
+        return result;
+    }
     void RegisterCaps(UUID agent,Caps caps)
     {
         Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); content?.Invalidate(agent.ToString()); sessions[agent]=session; }

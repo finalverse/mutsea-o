@@ -58,6 +58,11 @@ public sealed partial class WorldModule
                 {
                     var account=scene.UserAccountService.GetUserAccount(UUID.Zero,n.first_name,n.last_name);
                     bool created=account==null;
+                    var grid=account==null?null:scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
+                    // Validate before creating an identity. Existing homes and
+                    // appearance are preserved; only a missing home is filled.
+                    double[]? arrival=grid==null||grid.HomeRegionID==UUID.Zero
+                        ?WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight):null;
                     if(created)
                     {
                         account=service.CreateUser(UUID.Zero,UUID.Random(),n.first_name,n.last_name,n.password,"");
@@ -67,11 +72,15 @@ public sealed partial class WorldModule
                     }
                     else ContentCatalog.Require(account!.UserLevel>=0,"Existing account "+n.first_name+" "+n.last_name+" is not active.");
                     // Only fill a missing home; an account's own home is never moved.
-                    bool homed=false;var grid=scene.GridUserService.GetGridUserInfo(account!.PrincipalID.ToString());
+                    bool homed=false;
+                    grid=scene.GridUserService.GetGridUserInfo(account!.PrincipalID.ToString());
                     if(grid==null||grid.HomeRegionID==UUID.Zero)
                     {
-                        var at=new Vector3((float)accountsHome[0],(float)accountsHome[1],(float)Height(accountsHome[0],accountsHome[1]));
+                        arrival??=WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight);
+                        var at=new Vector3((float)arrival![0],(float)arrival[1],(float)arrival[2]);
                         ContentCatalog.Require(scene.GridUserService.SetHome(account.PrincipalID.ToString(),scene.RegionInfo.RegionID,at,Vector3.UnitY),"Newcomer home could not be stored.");
+                        var stored=scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
+                        ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,at)<.01f,"Newcomer home postcondition was not confirmed.");
                         homed=true;AccountRecord("home_set",account);
                     }
                     string? package=null;

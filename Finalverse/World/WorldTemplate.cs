@@ -10,21 +10,45 @@ namespace Finalverse.World;
 // operation; each place keeps its own place journal and rollback.
 public sealed record WorldPlace(string local_id,string place_id,string version,string manifest_sha256,double[] anchor,double yaw_degrees,bool anchor_on_terrain=false);
 public sealed record WorldSpawn(double[] position,double[] look_at);
+public sealed record WorldLanding(string parcel_id,double[] position,double[] look_at,byte landing_type);
+public sealed record WorldEntityContext(string world_id,string version,string manifest_sha256,string region_id,string operation_id,string place_plan_id);
 public sealed record WorldTemplateManifest(int schema_version,string kind,string world_id,string version,string title,string description,string license,
     int[] region_size,double water_height,string? terrain_r32_sha256,string environment_preset,WorldSpawn spawn,WorldPlace[] places,string? manifest_sha256=null);
 public sealed record WorldEntry(string operation_id,string status,DateTimeOffset timestamp,string world_id,string version,string manifest_sha256,string region_id,
-    string? terrain_before_sha256,double? water_before,string[] place_plans,string? error);
+    string? terrain_before_sha256,double? water_before,string[] place_plans,string? error,
+    WorldLanding? landing_before=null,WorldLanding? landing_after=null,string? terrain_after_sha256=null,double? water_after=null,string? terrain_hash_format=null);
+
+// Shared arrival policy for starter worlds and newcomer homes. This checks a
+// standing footprint against authoritative terrain; it is not navigation or a
+// substitute for continuous collision/appearance acceptance.
+public static class WorldArrival
+{
+    public static double[] StandingPosition(double x,double y,Func<double,double,double> ground,double water)
+    {
+        ContentCatalog.Vector([x,y],2,1,255);
+        var heights=new List<double>();
+        foreach(double dx in new[]{-.5,0,.5})foreach(double dy in new[]{-.5,0,.5})heights.Add(ground(x+dx,y+dy));
+        ContentCatalog.Require(heights.All(h=>double.IsFinite(h)&&h>water+.1)&&heights.Max()-heights.Min()<=.6,"Arrival needs dry, level terrain across its standing footprint.");
+        return [x,y,heights.Max()+1.1];
+    }
+}
 
 // The region adapter for world provisioning.
 public interface IWorldTemplateRegion
 {
     string RegionId{get;}
     bool IsEmpty();                                    // no persistent scene objects
+    bool IsEmptyExcept(string[] rootIds);               // no later objects to erase or strand
+    string TerrainHashFormat{get;}
+    string TerrainHash();
     string SnapshotTerrain(string path);               // R32 snapshot; returns SHA-256
     void LoadTerrain(byte[] r32);                      // apply, persist and push to clients
     double WaterHeight{get;}
     void SetWaterHeight(double height);
     void SetLanding(double[] position,double[] lookAt);
+    WorldLanding CaptureLanding(double[] position);
+    bool MatchesLanding(WorldLanding landing);
+    void RestoreLanding(WorldLanding landing);
     double Ground(double x,double y);
     PlaceKernel Places{get;}
     string Operator{get;}
@@ -42,7 +66,9 @@ public sealed class WorldTemplateCatalog
             var file=new FileInfo(Path.Combine(directory,"world.json"));
             ContentCatalog.Require(file.Exists&&(file.Attributes&FileAttributes.ReparsePoint)==0&&file.Length is >0 and <=65536,"Missing, linked or oversized world manifest.");
             var bytes=File.ReadAllBytes(file.FullName);
-            var world=JsonSerializer.Deserialize<WorldTemplateManifest>(bytes,ContentCatalog.Json)! with{manifest_sha256=ContentCatalog.Hash(bytes)};
+            var parsed=JsonSerializer.Deserialize<WorldTemplateManifest>(bytes,ContentCatalog.Json);
+            ContentCatalog.Require(parsed!=null&&parsed.region_size is [256,256],"Only standard 256 m worlds are enabled.");
+            var world=parsed! with{manifest_sha256=ContentCatalog.Hash(bytes)};
             byte[]? terrain=null;
             if(world.terrain_r32_sha256!=null)
             {
@@ -64,8 +90,13 @@ public sealed class WorldTemplateCatalog
         ContentCatalog.Require(w.region_size is [256,256],"Only standard 256 m regions are enabled.");
         ContentCatalog.Vector([w.water_height],1,0,100);
         ContentCatalog.Vector(w.spawn.position,3,1,255);ContentCatalog.Vector(w.spawn.look_at,3,0,256);
+        double dx=w.spawn.look_at[0]-w.spawn.position[0],dy=w.spawn.look_at[1]-w.spawn.position[1];
+        ContentCatalog.Require(dx*dx+dy*dy>.0001,"Spawn needs a horizontal facing direction.");
         if(terrain!=null)
+        {
+            ContentCatalog.Require(terrain.Length==256*256*4,"Terrain must be a standard region R32 heightmap.");
             for(int i=0;i<terrain.Length;i+=4){var h=BitConverter.ToSingle(terrain,i);ContentCatalog.Require(float.IsFinite(h)&&h>=0&&h<=255,"Terrain heights must be finite and within 0–255 m.");}
+        }
         ContentCatalog.Require(w.places is {Length:>0 and <=32}&&w.places.Select(p=>p.local_id).Distinct().Count()==w.places.Length,"A world needs 1–32 uniquely identified places.");
         var rects=new List<(double x0,double x1,double y0,double y1,string id)>();
         foreach(var p in w.places)
@@ -101,6 +132,19 @@ public sealed class WorldTemplateKernel
     public WorldEntry? Active(string id,string version)=>entries.Where(e=>e.status=="committed"&&e.world_id==id&&e.version==version)
         .LastOrDefault(e=>!entries.Any(x=>x.operation_id==e.operation_id&&x.status=="rolled_back"));
 
+    public WorldEntityContext? EntityContext(string entity)
+    {
+        foreach(var entry in entries.Where(e=>e.status=="committed").Reverse())
+        {
+            if(entries.Any(e=>e.operation_id==entry.operation_id&&e.status=="rolled_back"))continue;
+            var place=region.Places.Entries.LastOrDefault(e=>e.status=="committed"&&entry.place_plans.Contains(e.plan.plan_id)
+                &&e.plan.placements.Any(p=>p.entity_ids.Contains(entity))
+                &&!region.Places.Entries.Any(x=>x.plan.plan_id==e.plan.plan_id&&x.status=="rolled_back"));
+            if(place!=null)return new(entry.world_id,entry.version,entry.manifest_sha256,entry.region_id,entry.operation_id,place.plan.plan_id);
+        }
+        return null;
+    }
+
     public WorldEntry Provision(string id,string version)
     {
         ContentCatalog.Require(!RecoveryRequired&&!region.Places.RecoveryRequired,"World recovery required.");
@@ -108,12 +152,18 @@ public sealed class WorldTemplateKernel
         ContentCatalog.Require(region.IsEmpty(),"World templates provision only into an empty region.");
         string operation=Guid.NewGuid().ToString();Directory.CreateDirectory(snapshots);
         string terrainBefore=region.SnapshotTerrain(Path.Combine(snapshots,operation+".before.r32"));double waterBefore=region.WaterHeight;
-        var intent=Append(new(operation,"intent",DateTimeOffset.UtcNow,world.world_id,world.version,world.manifest_sha256!,region.RegionId,terrainBefore,waterBefore,[],null));
+        var landingBefore=region.CaptureLanding(world.spawn.position);
+        var intent=Append(new(operation,"intent",DateTimeOffset.UtcNow,world.world_id,world.version,world.manifest_sha256!,region.RegionId,terrainBefore,waterBefore,[],null,landing_before:landingBefore));
         var plans=new List<string>();
         try
         {
             if(terrain!=null)region.LoadTerrain(terrain);
             region.SetWaterHeight(world.water_height);
+            // Landing is a registration postcondition, not merely a manifest hint.
+            // Terrain-backed starter worlds must offer dry arrival ground and a
+            // bounded standing height; floating/water starts need a future policy.
+            var standing=WorldArrival.StandingPosition(world.spawn.position[0],world.spawn.position[1],region.Ground,region.WaterHeight);
+            ContentCatalog.Require(world.spawn.position[2]>=standing[2]-1.1&&world.spawn.position[2]<=standing[2]+1.9,"World spawn must be within 3 m of its dry terrain.");
             foreach(var p in world.places)
             {
                 double z=p.anchor_on_terrain?region.Ground(p.anchor[0],p.anchor[1]):p.anchor[2];
@@ -121,7 +171,7 @@ public sealed class WorldTemplateKernel
                 region.Places.Provision(plan);plans.Add(plan.plan_id);
             }
             region.SetLanding(world.spawn.position,world.spawn.look_at);
-            return Append(intent with{status="committed",timestamp=DateTimeOffset.UtcNow,place_plans=plans.ToArray()});
+            return Append(intent with{status="committed",timestamp=DateTimeOffset.UtcNow,place_plans=plans.ToArray(),landing_after=region.CaptureLanding(world.spawn.position),terrain_after_sha256=region.TerrainHash(),water_after=region.WaterHeight,terrain_hash_format=region.TerrainHashFormat});
         }
         catch(Exception ex)
         {
@@ -129,7 +179,7 @@ public sealed class WorldTemplateKernel
             // then restore terrain and water. Anything unconfirmed fences world writes.
             bool clean=!region.Places.RecoveryRequired;
             foreach(var plan in Enumerable.Reverse(plans)){try{region.Places.Rollback(plan);}catch{clean=false;}}
-            try{region.LoadTerrain(File.ReadAllBytes(Path.Combine(snapshots,operation+".before.r32")));region.SetWaterHeight(waterBefore);}catch{clean=false;}
+            try{region.LoadTerrain(File.ReadAllBytes(Path.Combine(snapshots,operation+".before.r32")));region.SetWaterHeight(waterBefore);region.RestoreLanding(landingBefore);}catch{clean=false;}
             RecoveryRequired=!clean;
             Append(intent with{status=clean?"compensated":"recovery_required",timestamp=DateTimeOffset.UtcNow,place_plans=plans.ToArray(),error=ex.Message});
             throw;
@@ -143,11 +193,19 @@ public sealed class WorldTemplateKernel
         ContentCatalog.Require(done!=null&&!entries.Any(e=>e.operation_id==operation&&e.status=="rolled_back"),"No active provisioned world with that operation.");
         var snapshot=Path.Combine(snapshots,operation+".before.r32");
         ContentCatalog.Require(File.Exists(snapshot)&&ContentCatalog.Hash(File.ReadAllBytes(snapshot))==done!.terrain_before_sha256,"Terrain snapshot is missing or changed.");
+        // Old journals remain readable/idempotent but lack the postconditions
+        // needed for safe world rollback. They require an operator-reviewed repair.
+        ContentCatalog.Require(done!.landing_before!=null&&done.landing_after!=null&&done.terrain_after_sha256!=null&&done.water_after!=null&&done.terrain_hash_format==region.TerrainHashFormat,"Historical world lacks compatible rollback postconditions; operator review required.");
+        ContentCatalog.Require(region.TerrainHash()==done.terrain_after_sha256&&region.WaterHeight==done.water_after&&region.MatchesLanding(done.landing_after!),"Terrain, water or landing changed after provisioning; rollback preserves later edits.");
+        var placeEntries=done.place_plans.Select(region.Places.ValidateRollback).ToArray();
+        var roots=placeEntries.SelectMany(e=>e.plan.placements).Select(p=>p.entity_ids[0]).ToArray();
+        ContentCatalog.Require(region.IsEmptyExcept(roots),"Later scene objects are present; world rollback refuses to strand them.");
         var entry=done!;var intent=Append(entry with{status="rollback_intent",timestamp=DateTimeOffset.UtcNow});
         try
         {
             foreach(var plan in Enumerable.Reverse(entry.place_plans))region.Places.Rollback(plan);
             region.LoadTerrain(File.ReadAllBytes(snapshot));region.SetWaterHeight(entry.water_before??region.WaterHeight);
+            region.RestoreLanding(entry.landing_before!);
             return Append(intent with{status="rolled_back",timestamp=DateTimeOffset.UtcNow});
         }
         catch(Exception ex){RecoveryRequired=true;Append(intent with{status="recovery_required",timestamp=DateTimeOffset.UtcNow,error=ex.Message});throw;}

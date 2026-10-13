@@ -176,6 +176,8 @@ try{
   Reject(()=>WorldTemplateCatalog.Validate(World(("a",5,60)),terrain,placeCatalog));
   Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)) with{places=[World(("a",60,60)).places[0] with{manifest_sha256=new string('0',64)}]},terrain,placeCatalog));
   Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)),Flat(float.NaN),placeCatalog));
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)) with{spawn=new([128,128,25.3],[128,128,80])},terrain,placeCatalog));
+  Reject(()=>WorldTemplateCatalog.Validate(World(("a",60,60)),new byte[4],placeCatalog));
   File.WriteAllBytes(Path.Combine(worldRoot,"test","terrain.r32"),Flat(26f));Reject(()=>new WorldTemplateCatalog(worldRoot,placeCatalog));SaveWorld(World(("a",60,60),("b",120,60)));
  });
  var worldCatalog=new WorldTemplateCatalog(worldRoot,placeCatalog);
@@ -184,14 +186,57 @@ try{
   var r=Region("world-ok");var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-ok"));var done=k.Provision("mutsea.test.world","0.1.0");
   Assert(done.status=="committed"&&done.place_plans.Length==2&&r.Terrain.SequenceEqual(terrain)&&r.WaterHeight==20&&r.Landing!=null&&r.Fake.Live.Count==8&&k.Active("mutsea.test.world","0.1.0")!=null);
   Assert(r.Places.Entries.Where(e=>e.status=="committed").All(e=>Math.Abs(e.plan.anchor[2]-25)<1e-6));
-  Assert(k.Rollback(done.operation_id).status=="rolled_back"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10);
+  var restart=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-ok"));
+  var entity=r.Places.Entries.First(e=>e.status=="committed").plan.placements[0].entity_ids[0];
+  Assert(restart.EntityContext(entity) is {} context&&context.operation_id==done.operation_id&&context.manifest_sha256==done.manifest_sha256&&context.world_id=="mutsea.test.world");
+  Assert(restart.Rollback(done.operation_id).status=="rolled_back"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10&&r.Landing==null);
+  Assert(restart.EntityContext(entity)==null&&restart.EntityContext(Guid.NewGuid().ToString())==null);
   Assert(!new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-ok")).RecoveryRequired);
  });
  Test("a world only provisions into an empty region, before any write",()=>{var r=Region("world-busy");r.Empty=false;var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-busy"));Reject(()=>k.Provision("mutsea.test.world","0.1.0"));Assert(k.Entries.Count==0&&r.Terrain.SequenceEqual(Flat(21f)));});
+ Test("rollback restores an existing parcel's landing position, facing and policy",()=>{
+  var r=Region("world-landing");r.SetLanding([40,50,22],[0,-1,0]);var before=r.CaptureLanding([128,128,25]);
+  var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-landing"));var done=k.Provision("mutsea.test.world","0.1.0");
+  Assert(!r.MatchesLanding(before));k.Rollback(done.operation_id);Assert(r.MatchesLanding(before));
+ });
  Test("a failed place compensates the whole world",()=>{
   var r=Region("world-fail");r.Fake.FailAt=6;var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-fail"));
   try{k.Provision("mutsea.test.world","0.1.0");throw new Exception("Expected failure.");}catch(InvalidDataException){}
   Assert(!k.RecoveryRequired&&k.Entries.Last().status=="compensated"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10);
+ });
+ Test("world rollback preserves later terrain, water, landing and unrelated objects before any intent",()=>{
+  foreach(var change in new[]{"terrain","water","landing","object","early-place"}){
+   var r=Region("world-edited-"+change);var k=new WorldTemplateKernel(r,worldCatalog,Path.Combine(root,"world-edited-"+change));var done=k.Provision("mutsea.test.world","0.1.0");
+   if(change=="terrain")r.Terrain=Flat(26f);
+   if(change=="water")r.SetWaterHeight(19);
+   if(change=="landing")r.SetLanding([150,150,26],[160,150,26]);
+   if(change=="object")r.Fake.Existing.Add(Guid.NewGuid().ToString());
+   // The first place would be rolled back last. Preflight must prevent partial
+   // removal of the later place before discovering this earlier edit.
+   if(change=="early-place")r.Fake.Live[r.Places.Entries.First(e=>e.status=="committed").plan.placements[0].entity_ids[0]]="edited";
+   int records=k.Entries.Count,placeRecords=r.Places.Entries.Count,parts=r.Fake.Live.Count;
+   Reject(()=>k.Rollback(done.operation_id));
+   Assert(k.Entries.Count==records&&r.Places.Entries.Count==placeRecords&&r.Fake.Live.Count==parts&&!k.RecoveryRequired);
+  }
+ });
+ Test("legacy world journals remain readable but unsafe automatic rollback is refused",()=>{
+  var r=Region("world-legacy");var dir=Path.Combine(root,"world-legacy");var k=new WorldTemplateKernel(r,worldCatalog,dir);var done=k.Provision("mutsea.test.world","0.1.0");
+  var legacy=done with{landing_before=null,landing_after=null,terrain_after_sha256=null,water_after=null,terrain_hash_format=null};
+  File.WriteAllText(Path.Combine(dir,r.RegionId+".worlds.worldline.jsonl"),JsonSerializer.Serialize(legacy)+"\n");
+  var reload=new WorldTemplateKernel(r,worldCatalog,dir);Assert(reload.Active("mutsea.test.world","0.1.0")!=null);
+  Reject(()=>reload.Rollback(done.operation_id));Assert(r.Fake.Live.Count==8&&reload.Entries.Count==1&&!reload.RecoveryRequired);
+ });
+ Test("arrival refuses wet, steep and invalid terrain and lifts a valid newcomer above ground",()=>{
+  Assert(WorldArrival.StandingPosition(128,128,(_,_)=>25,20)[2]==26.1);
+  Reject(()=>WorldArrival.StandingPosition(128,128,(_,_)=>19,20));
+  Reject(()=>WorldArrival.StandingPosition(128,128,(x,_)=>x<128?25:26,20));
+  Reject(()=>WorldArrival.StandingPosition(128,128,(_,_)=>double.NaN,20));
+  Reject(()=>WorldArrival.StandingPosition(0,128,(_,_)=>25,20));
+ });
+ Test("a world with a submerged arrival compensates without creating places",()=>{
+  var wet=World(("a",60,60)) with{water_height=26};SaveWorld(wet);var wc=new WorldTemplateCatalog(worldRoot,placeCatalog);
+  var r=Region("world-wet");var k=new WorldTemplateKernel(r,wc,Path.Combine(root,"world-wet"));Reject(()=>k.Provision(wet.world_id,wet.version));
+  Assert(k.Entries.Last().status=="compensated"&&r.Fake.Live.Count==0&&r.Terrain.SequenceEqual(Flat(21f))&&r.WaterHeight==10&&r.Landing==null);
  });
  Test("newcomer file: valid accounts and Genesis choices parse",()=>{
   var ok=NewcomerFile.Parse(Encoding.UTF8.GetBytes("{\"accounts\":[{\"first_name\":\"Harbor\",\"last_name\":\"Newcomer\",\"password\":\"correct-horse-1\",\"genesis\":\"/config/genesis/kai-female-v0.1.0\",\"genesis_sha256\":\""+new string('a',64)+"\"},{\"first_name\":\"Second\",\"last_name\":\"Visitor2\",\"password\":\"correct-horse-2\"}]}"));
@@ -220,9 +265,16 @@ sealed class FakePlace:IPlaceWorld{public bool Deny,StuckDelete;public int FailA
  public void Restore(PlacePlan plan){foreach(var r in plan.retired)Existing.Add(r.group_id);}}
 
 sealed class FakeRegion(PlaceKernel places,FakePlace fake):IWorldTemplateRegion{
- public string RegionId{get;}=Guid.NewGuid().ToString();public bool Empty=true;public byte[] Terrain=Flat(21f);public double WaterHeight{get;private set;}=10;public double[]? Landing;
+ public string RegionId{get;}=Guid.NewGuid().ToString();public bool Empty=true;public byte[] Terrain=Flat(21f);public double WaterHeight{get;private set;}=10;public double[]? Landing;WorldLanding? landing;
  public FakePlace Fake=>fake;public PlaceKernel Places=>places;public string Operator{get;}=Guid.NewGuid().ToString();
  static byte[] Flat(float h){var b=new byte[256*256*4];for(int i=0;i<b.Length;i+=4)BitConverter.GetBytes(h).CopyTo(b,i);return b;}
  public bool IsEmpty()=>Empty;public string SnapshotTerrain(string path){File.WriteAllBytes(path,Terrain);return ContentCatalog.Hash(Terrain);}
- public void LoadTerrain(byte[] r32)=>Terrain=r32.ToArray();public void SetWaterHeight(double h)=>WaterHeight=h;public void SetLanding(double[] p,double[] l)=>Landing=p;
+ public bool IsEmptyExcept(string[] roots)=>fake.Existing.Count==0&&fake.Live.Keys.All(roots.Contains);
+ public string TerrainHashFormat=>"test-r32-v1";
+ public string TerrainHash()=>ContentCatalog.Hash(Terrain);
+ public void LoadTerrain(byte[] r32)=>Terrain=r32.ToArray();public void SetWaterHeight(double h)=>WaterHeight=h;
+ public void SetLanding(double[] p,double[] l){Landing=p;landing=new("test-parcel",p,l,1);}
+ public WorldLanding CaptureLanding(double[] p)=>landing??new("test-parcel",[0,0,0],[0,0,0],0);
+ public bool MatchesLanding(WorldLanding expected)=>JsonSerializer.Serialize(CaptureLanding(expected.position))==JsonSerializer.Serialize(expected);
+ public void RestoreLanding(WorldLanding before){landing=before;Landing=before.landing_type==0?null:before.position;}
  public double Ground(double x,double y)=>BitConverter.ToSingle(Terrain,((int)y*256+(int)x)*4);}
