@@ -70,6 +70,19 @@ def loaded_cert():
         with context.wrap_socket(raw,server_hostname='grid.mutsea.com') as tls:
             return hashlib.sha256(tls.getpeercert(binary_form=True)).hexdigest()
 
+def verify_gateway(expected):
+    # Verify the renewed frontend and its verified-TLS native proxy together,
+    # using only the loopback allowance and a public read-only grid-info path.
+    with socket.create_connection(('127.0.0.1',443),timeout=5) as raw:
+        with ssl.create_default_context().wrap_socket(raw,server_hostname='grid.mutsea.com') as tls:
+            if hashlib.sha256(tls.getpeercert(binary_form=True)).hexdigest()!=expected:raise OSError('Gateway certificate has not refreshed')
+            tls.sendall(b'GET /get_grid_info HTTP/1.1\r\nHost: grid.mutsea.com\r\nConnection: close\r\n\r\n')
+            reply=b''
+            while chunk:=tls.recv(4096):
+                reply+=chunk
+                if len(reply)>65536:raise OSError('Gateway response exceeds limit')
+            if not reply.startswith(b'HTTP/1.1 200 ') or b'<gridinfo>' not in reply:raise OSError('Verified native gateway is unavailable')
+
 def fingerprints(root):
     result={}
     for table in ('prims','primshapes','inventoryitems','inventoryfolders','avatars','useraccounts'):
@@ -83,6 +96,7 @@ def refresh(root, force=False):
     try:current=loaded_cert()==expected
     except (OSError,ssl.SSLError):current=False
     if current and not force:
+        verify_gateway(expected)
         print('event=native_certificate_current');return
     info=json.loads(run(['docker','inspect',SIM]).stdout)[0]
     labels=info['Config'].get('Labels',{})
@@ -131,7 +145,8 @@ def refresh(root, force=False):
         deadline=time.monotonic()+60
         while time.monotonic()<deadline:
             try:
-                if loaded_cert()==expected:break
+                if loaded_cert()==expected:
+                    verify_gateway(expected);break
             except (OSError,ssl.SSLError):pass
             time.sleep(1)
         else:raise RuntimeError('Native TLS did not load the renewed certificate')

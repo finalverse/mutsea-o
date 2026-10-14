@@ -33,7 +33,7 @@ The refresh process:
    fingerprints, disables container restart and requests native shutdown.
 5. Requires a clean exit, backs up the freshly stopped database, atomically
    replaces the PFX and starts the same container.
-6. Verifies loaded TLS and scene, appearance, inventory, account and journal
+6. Verifies loaded native and frontend TLS, the verified native HTTPS proxy, and scene, appearance, inventory, account and journal
    preservation before restoring admission and the prior restart policy.
 
 Errors stop with a sanitized journal event requiring operator review. The old PFX
