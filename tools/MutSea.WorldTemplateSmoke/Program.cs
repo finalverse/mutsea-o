@@ -6,7 +6,10 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length!=3)throw new ArgumentException("Expected private account, world receipt and new output path.");
+if(args.Length!=3&&(args.Length!=4||args[3]!="--hero-arrival"))throw new ArgumentException("Expected private account, world receipt, new output path and optional --hero-arrival fixture.");
+// A second named loopback fixture keeps the original island and its active
+// user untouched. This never accepts an arbitrary remote/production endpoint.
+bool hero=args.Length==4;string authority=hero?"127.0.0.1:18099":"127.0.0.1:18098";
 byte[] Read(string path,int limit,bool ownerOnly=false)
 {
     var file=new FileInfo(path);
@@ -15,7 +18,8 @@ byte[] Read(string path,int limit,bool ownerOnly=false)
     var bytes=File.ReadAllBytes(path);if(bytes.Length>limit)throw new IOException("Input exceeded its bound.");return bytes;
 }
 var account=JsonDocument.Parse(Read(args[0],16384,true)).RootElement;
-if(account.GetProperty("grid_url").GetString()!="http://127.0.0.1:18098/"||!account.GetProperty("registered").GetBoolean())throw new InvalidDataException("Expected isolated registered world-template fixture.");
+if(account.GetProperty("grid_url").GetString()!="http://"+authority+"/"||!account.GetProperty("registered").GetBoolean())throw new InvalidDataException("Expected isolated registered world-template fixture.");
+if(hero&&account.GetProperty("fixture").GetString()!="hero-arrival-v1")throw new InvalidDataException("Explicit hero fixture required.");
 if(File.Exists(args[2]))throw new IOException("Preserve the previous receipt.");
 var proof=JsonDocument.Parse(Read(args[1],16*1024*1024)).RootElement;
 var plans=proof.GetProperty("places").EnumerateArray().Select(e=>e.GetProperty("plan").Clone()).ToArray();
@@ -59,7 +63,7 @@ try
     Uri Capability(string name)
     {
         var uri=new Uri(map[name].AsString());
-        if(uri.Scheme!="http"||uri.Authority!="127.0.0.1:18098"||uri.UserInfo!="")throw new InvalidDataException("Unexpected native capability origin.");
+        if(uri.Scheme!="http"||uri.Authority!=authority||uri.UserInfo!="")throw new InvalidDataException("Unexpected native capability origin.");
         return uri;
     }
     var cap=Capability("FinalverseWorld");
