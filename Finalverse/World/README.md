@@ -330,3 +330,26 @@ ComposerSiting evaluates at most32 nearby candidates against native height/water
 Prepare reports the actual part_count and a human siting rationale. Human inspection/history joins bounded summaries from existing action/place journals, allowing Undo recovery after viewer restart. It does not create another persistence store. `prepare_place`, `commit_place` and `undo_place` are restricted citizen tools over this same executor. The bridge tracks the configured citizen/controller's own prepared and committed IDs and restores those sets from its existing journal. Human approval and the Rust runtime's192-part/180-second goal budget remain mandatory.
 
 `tools/MutSea.ComposerTests` tests deterministic/wet/dry/steep/edge/changed-ground rules and owned journal/Undo selection. With only .NET10 installed, run net8 tools using DOTNET_ROLL_FORWARD=Major. `tools/Finalverse.CitizenSmoke` co_build_verify and co_build_undo_verify take a fourth private committed-place JSON receipt and are read-only; use the separately built portable OpenMetaverse SDK.
+## Authenticated planner transport
+
+`[FinalversePlanning] Enabled = true` enables `op: plan` on the existing
+authenticated `FinalverseWorld` capability. `SocketPath` is an absolute private
+Unix-socket path, default `/run/finalverse-planner/planner.sock`. Deployment uses
+`compose.planning.yaml` with the private gateway service running as simulator
+UID 1000. `experience` advertises `server_planning` to the viewer.
+
+`PlanningBridge.cs` authenticates the active root session, accepts only a prompt
+or WorldSpec, derives scoped native context and applies bounded actor admission.
+`ServerPlanner.cs` supplies bounded HTTP-over-Unix-socket transport. Inference
+does not hold the scene transaction gate; the session is rechecked afterward.
+No planner response executes directly: existing Prepare, explicit approval,
+Commit, WorldLine and guarded Undo remain authoritative.
+
+`tools/Finalverse.PlanningTests` checks input/context boundaries.
+`tools/MutSea.PlanningSmoke` exercises the named private pilot deployment with
+strict TLS, real login/capabilities, inference, policy, UDP observation, restart
+and Undo. Its private account and receipts must stay outside Git. The probe
+does not alter appearance and never targets an arbitrary grid or user.
+
+See [native certificate renewal](../../deploy/standalone/native-certificate-renewal.md)
+for the separately scoped certificate hook, safe deferral and retry timer.

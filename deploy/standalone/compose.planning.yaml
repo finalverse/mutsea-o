@@ -1,0 +1,6 @@
+# Optional private IPC mount. Start the planner service before the simulator.
+# The socket is mode 0600 in a mode 0700 directory owned by simulator UID 1000.
+services:
+  mutsea:
+    volumes:
+      - /run/finalverse-planner:/run/finalverse-planner:ro

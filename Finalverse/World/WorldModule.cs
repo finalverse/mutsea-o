@@ -51,6 +51,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialiseWorlds(config);
         InitialiseAccounts(config);
         InitialiseComposer(config);
+        InitialisePlanning(config);
     }
     public void AddRegion(Scene s)
     {
@@ -99,6 +100,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>65536)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
+                if(data.GetProperty("op").GetString()=="plan")
+                {
+                    operation="plan";output=HumanPlan(data,agent,session);
+                    response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output},Kernel.Json);response.StatusCode=200;return;
+                }
                 if(data.GetProperty("op").GetString()=="citizen")
                 {
                     lock(gate)
