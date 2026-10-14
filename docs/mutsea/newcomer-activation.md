@@ -4,6 +4,8 @@ An operator-selected Genesis wardrobe used to run after the inherited account se
 
 `UserAccountService.CreateUserWithProvisioning` adds a trusted in-process completion callback to the existing account implementation. The inherited `CreateUser` method and optional model argument retain their ABI and behavior. No anonymous registration handler, new identity store, public endpoint or client privilege is added.
 
+Deploy the updated `Finalverse.World.dll` with the matching `MutSea.Services.UserAccountService.dll`; the new module calls the added completion method. This slice integrates that pair only on the named local hero fixture. Other established grids retain their previous tested binaries. A later rollout needs their normal session check, native backup/shutdown, matched pair, guarded restart and preservation verification.
+
 ```mermaid
 flowchart TD
   A[Preflight pinned wardrobe and selected world] --> B[Create inactive pending identity]
