@@ -84,6 +84,16 @@ public static class AvatarCatalog
     }
 
     public static (AvatarCompiled package,byte[] mesh,byte[][] materials,byte[][] motions) Load(string directory)=>Load(directory,out _);
+    public static (AvatarCompiled package,byte[] mesh,byte[][] materials,byte[][] motions) LoadWardrobe(string directory,string pin,out byte[]? alpha)
+    {
+        var file=new FileInfo(Path.Combine(directory,"compiled.json"));
+        ContentCatalog.Require(file.Exists&&(file.Attributes&FileAttributes.ReparsePoint)==0&&file.Length is >0 and <=65536,"Missing, linked or oversized wardrobe manifest.");
+        ContentCatalog.Require(ContentCatalog.Hash(File.ReadAllBytes(file.FullName))==pin,"Compiled avatar differs from its configuration pin.");
+        var result=Load(directory,out alpha);RequireCurrent(result.package);
+        ContentCatalog.Require(result.package.representation=="attachment"&&alpha!=null,"Only worn Genesis avatars can be provisioned to accounts.");
+        return result;
+    }
+
     public static (AvatarCompiled package,byte[] mesh,byte[][] materials,byte[][] motions) Load(string directory,out byte[]? alpha)
     {
         var root=new DirectoryInfo(directory);

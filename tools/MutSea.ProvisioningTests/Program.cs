@@ -21,6 +21,20 @@ foreach(string fault in new[]{"auth","inventory","wearable","link","appearance",
  Assert(f.Stored.All(s=>s.Data["UserLevel"]!="0"));
 });
 Test("legacy externally provisioned configuration stays compatible",()=>{var f=new Fixture{Fault="auth",Required=false};Assert(f.Create()!=null&&f.Stored.Count==1&&f.Stored[0].Data["UserLevel"]=="0");});
+Test("chosen wardrobe completion runs while pending and before activation",()=>{
+ var f=new Fixture();bool called=false;
+ var result=f.Create(a=>{called=true;Assert(a.UserLevel==-1000&&f.Stored.All(s=>s.Data["UserLevel"]!="0"));});
+ Assert(called&&result!=null&&result.UserLevel==0);
+});
+Test("chosen wardrobe failure retains inactive account without an active write",()=>{
+ var f=new Fixture();Assert(f.Create(_=>throw new IOException("Synthetic wardrobe failure"))==null);
+ Assert(f.Stored.Last().Data["UserLevel"]=="-1001"&&f.Stored.All(s=>s.Data["UserLevel"]!="0"));
+});
+Test("legacy external appearance cannot bypass extended provisioning",()=>{
+ var f=new Fixture{Required=false};bool refused=false;
+ try{f.Create(_=>{});}catch(InvalidOperationException){refused=true;}
+ Assert(refused&&f.Stored.Count==0);
+});
 foreach(var type in new[]{typeof(MutSea.Data.SQLite.SQLiteGenericTableHandler<ColumnRow>),typeof(MutSea.Data.SQLite.SQLiteAuthenticationData),typeof(MutSea.Data.PGSQL.PGSQLGenericTableHandler<ColumnRow>),typeof(MutSea.Data.PGSQL.PGSQLAuthenticationData)})Test("parallel first queries never return partial columns: "+type.Name,()=>{
  var handler=RuntimeHelpers.GetUninitializedObject(type);
  if(type.IsGenericType)Fixture.Set(handler,"m_Fields",new Dictionary<string,FieldInfo>());
@@ -48,7 +62,7 @@ sealed class Fixture
  public List<UserAccountData> Stored=new();public Dictionary<UUID,InventoryItemBase> Items=new();
  readonly Dictionary<FolderType,InventoryFolderBase> folders=new();AvatarAppearance appearance;
  public static void Set(object target,string name,object value){for(var t=target.GetType();t!=null;t=t.BaseType){var f=t.GetField(name,BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.DeclaredOnly);if(f!=null){f.SetValue(target,value);return;}}throw new Exception("Missing field "+name);}
- public UserAccount Create()
+ public UserAccount Create(Action<UserAccount> complete=null)
  {
   var service=(UserAccountService)RuntimeHelpers.GetUninitializedObject(typeof(UserAccountService));
   Set(service,"m_CreateDefaultAvatarEntries",Required);
@@ -80,7 +94,8 @@ sealed class Fixture
    if(Fault=="asset")return null;var id=new UUID((string)a[0]);var type=id==AvatarWearable.DEFAULT_SHIRT_ASSET||id==AvatarWearable.DEFAULT_PANTS_ASSET?AssetType.Clothing:AssetType.Bodypart;
    return new AssetBase(id,"Fixture",(sbyte)type,UUID.ZeroString){Data=[1]};
   }));
-  return service.CreateUser(UUID.Zero,UUID.Random(),"Fixture","Resident","synthetic-test-only","");
+  return complete==null?service.CreateUser(UUID.Zero,UUID.Random(),"Fixture","Resident","synthetic-test-only",""):
+   service.CreateUserWithProvisioning(UUID.Zero,UUID.Random(),"Fixture","Resident","synthetic-test-only","",complete);
  }
 }
 public class ColumnRow { public Dictionary<string,string> Data; }

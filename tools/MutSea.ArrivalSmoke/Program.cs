@@ -5,7 +5,8 @@ using System.Text.Json;
 using OpenMetaverse;
 using OpenMetaverse.Packets;
 
-if(args.Length!=3)throw new ArgumentException("Expected private hero account, world proof and NEW receipt.");
+if(args.Length!=3&&(args.Length!=4||args[3]!="--coastal-court"))throw new ArgumentException("Expected private hero account, world proof, NEW receipt and optional --coastal-court.");
+bool court=args.Length==4;
 void Require(bool condition,string reason){if(!condition)throw new InvalidDataException(reason);}
 JsonElement Read(string path,int limit,bool ownerOnly=false)
 {
@@ -16,12 +17,12 @@ JsonElement Read(string path,int limit,bool ownerOnly=false)
 var account=Read(args[0],16384,true);var proof=Read(args[1],16*1024*1024);
 Require(account.GetProperty("grid_url").GetString()=="http://127.0.0.1:18099/"&&account.GetProperty("fixture").GetString()=="hero-arrival-v1"&&account.GetProperty("registered").GetBoolean(),"Named local hero account required");
 Require(account.GetProperty("region_id").GetString()=="38bfc868-034e-4a29-acd6-5ff203e96e57"&&proof.GetProperty("world").GetProperty("region_id").GetString()==account.GetProperty("region_id").GetString(),"Hero region mismatch");
-Require(proof.GetProperty("world").GetProperty("status").GetString()=="committed"&&proof.GetProperty("world").GetProperty("version").GetString()=="0.2.0","Committed hero world required");
-var arrival=proof.GetProperty("places").EnumerateArray().Single(p=>p.GetProperty("plan").GetProperty("place").GetProperty("place_id").GetString()=="mutsea.starter.coastal-arrival").GetProperty("plan");
+Require(proof.GetProperty("world").GetProperty("status").GetString()=="committed"&&proof.GetProperty("world").GetProperty("world_id").GetString()=="mutsea.starter.aurens-island"&&proof.GetProperty("world").GetProperty("version").GetString()==(court?"0.3.0":"0.2.0"),"Committed named hero world required");
+var arrival=proof.GetProperty("places").EnumerateArray().Single(p=>p.GetProperty("plan").GetProperty("place").GetProperty("place_id").GetString()==(court?"mutsea.starter.coastal-court":"mutsea.starter.coastal-arrival")).GetProperty("plan");
 var placements=arrival.GetProperty("placements").EnumerateArray().ToArray();
 var definitions=arrival.GetProperty("place").GetProperty("placements").EnumerateArray().ToArray();
 JsonElement Placement(string id)=>placements[Array.FindIndex(definitions,d=>d.GetProperty("local_id").GetString()==id)];
-var canopy=Placement("canopy_west");var bench=Placement("bench_west");
+var canopy=Placement((court?"arrival_":"")+"canopy_west");var bench=Placement((court?"arrival_":"")+"bench_west");
 Vector3 V(JsonElement value)
 {
     Require(value.ValueKind==JsonValueKind.Array&&value.GetArrayLength()==3&&value.EnumerateArray().All(v=>double.IsFinite(v.GetDouble())&&Math.Abs(v.GetDouble())<=512),"Bounded geometry vector required");
@@ -69,8 +70,15 @@ try
         var id=new UUID(plan.GetProperty("entity_ids")[0].GetString());var p=client.Network.CurrentSim!.ObjectsPrimitives.Copy().Values.Single(p=>p.ID==id);
         Require(Vector3.Distance(p.Position,At(plan,V(plan.GetProperty("package").GetProperty("parts")[0].GetProperty("position"))))<.02f,"Hero geometry moved after provisioning");
     }
-    stage="axis";var axis=await Walk("eighteen_metre_arrival_axis",Anchor(arrival)+new Vector3(0,-9,1.2f),MathF.PI/2,110,18.1f);
-    Require(axis.end.Y-axis.start.Y>=18&&Math.Abs(axis.end.X-axis.start.X)<.35f&&axis.samples.All(p=>Math.Abs(p[2]-axis.start.Z)<.65f),"Arrival axis blocked or required flying/climbing");
+    float distance=court?52.2f:18.1f;
+    var arrivalOrigin=Anchor(arrival)+new Vector3(0,court?-24.4f:0,0);
+    stage="axis";var axis=await Walk(court?"arrival_to_pavilion_ground_walk":"eighteen_metre_arrival_axis",arrivalOrigin+new Vector3(0,-9,1.2f),MathF.PI/2,court?350:110,distance);
+    Require(axis.end.Y-axis.start.Y>=distance-.1f&&Math.Abs(axis.end.X-axis.start.X)<.35f&&axis.samples.All(p=>Math.Abs(p[2]-axis.start.Z)<.65f),"Arrival/promenade axis blocked or required flying/climbing");
+    if(court)
+    {
+        stage="return";var back=await Walk("pavilion_to_arrival_return",arrivalOrigin+new Vector3(.8f,43.2f,1.5f),-MathF.PI/2,350,49.3f);
+        Require(back.start.Y-back.end.Y>=49.2f&&Math.Abs(back.end.X-back.start.X)<.35f&&back.samples.All(p=>Math.Abs(p[2]-back.start.Z)<.65f),"Offset return path blocked or required flying/climbing");
+    }
     float yaw=(float)(canopy.GetProperty("yaw_degrees").GetDouble()*Math.PI/180);
     stage="canopy";var clear=await Walk("open_canopy_approach",At(canopy,new Vector3(0,-2.4f,1.2f)),yaw+MathF.PI/2,35,1.6f);
     Require(Vector3.Distance(clear.start,clear.end)>1.5f&&clear.samples.All(p=>Math.Abs(p[2]-clear.start.Z)<.65f),"Canopy void blocks its approach");
@@ -86,8 +94,8 @@ try
     client.Self.Stand();deadline=DateTime.UtcNow.AddSeconds(8);while(client.Self.SittingOn!=0&&DateTime.UtcNow<deadline)await Task.Delay(100);Require(client.Self.SittingOn==0,"Avatar did not stand");
     stage="logout";Stop();client.Network.Logout();deadline=DateTime.UtcNow.AddSeconds(5);while(client.Network.Connected&&DateTime.UtcNow<deadline)await Task.Delay(50);Require(!client.Network.Connected,"Native logout not confirmed");
     using var output=new FileStream(args[2],FileMode.CreateNew,FileAccess.Write,FileShare.None);if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[2],UnixFileMode.UserRead|UnixFileMode.UserWrite);
-    JsonSerializer.Serialize(output,new{verified=true,world_mutations=false,appearance_sent=false,axis=true,canopy_approach=true,solid_post=true,sit=true,stand=true,logout=true,observations},new JsonSerializerOptions{WriteIndented=true});
-    Console.WriteLine("ARRIVAL_SMOKE PASS: eighteen-metre walk, canopy clearance/post, native Sit/Stand/logout.");return 0;
+    JsonSerializer.Serialize(output,new{verified=true,world_mutations=false,appearance_sent=false,axis=true,promenade=court,return_walk=court,canopy_approach=true,solid_post=true,sit=true,stand=true,logout=true,observations},new JsonSerializerOptions{WriteIndented=true});
+    Console.WriteLine("ARRIVAL_SMOKE PASS: bounded ground walk, canopy clearance/post, native Sit/Stand/logout.");return 0;
 }
 catch(Exception e)
 {

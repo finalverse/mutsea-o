@@ -89,14 +89,11 @@ public sealed partial class WorldModule
         var active=records.Where(r=>r.GetProperty("kind").GetString()=="wardrobe_result"&&r.GetProperty("result").GetProperty("user").GetString()==user.ToString()&&!RolledBack(r.GetProperty("action_id").GetString())).ToList();
         if(active.Any(r=>r.GetProperty("result").GetProperty("compiled_sha256").GetString()==pin))return;
         ContentCatalog.Require(scene.GetScenePresence(user)==null,"Provision Genesis wardrobes while the wearer is offline.");
+        // Validate selected bytes before rolling back an existing outfit.
+        var (package,mesh,materials,_)=AvatarCatalog.LoadWardrobe(dir,pin,out var alpha);
         // A new assignment replaces the wearer's previous Genesis outfit: journaled rollback first, so
         // the snapshot below is the wearer's own appearance again.
         foreach(var previous in active)GenesisRollback(records,previous.GetProperty("action_id").GetString()!);
-        var compiledBytes=File.ReadAllBytes(Path.Combine(dir,"compiled.json"));
-        ContentCatalog.Require(ContentCatalog.Hash(compiledBytes)==pin,"Compiled avatar differs from its configuration pin.");
-        var (package,mesh,materials,_)=AvatarCatalog.Load(dir,out var alpha);
-        AvatarCatalog.RequireCurrent(package);
-        ContentCatalog.Require(package.representation=="attachment"&&alpha!=null,"Only worn Genesis avatars can be provisioned to accounts.");
         var appearance=scene.AvatarService.GetAppearance(user)??throw new InvalidDataException("The wearer has no stored appearance.");
         var inventory=scene.InventoryService;
         var clothing=inventory.GetFolderForType(user,FolderType.Clothing)??inventory.GetRootFolder(user)??throw new InvalidDataException("The wearer has no inventory.");
@@ -160,7 +157,19 @@ public sealed partial class WorldModule
         int point=package.attachment_point switch{"Chest"=>(int)AttachmentPoint.Chest,"Spine"=>(int)AttachmentPoint.Spine,_=>(int)AttachmentPoint.Pelvis};
         appearance.SetWearable(AvatarWearable.ALPHA,new AvatarWearable(alphaItem.ID,alphaAsset));
         appearance.SetAttachment(point|0x80,objectItem.ID,objectAsset);
-        scene.AvatarService.SetAppearance(user,appearance);
+        ContentCatalog.Require(scene.AvatarService.SetAppearance(user,appearance),"Genesis appearance storage failed.");
+        var stored=scene.AvatarService.GetAppearance(user);
+        ContentCatalog.Require(stored!=null&&stored.Wearables[AvatarWearable.ALPHA].Count>0&&stored.Wearables[AvatarWearable.ALPHA][0].ItemID==alphaItem.ID
+            &&stored.Wearables[AvatarWearable.ALPHA][0].AssetID==alphaAsset&&stored.GetAttachments().Any(a=>a.ItemID==objectItem.ID&&a.AttachPoint==point),"Genesis appearance postcondition failed.");
+        // The inherited avatar store persists attachment item/point, not its
+        // asset ID (resolved from owned inventory at login). Verify the object
+        // asset via the native inventory binding below, preserving that contract.
+        foreach(var id in links)
+        {
+            var link=inventory.GetItem(user,id);var target=link==null?null:inventory.GetItem(user,link.AssetID);
+            ContentCatalog.Require(link!=null&&link.Owner==user&&link.Folder==cof.ID&&link.AssetType==(int)AssetType.Link&&target!=null&&target.Owner==user
+                &&(target.ID==objectItem.ID&&target.AssetID==objectAsset||target.ID==alphaItem.ID&&target.AssetID==alphaAsset),"Genesis Current Outfit postcondition failed.");
+        }
         GenesisRecord(action,"wardrobe_result",new{status="provisioned",user=user.ToString(),package.package_id,package.version,compiled_sha256=pin,
             folder=folder.ID.ToString(),object_item=objectItem.ID.ToString(),object_asset=objectAsset.ToString(),alpha_item=alphaItem.ID.ToString(),alpha_asset=alphaAsset.ToString(),
             mesh_asset=meshId.ToString(),attachment_point=point,cof_links=links.Select(x=>x.ToString()).ToArray()});

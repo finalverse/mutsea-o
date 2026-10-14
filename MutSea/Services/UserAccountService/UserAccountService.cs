@@ -600,7 +600,14 @@ namespace MutSea.Services.UserAccountService
         /// <param name="email"></param>
         /// <param name="model"></param>
         public UserAccount CreateUser(UUID scopeID, UUID principalID, string firstName, string lastName, string password, string email, string model = "")
+            => CreateUserWithProvisioning(scopeID, principalID, firstName, lastName, password, email, null, model);
+
+        // Trusted in-process completion only: home/chosen wardrobe must persist
+        // before activation. Retain the inherited CreateUser ABI for connectors.
+        public UserAccount CreateUserWithProvisioning(UUID scopeID, UUID principalID, string firstName, string lastName, string password, string email, Action<UserAccount> complete, string model = "")
         {
+            if (complete != null && !m_CreateDefaultAvatarEntries)
+                throw new InvalidOperationException("Extended provisioning requires verified starter appearance.");
             firstName = firstName.Trim();
             lastName = lastName.Trim();
             UserAccount account = GetUserAccount(UUID.Zero, firstName, lastName);
@@ -695,6 +702,8 @@ namespace MutSea.Services.UserAccountService
                 if (m_CreateDefaultAvatarEntries)
                 {
                     ValidateInitialAppearance(account.PrincipalID);
+                    complete?.Invoke(account);
+                    if (complete != null) ValidateInitialAppearance(account.PrincipalID);
                     account.UserLevel = 0;
                     account.ServiceURLs["MutSeaProvisioningState"] = "active";
                     if (!StoreUserAccount(account)) throw new InvalidOperationException("Account activation failed.");

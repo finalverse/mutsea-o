@@ -54,41 +54,53 @@ public sealed partial class WorldModule
                 // The standalone local connector registers the inherited service itself as the region's account service.
                 var service=scene.RequestModuleInterface<IUserAccountService>() as UserAccountService
                     ??throw new InvalidDataException("Newcomer provisioning needs the local (standalone) account service.");
+                // Reject unsupported, retired or changed choices before creating any identity.
+                foreach(var n in newcomers.accounts)if(n.genesis!=null)AvatarCatalog.LoadWardrobe(n.genesis,n.genesis_sha256!.ToLowerInvariant(),out _);
+                if(worldsEnabled&&worldsProvision!="")
+                {
+                    var at=worldsProvision.Split('@');
+                    ContentCatalog.Require(worlds!=null&&!worlds.RecoveryRequired&&worlds.Active(at[0],at[1])!=null,"The selected world must be ready before newcomer provisioning.");
+                }
                 foreach(var n in newcomers.accounts)
                 {
                     var account=scene.UserAccountService.GetUserAccount(UUID.Zero,n.first_name,n.last_name);
-                    bool created=account==null;
+                    bool created=account==null,homed=false;string? package=null;
                     var grid=account==null?null:scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
-                    // Validate before creating an identity. Existing homes and
-                    // appearance are preserved; only a missing home is filled.
                     double[]? arrival=grid==null||grid.HomeRegionID==UUID.Zero
                         ?WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight):null;
+                    void Complete(UserAccount current)
+                    {
+                        if(created)AccountRecord("account_created",current);
+                        grid=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
+                        // A new identity gets its chosen experience's arrival,
+                        // even if the legacy service supplied a default first.
+                        // An existing user's valid home is always preserved.
+                        if(created||grid==null||grid.HomeRegionID==UUID.Zero)
+                        {
+                            arrival??=WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight);
+                            var position=new Vector3((float)arrival[0],(float)arrival[1],(float)arrival[2]);
+                            ContentCatalog.Require(scene.GridUserService.SetHome(current.PrincipalID.ToString(),scene.RegionInfo.RegionID,position,Vector3.UnitY),"Newcomer home could not be stored.");
+                            var stored=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
+                            ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,position)<.01f,"Newcomer home postcondition was not confirmed.");
+                            homed=true;AccountRecord("home_set",current);
+                        }
+                        if(n.genesis!=null)
+                        {
+                            var records=File.Exists(GenesisJournal)?File.ReadAllLines(GenesisJournal).Select(l=>JsonDocument.Parse(l).RootElement.Clone()).ToList():new List<JsonElement>();
+                            GenesisProvision(records,current.PrincipalID,n.genesis,n.genesis_sha256!.ToLowerInvariant());
+                            package=Path.GetFileName(n.genesis.TrimEnd('/'));
+                        }
+                    }
                     if(created)
                     {
-                        account=service.CreateUser(UUID.Zero,UUID.Random(),n.first_name,n.last_name,n.password,"");
-                        // A failed provisioning stays stored and inactive for operator repair; never retried blindly.
-                        ContentCatalog.Require(account!=null,"Account provisioning failed for "+n.first_name+" "+n.last_name+"; inspect it before retrying.");
-                        AccountRecord("account_created",account!);
+                        account=service.CreateUserWithProvisioning(UUID.Zero,UUID.Random(),n.first_name,n.last_name,n.password,"",Complete);
+                        ContentCatalog.Require(account!=null,"Account provisioning failed; retained inactive identity requires operator review.");
+                        AccountRecord("account_activated",account!);
                     }
-                    else ContentCatalog.Require(account!.UserLevel>=0,"Existing account "+n.first_name+" "+n.last_name+" is not active.");
-                    // Only fill a missing home; an account's own home is never moved.
-                    bool homed=false;
-                    grid=scene.GridUserService.GetGridUserInfo(account!.PrincipalID.ToString());
-                    if(grid==null||grid.HomeRegionID==UUID.Zero)
+                    else
                     {
-                        arrival??=WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight);
-                        var at=new Vector3((float)arrival![0],(float)arrival[1],(float)arrival[2]);
-                        ContentCatalog.Require(scene.GridUserService.SetHome(account.PrincipalID.ToString(),scene.RegionInfo.RegionID,at,Vector3.UnitY),"Newcomer home could not be stored.");
-                        var stored=scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
-                        ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,at)<.01f,"Newcomer home postcondition was not confirmed.");
-                        homed=true;AccountRecord("home_set",account);
-                    }
-                    string? package=null;
-                    if(n.genesis!=null)
-                    {
-                        var records=File.Exists(GenesisJournal)?File.ReadAllLines(GenesisJournal).Select(l=>JsonDocument.Parse(l).RootElement.Clone()).ToList():new List<JsonElement>();
-                        GenesisProvision(records,account!.PrincipalID,n.genesis,n.genesis_sha256!.ToLowerInvariant());
-                        package=Path.GetFileName(n.genesis.TrimEnd('/'));
+                        ContentCatalog.Require(account!.UserLevel>=0,"Existing account is inactive; operator review required.");
+                        Complete(account);
                     }
                     log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account!.PrincipalID.ToString(),created,home_set=homed,genesis=package}));
                 }

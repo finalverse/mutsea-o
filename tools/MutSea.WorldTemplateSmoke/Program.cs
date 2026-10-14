@@ -6,10 +6,10 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length!=3&&(args.Length!=4||args[3]!="--hero-arrival"))throw new ArgumentException("Expected private account, world receipt, new output path and optional --hero-arrival fixture.");
+if(args.Length!=3&&(args.Length is not (4 or 5)||args[3]!="--hero-arrival"||args.Length==5&&args[4]!="--hold-seconds=10"))throw new ArgumentException("Expected private account, world receipt, new output path, optional --hero-arrival and bounded --hold-seconds=10.");
 // A second named loopback fixture keeps the original island and its active
 // user untouched. This never accepts an arbitrary remote/production endpoint.
-bool hero=args.Length==4;string authority=hero?"127.0.0.1:18099":"127.0.0.1:18098";
+bool hero=args.Length>=4,hold=args.Length==5;string authority=hero?"127.0.0.1:18099":"127.0.0.1:18098";
 byte[] Read(string path,int limit,bool ownerOnly=false)
 {
     var file=new FileInfo(path);
@@ -33,11 +33,13 @@ string stage="login";bool logout=false;
 using var http=new HttpClient(new HttpClientHandler{AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(15)};
 try
 {
+    var loginClock=System.Diagnostics.Stopwatch.StartNew();
     if(!client.Network.Login(account.GetProperty("first_name").GetString(),account.GetProperty("last_name").GetString(),account.GetProperty("password").GetString(),"MutSea.WorldTemplateSmoke","home","0.1.0"))throw new InvalidDataException("First-session login failed.");
     var login=client.Network.LoginResponseData;
     if(login.StartLocation!="home"||login.AgentID.ToString()!=account.GetProperty("user_id").GetString())throw new InvalidDataException("Home login fell back or changed identity.");
     stage="streaming";var deadline=DateTime.UtcNow.AddSeconds(35);Primitive[] prims=[];
     do{prims=client.Network.CurrentSim?.ObjectsPrimitives.Copy().Values.ToArray()??[];if(ids.IsSubsetOf(prims.Select(p=>p.ID)))break;await Task.Delay(200);}while(DateTime.UtcNow<deadline);
+    double loginAndStreamMs=loginClock.Elapsed.TotalMilliseconds;
     if(client.Network.CurrentSim==null)throw new InvalidDataException("No active simulator.");
     if(client.Network.CurrentSim.RegionID.ToString()!=account.GetProperty("region_id").GetString())throw new InvalidDataException("Native region handshake differs from the fixture.");
     if(!ids.IsSubsetOf(prims.Select(p=>p.ID)))throw new InvalidDataException($"Incomplete world stream: received {ids.Intersect(prims.Select(p=>p.ID)).Count()} of {ids.Count} expected parts.");
@@ -123,11 +125,17 @@ try
             ||semantic.GetProperty("world_template").GetProperty("operation_id").GetString()!=proof.GetProperty("world").GetProperty("operation_id").GetString())throw new InvalidDataException("Missing canonical place or world provenance.");
         ++semanticPlaces;
     }
+    DateTimeOffset? holdStart=null,holdEnd=null;
+    if(hold)
+    {
+        stage="concurrent_hold";holdStart=DateTimeOffset.UtcNow;await Task.Delay(10000);holdEnd=DateTimeOffset.UtcNow;
+        if(!client.Network.Connected||client.Network.CurrentSim?.RegionID.ToString()!=account.GetProperty("region_id").GetString())throw new InvalidDataException("Native session dropped during the bounded concurrent hold.");
+    }
     stage="logout";client.Network.Logout();deadline=DateTime.UtcNow.AddSeconds(5);
     while(client.Network.Connected&&DateTime.UtcNow<deadline)await Task.Delay(50);
     logout=!client.Network.Connected;
     var result=new{schema_version=1,world_id=proof.GetProperty("world").GetProperty("world_id").GetString(),region_id=account.GetProperty("region_id").GetString(),home_login=true,start_location=login.StartLocation,
-        expected_parts=ids.Count,matched_parts=ids.Count,semantic_places=semanticPlaces,current_outfit_links=links.Length,required_wearables=6,ownership_source="native permissions.owner_id",recovery_observed=expectRecovery,blocked_writes=blockedWrites,genesis_bindings_verified=account.TryGetProperty("expect_genesis",out var g)&&g.GetBoolean(),logout,appearance_sent=false};
+        expected_parts=ids.Count,matched_parts=ids.Count,semantic_places=semanticPlaces,current_outfit_links=links.Length,required_wearables=6,ownership_source="native permissions.owner_id",recovery_observed=expectRecovery,blocked_writes=blockedWrites,genesis_bindings_verified=account.TryGetProperty("expect_genesis",out var g)&&g.GetBoolean(),login_and_stream_ms=loginAndStreamMs,hold_start=holdStart,hold_end=holdEnd,logout,appearance_sent=false};
     using var output=new FileStream(args[2],FileMode.CreateNew,FileAccess.Write,FileShare.None);if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[2],UnixFileMode.UserRead|UnixFileMode.UserWrite);
     JsonSerializer.Serialize(output,result,new JsonSerializerOptions{WriteIndented=true});
     Console.WriteLine($"WORLD_TEMPLATE_SMOKE home=true parts={ids.Count} places={semanticPlaces} outfit_links={links.Length} logout={logout}");return logout?0:1;

@@ -1,5 +1,7 @@
 # Coastal arrival WorldTemplate — local native acceptance
 
+The subsequent world v0.3.0 composes arrival, promenade and pavilion as a bounded reusable court (95 placements / 381 parts), with the preserved nook and fire circle yielding 422 world parts. Prior versions remain available without implicit migration. The native avatar-only probe also covers the full promenade and offset return. See [selected newcomer activation](newcomer-activation.md) for the concurrent-session finding, verified provisioning fix and remaining public-onboarding gates.
+
 The original Starter Library now has `mutsea.starter.coastal-arrival@0.1.0`, composed from two new original small assets and already approved dependencies. `mutsea.starter.aurens-island@0.2.0` changes only the arrival dependency; original terrain, 20 m water, spawn and the other three places are retained. Existing v0.1.0 worlds are preserved and receive no implicit upgrade. Studio owns editable authoring data; MutSea remains canonical authority for instances, accounts, ownership, scene state and WorldLine.
 
 The arrival is 27 placements / 106 parts / 16,628 high triangles / four lights, versus the older arrival's 70 / 218 / 30,848 / nine. A new canopy has six parts, four individual solid posts and noncolliding overhead shell/edge. A planter has three parts, a solid low base and noncolliding hedge/blooms. Native LOD totals are 1,148/628/250/110 and 708/388/154/70. Material/semantic/collision/source hashes pass the existing native catalog; no small-asset or place limit was relaxed and no new executor introduced.
