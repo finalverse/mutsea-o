@@ -4,7 +4,7 @@
 
 The 2026-10-15 backend milestone places MutSea, a dedicated PostgreSQL database and a private local-model planner on one operator-selected host, behind the existing grid HTTPS gateway. It provisions the reusable Harbor island template through the existing World/Place kernels. Native private-route login verifies all 422 scene parts, three semantic places and eight owned Current Outfit links; a fresh operator admission and clean restart preserve inventory, appearance, accounts and journals. See [Finalverse backend](finalverse-backend.md) for topology, maintenance and verification limits. Website publication is separate.
 
-Public grid access remains gated. Region UDP delivery passes from the local network, but the latest external probe does not reach the host even with UDP 19000 explicitly allowed. Host services do not depend on another site's server. The outside host is a test vantage point. Router DMZ/forwarding and native TLS certificate renewal must be checked before enabling public entry. These checks do not require migrating the services again.
+Public grid access remains gated. After the router forwarding change, real outside native home entry, all 422 parts, selected outfit ownership, semantic inspection and logout pass with strict TLS. An owned host guard restricts the newly broadened router range to the required UDP port. The test's exact-source HTTPS allowance was removed afterward. Host services do not depend on another site's server; the outside host is a test vantage point. Native TLS certificate renewal, controlled public admission and authenticated viewer-to-server planning remain before public operation. These tasks do not require migrating the services again.
 
 ### Earlier development deployment — 2026-10-09
 

@@ -29,7 +29,18 @@ if content.count(b'bool _Running;') != 1 or content.count(b'downloadMaster.Abort
 content=content.replace(b'bool _Running;',b'volatile bool _Running;')
 content=content.replace(b'downloadMaster.Abort();',b'_Running = false;\r\n                downloadMaster.Join(2000);')
 source.write_bytes(content)
+# The inherited diagnostic SDK ignored chain and hostname errors. Keep the
+# runtime/server untouched; tighten both callbacks in this pinned test build.
+for relative in ['OpenMetaverse/Login.cs','OpenMetaverse/Capabilities/CapsBase.cs']:
+    source=sdk/relative;content=source.read_bytes()
+    for flag in ['RemoteCertificateChainErrors','RemoteCertificateNameMismatch']:
+        bypass=('sslPolicyErrors &= ~SslPolicyErrors.'+flag+';').encode()
+        if content.count(bypass)!=1:raise ValueError('Unreviewed TLS validation implementation')
+        content=content.replace(bypass,b'// Development probe retains all certificate validation errors.')
+    source.write_bytes(content)
 run(['bash','runprebuild.sh'],sdk)
 run(['dotnet','build','-c','Release','OpenMetaverse.sln','-m:2'],sdk)
+run(['dotnet','run','--project',str(Path(__file__).parent.parent/'MutSea.ProtocolTlsTests'),
+     '-c','Release','-p:ProbeBin='+str(sdk/'bin')])
 run(['dotnet','build',str(Path(__file__).parent/'MutSea.ProtocolSmoke.csproj'),'-c','Release','-p:MutSeaBin='+str(sdk/'bin')])
 print('Protocol probe built; SDK revision:',revision)
