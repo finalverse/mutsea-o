@@ -25,6 +25,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     readonly object gate = new();
     readonly Dictionary<UUID,Guid> sessions = new();
     readonly Dictionary<UUID,DateTimeOffset> lastRequest = new();
+    readonly Dictionary<UUID,DateTimeOffset> lastExperienceRequest = new();
     Scene scene = null!;
     Kernel kernel = null!;
     bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true
@@ -112,13 +113,17 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 lock(gate)
                 {
                     if(!sessions.TryGetValue(agent,out var current)||current!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");
-                    if(lastRequest.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
-                    lastRequest[agent]=DateTimeOffset.UtcNow;
                     string actor=agent.ToString(); string op=data.GetProperty("op").GetString()!;
+                    // Background discovery must not consume the human action
+                    // throttle or make a concurrent approval fail spuriously.
+                    var requests=op=="experience"?lastExperienceRequest:lastRequest;
+                    if(requests.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
+                    requests[agent]=DateTimeOffset.UtcNow;
                     if(WorldRecoveryRequired && op is "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
-                    if(op is "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
+                    if(op is "experience" or "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
                     if(op.StartsWith("content_",StringComparison.Ordinal))operation=op;
                     object result=op switch {
+                        "experience"=>HumanExperience(actor),
                         "content_preview"=>content!.Preview(data.GetProperty("package_id").GetString()!,data.GetProperty("version").GetString()!,data.GetProperty("anchor").Deserialize<double[]>()!,actor),
                         "content_commit"=>content!.Commit(data.GetProperty("plan_id").GetString()!,actor),
                         "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),

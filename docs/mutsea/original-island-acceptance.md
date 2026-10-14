@@ -44,3 +44,7 @@ The viewer review exposed and repaired a separate default-start-location compari
 Private integration/creation/Undo/home-login/build evidence and launch inputs live under `~/Finalverse/dev/onboarding-20261014`. No credentials, databases or raw capability logs entered Git. No repeated avatar screenshot or performance loop was performed. These are bounded local proof, not public onboarding or market acceptance.
 
 Phase 4B remains **open** for final art/landscape and arrival treatment, public registration/character/experience choices and a first-time user study, capability-aware Lumi availability across worlds, continuous collision/LOD, controlled performance and distribution approval.
+
+## Capability-aware first creation — 2026-10-14
+
+The subsequent [experience discovery slice](experience-discovery.md) closes the bounded Lumi-availability gap above. All three local grids now run the same authenticated discovery module, with scene/inventory/appearance/sidecar state unchanged before protocol review. Native controller, observer and absent-citizen sessions passed. Finalverse's one combined island UI review verified direct Nearby results and guided nook/garden creation without falsely offering citizen control. The other Phase 4B product gates remain open; no new build/Undo or repeated visual/performance loop was required for this UI slice.

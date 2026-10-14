@@ -27,7 +27,19 @@ Test("human history joins journals without leaking another actor",()=>{
  Assert(history.Length==3&&history[0].GetProperty("plan_id").GetString()=="action"&&history[2].GetProperty("status").GetString()=="undone");
  Assert(history[1].GetProperty("proposal").GetProperty("request").GetString()=="Garden");
 });
-Console.WriteLine($"{passed} composer siting checks passed; no world mutation API called.");
+Test("disabled or absent citizens never offer a relay",()=>{
+ Assert(!ExperienceAvailability.Citizen(false,true,true,true,false).can_interact);
+ Assert(ExperienceAvailability.Citizen(true,false,true,true,false) is {present:false,can_interact:false,state:"not_in_world"});
+});
+Test("seeing Lumi does not grant controller privileges",()=>{
+ Assert(ExperienceAvailability.Citizen(true,true,false,true,false) is {present:true,can_interact:false,state:"not_controller"});
+ Assert(ExperienceAvailability.Citizen(true,true,true,true,false) is {present:true,can_interact:true,state:"enabled"});
+});
+Test("starting and failed representations keep citizen controls closed",()=>{
+ Assert(ExperienceAvailability.Citizen(true,true,true,false,false).state=="starting");
+ Assert(ExperienceAvailability.Citizen(true,true,true,true,true) is {can_interact:false,state:"representation_recovery"});
+});
+Console.WriteLine($"{passed} composer/discovery checks passed; no world mutation API called.");
 sealed class Terrain:IWorld
 {
  public Func<double,double,double> Sample=(x,y)=>25;public double[] Position=[64,64,25];
