@@ -4,10 +4,15 @@ Opt-in region module; MutSea remains the simulator/world brand. Inherited scene,
 
 ## Build and run
 
-Build the existing standalone image first using `deploy/standalone/Dockerfile`. Build the add-on against that **same** image; avoid mixing unrelated simulator assemblies:
+The standalone recipe now builds the opt-in module against the **same** freshly compiled simulator assemblies. This also keeps the account service and its provisioning callback compatible:
 
 ```sh
 docker build -f deploy/standalone/Dockerfile -t mutsea:verify .
+```
+
+The optional add-on recipe remains available for a verified native base. It runs the kernel/content suites and recompiles the module against that base. Account provisioning additionally requires the matching updated `MutSea.Services.UserAccountService.dll`; an older base without its callback is unsuitable:
+
+```sh
 docker build -f deploy/worldops/Dockerfile --build-arg MUTSEA_IMAGE=mutsea:verify -t mutsea:worldops-verify .
 ```
 
@@ -28,7 +33,7 @@ Enabled = true
 DataDirectory = /data/finalverse
 ```
 
-Use the existing standalone entrypoint/configuration procedure. The data directory must be writable by the simulator service user. Keep the fixture isolated, publish ports only on loopback, use a generated development account, and back up scene data and WorldLine together. No public deployment is included in this milestone.
+Use the existing standalone entrypoint/configuration procedure. The data directory must be writable by the simulator service user. For local fixtures, keep ports on loopback. The dedicated backend topology and its separate external-entry gate are documented in [backend deployment](../../docs/mutsea/finalverse-backend.md). Back up scene data and WorldLine together; packaging alone does not enable the module or public admission.
 
 ## Contract and limits
 

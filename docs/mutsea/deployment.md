@@ -2,6 +2,12 @@
 
 ## Current public state
 
+The 2026-10-15 backend milestone places MutSea, a dedicated PostgreSQL database and a private local-model planner on one operator-selected host, behind the existing grid HTTPS gateway. It provisions the reusable Harbor island template through the existing World/Place kernels. Native private-route login verifies all 422 scene parts, three semantic places and eight owned Current Outfit links; a fresh operator admission and clean restart preserve inventory, appearance, accounts and journals. See [Finalverse backend](finalverse-backend.md) for topology, maintenance and verification limits. Website publication is separate.
+
+Public grid access remains gated. Region UDP delivery passes from the local network, but the latest external probe does not reach the host even with UDP 19000 explicitly allowed. Host services do not depend on another site's server. The outside host is a test vantage point. Router DMZ/forwarding and native TLS certificate renewal must be checked before enabling public entry. These checks do not require migrating the services again.
+
+### Earlier development deployment — 2026-10-09
+
 As of 2026-10-09, a new x86-64 simulator is installed on the requested development host with a dedicated PostgreSQL 16.15 container, persistent storage and a private database network. The application role owns its database and has no superuser, database-creation or role-creation privileges. No database port is published. Existing neighboring containers and volumes were preserved.
 
 The full native source build and Finalverse module build passed. Fresh startup provisioned an active developer account with initial appearance data and seeded 40 Harbor objects. Real LAN HTTPS login through the gateway, the advertised HTTPS capability origin, all 40 UDP object identities/transforms and logout passed. This uses explicit private test DNS mappings and is **not** proof of public world entry.
@@ -24,7 +30,7 @@ The generator defaults to PostgreSQL and requires a private database configurati
 
 Build `tools/MutSea.StarterScene` against the freshly compiled simulator assemblies with `-p:MutSeaBin=/absolute/path/to/bin`. Run its DLL with the owner UUID from the private account file and a new scene directory. UUIDs are identifiers, not passwords.
 
-For the public TLS profile, install a valid PKCS12 certificate at `/config/mutsea.p12`, using the generated certificate-password file through OpenSSL's file input. Its SAN must cover `grid.mutsea.com`. Keep certificate keys private; arrange renewal and simulator certificate reload/restart before enabling public traffic. The gateway renewal hook currently reloads nginx only. Simulator certificate synchronization is still a deployment gate; the gateway does not yet have authorized unattended SSH access to the simulator. A manual certificate installation is verified, with expiration on 2027-01-05.
+For the public TLS profile, install a valid PKCS12 certificate at `/config/mutsea.p12`, using the generated certificate-password file through OpenSSL's file input. Its SAN must cover `grid.mutsea.com`. Keep certificate keys private; arrange renewal and simulator certificate reload/restart before enabling public traffic. The earlier gateway renewal hook reloads nginx only. Simulator certificate synchronization is still a deployment gate. On a single-host deployment no cross-host SSH is needed: the operator installs the renewed private bundle locally and performs a reviewed, drained native restart. The earlier manual certificate installation was verified, with expiration on 2027-01-05; check the actual current certificate instead of relying on that historical date.
 
 Set the Compose environment privately:
 

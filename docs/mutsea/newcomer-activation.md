@@ -4,7 +4,7 @@ An operator-selected Genesis wardrobe used to run after the inherited account se
 
 `UserAccountService.CreateUserWithProvisioning` adds a trusted in-process completion callback to the existing account implementation. The inherited `CreateUser` method and optional model argument retain their ABI and behavior. No anonymous registration handler, new identity store, public endpoint or client privilege is added.
 
-Deploy the updated `Finalverse.World.dll` with the matching `MutSea.Services.UserAccountService.dll`; the new module calls the added completion method. This slice integrates that pair only on the named local hero fixture. Other established grids retain their previous tested binaries. A later rollout needs their normal session check, native backup/shutdown, matched pair, guarded restart and preservation verification.
+Deploy the updated `Finalverse.World.dll` with the matching `MutSea.Services.UserAccountService.dll`; the new module calls the added completion method. The original slice integrated that pair on the named local hero fixture. The 2026-10-15 [single-host backend](finalverse-backend.md) now builds and deploys both from the same source and verifies a fresh [operator pilot admission](pilot-admission.md), login and restart. Other established grids retain their previous tested binaries. Any further rollout needs their normal session check, native backup/shutdown, matched pair, guarded restart and preservation verification.
 
 ```mermaid
 flowchart TD
@@ -34,4 +34,4 @@ Wardrobe selection validation also precedes rollback of an existing Genesis assi
 
 `tools/MutSea.WorldTemplateSmoke/load.py` coordinates 2–6 unique private accounts only on the named loopback hero fixture. Raw SDK logs and account files stay private. It validates all normal logout receipts and exact native UTC hold intervals; .NET's variable fractional digits are parsed as 100 ns ticks for Python 3.9 compatibility. A summary-format failure was corrected from the completed receipts without repeating logins. It cannot target a public grid or log in the same account concurrently.
 
-Public signup, invitation/admission policy, recovery UI, character/experience selection, abuse controls, a first-time user study and distribution remain open. Future registration must invoke the same verified native completion path with server-controlled choices. Phase 4B stays open; no public service was deployed.
+Public signup, invitation redemption, recovery UI, public character/experience selection, abuse controls, a first-time user study and distribution remain open. Operator admission now pins a supported character and Harbor experience through this same verified native completion path. The new backend is deployed behind a closed public grid ACL; private route verification is not public-service acceptance.

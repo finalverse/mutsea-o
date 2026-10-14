@@ -6,10 +6,13 @@ using System.Text;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 
-if(args.Length!=3&&(args.Length is not (4 or 5)||args[3]!="--hero-arrival"||args.Length==5&&args[4]!="--hold-seconds=10"))throw new ArgumentException("Expected private account, world receipt, new output path, optional --hero-arrival and bounded --hold-seconds=10.");
+bool backend=args.Length==4&&args[3]=="--maple-early-access";
+if(args.Length!=3&&!backend&&(args.Length is not (4 or 5)||args[3]!="--hero-arrival"||args.Length==5&&args[4]!="--hold-seconds=10"))throw new ArgumentException("Expected private account, world receipt, new output path and a named fixture mode.");
 // A second named loopback fixture keeps the original island and its active
 // user untouched. This never accepts an arbitrary remote/production endpoint.
-bool hero=args.Length>=4,hold=args.Length==5;string authority=hero?"127.0.0.1:18099":"127.0.0.1:18098";
+bool hero=!backend&&args.Length>=4,hold=args.Length==5;
+string authority=backend?"grid.mutsea.com":hero?"127.0.0.1:18099":"127.0.0.1:18098";
+string scheme=backend?"https":"http";
 byte[] Read(string path,int limit,bool ownerOnly=false)
 {
     var file=new FileInfo(path);
@@ -18,8 +21,9 @@ byte[] Read(string path,int limit,bool ownerOnly=false)
     var bytes=File.ReadAllBytes(path);if(bytes.Length>limit)throw new IOException("Input exceeded its bound.");return bytes;
 }
 var account=JsonDocument.Parse(Read(args[0],16384,true)).RootElement;
-if(account.GetProperty("grid_url").GetString()!="http://"+authority+"/"||!account.GetProperty("registered").GetBoolean())throw new InvalidDataException("Expected isolated registered world-template fixture.");
+if(account.GetProperty("grid_url").GetString()!=scheme+"://"+authority+"/"||!account.GetProperty("registered").GetBoolean())throw new InvalidDataException("Expected isolated registered world-template fixture.");
 if(hero&&account.GetProperty("fixture").GetString()!="hero-arrival-v1")throw new InvalidDataException("Explicit hero fixture required.");
+if(backend&&(account.GetProperty("fixture").GetString()!="maple-early-access-20261015"||account.GetProperty("first_name").GetString()!="Pilot"||account.GetProperty("last_name").GetString() is not ("Builder" or "Explorer" or "Architect")))throw new InvalidDataException("Only the named backend's private pilot identities may use this probe.");
 if(File.Exists(args[2]))throw new IOException("Preserve the previous receipt.");
 var proof=JsonDocument.Parse(Read(args[1],16*1024*1024)).RootElement;
 var plans=proof.GetProperty("places").EnumerateArray().Select(e=>e.GetProperty("plan").Clone()).ToArray();
@@ -65,7 +69,7 @@ try
     Uri Capability(string name)
     {
         var uri=new Uri(map[name].AsString());
-        if(uri.Scheme!="http"||uri.Authority!=authority||uri.UserInfo!="")throw new InvalidDataException("Unexpected native capability origin.");
+        if(uri.Scheme!=scheme||uri.Authority!=authority||uri.UserInfo!="")throw new InvalidDataException("Unexpected native capability origin.");
         return uri;
     }
     var cap=Capability("FinalverseWorld");
@@ -99,6 +103,14 @@ try
         inspectResponse.EnsureSuccessStatusCode();var context=JsonDocument.Parse(await inspectResponse.Content.ReadAsStringAsync()).RootElement.GetProperty("result");
         if(context.GetProperty("region").GetProperty("id").GetString()!=account.GetProperty("region_id").GetString())throw new InvalidDataException("Authenticated world region differs from the fixture.");
         if(context.GetProperty("recovery_required").GetBoolean()!=expectRecovery)throw new InvalidDataException("World recovery status is not observable in inspection.");
+        if(backend)
+        {
+            // Scoped native observations only, never the login/seed/capability
+            // response. Allows private inference verification after logout.
+            using var contextFile=new FileStream(args[2]+".world-context.json",FileMode.CreateNew,FileAccess.Write,FileShare.None);
+            if(!OperatingSystem.IsWindows())File.SetUnixFileMode(args[2]+".world-context.json",UnixFileMode.UserRead|UnixFileMode.UserWrite);
+            JsonSerializer.Serialize(contextFile,context);
+        }
     }
     int blockedWrites=0;
     if(expectRecovery)

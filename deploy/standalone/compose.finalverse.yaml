@@ -1,0 +1,61 @@
+# A dedicated backend behind the Finalverse gateway. No database port is published.
+# Operator secrets/configuration live outside the source tree and image.
+services:
+  postgres:
+    image: ${FINALVERSE_POSTGRES_IMAGE:?Use an inspected immutable PostgreSQL 16 digest}
+    restart: unless-stopped
+    cpus: 1
+    mem_limit: 1g
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ${FINALVERSE_OPERATIONS:?Private operator directory}/pg-admin-password:/run/secrets/postgres_admin:ro
+      - ${FINALVERSE_OPERATIONS}/init-app.sql:/docker-entrypoint-initdb.d/10-finalverse.sql:ro
+    networks: [database]
+    healthcheck:
+      # initdb's temporary Unix-socket server must not look ready. Require the
+      # final TCP listener and the separately initialized application database.
+      test: [CMD-SHELL, "pg_isready -h 127.0.0.1 -U postgres -d postgres && psql -U postgres -d finalverse -Atc 'SELECT 1' >/dev/null"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+  mutsea:
+    image: ${FINALVERSE_MUTSEA_IMAGE:?Use the source-built image digest}
+    restart: unless-stopped
+    depends_on:
+      postgres: {condition: service_healthy}
+    init: true
+    stdin_open: true
+    tty: true
+    user: "1000:1000"
+    cpus: 2
+    mem_limit: 3g
+    environment:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+    volumes:
+      - ${FINALVERSE_CONFIG:?Private configuration and pinned content}:/config:ro
+      - ${FINALVERSE_DATA:?Persistent runtime and WorldLine directory}:/data
+    ports:
+      # The existing HTTPS gateway talks to this loopback-only native TLS listener.
+      - "127.0.0.1:${FINALVERSE_TLS_PORT:?Unused loopback TLS port}:443/tcp"
+      # Region UDP is independent of web/API access and still needs router verification.
+      - "${FINALVERSE_UDP_BIND:?Explicit region UDP bind address}:19000:19000/udp"
+    # Native grid/region startup resolves its advertised public hostname. Give
+    # the simulator a normal egress network; keep PostgreSQL internal-only.
+    networks: [database, runtime]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+networks:
+  database:
+    internal: true
+  runtime:
+volumes:
+  postgres-data:

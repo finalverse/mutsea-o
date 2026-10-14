@@ -3,6 +3,8 @@
 MutSea remains the simulator/server brand. Finalverse is the world client. This delivery adds deployment packaging and a deterministic starter scene around the inherited server, without replacing its world, account, inventory, asset or physics systems.
 
 - [Deployment](deployment.md): fresh-instance preparation, TLS, persistent data and rollback.
+- [Finalverse backend](finalverse-backend.md): verified single-host topology, private inference, region networking and maintenance.
+- [Pilot admission](pilot-admission.md): operator-controlled character/experience selection, native activation and preservation on replay.
 - [PostgreSQL](postgresql.md): native storage configuration, audited development-fixture migration, backup and rollback.
 - [MutSea Harbor](starter-world.md): scene contents, import and provenance.
 - [Platform verification](platform-verification.md): observed build/runtime results and remaining gates.

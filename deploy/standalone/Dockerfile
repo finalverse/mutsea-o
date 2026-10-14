@@ -3,6 +3,8 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 WORKDIR /src
 COPY . .
 RUN bash runprebuild.sh && dotnet build -c Release MutSea.sln -m:2
+RUN dotnet build -c Release Finalverse/World/Finalverse.World.csproj \
+    -p:MutSeaBin=/src/bin -o /finalverse-module
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0-bookworm-slim@sha256:47c36b770db8f712ceb03e9220d799b068c769b8bc89c61d62cd41600633d9c2
 RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list.d/debian.sources \
@@ -11,6 +13,7 @@ RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.l
     && rm -rf /var/lib/apt/lists/* \
     && useradd --uid 1000 --create-home mutsea
 COPY --from=build --chown=1000:1000 /src/bin/ /opt/mutsea/
+COPY --from=build --chown=1000:1000 /finalverse-module/Finalverse.World.dll /opt/mutsea/
 COPY LICENSE.txt CONTRIBUTORS.txt /usr/share/doc/mutsea/
 COPY deploy/standalone/entrypoint.sh /usr/local/bin/mutsea-entrypoint
 RUN chmod 755 /usr/local/bin/mutsea-entrypoint && mkdir /data && chown 1000:1000 /data

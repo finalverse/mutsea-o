@@ -64,13 +64,25 @@ public sealed partial class WorldModule
                 foreach(var n in newcomers.accounts)
                 {
                     var account=scene.UserAccountService.GetUserAccount(UUID.Zero,n.first_name,n.last_name);
+                    string? selection=n.admission_id==null?null:PilotAdmission.Selection(n,RegionId,accountsHome);
+                    if(account!=null&&n.admission_id!=null)
+                    {
+                        // A fresh admission cannot repurpose an existing name.
+                        // A confirmed replay observes its original account only,
+                        // preserving all user edits and authentication state.
+                        ContentCatalog.Require(account.UserLevel>=0&&PilotAdmission.Confirmed(
+                            File.Exists(AccountsJournal)?File.ReadLines(AccountsJournal):[],n.admission_id,
+                            account.PrincipalID.ToString(),selection!),"Admission name is already registered or requires operator review; no existing identity is changed.");
+                        log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account.PrincipalID.ToString(),created=false,home_set=false,admission_replay=true}));
+                        continue;
+                    }
                     bool created=account==null,homed=false;string? package=null;
                     var grid=account==null?null:scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
                     double[]? arrival=grid==null||grid.HomeRegionID==UUID.Zero
                         ?WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight):null;
                     void Complete(UserAccount current)
                     {
-                        if(created)AccountRecord("account_created",current);
+                        if(created)AccountRecord("account_created",current,n.admission_id,selection);
                         grid=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
                         // A new identity gets its chosen experience's arrival,
                         // even if the legacy service supplied a default first.
@@ -82,7 +94,7 @@ public sealed partial class WorldModule
                             ContentCatalog.Require(scene.GridUserService.SetHome(current.PrincipalID.ToString(),scene.RegionInfo.RegionID,position,Vector3.UnitY),"Newcomer home could not be stored.");
                             var stored=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
                             ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,position)<.01f,"Newcomer home postcondition was not confirmed.");
-                            homed=true;AccountRecord("home_set",current);
+                            homed=true;AccountRecord("home_set",current,n.admission_id,selection);
                         }
                         if(n.genesis!=null)
                         {
@@ -95,7 +107,7 @@ public sealed partial class WorldModule
                     {
                         account=service.CreateUserWithProvisioning(UUID.Zero,UUID.Random(),n.first_name,n.last_name,n.password,"",Complete);
                         ContentCatalog.Require(account!=null,"Account provisioning failed; retained inactive identity requires operator review.");
-                        AccountRecord("account_activated",account!);
+                        AccountRecord("account_activated",account!,n.admission_id,selection);
                     }
                     else
                     {
@@ -109,10 +121,11 @@ public sealed partial class WorldModule
         }
     }
 
-    void AccountRecord(string kind,UserAccount account)
+    void AccountRecord(string kind,UserAccount account,string? admission_id=null,string? selection_sha256=null)
     {
         byte[] data=JsonSerializer.SerializeToUtf8Bytes(new{event_id=Guid.NewGuid(),kind,timestamp=DateTimeOffset.UtcNow,account_id=account.PrincipalID.ToString(),name=account.FirstName+" "+account.LastName,
-            provisioning_state=account.ServiceURLs!=null&&account.ServiceURLs.TryGetValue("MutSeaProvisioningState",out var state)?state?.ToString():null,user_level=account.UserLevel});
+            provisioning_state=account.ServiceURLs!=null&&account.ServiceURLs.TryGetValue("MutSeaProvisioningState",out var state)?state?.ToString():null,user_level=account.UserLevel,
+            admission_id,selection_sha256});
         using var file=new FileStream(AccountsJournal,FileMode.Append,FileAccess.Write,FileShare.Read);file.Write(data);file.WriteByte(10);file.Flush(true);
         if(!OperatingSystem.IsWindows())File.SetUnixFileMode(AccountsJournal,UnixFileMode.UserRead|UnixFileMode.UserWrite);
     }
