@@ -22,7 +22,7 @@ public sealed partial class WorldModule
     readonly HashSet<string> citizenIntents=new(),gardenPlans=new(),gardenCommits=new();
     readonly HashSet<string> citizenPlacePlans=new(),citizenPlaceCommits=new();
     DateTimeOffset lease,lastTick=DateTimeOffset.UtcNow,lastBackup=DateTimeOffset.UtcNow;
-    static readonly HttpClient runtimeHttp=new(new HttpClientHandler {UseProxy=false}) {Timeout=TimeSpan.FromSeconds(100)};
+    HttpClient runtimeHttp=new(new HttpClientHandler {UseProxy=false,AllowAutoRedirect=false}) {Timeout=TimeSpan.FromSeconds(100)};
     void InitialiseCitizen(IConfigSource source)
     {
         var c=source.Configs["FinalverseCitizens"];
@@ -32,6 +32,8 @@ public sealed partial class WorldModule
         string tokenFile=c.GetString("TokenFile","");
         if(!Guid.TryParse(citizenOwner,out _)||!Uri.TryCreate(runtimeUrl,UriKind.Absolute,out var url)||url.Scheme!="http"||url.Query!=""||url.UserInfo!="")throw new InvalidDataException("Invalid private citizen configuration.");
         citizenToken=File.ReadAllText(tokenFile).Trim();if(citizenToken.Length<32||citizenToken.Length>128)throw new InvalidDataException("Citizen service token must be 32–128 characters.");
+        string runtimeSocket=c.GetString("RuntimeSocket","");
+        if(runtimeSocket!=""){runtimeHttp.Dispose();runtimeHttp=PrivateServiceHttp.Client(runtimeSocket,TimeSpan.FromSeconds(100));}
         InitialiseRepresentation(c);
     }
     void StartCitizen()
@@ -108,8 +110,9 @@ public sealed partial class WorldModule
         using var message=new HttpRequestMessage(HttpMethod.Post,runtimeUrl.TrimEnd('/')+"/v1/citizens/"+Kernel.LumiId+"/command");
         message.Headers.Authorization=new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",citizenToken);
         message.Content=new StringContent(JsonSerializer.Serialize(new{controller_id=actor,command,text}),Encoding.UTF8,"application/json");
-        using var reply=runtimeHttp.Send(message);using var stream=reply.Content.ReadAsStream();using var memory=new MemoryStream();byte[] buffer=new byte[4096];int count;
-        while((count=stream.Read(buffer,0,buffer.Length))>0){memory.Write(buffer,0,count);if(memory.Length>65536)throw new InvalidDataException("Citizen reply exceeds limit.");}
+        using var deadline=new CancellationTokenSource(TimeSpan.FromSeconds(100));
+        using var reply=runtimeHttp.SendAsync(message,HttpCompletionOption.ResponseHeadersRead,deadline.Token).GetAwaiter().GetResult();using var stream=reply.Content.ReadAsStream(deadline.Token);using var memory=new MemoryStream();byte[] buffer=new byte[4096];int count;
+        while((count=stream.ReadAsync(buffer,deadline.Token).AsTask().GetAwaiter().GetResult())>0){memory.Write(buffer,0,count);if(memory.Length>65536)throw new InvalidDataException("Citizen reply exceeds limit.");}
         var root=JsonDocument.Parse(memory.ToArray()).RootElement;
         if(!reply.IsSuccessStatusCode)throw new InvalidDataException("Citizen runtime could not complete that request safely.");return root.Clone();
     }

@@ -14,7 +14,7 @@ public sealed record Entity(string id, string name, string description, string o
     // (0.35–1.8 m above ground). Null for sources that cannot tell, which keep the root-based rule.
     double? body_radius = null);
 public sealed record Step(string type, string id, Entity? before, Entity? after);
-public sealed record Prepared(string plan_id, string actor_id, DateTimeOffset expires_at, Plan proposal, Step[] steps, string scene_revision, string summary);
+public sealed record Prepared(string plan_id, string actor_id, DateTimeOffset expires_at, Plan proposal, Step[] steps, string scene_revision, string summary, string? siting = null);
 public sealed record Entry(string operation_id, string plan_id, string actor_id, DateTimeOffset timestamp,
     string status, Plan proposal, Step[] steps, string? error, string? owner_agent_id, Entity?[]? observed_state = null);
 public interface IWorld
@@ -103,6 +103,7 @@ public sealed class Kernel
         var steps = new List<Step>();
         var targets = new HashSet<string>();
         var avatar = world.Avatar(actor);
+        string? siting=null;
         int component = 0;
         Entity New(string name, string shape, double[] pos, double[] size, double[] color, double yaw = 0) =>
             new(TraceId(id, component++), name, "Created through Finalverse World API", actor, shape, pos,
@@ -156,11 +157,21 @@ public sealed class Kernel
             }
             else if (a.type == "create_primitive")
             {
-                Fields(p,"position","scale","color","shape","name");
+                bool relative=p.TryGetProperty("placement",out var placement);
+                Fields(p,relative?"placement":"position","scale","color","shape","name");
+                Require(!relative||proposal.actions.Length==1,"Relative placement supports one primitive per proposal.");
                 Require(a.target_id == null, "Creation cannot target an existing object.");
                 string shape = p.GetProperty("shape").GetString()!;
                 Require(shape is "box" or "sphere", "Only box and sphere primitives are supported.");
-                var e = New(Text(p,"name",80),shape,Vec(p,"position",3),Vec(p,"scale",3),Vec(p,"color",4));
+                var scale=Vec(p,"scale",3);
+                var position=relative?RelativePlacement.Resolve(world,actor,placement,scale):Vec(p,"position",3);
+                if(relative)
+                {
+                    string direction=placement.GetProperty("direction").GetString()!;
+                    string label=direction switch{"forward"=>"in front of you","backward"=>"behind you",_=>"to your "+direction};
+                    siting=placement.GetProperty("distance").GetDouble().ToString("0.##",System.Globalization.CultureInfo.InvariantCulture)+" m "+label+", on dry ground. Apply uses this previewed location.";
+                }
+                var e = New(Text(p,"name",80),shape,position,scale,Vec(p,"color",4));
                 steps.Add(new("create",e.id,null,e));
             }
             else
@@ -205,7 +216,7 @@ public sealed class Kernel
         Require(steps.Count(s=>s.type=="create")<=MaxCreates && steps.Sum(s=>s.after?.scale.Aggregate(1d,(v,x)=>v*x)??0)<=MaxVolume,"Creation exceeds the primitive/volume budget.");
         Require(world.CanCreate(actor,steps.Count(s=>s.type=="create"),avatar),"Region object budget or build permission rejected this plan.");
         ValidateSteps(steps,actor);
-        var prepared=new Prepared(id,actor,DateTimeOffset.UtcNow.AddMinutes(2),proposal,steps.ToArray(),SceneRevision(actor),$"{steps.Count} bounded world changes. Build creates {steps.Count(s=>s.type=="create")} primitives; undo uses guarded compensation.");
+        var prepared=new Prepared(id,actor,DateTimeOffset.UtcNow.AddMinutes(2),proposal,steps.ToArray(),SceneRevision(actor),$"{steps.Count} bounded world changes. Build creates {steps.Count(s=>s.type=="create")} primitives; undo uses guarded compensation.",siting);
         foreach(var old in pending.Where(x=>x.Value.expires_at<DateTimeOffset.UtcNow).Select(x=>x.Key).ToArray()) pending.Remove(old);
         Require(pending.Count < 100, "Too many pending plans; wait for expiry."); pending.Add(id,prepared); return prepared;
     }
@@ -231,6 +242,8 @@ public sealed class Kernel
         Require(!RecoveryRequired&&pending.TryGetValue(planId,out var _),"Plan missing or recovery required.");
         var plan=pending[planId]; Require(plan.actor_id==actor&&plan.expires_at>DateTimeOffset.UtcNow,"Plan expired or belongs to another actor.");
         if(plan.steps.Any(s=>s.type=="create")) Require(plan.scene_revision==SceneRevision(actor),"Scene changed after placement validation. Please plan again.");
+        if(plan.proposal.actions is [{type:"create_primitive"} action]&&action.parameters.TryGetProperty("placement",out _))
+            RelativePlacement.Validate(world,actor,plan.steps[0].after!.position,plan.steps[0].after!.scale);
         ValidateSteps(plan.steps,actor); pending.Remove(planId);
         return Execute(planId,actor,plan.proposal,plan.steps,"committed",plan.proposal.actions.Any(a=>a.type=="create_structure")?LumiId:null);
     }

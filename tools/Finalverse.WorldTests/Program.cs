@@ -95,6 +95,34 @@ Test("low root route keeps lift",()=>{navWorld.Objects.Clear();var route=Citizen
 Test("low root ignores ground paths",()=>{navWorld.Objects.Clear();navWorld.Objects[cube]=original with {position=[106,100,25.05],scale=[4,4,.1]};Check(CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,100,25.2],.2));});
 Test("low root blocks body-height solids",()=>{navWorld.Objects.Clear();navWorld.Objects[cube]=original with {position=[106,100,25.6],scale=[1,1,.6]};Check(!CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,100,25.2],.2));});
 Test("window is lift invariant",()=>{foreach(var z in new[]{25.3,25.6,26.5,26.9}){navWorld.Objects.Clear();navWorld.Objects[cube]=original with {position=[106,100,z],scale=[1,1,.3]};Check(CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,100,25.9])==CitizenNavigator.Clear(navWorld,actor,Kernel.LumiId,[106,100,25.2],.2));}navWorld.Objects.Clear();});
+// Relative placement must be invariant to model coordinates and use native actor heading.
+Plan Relative(string direction,double distance)=>Plan("create_primitive",new{placement=new{direction,distance},scale=new[]{.6,.6,.6},color=new[]{0d,0,1,1},shape="box",name="Relative Marker"});
+Test("actor-relative cardinal frames",()=>{
+ var w=new Fake(actor);var k=new Kernel(w,Path.Combine(path,"relative-cardinals"));
+ foreach(var item in new[]{(0d,1d,172d,150d),(Math.Sqrt(.5),Math.Sqrt(.5),176d,154d),(1d,0d,172d,158d),(-Math.Sqrt(.5),Math.Sqrt(.5),168d,154d)}){
+  w.Q=[0,0,item.Item1,item.Item2];var p=k.Prepare(Relative("right",4),actor);var at=p.steps[0].after!.position;
+  Check(Math.Abs(at[0]-item.Item3)<.001&&Math.Abs(at[1]-item.Item4)<.001&&Math.Abs(at[2]-25.3)<.001);
+ }
+});
+Test("relative dry-ground slope and distance refusal",()=>{
+ var w=new Fake(actor);var k=new Kernel(w,Path.Combine(path,"relative-refusal"));
+ foreach(var n in new[]{0d,.4,12.1})Reject(()=>k.Prepare(Relative("right",n),actor));
+ Reject(()=>k.Prepare(Relative("somewhere",4),actor));
+ w.Terrain=19;Reject(()=>k.Prepare(Relative("right",4),actor));w.Terrain=25;w.Slope=true;Reject(()=>k.Prepare(Relative("right",4),actor));
+});
+Test("relative overlap and boundary refusal",()=>{
+ var w=new Fake(actor);var k=new Kernel(w,Path.Combine(path,"relative-blocked"));
+ w.Objects[cube]=original with {position=[172,150,25.5]};Reject(()=>k.Prepare(Relative("right",4),actor));w.Objects.Clear();
+ w.At=[1,1,27];Reject(()=>k.Prepare(Relative("right",4),actor));
+});
+Test("relative commit freezes preview and supports undo",()=>{
+ var w=new Fake(actor);var k=new Kernel(w,Path.Combine(path,"relative-commit"));var p=k.Prepare(Relative("right",4),actor);
+ Check(p.siting!.Contains("4 m to your right"));w.Q=[0,0,1,0];Check(k.Commit(p.plan_id,actor).status=="committed");Check(w.Objects.Values.Single().position[1]==150);Check(k.Undo(p.plan_id,actor).status=="undone"&&w.Objects.Count==0);
+});
+Test("relative terrain change invalidates commit",()=>{
+ var w=new Fake(actor);var k=new Kernel(w,Path.Combine(path,"relative-stale"));var p=k.Prepare(Relative("right",4),actor);w.Terrain=26;
+ Reject(()=>k.Commit(p.plan_id,actor));Check(w.Objects.Count==0);
+});
 Console.WriteLine($"WORLD_TESTS {passed} passed");return 0;
 
 sealed class Fake(string actor):IWorld
@@ -103,9 +131,10 @@ sealed class Fake(string actor):IWorld
     public bool CanBuild=true,FailDeletes,Slope,EditOnFailure;
     public int FailAt;
     public double Terrain=25;
+    public double[] At=[172,154,27],Q=[0,0,0,1];
     public string RegionId=>"test-region";public string RegionName=>"Test";public double WaterHeight=>20;public double SizeX=>256;public double SizeY=>256;
-    public double[] Avatar(string a)=>[172,154,27];
-    public double[] Orientation(string a)=>[0,0,0,1];
+    public double[] Avatar(string a)=>At;
+    public double[] Orientation(string a)=>Q;
     public Entity? Find(string id,string a)=>Objects.GetValueOrDefault(id);
     public IEnumerable<Entity> Entities(string a)=>Objects.Values;
     public double Height(double x,double y)=>Terrain+(Slope?(x-172):0);

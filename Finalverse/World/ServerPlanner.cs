@@ -1,5 +1,4 @@
 // Copyright (c) 2026 Finalverse contributors. SPDX-License-Identifier: BSD-3-Clause
-using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -14,14 +13,7 @@ public sealed class ServerPlanner
     static readonly SemaphoreSlim capacity = new(2);
     public ServerPlanner(string socketPath)
     {
-        if(!Path.IsPathFullyQualified(socketPath)||socketPath.Length>100)throw new InvalidDataException("Invalid private planner socket.");
-        var handler=new SocketsHttpHandler{UseProxy=false,AllowAutoRedirect=false,
-            ConnectCallback=async (_,token)=>{
-                var socket=new Socket(AddressFamily.Unix,SocketType.Stream,ProtocolType.Unspecified);
-                try {await socket.ConnectAsync(new UnixDomainSocketEndPoint(socketPath),token);return new NetworkStream(socket,true);}
-                catch {socket.Dispose();throw;}
-            }};
-        http=new HttpClient(handler){Timeout=TimeSpan.FromSeconds(45)};
+        http=PrivateServiceHttp.Client(socketPath,TimeSpan.FromSeconds(45));
     }
     public static bool Recipe(JsonElement data)
     {

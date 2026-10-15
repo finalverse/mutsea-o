@@ -1,0 +1,10 @@
+# Compile the adapter against the exact already-tested native runtime assemblies.
+ARG FINALVERSE_NATIVE_BASE
+FROM ${FINALVERSE_NATIVE_BASE} AS native
+FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim@sha256:ec9c0a0dc5f60adc2065762050638dd5ed5facfc53716d4580a42d86027c8e80 AS build
+WORKDIR /source
+COPY --from=native /opt/mutsea /native
+COPY Finalverse/World Finalverse/World
+RUN dotnet build Finalverse/World/Finalverse.World.csproj -c Release -p:MutSeaBin=/native -o /module
+FROM native
+COPY --from=build --chown=1000:1000 /module/Finalverse.World.dll /opt/mutsea/Finalverse.World.dll

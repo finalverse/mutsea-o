@@ -1,0 +1,34 @@
+# Merge with the private PostgreSQL/backend compose and compose.planning.yaml.
+# No listener is published; both simulator control and planner use private IPC.
+services:
+  mutsea:
+    volumes:
+      - ${FINALVERSE_CITIZEN_IPC:?Private citizen IPC directory required}:/run/finalverse-citizens:ro
+    # Preserve simulator public DNS; runtime TLS routing is client-local.
+  agent-runtime:
+    image: ${FINALVERSE_AGENT_IMAGE:?Set tested runtime image}
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 60s
+    user: "1000:1000"
+    cpus: 1
+    mem_limit: 512m
+    read_only: true
+    tmpfs: ["/tmp:size=16m,mode=1777,noexec,nosuid"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ${FINALVERSE_CITIZEN_CONFIG:?Private runtime configuration required}:/config:ro
+      - ${FINALVERSE_CITIZEN_IPC}:/run/finalverse-citizens
+      - /run/finalverse-planner:/run/finalverse-planner:ro
+    networks: [database, runtime]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mutsea:
+        condition: service_started
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

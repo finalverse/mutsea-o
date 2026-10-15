@@ -353,3 +353,30 @@ does not alter appearance and never targets an arbitrary grid or user.
 
 See [native certificate renewal](../../deploy/standalone/native-certificate-renewal.md)
 for the separately scoped certificate hook, safe deferral and retry timer.
+
+## Deterministic placement and private hosted citizen transport
+
+`create_primitive` can replace its legacy `position` with one bounded `placement`
+object: `{ "direction": "right", "distance": 4 }`. Only one primitive is allowed
+in this relative proposal. The executor derives coordinates from the current
+native actor heading and samples nine terrain points across the footprint.
+It rejects water, slopes above 0.35 m, occupied sites, avatar overlap, region
+edges and missing rights. Preview includes readable siting; Commit keeps the
+approved position and revalidates terrain/current scene state. Existing explicit
+position actions and historical WorldLine entries remain compatible.
+
+`[FinalverseCitizens] RuntimeSocket` selects the same private Unix HTTP adapter
+used by the server planner; `RuntimeUrl` is then a logical HTTP origin. A shared
+mode-0700 directory and mode-0600 socket plus the existing bearer/controller
+checks protect the relay. Hosted runtime configuration is separate from the
+client, uses PostgreSQL for citizen persistence and reaches the native world
+bridge over verified HTTPS. `compose.citizens.yaml` adds no public service port.
+Its runtime-side private dial mapping must not alter the simulator's public grid
+DNS: the simulator advertises that DNS result to external UDP clients.
+
+`Dockerfile.world-module` builds the adapter against the exact tested native
+assemblies. Preserve the base image ID, native database/journals and private
+configuration as rollback. Start the planner first, the simulator next and the
+runtime last; stop the runtime gracefully before replacing the simulator. Run
+`Finalverse.WorldTests`, `MutSea.ComposerTests`, planning boundary tests, Rust/
+gateway tests and the bounded `MutSea.HostedLumiSmoke` private pilot checks.
