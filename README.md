@@ -11,6 +11,12 @@ content and accountable AI world operations. The server/platform brand is
 [Finalverse Mac preview](https://github.com/finalverse/final_viewer/releases/tag/v0.4.0-preview.1) ·
 [Native demo and getting started](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/getting-started.md)
 
+**Existing users:** [manage your account](https://mutsea.com/account/) with the
+same avatar name/password as the viewer. View your home/identity, edit web-profile
+preferences, change your world password and generate private recovery codes.
+[Account and recovery guide](docs/mutsea/account-portal.md). Email reset and public
+registration are not yet available.
+
 > Development platform. A private hosted pilot is verified. Public grid signup,
 > managed hosting, general multi-user AI citizen ownership and a commercial SLA
 > are not offered. The downloadable viewer is an experimental Mac prerelease,

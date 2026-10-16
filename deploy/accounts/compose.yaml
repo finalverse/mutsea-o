@@ -1,0 +1,25 @@
+# Attach to the existing private database network; publish no TCP port.
+services:
+  accounts:
+    image: ${MUTSEA_ACCOUNTS_IMAGE:?Use a tested pinned image}
+    user: "1000:33"
+    init: true
+    restart: unless-stopped
+    read_only: true
+    cpus: 1
+    mem_limit: 384m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 30s
+    volumes:
+      - ${MUTSEA_ACCOUNTS_CONFIG:?Private owner-only configuration}:/config:ro
+      - ${MUTSEA_ACCOUNTS_IPC:?Private UID 1000 GID 33 directory}:/run/mutsea-accounts
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    networks: [database]
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
+networks:
+  database:
+    external: true
+    name: ${MUTSEA_DATABASE_NETWORK:?Existing private PostgreSQL network}

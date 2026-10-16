@@ -1,0 +1,16 @@
+<Project>
+  <ItemGroup>
+    <Reference Include="MutSea.Framework.Console"><HintPath>$(MutSeaBin)/MutSea.Framework.Console.dll</HintPath></Reference>
+    <Reference Include="MutSea.Services.Interfaces"><HintPath>$(MutSeaBin)/MutSea.Services.Interfaces.dll</HintPath></Reference>
+    <Reference Include="MutSea.Services.AuthenticationService"><HintPath>$(MutSeaBin)/MutSea.Services.AuthenticationService.dll</HintPath></Reference>
+    <Reference Include="MutSea.Services.UserAccountService"><HintPath>$(MutSeaBin)/MutSea.Services.UserAccountService.dll</HintPath></Reference>
+    <Reference Include="MutSea.Services.Base"><HintPath>$(MutSeaBin)/MutSea.Services.Base.dll</HintPath></Reference>
+    <Reference Include="MutSea.Framework"><HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath></Reference>
+    <Reference Include="MutSea.Data"><HintPath>$(MutSeaBin)/MutSea.Data.dll</HintPath></Reference>
+    <Reference Include="MutSea.Data.PGSQL"><HintPath>$(MutSeaBin)/MutSea.Data.PGSQL.dll</HintPath></Reference>
+    <Reference Include="OpenMetaverseTypes"><HintPath>$(MutSeaBin)/OpenMetaverseTypes.dll</HintPath></Reference>
+    <Reference Include="Nini"><HintPath>$(MutSeaBin)/Nini.dll</HintPath></Reference>
+    <Reference Include="Npgsql"><HintPath>$(MutSeaBin)/Npgsql.dll</HintPath></Reference>
+    <Reference Include="log4net"><HintPath>$(MutSeaBin)/log4net.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>
