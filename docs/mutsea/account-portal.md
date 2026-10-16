@@ -186,7 +186,31 @@ verified the real Secure/host-only cookie contract. Do not deploy that QA proxy.
 
 See [deploy/accounts/README.md](../../deploy/accounts/README.md). Changes are an
 independent private service, an additive sidecar schema and a scoped website
-proxy. The simulator image, UDP routing, world state and admitted users are not
-replaced. Restore the previous website vhost/release to remove public exposure;
+proxy. The existing simulator core is retained; its optional world adapter image now
+includes the registration worker. UDP routing, world state and existing users
+are preserved. Restore the previous website vhost/release to remove public exposure;
 stop only the account container if necessary. Keep sidecar data and keys for
 rollback. Do not restore an old native auth backup over newer user passwords.
+
+## Private operator user management
+
+The native simulator already has user-management commands. Use its private
+interactive console; these are **not** public HTTP/admin endpoints:
+
+```text
+show account First Last
+set user level First Last -1
+set user level First Last 0
+```
+
+`show account` inspects the named identity. A negative level disables subsequent
+native logins and portal access; it does not forcibly disconnect an existing
+world session. Restore level `0` only after review to reactivate an ordinary
+account. Registration never assigns an administrator level.
+
+For forgotten passwords, prefer the user's saved recovery codes. An operator
+who has verified ownership can use `reset user password` **without password
+arguments**, then complete the private native prompts. Never paste a password
+in a shell command, transcript or email. Do not use bare `create user` as a
+substitute for the reviewed starter appearance/home provisioning flow. Public
+preview users should register through the portal while admissions are enabled.
