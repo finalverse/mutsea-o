@@ -1,125 +1,120 @@
-Welcome to MutSea.
+# MutSea
 
-# Overview
+**The persistent spatial runtime behind [Finalverse](https://finalverse.com).**
 
-MutSea is the Finalverse MutSea Server, short for "The Classic of Mountains and Seas" server.
-It is maintained by the Finalverse MutSea Dev Team.
+MutSea preserves the mature OpenSim-derived region, avatar, inventory, asset,
+permission and networking systems while adding semantic places, reusable world
+content and accountable AI world operations. The server/platform brand is
+**MutSea**; the consumer desktop experience is **Finalverse**.
 
-MutSea is a BSD Licensed Open Source project to develop a functioning
-virtual worlds server platform capable of supporting multiple clients
-and servers in a heterogeneous grid structure. MutSea is written in
-C#, and can run under Mono or the Microsoft .NET runtimes.
+[Platform website](https://mutsea.com) ·
+[Finalverse Mac preview](https://github.com/finalverse/final_viewer/releases/tag/v0.4.0-preview.1) ·
+[Native demo and getting started](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/getting-started.md)
 
-Project links:
- * Website: https://mutsea.finalverse.com
- * Alternate URL: https://www.finalverse.com/mutsea
- * GitHub: https://github.com/finalverse/mutsea-o
- * Contact: mutsea@finalverse.com
+> Development platform. A private hosted pilot is verified. Public grid signup,
+> managed hosting, general multi-user AI citizen ownership and a commercial SLA
+> are not offered. The downloadable viewer is an experimental Mac prerelease,
+> not a public-world access grant.
 
-This is considered an alpha release.  Some stuff works, a lot doesn't.
-If it breaks, you get to keep *both* pieces.
+## Current implementation
 
-# Compiling MutSea
+- Existing grid/region connectivity, scene simulation, avatars, inventory, assets,
+  permissions and editing remain the bootstrap runtime.
+- Native world services can inspect structured entities and prepare bounded
+  actions. Policy, permissions, terrain and explicit approval precede mutation.
+- Deterministic avatar-relative placement handles bounded primitive requests;
+  composed places use validated versioned content and native site checks.
+- WorldLine records operations, with fingerprint-guarded compensation/Undo.
+- Hosted Lumi co-building uses private IPC for planning/citizen commands,
+  verified world HTTPS and a dedicated PostgreSQL citizen database. The model
+  does not receive world-write authority or simulator credentials.
+- Avatar/home onboarding and reusable Starter Library/world-template tools are
+  implemented incrementally over the inherited account/inventory/appearance model.
 
-Please see BUILDING.md
+A real hosted-Lumi acceptance created 147 native parts after approval, retained
+exact transforms/ownership/semantics and memory across restarts, then removed
+the creation through Undo. Scene counts returned to the 423-part baseline.
+[Actual screenshots and limitations](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/demos.md).
 
-# Running MutSea on Windows
+## Build
 
-You will need the dotnet 8.0 runtime or a newer installed dotnet runtime
-(https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+The native runtime targets .NET 8. Use its SDK and platform native dependencies;
+see [BUILDING.md](BUILDING.md) for the retained source build:
 
+```sh
+git clone https://github.com/finalverse/mutsea-o.git
+cd mutsea-o
+./runprebuild.sh
+dotnet build --configuration Release MutSea.sln
+```
 
-To run MutSea from a command prompt
+The reproducible Linux container path is
+[deploy/standalone/Dockerfile](deploy/standalone/Dockerfile). Build the separate
+World adapter against the **same tested native image/assemblies** using
+[Dockerfile.world-module](deploy/standalone/Dockerfile.world-module). Never mix
+an adapter with an unrelated runtime binary.
 
- * cd to the bin/ directory where you unpacked MutSea
- * review and change configuration files (.ini) for your needs. see the "Configuring MutSea" section
- * run MutSea.exe
+## Configure a separate world
 
+Read [deployment](docs/mutsea/deployment.md),
+[PostgreSQL](docs/mutsea/postgresql.md) and
+[world operations](Finalverse/World/README.md) before running a new instance.
+PostgreSQL is the fresh-instance default; there is no silent SQLite fallback.
+The operator provisions a private database/role first and passes its mode-0600
+configuration file to `deploy/standalone/configure.py`. That generator refuses
+to overwrite an existing world.
 
-# Running MutSea on Linux/Mac
+Keep native control, databases, planner and citizen sockets private. Public
+viewer connectivity needs the advertised region hostname, valid TLS and the
+correct region UDP mapping; it does not require publishing database/control/AI
+ports. A website deployment must not alter the grid vhost or world admission.
+Stop the runtime gracefully before replacing the simulator, retain native data
+and journals together, and keep a tested image/config/database rollback.
 
-You will need
+## Accounts and login
 
- * [dotnet 8.0 Runtime or newer](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
- * libgdiplus 
- 
- if you have mono 6.x complete, you already have libgdiplus, otherwise you need to install it
- using a package manager for your operating system, like apt, brew, macports, etc
- for example on debian:
- 
- `apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev`
- 
-To run MutSea, from the unpacked distribution type:
+Accounts belong to the selected grid. On your **own** simulator console, use
+interactive `create user`, `show account Firstname Lastname`, and
+`reset user password Firstname Lastname`. Password prompts must remain hidden;
+never put passwords in shell arguments or issue attachments. `login status`
+shows admission; `login disable`/`login enable` are operator maintenance controls.
+Do not grant administrative user levels to ordinary testers.
 
- * cd bin
- * review and change configuration files (.ini) for your needs. see the "Configuring MutSea" section
- * run ./mutsea.sh
+For the private Finalverse pilot, request access at
+[info@finalverse.com](mailto:info@finalverse.com?subject=Finalverse%20preview%20world%20access).
+No public demo credential is provided. Newcomer appearance/home provisioning is
+separate from issuing a login: see [activation](docs/mutsea/newcomer-activation.md).
 
+## Tests and integration
 
-# Configuring MutSea
+The current increment runs 61 World tests, 13 composer/discovery checks and 12
+planner-boundary checks, plus build/protocol/persistence acceptance. From a
+checkout with a compatible .NET host:
 
-When MutSea starts for the first time, you will be prompted with a
-series of questions that look something like:
+```sh
+dotnet run --project tools/Finalverse.WorldTests -c Release
+dotnet run --project tools/MutSea.ComposerTests -c Release
+dotnet run --project tools/Finalverse.PlanningTests -c Release
+```
 
-	[09-17 03:54:40] DEFAULT REGION CONFIG: Simulator Name [MutSea Test]:
+These are policy/geometry fixtures, not a substitute for actual login, UDP,
+rendered scene and restart/Undo checks. Native probes require a separate
+portable protocol SDK and private account/receipt files. Do not run a probe
+concurrently with the same account in the viewer.
 
-For all the options except simulator name, you can safely hit enter to accept
-the default if you want to connect using a client on the same machine or over
-your local network.
+[Documentation index](docs/mutsea/README.md) ·
+[World template provisioning](docs/mutsea/world-template-provisioning.md) ·
+[Native certificate renewal](deploy/standalone/native-certificate-renewal.md)
 
-You will then be asked "Do you wish to join an existing estate?".  If you're
-starting MutSea for the first time then answer no (which is the default) and
-provide an estate name.
+## Provenance and contributions
 
-Shortly afterwards, you will then be asked to enter an estate owner first name,
-last name, password and e-mail (which can be left blank).  Do not forget these
-details, since initially only this account will be able to manage your region
-in-world.  You can also use these details to perform your first login.
+MutSea is BSD-licensed; preserve [LICENSE.txt](LICENSE.txt), upstream contributor
+notices and file-specific licenses. It is an OpenSim-derived project; inherited
+code is not newly authored Finalverse work. Imported assets/OARs have their own
+license/provenance and must be reviewed independently of server source licensing.
 
-Once you are presented with a prompt that looks like:
-
-	Region (My region name) #
-
-You have successfully started MutSea.
-
-If you want to create another user account to login rather than the estate
-account, then type "create user" on the MutSea console and follow the prompts.
-
-Helpful resources:
- * https://mutsea.finalverse.com
- * https://github.com/finalverse/mutsea-o
-
-# Connecting to your MutSea
-
-By default your sim will be available for login on port 9000.  You can login by
-adding -loginuri http://127.0.0.1:9000 to the command that starts Second Life
-(e.g. in the Target: box of the client icon properties on Windows).  You can
-also login using the network IP address of the machine running MutSea (e.g.
-http://192.168.1.2:9000)
-
-To login, use the avatar details that you gave for your estate ownership or the
-one you set up using the "create user" command.
-
-# Bug reports
-
-In the very likely event of bugs biting you (err, your MutSea) we
-encourage you to check the GitHub issue tracker first:
-
- * https://github.com/finalverse/mutsea-o/issues
-
-If the issue is not already reported, file a new issue or contact the
-team at mutsea@finalverse.com. Useful information to include:
- * description of what went wrong
- * stack trace
- * MutSea.log (attach as file)
- * MutSea.ini (attach as file)
-
-
-# More Information on MutSea
-
-More extensive information on building, running, and configuring
-MutSea, as well as how to report bugs, and participate in the MutSea
-project can always be found at https://mutsea.finalverse.com or
-https://github.com/finalverse/mutsea-o.
-
-Thanks for trying MutSea, we hope it is a pleasant experience.
+Report reproducible issues at
+[finalverse/mutsea-o](https://github.com/finalverse/mutsea-o/issues). Include source
+revision, platform and redacted diagnostics. Never attach raw private INI,
+database URLs, account files, capability URLs or session tokens. Prefer small,
+tested changes over subsystem replacement.
