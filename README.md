@@ -8,7 +8,7 @@ content and accountable AI world operations. The server/platform brand is
 **MutSea**; the consumer desktop experience is **Finalverse**.
 
 [Platform website](https://mutsea.com) ·
-[Finalverse Mac preview](https://github.com/finalverse/final_viewer/releases/tag/v0.4.0-preview.2) ·
+[Finalverse Mac preview](https://github.com/finalverse/final_viewer/releases/tag/v0.4.0-preview.3) ·
 [Native demo and getting started](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/getting-started.md)
 
 **New and existing users:** [create or manage your account](https://mutsea.com/account/) with the
