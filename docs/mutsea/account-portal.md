@@ -1,13 +1,13 @@
 # MutSea / Finalverse account portal
 
-Existing pilot users can manage their world account at
+Create a limited-preview world account or manage an existing one at
 [mutsea.com/account/](https://mutsea.com/account/). The Account link on both
 websites opens this portal. Use the **same avatar first name, last name and
 password as the Finalverse viewer**. There is no second Finalverse password.
 
 ## For users
 
-1. Open the HTTPS portal and enter `First Last` and your current world password.
+1. Open the HTTPS portal. New users choose **Create your world account**, a first and last avatar name, a pinned starter avatar and a password. Wait for **Account ready**. Existing users enter `First Last` and their current world password. An avatar UUID or email is not a login name.
 2. Your World shows your avatar ID, account creation date, registered email,
    home region, last known region and world status. Location/status may lag by
    five minutes. Signing in on the web does not log your avatar into the world.
@@ -32,9 +32,19 @@ Use World → Teleport Home in the viewer to travel home. Set Home to Here remai
 a viewer operation because the native region must validate land permissions.
 The portal does not bypass that check.
 
-Public registration remains closed. An invitation/account is separate from
-downloading the client. Operators must use the existing admitted-account
-provisioning path that verifies appearance, inventory and home before activation.
+Limited preview registration prepares a native identity, six base wearables,
+Genesis alpha and mesh attachments, current-outfit links and a persistent starter
+home before activating login. The website and viewer share the same password.
+Choose **Finalverse Harbor (Preview)** (`https://grid.mutsea.com/`) in the viewer;
+Second Life accounts and grids are separate. Preview.2 users can reveal the grid
+selector with ⌘⇧G and should use the web registration link instead of its inherited
+Sign up button. The newer viewer makes the grid visible and routes MutSea signup
+and recovery to this portal.
+
+Registration is capacity-limited and pauses if the native worker has not reported
+readiness within 60 seconds. No invitation is needed while it is enabled. It is
+still an experimental service, without verified-email reset, MFA or a commercial
+availability commitment.
 
 ## Architecture and boundaries
 
@@ -113,14 +123,16 @@ instead of sharing cookies between unrelated domains.
 
 An exposed service with password-update capability remains a sensitive service.
 Keep its database role, HMAC key, config and backups private and access-controlled.
-MFA, verified-email delivery and public registration are subsequent work, not
-features claimed by this version.
+MFA and verified-email delivery remain subsequent work. See the [registration provisioning contract](registration.md) for queue security, limits and deployment.
 
 ## API used by the portal
 
 | Method | Path under `/account/api/` | Purpose |
 |---|---|---|
 | GET | `session` | Anonymous CSRF bootstrap or own authenticated identity/profile |
+| GET | `registration-options` | Native readiness and allowlisted starter choices |
+| POST | `register` | `firstName`, `lastName`, `password`, `email`, `avatar`; queue native provisioning |
+| GET | `registration-status` | Own provisioning result, bound to HttpOnly receipt |
 | POST | `login` | `name`, `password`; issue an opaque session cookie |
 | POST | `logout` | Revoke current session and expire its cookie |
 | POST | `profile` | `about`, `contactEmail`, `language`, `version`; own profile only |
@@ -163,8 +175,8 @@ each points to a mode-0600 file inside the test container. The restricted
 connection has the portal grants; the fixture-only admin connection seeds a
 synthetic identity/home. Never mount those admin files into production.
 
-Validated on October 16, 2026: **59 core/HTTP checks on macOS, 62 on Linux (including Unix socket type checks),
-and 14 native PostgreSQL checks**, public TLS sign-in/home/logout, a forced process stop/restart with a
+Validated on October 17, 2026: **72 core/HTTP checks on macOS, 75 on Linux (including Unix socket type checks),
+14 native PostgreSQL checks, 26 PostgreSQL registration checks and 8 running-world registration checks repeated after restart**, public TLS sign-in/home/logout, a forced process stop/restart with a
 persistent browser session, and browser profile save/reload/restore. The browser
 could not finish direct public-page navigation in the test environment, so UI
 QA used a private loopback proxy to the deployed HTTPS site; separate HTTP checks

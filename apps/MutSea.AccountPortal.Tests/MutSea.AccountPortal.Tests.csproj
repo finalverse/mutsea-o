@@ -1,4 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
   <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App"/><ProjectReference Include="../MutSea.AccountPortal/MutSea.AccountPortal.csproj"/></ItemGroup>
+<ItemGroup>
+<Reference Include="MutSea.Services.AvatarService"><HintPath>$(MutSeaBin)/MutSea.Services.AvatarService.dll</HintPath></Reference>
+<Reference Include="MutSea.Services.InventoryService"><HintPath>$(MutSeaBin)/MutSea.Services.InventoryService.dll</HintPath></Reference>
+</ItemGroup>
 <Import Project="../MutSea.AccountPortal/NativeReferences.props" /></Project>

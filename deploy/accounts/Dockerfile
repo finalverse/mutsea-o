@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim@sha256:ec9c0a0dc5f60adc20657
 WORKDIR /source
 COPY --from=native /opt/mutsea /native
 COPY apps/MutSea.AccountPortal apps/MutSea.AccountPortal
+COPY apps/MutSea.Registration apps/MutSea.Registration
 COPY apps/MutSea.AccountPortal.Tests apps/MutSea.AccountPortal.Tests
 RUN dotnet publish apps/MutSea.AccountPortal/MutSea.AccountPortal.csproj -c Release -p:MutSeaBin=/native -o /portal
 RUN dotnet build apps/MutSea.AccountPortal.Tests/MutSea.AccountPortal.Tests.csproj -c Release -p:MutSeaBin=/native -o /tests

@@ -50,6 +50,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialisePlaces(config);
         InitialiseWorlds(config);
         InitialiseAccounts(config);
+        InitialiseRegistration(config);
         InitialiseComposer(config);
         InitialisePlanning(config);
     }
@@ -70,10 +71,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=AccountsPrimsLoaded;
+        s.EventManager.OnPrimsLoaded+=RegistrationPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;} lock(gate)sessions.Clear(); }
-    public void Close() { StopCitizen(); lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopRegistration();StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;s.EventManager.OnPrimsLoaded-=RegistrationPrimsLoaded;} lock(gate)sessions.Clear(); }
+    public void Close() { StopRegistration();StopCitizen(); lock(gate)sessions.Clear(); }
     object? ContentSemantic(string id,string actor)
     {
         var metadata=content?.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);

@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using MutSea.Registration;
 namespace MutSea.AccountPortal;
-public sealed record PortalOptions(string Origin,string? Socket,string? Listen,bool Development,string DatabaseFile,string KeyFile,Dictionary<Guid,string> Regions)
+public sealed record PortalOptions(string Origin,string? Socket,string? Listen,bool Development,string DatabaseFile,string KeyFile,Dictionary<Guid,string> Regions,string? RegistrationFile=null)
 {
     public static string ReadSecret(string file)
     {
@@ -22,7 +23,7 @@ public sealed record PortalOptions(string Origin,string? Socket,string? Listen,b
 }
 public static class PortalApp
 {
-    public static WebApplication Build(PortalOptions options,Accounts core,string[]? args=null)
+    public static WebApplication Build(PortalOptions options,Accounts core,string[]? args=null,IRegistrations? registrations=null)
     {
         options.Validate();
         var builder=WebApplication.CreateBuilder(args??[]);builder.Logging.ClearProviders();
@@ -33,6 +34,7 @@ public static class PortalApp
         var app=builder.Build();var slots=new SemaphoreSlim(8);
         string sessionCookie=options.Development?"mutsea-dev-session":"__Host-mutsea-session";
         string csrfCookie=options.Development?"mutsea-dev-csrf":"__Host-mutsea-csrf";
+        string registrationCookie=options.Development?"mutsea-dev-registration":"__Host-mutsea-registration";
         CookieOptions Cookie(TimeSpan? age=null)=>new(){HttpOnly=true,Secure=!options.Development,SameSite=SameSiteMode.Strict,Path="/",MaxAge=age??TimeSpan.FromHours(12),IsEssential=true};
         string Csrf(HttpContext c,bool renew=false)
         {
@@ -67,6 +69,7 @@ public static class PortalApp
                 await next(c);
             }
             catch(PortalFault f){c.Response.StatusCode=f.Status;if(f.Status==429)c.Response.Headers.RetryAfter="900";await c.Response.WriteAsJsonAsync(new{error=f.Message});}
+            catch(RegistrationFault f){c.Response.StatusCode=f.Status;if(f.Status==429)c.Response.Headers.RetryAfter="86400";await c.Response.WriteAsJsonAsync(new{error=f.Message});}
             catch(JsonException){c.Response.StatusCode=400;await c.Response.WriteAsJsonAsync(new{error="Invalid request."});}
             catch(Microsoft.AspNetCore.Http.BadHttpRequestException){c.Response.StatusCode=400;await c.Response.WriteAsJsonAsync(new{error="Invalid request."});}
             catch(Exception e){Console.Error.WriteLine("Account request failed: "+e.GetType().Name);c.Response.StatusCode=503;await c.Response.WriteAsJsonAsync(new{error="Account service is temporarily unavailable. No automatic retry was made."});}
@@ -82,6 +85,8 @@ public static class PortalApp
             }
         });
         app.MapGet("/account/api/session",(HttpContext c)=>Results.Json(View(c,Token(c))));
+        app.MapGet("/account/api/registration-options",()=>Results.Json(registrations?.Options()??new{enabled=false}));
+        app.MapGet("/account/api/registration-status",(HttpContext c)=>Results.Json(new{registration=registrations?.Status(c.Request.Cookies[registrationCookie])}));
         app.MapPost("/account/api/{operation}",async(HttpContext c,string operation)=>{
             using var d=await JsonDocument.ParseAsync(c.Request.Body,new JsonDocumentOptions{MaxDepth=6},c.RequestAborted);
             if(d.RootElement.ValueKind!=JsonValueKind.Object)throw new PortalFault(400,"Invalid request.");
@@ -95,6 +100,14 @@ public static class PortalApp
             }
             switch(operation)
             {
+                case "register":
+                    Fields("firstName","lastName","password","email","avatar");
+                    if(registrations==null)throw new PortalFault(503,"Registration is temporarily unavailable.");
+                    string first=Text("firstName",31),last=Text("lastName",31),source=Ip();
+                    core.Throttle(first+" "+last,source,"register");
+                    string receipt=registrations.Register(first,last,Text("password",16),Text("email",254),Text("avatar",41),source,c.Request.Cookies[registrationCookie]);
+                    c.Response.Cookies.Append(registrationCookie,receipt,Cookie(TimeSpan.FromHours(24)));
+                    return Results.Json(new{registration=registrations.Status(receipt)},statusCode:202);
                 case "login":
                     Fields("name","password");string token=core.Login(Text("name",130),Text("password"),Ip());c.Response.Cookies.Append(sessionCookie,token,Cookie());Csrf(c,true);return Results.Json(View(c,token));
                 case "logout":Fields();core.Logout(Token(c));Clear(c);return Results.Json(new{authenticated=false,csrfToken=Csrf(c,true)});

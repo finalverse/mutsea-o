@@ -5,6 +5,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim@sha256:ec9c0a0dc5f60adc20657
 WORKDIR /source
 COPY --from=native /opt/mutsea /native
 COPY Finalverse/World Finalverse/World
+COPY apps/MutSea.Registration apps/MutSea.Registration
 RUN dotnet build Finalverse/World/Finalverse.World.csproj -c Release -p:MutSeaBin=/native -o /module
 FROM native
 COPY --from=build --chown=1000:1000 /module/Finalverse.World.dll /opt/mutsea/Finalverse.World.dll
+COPY --from=build --chown=1000:1000 /module/MutSea.Registration.dll /opt/mutsea/MutSea.Registration.dll

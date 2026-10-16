@@ -1,8 +1,7 @@
 # Private account service deployment
 
 Read the [account contract and user guide](../../docs/mutsea/account-portal.md).
-This service is for an existing PostgreSQL-backed MutSea world. It neither
-registers users nor runs a simulator.
+This service is for an existing PostgreSQL-backed MutSea world. It calls native identity services and queues limited-preview registration for a separately running simulator.
 
 1. Back up native identity data privately and record the tested simulator image
    digest. Build/test the portal against its exact assemblies using this
@@ -82,4 +81,4 @@ or apply an old auth dump over passwords users subsequently changed. A manual
 again when rehearsing crash recovery. Ordinary process exits use `unless-stopped`.
 
 The user-facing privacy notice must match the implementation. Verified-email
-recovery, MFA and public signup are not implemented in this version.
+recovery and MFA are not implemented in this version. Registration requires the explicit native-worker setup in the [registration runbook](../../docs/mutsea/registration.md).

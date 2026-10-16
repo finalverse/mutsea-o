@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><MutSeaBin Condition="'$(MutSeaBin)' == ''">../../bin</MutSeaBin></PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="../../apps/MutSea.Registration/MutSea.Registration.csproj" />
     <Reference Include="MutSea.Services.Interfaces"><HintPath>$(MutSeaBin)/MutSea.Services.Interfaces.dll</HintPath></Reference>
     <Reference Include="MutSea.Capabilities"><HintPath>$(MutSeaBin)/MutSea.Capabilities.dll</HintPath></Reference>
     <Reference Include="MutSea.Framework"><HintPath>$(MutSeaBin)/MutSea.Framework.dll</HintPath></Reference>

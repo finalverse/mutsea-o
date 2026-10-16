@@ -51,9 +51,6 @@ public sealed partial class WorldModule
                 ContentCatalog.Require(info.Exists&&(info.Attributes&FileAttributes.ReparsePoint)==0,"Newcomer file is missing or linked.");
                 if(!OperatingSystem.IsWindows())ContentCatalog.Require((File.GetUnixFileMode(accountsFile)&(UnixFileMode.GroupRead|UnixFileMode.GroupWrite|UnixFileMode.GroupExecute|UnixFileMode.OtherRead|UnixFileMode.OtherWrite|UnixFileMode.OtherExecute))==0,"Newcomer file must be owner-only.");
                 var newcomers=NewcomerFile.Parse(File.ReadAllBytes(accountsFile));
-                // The standalone local connector registers the inherited service itself as the region's account service.
-                var service=scene.RequestModuleInterface<IUserAccountService>() as UserAccountService
-                    ??throw new InvalidDataException("Newcomer provisioning needs the local (standalone) account service.");
                 // Reject unsupported, retired or changed choices before creating any identity.
                 foreach(var n in newcomers.accounts)if(n.genesis!=null)AvatarCatalog.LoadWardrobe(n.genesis,n.genesis_sha256!.ToLowerInvariant(),out _);
                 if(worldsEnabled&&worldsProvision!="")
@@ -61,64 +58,79 @@ public sealed partial class WorldModule
                     var at=worldsProvision.Split('@');
                     ContentCatalog.Require(worlds!=null&&!worlds.RecoveryRequired&&worlds.Active(at[0],at[1])!=null,"The selected world must be ready before newcomer provisioning.");
                 }
-                foreach(var n in newcomers.accounts)
-                {
-                    var account=scene.UserAccountService.GetUserAccount(UUID.Zero,n.first_name,n.last_name);
-                    string? selection=n.admission_id==null?null:PilotAdmission.Selection(n,RegionId,accountsHome);
-                    if(account!=null&&n.admission_id!=null)
-                    {
-                        // A fresh admission cannot repurpose an existing name.
-                        // A confirmed replay observes its original account only,
-                        // preserving all user edits and authentication state.
-                        ContentCatalog.Require(account.UserLevel>=0&&PilotAdmission.Confirmed(
-                            File.Exists(AccountsJournal)?File.ReadLines(AccountsJournal):[],n.admission_id,
-                            account.PrincipalID.ToString(),selection!),"Admission name is already registered or requires operator review; no existing identity is changed.");
-                        log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account.PrincipalID.ToString(),created=false,home_set=false,admission_replay=true}));
-                        continue;
-                    }
-                    bool created=account==null,homed=false;string? package=null;
-                    var grid=account==null?null:scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
-                    double[]? arrival=grid==null||grid.HomeRegionID==UUID.Zero
-                        ?WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight):null;
-                    void Complete(UserAccount current)
-                    {
-                        if(created)AccountRecord("account_created",current,n.admission_id,selection);
-                        grid=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
-                        // A new identity gets its chosen experience's arrival,
-                        // even if the legacy service supplied a default first.
-                        // An existing user's valid home is always preserved.
-                        if(created||grid==null||grid.HomeRegionID==UUID.Zero)
-                        {
-                            arrival??=WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight);
-                            var position=new Vector3((float)arrival[0],(float)arrival[1],(float)arrival[2]);
-                            ContentCatalog.Require(scene.GridUserService.SetHome(current.PrincipalID.ToString(),scene.RegionInfo.RegionID,position,Vector3.UnitY),"Newcomer home could not be stored.");
-                            var stored=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
-                            ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,position)<.01f,"Newcomer home postcondition was not confirmed.");
-                            homed=true;AccountRecord("home_set",current,n.admission_id,selection);
-                        }
-                        if(n.genesis!=null)
-                        {
-                            var records=File.Exists(GenesisJournal)?File.ReadAllLines(GenesisJournal).Select(l=>JsonDocument.Parse(l).RootElement.Clone()).ToList():new List<JsonElement>();
-                            GenesisProvision(records,current.PrincipalID,n.genesis,n.genesis_sha256!.ToLowerInvariant());
-                            package=Path.GetFileName(n.genesis.TrimEnd('/'));
-                        }
-                    }
-                    if(created)
-                    {
-                        account=service.CreateUserWithProvisioning(UUID.Zero,UUID.Random(),n.first_name,n.last_name,n.password,"",Complete);
-                        ContentCatalog.Require(account!=null,"Account provisioning failed; retained inactive identity requires operator review.");
-                        AccountRecord("account_activated",account!,n.admission_id,selection);
-                    }
-                    else
-                    {
-                        ContentCatalog.Require(account!.UserLevel>=0,"Existing account is inactive; operator review required.");
-                        Complete(account);
-                    }
-                    log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account!.PrincipalID.ToString(),created,home_set=homed,genesis=package}));
-                }
+                foreach(var n in newcomers.accounts)ProvisionNewcomer(n);
             }
             catch(Exception ex){log.Error(JsonSerializer.Serialize(new{@event="newcomer_provisioning_failed",exception_type=ex.GetType().Name,error=ex.Message}));}
         }
+    }
+
+    // Caller holds the region gate. Both private operator admissions and the
+    // validated web queue use exactly this home/wardrobe/activation path.
+    UserAccount ProvisionNewcomer(NewcomerAccount n,string email="")
+    {
+        var service=scene.RequestModuleInterface<IUserAccountService>() as UserAccountService
+            ??throw new InvalidDataException("Newcomer provisioning needs the native standalone account service.");
+        if(n.genesis!=null)AvatarCatalog.LoadWardrobe(n.genesis,n.genesis_sha256!.ToLowerInvariant(),out _);
+        if(worldsEnabled&&worldsProvision!="")
+        {
+            var selected=worldsProvision.Split('@');
+            ContentCatalog.Require(worlds!=null&&!WorldRecoveryRequired&&worlds.Active(selected[0],selected[1])!=null,"The selected world must be ready before account provisioning.");
+        }
+        var account=scene.UserAccountService.GetUserAccount(UUID.Zero,n.first_name,n.last_name);
+        string? selection=n.admission_id==null?null:PilotAdmission.Selection(n,RegionId,accountsHome);
+        if(account!=null&&n.admission_id!=null)
+        {
+            // A fresh admission cannot repurpose an existing name.
+            // A confirmed replay observes its original account only,
+            // preserving all user edits and authentication state.
+            ContentCatalog.Require(account.UserLevel>=0&&PilotAdmission.Confirmed(
+                File.Exists(AccountsJournal)?File.ReadLines(AccountsJournal):[],n.admission_id,
+                account.PrincipalID.ToString(),selection!),"Admission name is already registered or requires operator review; no existing identity is changed.");
+            log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account.PrincipalID.ToString(),created=false,home_set=false,admission_replay=true}));
+            return account;
+        }
+        bool created=account==null,homed=false;string? package=null;
+        var grid=account==null?null:scene.GridUserService.GetGridUserInfo(account.PrincipalID.ToString());
+        double[]? arrival=grid==null||grid.HomeRegionID==UUID.Zero
+            ?WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight):null;
+        void Complete(UserAccount current)
+        {
+            if(created)AccountRecord("account_created",current,n.admission_id,selection);
+            grid=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
+            // A new identity gets its chosen experience's arrival,
+            // even if the legacy service supplied a default first.
+            // An existing user's valid home is always preserved.
+            if(created||grid==null||grid.HomeRegionID==UUID.Zero)
+            {
+                arrival??=WorldArrival.StandingPosition(accountsHome[0],accountsHome[1],Height,WaterHeight);
+                var position=new Vector3((float)arrival[0],(float)arrival[1],(float)arrival[2]);
+                ContentCatalog.Require(scene.GridUserService.SetHome(current.PrincipalID.ToString(),scene.RegionInfo.RegionID,position,Vector3.UnitY),"Newcomer home could not be stored.");
+                var stored=scene.GridUserService.GetGridUserInfo(current.PrincipalID.ToString());
+                ContentCatalog.Require(stored!=null&&stored.HomeRegionID==scene.RegionInfo.RegionID&&Vector3.Distance(stored.HomePosition,position)<.01f,"Newcomer home postcondition was not confirmed.");
+                homed=true;AccountRecord("home_set",current,n.admission_id,selection);
+            }
+            if(n.genesis!=null)
+            {
+                var records=File.Exists(GenesisJournal)?File.ReadAllLines(GenesisJournal).Select(l=>JsonDocument.Parse(l).RootElement.Clone()).ToList():new List<JsonElement>();
+                GenesisProvision(records,current.PrincipalID,n.genesis,n.genesis_sha256!.ToLowerInvariant());
+                package=Path.GetFileName(n.genesis.TrimEnd('/'));
+            }
+        }
+        if(created)
+        {
+            var principal=n.admission_id==null?UUID.Random():new UUID(n.admission_id);
+            ContentCatalog.Require(scene.UserAccountService.GetUserAccount(UUID.Zero,principal)==null,"New identity ID is already registered; no existing identity is changed.");
+            account=service.CreateUserWithProvisioning(UUID.Zero,principal,n.first_name,n.last_name,n.password,email,Complete);
+            ContentCatalog.Require(account!=null,"Account provisioning failed; retained inactive identity requires operator review.");
+            AccountRecord("account_activated",account!,n.admission_id,selection);
+        }
+        else
+        {
+            ContentCatalog.Require(account!.UserLevel>=0,"Existing account is inactive; operator review required.");
+            Complete(account);
+        }
+        log.Info(JsonSerializer.Serialize(new{@event="newcomer_ready",account_id=account!.PrincipalID.ToString(),created,home_set=homed,genesis=package}));
+        return account!;
     }
 
     void AccountRecord(string kind,UserAccount account,string? admission_id=null,string? selection_sha256=null)

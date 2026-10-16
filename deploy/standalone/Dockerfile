@@ -14,6 +14,7 @@ RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.l
     && useradd --uid 1000 --create-home mutsea
 COPY --from=build --chown=1000:1000 /src/bin/ /opt/mutsea/
 COPY --from=build --chown=1000:1000 /finalverse-module/Finalverse.World.dll /opt/mutsea/
+COPY --from=build --chown=1000:1000 /finalverse-module/MutSea.Registration.dll /opt/mutsea/
 COPY LICENSE.txt CONTRIBUTORS.txt /usr/share/doc/mutsea/
 COPY deploy/standalone/entrypoint.sh /usr/local/bin/mutsea-entrypoint
 RUN chmod 755 /usr/local/bin/mutsea-entrypoint && mkdir /data && chown 1000:1000 /data

@@ -2,13 +2,15 @@
 using System.Text.Json;
 using System.Net.Sockets;
 using MutSea.AccountPortal;
+using MutSea.Registration;
 try
 {
     if(args.Length!=1)throw new InvalidDataException("Supply the private configuration file.");
     var options=JsonSerializer.Deserialize<PortalOptions>(PortalOptions.ReadSecret(args[0]),new JsonSerializerOptions{PropertyNameCaseInsensitive=true})??throw new InvalidDataException();
     options.Validate();string connection=PortalOptions.ReadSecret(options.DatabaseFile);byte[] key=Convert.FromHexString(PortalOptions.ReadSecret(options.KeyFile));if(key.Length!=32)throw new InvalidDataException("Expected a 256-bit service key.");
     var state=new PgState(connection);state.Prune(DateTimeOffset.UtcNow);
-    var app=PortalApp.Build(options,new Accounts(new NativeIdentity(connection,key,options.Regions),state,key));
+    var registrations=options.RegistrationFile==null?null:new PgRegistrations(connection,RegistrationSettings.Load(options.RegistrationFile));
+    var app=PortalApp.Build(options,new Accounts(new NativeIdentity(connection,key,options.Regions),state,key),registrations:registrations);
     using var maintenance=new PeriodicTimer(TimeSpan.FromMinutes(15));
     using var stopped=new CancellationTokenSource();
     var cleanup=Task.Run(async()=>{

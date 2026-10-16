@@ -51,5 +51,6 @@ static class NativeChecks
         using(var cmd=new NpgsqlCommand("SELECT has_schema_privilege(current_user,'public','CREATE')",db))Check(!(bool)cmd.ExecuteScalar()!,"cannot create native schema objects");
         state.Prune(DateTimeOffset.UtcNow+TimeSpan.FromDays(100));Check(state.Session(Accounts.Hash(token))==null,"expired session retention cleanup");
         Console.WriteLine($"{passed} real native/PostgreSQL checks passed.");
+        RegistrationChecks.Run(connection,admin,f.KeyFile);
     }
 }

@@ -4,9 +4,11 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using MutSea.AccountPortal;
+using MutSea.Registration;
 using System.Net.Sockets;
 
 if(args is ["--native",var fixture]){NativeChecks.Run(fixture);return;}
+if(args is ["--world-registration",var mode,var directory]){await WorldRegistrationChecks.Run(mode,directory);return;}
 int passed=0;void Check(bool yes,string name){if(!yes)throw new Exception(name);passed++;Console.WriteLine("PASS "+name);}
 void Fault(Action action,int status,string name){try{action();throw new Exception("Expected rejection: "+name);}catch(PortalFault f){Check(f.Status==status,name);}}
 if(OperatingSystem.IsLinux())
@@ -92,13 +94,47 @@ login=await result.Content.ReadFromJsonAsync<JsonElement>();rotated=login.GetPro
 result=await Post("logout",new{},origin,rotated);Check(result.IsSuccessStatusCode,"Actual HTTP logout succeeds");
 Check(!handler.CookieContainer.GetCookies(new Uri(origin)).Cast<Cookie>().Any(c=>c.Name=="mutsea-dev-session"),"Logout removes the browser cookie");
 var last=await http.GetFromJsonAsync<JsonElement>("/account/api/session");Check(!last.GetProperty("authenticated").GetBoolean(),"Logged-out browser is anonymous");
-await app.StopAsync();Console.WriteLine($"{passed} account security and HTTP checks passed.");
+csrf=last.GetProperty("csrfToken").GetString()!;
+result=await Post("register",new{firstName="Ada",lastName="Meadow",password="StarterPass123!",email="",avatar="auren"});
+Check(result.StatusCode==HttpStatusCode.ServiceUnavailable,"Registration stays closed without an explicitly configured native worker");
+await app.StopAsync();
+var registrationIdentity=new FixtureIdentity{Name="Ada Meadow",Password="StarterPass123!",Active=false};
+var registrationFixture=new FixtureRegistrations();
+await using var join=PortalApp.Build(options,new Accounts(registrationIdentity,new MemoryState(),key),registrations:registrationFixture);await join.StartAsync();
+using var joinHandler=new HttpClientHandler{CookieContainer=new CookieContainer(),AllowAutoRedirect=false};
+using var joinHttp=new HttpClient(joinHandler){BaseAddress=new Uri(origin)};
+var bootstrap=await joinHttp.GetFromJsonAsync<JsonElement>("/account/api/session");string joinCsrf=bootstrap.GetProperty("csrfToken").GetString()!;
+async Task<HttpResponseMessage> JoinPost(string operation,object body,string? from="default",string? nonce="default")
+{
+ using var message=new HttpRequestMessage(HttpMethod.Post,"/account/api/"+operation){Content=JsonContent.Create(body)};
+ if(from!=null)message.Headers.Add("Origin",from=="default"?origin:from);
+ if(nonce!=null)message.Headers.Add("X-MutSea-CSRF",nonce=="default"?joinCsrf:nonce);
+ return await joinHttp.SendAsync(message);
+}
+var signup=new{firstName="Ada",lastName="Meadow",password="StarterPass123!",email="",avatar="auren"};
+result=await JoinPost("register",signup,"https://evil.invalid");Check(result.StatusCode==HttpStatusCode.Forbidden,"Cross-origin registration rejected");
+result=await JoinPost("register",signup,origin,null);Check(result.StatusCode==HttpStatusCode.Forbidden,"Registration requires CSRF");
+result=await JoinPost("register",new{signup.firstName,signup.lastName,signup.password,signup.email,signup.avatar,userLevel=240});Check(result.StatusCode==HttpStatusCode.BadRequest,"Registration rejects privilege fields");
+result=await JoinPost("register",new{firstName=Guid.NewGuid().ToString(),lastName="Meadow",signup.password,signup.email,signup.avatar});Check(result.StatusCode==HttpStatusCode.BadRequest,"Avatar UUID is rejected as a registration name");
+result=await JoinPost("register",new{signup.firstName,signup.lastName,password="far-too-long-for-the-viewer-password",signup.email,signup.avatar});Check(result.StatusCode==HttpStatusCode.BadRequest,"Registration retains viewer password length contract");
+result=await JoinPost("register",signup);Check(result.StatusCode==HttpStatusCode.Accepted,"Registration queues native provisioning instead of pretending an identity is ready");
+Check(result.Headers.GetValues("Set-Cookie").Any(v=>v.StartsWith("mutsea-dev-registration=")&&v.Contains("httponly",StringComparison.OrdinalIgnoreCase)),"Registration receipt is an HttpOnly cookie");
+var queued=await result.Content.ReadFromJsonAsync<JsonElement>();Check(queued.GetProperty("registration").GetProperty("state").GetString()=="queued","New registration reports queued state");
+result=await JoinPost("login",new{name="Ada Meadow",password="StarterPass123!"});Check(result.StatusCode==HttpStatusCode.Unauthorized,"A pending account cannot sign in");
+using(var stranger=new HttpClient{BaseAddress=new Uri(origin)})
+{
+ var hidden=await stranger.GetFromJsonAsync<JsonElement>("/account/api/registration-status?ticket=untrusted");Check(hidden.GetProperty("registration").ValueKind==JsonValueKind.Null,"Anonymous status cannot inspect another registration");
+}
+registrationFixture.Complete=true;registrationIdentity.Active=true;
+var complete=await joinHttp.GetFromJsonAsync<JsonElement>("/account/api/registration-status");Check(complete.GetProperty("registration").GetProperty("name").GetString()=="Ada Meadow"&&complete.GetProperty("registration").GetProperty("state").GetString()=="ready","Receipt sees its own completed avatar name");
+result=await JoinPost("login",new{name="Ada Meadow",password="StarterPass123!"});Check(result.IsSuccessStatusCode,"Newly activated native identity uses ordinary account sign-in");
+await join.StopAsync();Console.WriteLine($"{passed} account security and HTTP checks passed.");
 
 sealed class FixtureIdentity:IWorldIdentity
 {
- public Guid Id=Guid.NewGuid();public string Password="OldPassword123!";public bool Active=true,RotateDuringVerify;int generation;
- public WorldAccount? Find(string name)=>name=="Portal Smoke"&&Active?Get(Id):null;
- public WorldAccount? Get(Guid id)=>id==Id&&Active?new(id,"Portal Smoke","",1700000000,null,null,false,null):null;
+ public string Name="Portal Smoke";public Guid Id=Guid.NewGuid();public string Password="OldPassword123!";public bool Active=true,RotateDuringVerify;int generation;
+ public WorldAccount? Find(string name)=>name==Name&&Active?Get(Id):null;
+ public WorldAccount? Get(Guid id)=>id==Id&&Active?new(id,Name,"",1700000000,null,null,false,null):null;
  public bool Verify(Guid id,string password){bool yes=id==Id&&password==Password;if(RotateDuringVerify)generation++;return yes;}
  public string? CredentialStamp(Guid id)=>id==Id?"stamp-"+generation:null;
  public bool SetPassword(Guid id,string password){if(id!=Id)return false;Password=password;generation++;return true;}
@@ -122,4 +158,17 @@ sealed class MemoryState:IPortalState
  public int CodeCount(Guid u,string stamp)=>Codes.Count(p=>p.Key.StartsWith(u+":")&&p.Value==stamp);
  public T Locked<T>(Guid u,Func<T> a){lock(gates.GetOrAdd(u,_=>new object()))return a();}
  public void Audit(Guid? u,string kind,DateTimeOffset now){}
+}
+
+sealed class FixtureRegistrations:IRegistrations
+{
+ readonly string ticket=Accounts.RandomToken();public bool Complete;
+ public object Options()=>new{enabled=true,avatars=new[]{new{id="auren",title="Auren"}}};
+ public string Register(string first,string last,string password,string email,string avatar,string ip,string? previous)
+ {
+  PgRegistrations.Validate(first,last,password,email);
+  if(avatar!="auren")throw new RegistrationFault(400,"Unavailable starter.");
+  return ticket;
+ }
+ public RegistrationStatus? Status(string? value)=>value==ticket?new(Complete?"ready":"queued","Ada Meadow",null):null;
 }
