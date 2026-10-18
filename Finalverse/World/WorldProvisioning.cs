@@ -36,7 +36,10 @@ public sealed partial class WorldModule : IWorldTemplateRegion
 
     void StartWorlds(ContentCatalog catalog)
     {
-        if(!worldsEnabled||RegionId!=worldsHost)return;
+        if(!worldsEnabled)return;
+        if(library?.Find(RegionId)?.template is {} provision&&RegionId!=worldsHost)
+        {worldsHost=RegionId;worldsProvision=provision;worldsRollback="";}
+        if(RegionId!=worldsHost)return;
         var placeCatalog=new PlaceCatalog(placesCatalog==""?"/config/places":placesCatalog,catalog);
         worldPlaces=places??new PlaceKernel(this,catalog,placeCatalog,directory,RegionId);
         worlds=new WorldTemplateKernel(this,new WorldTemplateCatalog(worldsCatalog,placeCatalog),directory);

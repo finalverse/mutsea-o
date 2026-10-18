@@ -16,7 +16,7 @@ public sealed record CitizenNavigation(string action_id,string status,string hom
 public sealed partial class WorldModule
 {
     bool citizensEnabled;
-    string citizenOwner="",citizenToken="",runtimeUrl="",bridgePath="",citizenJournal="";
+    string citizenHost="",citizenOwner="",citizenToken="",runtimeUrl="",bridgePath="",citizenJournal="";
     CitizenNavigation? navigation;
     readonly Dictionary<string,JsonElement> citizenReceipts=new();
     readonly HashSet<string> citizenIntents=new(),gardenPlans=new(),gardenCommits=new();
@@ -28,7 +28,10 @@ public sealed partial class WorldModule
         var c=source.Configs["FinalverseCitizens"];
         citizensEnabled=c?.GetBoolean("Enabled",false)??false;
         if(!citizensEnabled)return;
-        citizenOwner=c!.GetString("ControllerId","");runtimeUrl=c.GetString("RuntimeUrl","");
+        citizenHost=c!.GetString("HostRegion","");
+        if(citizenHost!=""&&!WorldLibrary.CanonicalRegion(citizenHost))throw new InvalidDataException("Citizen HostRegion must be a canonical region UUID.");
+        if(library?.Destinations.Length>1&&citizenHost=="")throw new InvalidDataException("A multi-region World Library requires an explicit citizen HostRegion.");
+        citizenOwner=c.GetString("ControllerId","");runtimeUrl=c.GetString("RuntimeUrl","");
         string tokenFile=c.GetString("TokenFile","");
         if(!Guid.TryParse(citizenOwner,out _)||!Uri.TryCreate(runtimeUrl,UriKind.Absolute,out var url)||url.Scheme!="http"||url.Query!=""||url.UserInfo!="")throw new InvalidDataException("Invalid private citizen configuration.");
         citizenToken=File.ReadAllText(tokenFile).Trim();if(citizenToken.Length<32||citizenToken.Length>128)throw new InvalidDataException("Citizen service token must be 32–128 characters.");
@@ -38,6 +41,7 @@ public sealed partial class WorldModule
     }
     void StartCitizen()
     {
+        if(!WorldLibrary.Hosts(citizenHost,RegionId)){citizensEnabled=false;return;}
         if(!citizensEnabled)return;
         citizenJournal=Path.Combine(directory,RegionId+".citizens.worldline.jsonl");
         if(File.Exists(citizenJournal))foreach(var line in File.ReadLines(citizenJournal))

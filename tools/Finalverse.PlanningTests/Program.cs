@@ -16,4 +16,9 @@ Reject("{\"op\":\"plan\",\"request\":\""+new string('x',2049)+"\"}");
 var entity=new{id="id",name="safe name",shape="box",position=new[]{1,2,3},scale=new[]{1,1,1},editable=true,owner_id="secret",description="secret"};
 var context=ServerPlanner.Context(new{region=new{id="region",bounds=new[]{256,256},name="secret"},avatar=new{position=new[]{1,2,3},session_id="secret"},terrain=new{height=2},selected_object=entity,nearby_entities=Enumerable.Range(0,70).Select(_=>new{entity,distance=1,semantic="secret"}),lumi="secret",undoable_plan_id="secret"});
 Check(!context.ToJsonString().Contains("secret"));Check(context["nearby_entities"]!.AsArray().Count==64);Check(context["selected_object"]!["name"]!.GetValue<string>()=="safe name");
+var spatialSource=JsonSerializer.SerializeToNode(new{region=new{id="r",bounds=new[]{256,256}},avatar=new{position=new[]{128,128,24}},terrain=new{height=22},nearby_entities=Array.Empty<object>(),
+ workspace=new{id="confluence",title="Confluence",chat="secret",token="secret",zones=new[]{new{id="review",title="Review Pavilion",purpose="Review proposed artifacts",center=new[]{128,176},radius=11,api_key="secret"}}}})!;
+var spatialContext=ServerPlanner.Context(spatialSource);
+Check(spatialContext["workspace"]!["zones"]![0]!["title"]!.GetValue<string>()=="Review Pavilion");
+Check(!spatialContext.ToJsonString().Contains("secret"));
 Console.WriteLine($"{passed} planning boundary checks passed.");

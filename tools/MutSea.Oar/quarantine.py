@@ -242,8 +242,8 @@ def prepare(source, output, limits=Limits()):
                     if name == 'archive.xml':
                         root = xml(data, limits)
                         archive_version = [int(root.get('major_version', '-1')), int(root.get('minor_version', '-1'))]
-                        if root.tag != 'archive' or archive_version != [0, 8]:
-                            raise Rejected('Only single-region OAR 0.8 is supported')
+                        if root.tag != 'archive' or archive_version not in ([0, 7], [0, 8]):
+                            raise Rejected('Only single-region OAR 0.7/0.8 is supported')
                         size = root.findtext('region_info/size_in_meters', '256,256')
                         if size != '256,256':
                             raise Rejected('Only 256m staging regions are supported')
@@ -321,7 +321,7 @@ def prepare(source, output, limits=Limits()):
                     tar.addfile(member, io.BytesIO(transformed))
         if archive_version is None or counts['settings'] != 1 or counts['terrains'] != 1 or not objects:
             raise Rejected('Incomplete single-region archive')
-        report = dict(schema_version=1, converter='mutsea.oar.quarantine/0.1.0',
+        report = dict(schema_version=1, converter='mutsea.oar.quarantine/0.2.0',
             source_sha256=digest(compressed), source_bytes=len(compressed), archive_version=archive_version,
             staging_sha256=digest(target.read_bytes()), member_counts=dict(counts), asset_types=dict(asset_types),
             object_groups=len(objects), scene_parts=len(part_ids), removed=dict(removed),

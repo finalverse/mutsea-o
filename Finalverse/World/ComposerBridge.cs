@@ -46,6 +46,7 @@ public sealed partial class WorldModule
     {
         var result=JsonSerializer.SerializeToNode(kernel.Inspect(actor,selected),Kernel.Json)!;
         result["recovery_required"]=WorldRecoveryRequired;
+        if(WorkspaceContext() is {} workspace)result["workspace"]=JsonSerializer.SerializeToNode(workspace);
         string? previous=result["undoable_plan_id"]?.GetValue<string>();
         var timestamp=kernel.History(actor).LastOrDefault(e=>e.plan_id==previous&&e.status=="committed")?.timestamp??DateTimeOffset.MinValue;
         var latest=ComposerAudit.LatestPlace(composerPlaces?.Entries??[],actor,timestamp);

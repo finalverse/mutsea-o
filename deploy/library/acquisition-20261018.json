@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "verified_date": "2026-10-18",
+  "sources_attempted": 28,
+  "status_counts": {
+    "quarantined": 13,
+    "rejected": 15,
+    "deferred": 3
+  },
+  "asset_uuid_conflicts_between_source_derivatives": [],
+  "entries": [
+    {
+      "id": "zadaroo.zadarooenglishgarden",
+      "title": "Zadaroo English Garden",
+      "source": "https://files.zadaroo.com/oars/ZadarooEnglishGarden.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 18980797,
+      "source_sha256": "401f07f3c42ee18b88bc1c0f602f64e1d02c326db72e3e5a45791824aa73ae93",
+      "staging_sha256": "b92b154d1d296b27c74ee3927a6fa56118857c7db1a06cd29376dd1ef7452ce1",
+      "scene_parts": 4505,
+      "native_deserialization": "passed",
+      "missing_texture_references": 2,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.zadarooswamp",
+      "title": "Zadaroo Swamp",
+      "source": "https://files.zadaroo.com/oars/ZadarooSwamp.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 24835285,
+      "source_sha256": "e2e4059756fcd9a107fcbe47dd3e223bd189438991434fe3ccc77e7e6f1ab388",
+      "staging_sha256": "239adfbe6db345d70b42decc7dc151906ba6ce663000cb965723d6d8728a336f",
+      "scene_parts": 5224,
+      "native_deserialization": "passed",
+      "missing_texture_references": 1,
+      "missing_geometry_references": 1
+    },
+    {
+      "id": "zadaroo.gardencenter",
+      "title": "Garden Center",
+      "source": "https://files.zadaroo.com/oars/GardenCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 30497044,
+      "source_sha256": "20e88cff9988ea21175089559a062b2b3749b93e91b2ac9719c423d5370c0fa7",
+      "staging_sha256": "10c0e2f889fea987910ea22fb521b612a54ef1f8d9e52a49b3ef13e875f78db4",
+      "scene_parts": 1763,
+      "native_deserialization": "passed",
+      "missing_texture_references": 2,
+      "missing_geometry_references": 3
+    },
+    {
+      "id": "zadaroo.opesnsimshoppingcenter",
+      "title": "Opesnsim Shopping Center",
+      "source": "https://files.zadaroo.com/oars/OpesnsimShoppingCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.autumncastle",
+      "title": "Autumn Castle",
+      "source": "https://files.zadaroo.com/oars/AutumnCastle.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 19574452,
+      "source_sha256": "c5c142007b29a3d6b9ede7dc99c006d3729667ad6dde768d5cec96a583369c9a",
+      "staging_sha256": "aa64e4cc67a75cdf7ad05a3f5021657359ac680f5207370f6982936005e94687",
+      "scene_parts": 6133,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.boardwalk",
+      "title": "boardwalk",
+      "source": "https://files.zadaroo.com/oars/boardwalk.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.businessdistrictv7-3",
+      "title": "Business District V7 3",
+      "source": "https://files.zadaroo.com/oars/BusinessDistrictV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 42187239,
+      "source_sha256": "182629f96f2a83edf1a418e83a3a3c93e966a32083254d4a38ab0f93589596ec",
+      "staging_sha256": "5c66e92e5c7091ea1429aa5590f2af393a835fdf48e3696ac25c17ca1541e77a",
+      "scene_parts": 17323,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.lindakelliecityv7-3",
+      "title": "Linda Kellie City V7 3",
+      "source": "https://files.zadaroo.com/oars/LindaKellieCityV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.fantasy",
+      "title": "Fantasy",
+      "source": "https://files.zadaroo.com/oars/Fantasy.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 28123940,
+      "source_sha256": "dd0cd7138ef3049795b7dc29383568a13e90745b92888df99f34de2a33d388b3",
+      "staging_sha256": "9854253c1226ae35c102bf6b1246f65f388e801c86fa46478718a8b5382ebc9b",
+      "scene_parts": 6442,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.freebiemall",
+      "title": "Freebie Mall",
+      "source": "https://files.zadaroo.com/oars/FreebieMall.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.freebiemall41212",
+      "title": "Freebie Mall41212",
+      "source": "https://files.zadaroo.com/oars/FreebieMall41212.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.lk-kidsplace",
+      "title": "LK Kids Place",
+      "source": "https://files.zadaroo.com/oars/LK-KidsPlace.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "source_bytes": 26678726,
+      "source_sha256": "47b83b672c72091261788fa4d4154571193f79b8420be05c120f3ada591b3906",
+      "reason": "Only single-region OAR 0.7/0.8 is supported"
+    },
+    {
+      "id": "zadaroo.lakehouse",
+      "title": "Lake House",
+      "source": "https://files.zadaroo.com/oars/LakeHouse.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 13317692,
+      "source_sha256": "a89ab8db6b74008815c0a446db084fef75efae29a444e8a3b882c451ad9b0846",
+      "staging_sha256": "45551f1ecb9e43bb043d5850fe8343fced7be7064c1284f54f6a42cce9a925c7",
+      "scene_parts": 1722,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.lindakelliedesignsv7-3",
+      "title": "Linda Kellie Designs V7 3",
+      "source": "https://files.zadaroo.com/oars/LindaKellieDesignsV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.lk-mountainretreat",
+      "title": "LK Mountain Retreat",
+      "source": "https://files.zadaroo.com/oars/LK-MountainRetreat.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 24231579,
+      "source_sha256": "6500281b31258a798e26f6a7d82239f44f5c6f7587f5af276322b8e37dbf553a",
+      "staging_sha256": "6aa9f9f86955981eae2574bc5094674c98a2a15ba2449981e770584f12f5f76c",
+      "scene_parts": 3061,
+      "native_deserialization": "passed",
+      "missing_texture_references": 1,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.shoppingcenter",
+      "title": "Shopping Center",
+      "source": "https://files.zadaroo.com/oars/ShoppingCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 1313906,
+      "source_sha256": "71402d7feb13b7a038af44f4d82232cfa81c21d84a2430038d191abdeb4f1aca",
+      "staging_sha256": "c695542ea1cc93db5b1bc4050bc1e46704ae36dba2ac47f998c919c229392923",
+      "scene_parts": 1574,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.lk-tikisummer",
+      "title": "LK Tiki Summer",
+      "source": "https://files.zadaroo.com/oars/LK-TikiSummer.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 17331235,
+      "source_sha256": "14f7363980c881b656ceb4b41b9707ee3907769e6345a5b5b1c25d0aa975af1e",
+      "staging_sha256": "9281ffd106d611cb3d63916630766d09bcd6d644c740ebec2d0341a30ab8792d",
+      "scene_parts": 4272,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.tropical",
+      "title": "Tropical",
+      "source": "https://files.zadaroo.com/oars/Tropical.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 10552621,
+      "source_sha256": "6287a48de5e3ca999173b7a957b4e7b06ed294d6b0b7e19d41996ed6c61932f8",
+      "staging_sha256": "88d4f75b4643bb3d06f1f8402f867e48235b55f884c8fcbea1cb576fb76b93c0",
+      "scene_parts": 1445,
+      "native_deserialization": "passed",
+      "missing_texture_references": 2,
+      "missing_geometry_references": 2
+    },
+    {
+      "id": "zadaroo.totalsimv7-3",
+      "title": "totalsim V7 3",
+      "source": "https://files.zadaroo.com/oars/totalsimV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.westerntown",
+      "title": "Western Town",
+      "source": "https://files.zadaroo.com/oars/WesternTown.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.lk-urbancityv7-3",
+      "title": "LK Urban City V7 3",
+      "source": "https://files.zadaroo.com/oars/LK-UrbanCityV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.buildingsupply",
+      "title": "Building Supply",
+      "source": "https://files.zadaroo.com/oars/BuildingSupply.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.lk-winterv7-3",
+      "title": "LK Winter V7 3",
+      "source": "https://files.zadaroo.com/oars/LK-WinterV7-3.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.welcomecenter",
+      "title": "Welcome Center",
+      "source": "https://files.zadaroo.com/oars/WelcomeCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "source_bytes": 6241164,
+      "source_sha256": "2cfa156c80f0d933bbfe45145d0d453b7abe3646c0757a213df47d2011041a08",
+      "reason": "Compressed file ended before the end-of-stream marker was reached"
+    },
+    {
+      "id": "zadaroo.countrycabin",
+      "title": "Country Cabin",
+      "source": "https://files.zadaroo.com/oars/CountryCabin.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 13295046,
+      "source_sha256": "bf12c9abe4c4e1c7352be3322cb7df7d2fcf0bf9224365d2ee0dd419da104987",
+      "staging_sha256": "d9192bd8396aaa48c7f7526bba5449be3f69502a23832b0c2d8cc257edf457bb",
+      "scene_parts": 1991,
+      "native_deserialization": "passed",
+      "missing_texture_references": 5,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.conferencecenter",
+      "title": "Conference Center",
+      "source": "https://files.zadaroo.com/oars/ConferenceCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "quarantined",
+      "source_bytes": 12399358,
+      "source_sha256": "52c6645731f6f8144174714579893bdd0728021fc3e94568428d45ac937883e5",
+      "staging_sha256": "c34f636d57089cf4064436de1efe2e7b4dbd4bb42fc30b72aab8abc915defdd5",
+      "scene_parts": 1893,
+      "native_deserialization": "passed",
+      "missing_texture_references": 0,
+      "missing_geometry_references": 0
+    },
+    {
+      "id": "zadaroo.opensimfreefurniture",
+      "title": "Open Sim Free Furniture",
+      "source": "https://files.zadaroo.com/oars/OpenSimFreeFurniture.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.oar-clutterfly-shopping-linda-kellie",
+      "title": "OAR Clutterfly_Shopping_Linda_Kellie",
+      "source": "https://files.zadaroo.com/oars/OAR-Clutterfly_Shopping_Linda_Kellie.tgz",
+      "license": "CC0-1.0",
+      "status": "rejected",
+      "reason": "Compressed download exceeds configured limit"
+    },
+    {
+      "id": "zadaroo.aurorafreefurniture",
+      "title": "Aurora Free Furniture",
+      "source": "https://files.zadaroo.com/oars/AuroraFreeFurniture.tgz",
+      "license": "CC0-1.0",
+      "status": "deferred",
+      "reason": "unsupported-format"
+    },
+    {
+      "id": "zadaroo.spacewelcomecenter",
+      "title": "Space Welcome Center",
+      "source": "https://files.zadaroo.com/oars/SpaceWelcomeCenter.tgz",
+      "license": "CC0-1.0",
+      "status": "deferred",
+      "reason": "unsupported-format"
+    },
+    {
+      "id": "openvce.2022",
+      "title": "OpenVCE Collaborative Plaza",
+      "source": "https://openvce.net/downloads/2022/OpenVCE.oar",
+      "license": "CC-BY-4.0",
+      "status": "deferred",
+      "reason": "mixed-license-review"
+    }
+  ]
+}

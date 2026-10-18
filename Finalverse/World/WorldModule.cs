@@ -28,7 +28,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     readonly Dictionary<UUID,DateTimeOffset> lastExperienceRequest = new();
     Scene scene = null!;
     Kernel kernel = null!;
-    bool WorldRecoveryRequired => kernel?.RecoveryRequired==true||content?.RecoveryRequired==true
+    bool WorldRecoveryRequired => libraryRecovery|| kernel?.RecoveryRequired==true||content?.RecoveryRequired==true
         ||places?.RecoveryRequired==true||worldPlaces?.RecoveryRequired==true||composerPlaces?.RecoveryRequired==true||worlds?.RecoveryRequired==true;
     bool enabled;
     string directory = "";
@@ -45,6 +45,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         enabled=c?.GetBoolean("Enabled",false)??false;
         directory=c?.GetString("DataDirectory","/data/finalverse")??"/data/finalverse";
         contentDirectory=c?.GetString("ContentLibraryDirectory","")??"";
+        InitialiseLibrary(config);
         InitialiseCitizen(config);
         InitialiseGenesis(config);
         InitialisePlaces(config);
@@ -67,6 +68,12 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         kernel.ContentSemantics=ContentSemantic;
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
+        s.EventManager.OnNewClient+=WorldClientOpened;
+        s.EventManager.OnMakeRootAgent+=WorldRootOpened;
+        s.EventManager.OnClientClosed+=WorldClientClosed;
+        s.EventManager.OnPrimsLoaded+=QueueLibraryImport;
+        s.EventManager.OnFrame+=LibraryImportTick;
+        s.EventManager.OnOarFileLoaded+=LibraryOarLoaded;
         s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
@@ -74,8 +81,40 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         s.EventManager.OnPrimsLoaded+=RegistrationPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopRegistration();StopCitizen(); if(enabled){s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;s.EventManager.OnPrimsLoaded-=RegistrationPrimsLoaded;} lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopRegistration();StopCitizen(); libraryStopped=true;if(enabled){s.EventManager.OnFrame-=LibraryImportTick;s.EventManager.OnPrimsLoaded-=QueueLibraryImport;s.EventManager.OnOarFileLoaded-=LibraryOarLoaded;s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnNewClient-=WorldClientOpened;s.EventManager.OnMakeRootAgent-=WorldRootOpened;s.EventManager.OnClientClosed-=WorldClientClosed;lock(gate){foreach(var client in worldClients.Values)client.OnLogout-=WorldClientLogout;worldClients.Clear();}s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;s.EventManager.OnPrimsLoaded-=RegistrationPrimsLoaded;} lock(gate)sessions.Clear(); }
     public void Close() { StopRegistration();StopCitizen(); lock(gate)sessions.Clear(); }
+    readonly Dictionary<UUID,MutSea.Framework.IClientAPI> worldClients=new();
+    void WorldRootOpened(ScenePresence presence) => WorldClientOpened(presence.ControllingClient);
+    bool HasWorldSession(UUID agent,Guid session) => sessions.TryGetValue(agent,out var active)&&active==session&&
+        scene.GetScenePresence(agent) is {IsChildAgent:false,IsDeleted:false,ControllingClient:{IsActive:true,IsLoggingOut:false}};
+    void WorldClientOpened(MutSea.Framework.IClientAPI client)
+    {
+        lock(gate)
+        {
+            if(worldClients.TryGetValue(client.AgentId,out var previous))previous.OnLogout-=WorldClientLogout;
+            worldClients[client.AgentId]=client;client.OnLogout+=WorldClientLogout;
+        }
+    }
+    void WorldClientLogout(MutSea.Framework.IClientAPI client)
+    {
+        // OnLogout is raised before the UDP logout reply. Presence teardown can
+        // finish later; a lingering root presence must not retain API authority.
+        lock(gate)if(worldClients.TryGetValue(client.AgentId,out var active)&&ReferenceEquals(active,client))RevokeWorldSession(client.AgentId);
+    }
+    void WorldClientClosed(UUID agent,Scene closedScene)
+    {
+        if(!ReferenceEquals(scene,closedScene))return;
+        lock(gate)
+        {
+            RevokeWorldSession(agent);
+            if(worldClients.Remove(agent,out var client))client.OnLogout-=WorldClientLogout;
+        }
+    }
+    void RevokeWorldSession(UUID agent)
+    {
+        sessions.Remove(agent);lastRequest.Remove(agent);lastExperienceRequest.Remove(agent);
+        kernel.InvalidateSession(agent.ToString());content?.Invalidate(agent.ToString());
+    }
     object? ContentSemantic(string id,string actor)
     {
         var metadata=content?.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
@@ -111,7 +150,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 {
                     lock(gate)
                     {
-                        if(!sessions.TryGetValue(agent,out var active)||active!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");
+                        if(!HasWorldSession(agent,session))throw new InvalidDataException("Your region session is no longer active.");
                         if(lastRequest.TryGetValue(agent,out var recent)&&DateTimeOffset.UtcNow-recent<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
                         lastRequest[agent]=DateTimeOffset.UtcNow;
                     }
@@ -120,18 +159,20 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 }
                 lock(gate)
                 {
-                    if(!sessions.TryGetValue(agent,out var current)||current!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");
+                    if(!HasWorldSession(agent,session))throw new InvalidDataException("Your region session is no longer active.");
                     string actor=agent.ToString(); string op=data.GetProperty("op").GetString()!;
                     // Background discovery must not consume the human action
                     // throttle or make a concurrent approval fail spuriously.
-                    var requests=op=="experience"?lastExperienceRequest:lastRequest;
+                    var requests=op is "experience" or "destinations"?lastExperienceRequest:lastRequest;
                     if(requests.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
                     requests[agent]=DateTimeOffset.UtcNow;
-                    if(WorldRecoveryRequired && op is "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
-                    if(op is "experience" or "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
+                    if(WorldRecoveryRequired && op is "creator" or "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
+                    if(op is "creator" or "destinations" or "experience" or "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
                     if(op.StartsWith("content_",StringComparison.Ordinal))operation=op;
                     object result=op switch {
                         "experience"=>HumanExperience(actor),
+                        "destinations"=>HumanDestinations(actor),
+                        "creator"=>HumanCreator(data,actor),
                         "content_preview"=>content!.Preview(data.GetProperty("package_id").GetString()!,data.GetProperty("version").GetString()!,data.GetProperty("anchor").Deserialize<double[]>()!,actor),
                         "content_commit"=>content!.Commit(data.GetProperty("plan_id").GetString()!,actor),
                         "content_undo"=>content!.Undo(data.GetProperty("plan_id").GetString()!,actor),

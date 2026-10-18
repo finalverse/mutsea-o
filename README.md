@@ -123,3 +123,7 @@ Report reproducible issues at
 revision, platform and redacted diagnostics. Never attach raw private INI,
 database URLs, account files, capability URLs or session tokens. Prefer small,
 tested changes over subsystem replacement.
+
+## World Library and Confluence
+
+[Live regions and acceptance](docs/mutsea/world-library-acceptance-20261018.md) · [Architecture and API boundaries](docs/mutsea/world-library.md) · [Operator acquisition/admission guide](docs/mutsea/world-library-operations.md). The source catalog records staged, rejected and deferred archives separately from live destinations. Creator recipes support private releases, free publishing and remix previews; payment checkout is not enabled. The current Mac preview.3 has a known repeated-teleport handoff race; see the acceptance record for the source fix and installer gate.

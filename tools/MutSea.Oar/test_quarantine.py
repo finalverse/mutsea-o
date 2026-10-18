@@ -74,6 +74,13 @@ class QuarantineTests(unittest.TestCase):
                 if m.name.startswith('settings/'):
                     self.assertEqual(ET.fromstring(data).findtext('General/DisableScripts'), 'True')
 
+    def test_legacy_single_region_07_uses_same_validation(self):
+        content = fixture(control=b'<archive major_version="0" minor_version="7"/>')
+        self.assertEqual([0, 7], self.run_fixture(content)['archive_version'])
+        __import__('shutil').rmtree(self.root/'out')
+        self.reject(fixture(control=b'<archive major_version="0" minor_version="6"/>'))
+        self.reject(fixture(control=b'<archive major_version="0" minor_version="7"><region_info><size_in_meters>512,512</size_in_meters></region_info></archive>'))
+
     def test_reproducible_derivative(self):
         content = fixture()
         first = self.run_fixture(content)

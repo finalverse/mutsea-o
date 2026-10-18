@@ -18,7 +18,7 @@ public sealed partial class WorldModule
     object HumanPlan(JsonElement data,UUID agent,Guid session)
     {
         bool recipe=ServerPlanner.Recipe(data);JsonObject? context=null;JsonNode? undo=null;
-        void Session(){if(!sessions.TryGetValue(agent,out var active)||active!=session||scene.GetScenePresence(agent) is not {IsChildAgent:false})throw new InvalidDataException("Your region session is no longer active.");}
+        void Session(){if(!HasWorldSession(agent,session))throw new InvalidDataException("Your region session is no longer active.");}
         lock(gate)
         {
             Session();

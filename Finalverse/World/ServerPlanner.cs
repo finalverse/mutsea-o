@@ -46,6 +46,16 @@ public sealed class ServerPlanner
         foreach(var item in source["nearby_entities"]!.AsArray().Take(64))
             nearby.Add(new JsonObject{["entity"]=Entity(item!["entity"]!),["distance"]=Copy(item["distance"])});
         context["nearby_entities"]=nearby;
+        if(source["workspace"] is JsonObject workspace&&workspace["zones"] is JsonArray spatial)
+        {
+            var zones=new JsonArray();
+            foreach(var zone in spatial.Take(8))
+            {
+                if(zone is not JsonObject)continue;
+                var value=new JsonObject();foreach(var key in new[]{"id","title","purpose","center","radius"})value[key]=Copy(zone[key]);zones.Add(value);
+            }
+            context["workspace"]=new JsonObject{["id"]=Copy(workspace["id"]),["title"]=Copy(workspace["title"]),["zones"]=zones};
+        }
         return context;
     }
     public JsonObject Propose(JsonElement data,JsonObject? context)
