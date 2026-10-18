@@ -11,7 +11,7 @@ The existing PostgreSQL-backed grid now hosts Harbor plus four separately alloca
 | Conference Center | Zadaroo/Linda Kellie publisher CC0 archive, passive derivative | 1,893 |
 | Autumn Castle | Zadaroo/Linda Kellie publisher CC0 archive, passive derivative | 6,133 |
 
-In the published Mac **preview.3**, open **Explore → World map**, search an exact region name above, and choose **Teleport**. New source builds add **Explore → World Library**, with native online discovery and teleport. This source feature does not silently update an installed preview.3 app. [Viewer instructions](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/world/world-library-and-confluence.md).
+In the published Mac **preview.3**, open **Explore → World map**, search an exact region name above, and choose **Teleport**. New source builds add **Worlds → World Library**, with native online discovery and teleport. This source feature does not silently update an installed preview.3 app. [Viewer instructions](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/world/world-library-and-confluence.md).
 
 All three imported originals have zero missing texture/geometry references in the native audit, disabled scripts/task inventory, preserved creator identities, copy permissions and protected parcels. Native ownership does not override source terms. Visitors customize inventory copies on land where they can build; they do not edit a shared original. Archive restore is an operator operation into an empty new region, never an AI tool.
 
@@ -32,11 +32,11 @@ A deterministic derivative remaps each publisher archive's colliding blank-textu
 - Preservation audit against the pre-deployment PostgreSQL snapshot: all six account records and 80 inventory items are byte-for-byte unchanged; Harbor retains all 423 part IDs/owners/permissions, all 423 shape records and its original parcel record.
 - 61 World Kernel tests; 50 content tests; 27 OAR converter tests; eight acquisition tests; 16 library/creator tests; 14 planning-boundary checks; three native rekey checks. Studio's changed place/world suites pass ten tests.
 - Gateway: 81 tests, one optional integration test skipped. Workspace context is bounded and allowlisted in both simulator and gateway; arbitrary fields and transcripts are excluded.
-- Viewer: universal native build succeeds. 119 CTest entries pass: 118 unchanged tests using RelWithDebInfo binaries and the changed presentation suite using its rebuilt Release binary (12 cases). This is not a claim that every test target was rebuilt in Release.
+- Viewer: universal native build succeeds. 119 CTest entries pass: 118 unchanged tests using RelWithDebInfo binaries and the changed presentation suite using its rebuilt Release binary (14 cases). This is not a claim that every test target was rebuilt in Release.
 
 ## Native viewer gate
 
-The universal Mac client displayed all five online destinations and entered Confluence. A subsequent teleport exposed source `DisableSimulator` arriving before destination movement completion, which the inherited viewer treats as a disconnect. A bounded MutSea-only handoff fix is being verified; ordinary shutdowns, system grids and timeout behavior must remain intact. **Do not infer a new installer release or complete native multi-region qualification from the portable protocol tour.** The existing preview.3 installer can encounter this race.
+The universal Mac client displayed all five online destinations and entered Confluence. A subsequent teleport exposed source `DisableSimulator` arriving before destination movement completion, which the inherited viewer treats as a disconnect. A bounded MutSea-only handoff fix is in [viewer commit 781ddb04cb](https://github.com/finalverse/final_viewer/commit/781ddb04cb); ordinary shutdowns, system grids and timeout behavior remain immediate. A subsequent combined native run entered Autumn Castle, used Overview and action search, teleported to Confluence, remained connected there for over eight minutes, returned to Harbor and quit normally. All five destinations remained discoverable. An earlier post-arrival session also suffered a delayed UDP disconnect, and background discovery showed intermittent HTTP timeouts; those causes are not represented as resolved by the successful later run. **Do not infer a new installer release or complete native multi-region qualification from the portable protocol tour.** The existing preview.3 installer can encounter this race.
 
 ## Creator release scope
 
