@@ -54,6 +54,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialiseRegistration(config);
         InitialiseComposer(config);
         InitialisePlanning(config);
+        InitialiseEarthBridge(config);
     }
     public void AddRegion(Scene s)
     {
@@ -65,6 +66,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         StartPlaces(catalog);
         StartWorlds(catalog);
         StartComposer(catalog);
+        StartEarthBridge();
         kernel.ContentSemantics=ContentSemantic;
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
@@ -117,6 +119,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     }
     object? ContentSemantic(string id,string actor)
     {
+        if(EarthSemantic(id,actor) is {} earth)return earth;
         var metadata=content?.Semantic(id,actor)??places?.Semantic(id,actor)??worldPlaces?.Semantic(id,actor);
         if(metadata==null||worlds?.EntityContext(id) is not {} context)return metadata;
         // Sidecar world provenance enriches existing entity/place semantics.
@@ -141,6 +144,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>65536)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
+                if(data.GetProperty("op").GetString()=="earth_bridge")
+                {
+                    operation="earth_bridge";output=HumanEarthBridge(data,agent,session);
+                    response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output},Kernel.Json);response.StatusCode=200;return;
+                }
                 if(data.GetProperty("op").GetString()=="plan")
                 {
                     operation="plan";output=HumanPlan(data,agent,session);
@@ -167,6 +175,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                     if(requests.TryGetValue(agent,out var last)&&DateTimeOffset.UtcNow-last<TimeSpan.FromMilliseconds(100))throw new InvalidDataException("Please wait briefly before the next request.");
                     requests[agent]=DateTimeOffset.UtcNow;
                     if(WorldRecoveryRequired && op is "creator" or "prepare" or "commit" or "undo" or "content_preview" or "content_commit" or "content_undo")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
+                    if(op is "commit" or "undo" && data.TryGetProperty("plan_id",out var earthPlan)&&IsEarthPlan(earthPlan.GetString()??""))throw new InvalidDataException("Use the Earth bridge review to approve or undo this experience.");
                     if(op is "creator" or "destinations" or "experience" or "inspect" or "prepare" or "commit" or "undo" or "journal" or "lumi" or "semantic")operation=op;
                     if(op.StartsWith("content_",StringComparison.Ordinal))operation=op;
                     object result=op switch {

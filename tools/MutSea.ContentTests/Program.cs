@@ -15,6 +15,19 @@ try{
  var package=new ContentPackage(1,"mutsea.test.lantern","0.1.0","Lantern",ContentCatalog.Hash(manifest),"CC0-1.0",[new("base","Lantern","lighting","Original test lamp",[0,0,.5],[.5,.5,1],[0,0,0,1],[new([1,.7,.2,1],true)],"mesh.llmesh",ContentCatalog.Hash(mesh),2)],"full","convex");
  void Save(ContentPackage p)=>File.WriteAllText(Path.Combine(directory,"compiled.json"),JsonSerializer.Serialize(p));Save(package);
  var catalog=new ContentCatalog(Path.Combine(root,"catalog"));var world=new Fake();var actor=Guid.NewGuid().ToString();var journal=Path.Combine(root,"journal");var region=Guid.NewGuid().ToString();var kernel=new ContentKernel(world,catalog,journal,region);
+ var grid=Guid.NewGuid().ToString();
+ var fsip=System.Text.Json.Nodes.JsonNode.Parse(JsonSerializer.Serialize(new{
+   protocol_version="0.1",manifest_version=1,experience_id=Guid.NewGuid(),owner=new{earth_subject=new string('a',64),mutsea_agent_id=(string?)null},title="Synthetic FSIP fixture",source_workspace=(object?)null,world_template="mutsea.test.virtual",
+   transform=new{layout="virtual",source_context=(object?)null,target=new{grid_id=grid,region_id=region},frame=new{frame_id=Guid.NewGuid(),axes="east_north_up",metres_per_unit=1,origin=new[]{0d,0,0},geo_anchor=(object?)null},description="Entirely virtual test frame"},
+   objects=new[]{new{local_id="test-lamp",asset=new{package_id=package.package_id,version=package.version,manifest_sha256=package.manifest_sha256,license="CC0-1.0"},offset_m=new[]{0d,0,0},yaw_degrees=0,semantic_type="lighting",description="Synthetic test asset",source_record_ids=Array.Empty<string>(),generated_geometry=true}},
+   semantic_zones=new[]{new{zone_id="review",title="Test",affordances=new[]{"inspect"}}},required_permissions=new[]{"read_context","preview","create_owned_place","inspect_receipt","undo_owned_place"},
+   budget=new{max_objects=1,max_triangles=2,max_asset_bytes=4,max_lights=0,scripts_allowed=false},provenance=new[]{new{source="synthetic-test",record_ids=Array.Empty<string>(),license="CC0-1.0",attribution="Test fixture only",sha256=new string('b',64),generated=true}},ai_narrative="Unit fixture, not production evidence",created_at=DateTimeOffset.UtcNow
+ }))!;
+ void FsipReject(Action<System.Text.Json.Nodes.JsonNode> change){var bad=fsip.DeepClone();change(bad);Reject(()=>EarthBridgeContract.Draft(JsonSerializer.SerializeToElement(bad),grid,region,catalog));}
+ Test("FSIP compiles a bounded virtual draft using approved assets",()=>Assert(EarthBridgeContract.Draft(JsonSerializer.SerializeToElement(fsip),grid,region,catalog).placements.Length==1));
+ Test("FSIP denies another audience, implicit geography and unknown fields",()=>{FsipReject(m=>m["transform"]!["target"]!["region_id"]=Guid.NewGuid().ToString());FsipReject(m=>m["transform"]!["frame"]!["geo_anchor"]=new System.Text.Json.Nodes.JsonObject());FsipReject(m=>m["exec"]="bad");});
+ Test("FSIP rechecks actual parts, triangles, asset bytes and scripts",()=>{FsipReject(m=>m["budget"]!["max_objects"]=0);FsipReject(m=>m["budget"]!["max_triangles"]=1);FsipReject(m=>m["budget"]!["max_asset_bytes"]=2);FsipReject(m=>m["budget"]!["scripts_allowed"]=true);});
+ Test("FSIP denies changed pins, invented records and unlabelled geometry",()=>{FsipReject(m=>m["objects"]![0]!["asset"]!["manifest_sha256"]=new string('c',64));FsipReject(m=>m["objects"]![0]!["source_record_ids"]=new System.Text.Json.Nodes.JsonArray("fabricated"));FsipReject(m=>m["objects"]![0]!["generated_geometry"]=false);FsipReject(m=>m["provenance"]![0]!["generated"]=false);});
  Test("v1 metadata hydrated from pinned manifest",()=>{var p=catalog.Get(package.package_id,package.version).package;Assert(p.parts[0].semantics!.affordances.SequenceEqual(new[]{"inspect"}));});
  Test("v2 metadata omission fails closed",()=>Reject(()=>ContentCatalog.Validate(package with{schema_version=2})));
  var material=new ContentMaterialFactors("wood",[.3,.12,.04,1],0,.7,[0,0,0],"OPAQUE",.5,false);

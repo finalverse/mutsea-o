@@ -107,7 +107,7 @@ public sealed partial class WorldModule
     {
         if(!citizensEnabled||actor!=citizenOwner)throw new InvalidDataException("This citizen is not controlled by your account.");
         string command=data.GetProperty("command").GetString()!;
-        if(command is not ("inspect" or "say" or "pause" or "resume" or "cancel" or "approve" or "undo"))throw new InvalidDataException("Unknown citizen command.");
+        if(command is not ("inspect" or "say" or "pause" or "resume" or "cancel" or "approve" or "undo" or "experience"))throw new InvalidDataException("Unknown citizen command.");
         string text=data.TryGetProperty("text",out var t)?t.GetString()??"":"";
         if(text.Length>2048)throw new InvalidDataException("Citizen message exceeds limit.");
         if(command=="say")lock(gate)HearGesture(text);
@@ -123,10 +123,11 @@ public sealed partial class WorldModule
     object CitizenTool(JsonElement data)
     {
         string op=data.GetProperty("op").GetString()!;
-        if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden" or "prepare_place" or "commit_place" or "undo_place"))throw new InvalidDataException("Tool capability denied.");
+        if(op is not ("ensure" or "observe" or "navigate_home" or "stop" or "speak" or "prepare_garden" or "commit_garden" or "undo_garden" or "prepare_place" or "commit_place" or "undo_place" or "review_experience"))throw new InvalidDataException("Tool capability denied.");
         lease=DateTimeOffset.UtcNow;
         if(!representationReady)throw new InvalidDataException("Citizen embodiment is still loading.");
         if(op=="observe")return ObserveCitizen();
+        if(op=="review_experience")return CitizenEarthContext(data.GetProperty("plan_id").GetString()??"");
         if(WorldRecoveryRequired&&op!="stop")throw new InvalidDataException("An interrupted world transaction requires administrator recovery.");
         if(representationRecovery&&op!="stop")throw new InvalidDataException("Citizen representation requires administrator recovery.");
         string action=data.GetProperty("action_id").GetString()!;if(!Guid.TryParse(action,out _))throw new InvalidDataException("Invalid action correlation.");

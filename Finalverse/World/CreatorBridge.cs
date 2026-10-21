@@ -13,6 +13,7 @@ public sealed partial class WorldModule
         if(command=="save")
         {
             string planId=data.GetProperty("plan_id").GetString()!;
+            ContentCatalog.Require(!IsEarthPlan(planId),"Earth experiences retain separate data attribution and WorldBindings. Export as a generic creator recipe is not enabled in this preview.");
             var entries=composerPlaces?.Entries.Where(e=>e.plan.plan_id==planId).ToArray()??[];
             var last=entries.LastOrDefault();
             ContentCatalog.Require(last is {status:"committed"}&&last.plan.actor_id==actor&&last.fingerprints?.Length==last.plan.placements.Length,"Save requires your own active committed place recipe.");

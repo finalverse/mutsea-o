@@ -13,6 +13,7 @@ public sealed partial class WorldModule
             schema_version=1,region_id=RegionId,actor_id=actor,
             recovery_required=WorldRecoveryRequired,compose_places=composerPlaces!=null,
             server_planning=serverPlanner!=null,
+            earth_bridge=composerPlaces!=null&&(earthBridge!=null||earthEntries.Count>0),
             citizen=ExperienceAvailability.Citizen(citizensEnabled,body is {IsDeleted:false},actor==citizenOwner,
                 representationReady&&!string.IsNullOrEmpty(bridgePath),representationRecovery)
         };
