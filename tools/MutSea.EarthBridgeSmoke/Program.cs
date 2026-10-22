@@ -43,7 +43,44 @@ try {
         if(!client.Self.Teleport(sim.Handle,new Vector3(xyz[0],xyz[1],xyz[2])))throw new IOException("Native site teleport failed");await Task.Delay(500);
     }
     stage=input.GetProperty("action").GetString()!;JsonElement result;
-    if(stage is "preview" or "apply") {
+    if(stage=="confluence") {
+        using var handoff=JsonDocument.Parse(File.ReadAllBytes(input.GetProperty("handoff_file").GetString()!));
+        var grant=handoff.RootElement;
+        var joined=await World(new{op="confluence",action="join",handoff=grant.GetProperty("token").GetString()});
+        if(joined.GetProperty("session_id").GetString()!=grant.GetProperty("session_id").GetString())throw new IOException("Session identity changed at native join");
+        var snapshot=await World(new{op="confluence",action="read",after=0});
+        Guid? submittedRequest=null;
+        if(input.TryGetProperty("text",out var question)) {
+            bool allowed=joined.GetProperty("can_propose").GetBoolean();
+            Guid requestId=Guid.NewGuid();
+            var message=await Call(new{op="confluence",action="message",text=question.GetString(),request_id=requestId});
+            if(allowed)submittedRequest=requestId;
+            if((message.status==200)!=allowed)throw new IOException("Native participant proposal policy differs from grant");
+            if(allowed) {
+                for(int attempt=0;attempt<100;attempt++) {
+                    await Task.Delay(500);snapshot=await World(new{op="confluence",action="read",after=0});
+                    if(snapshot.GetProperty("session").GetProperty("status").GetString()=="idle")break;
+                }
+                if(snapshot.GetProperty("session").GetProperty("status").GetString()!="idle")throw new IOException("Shared conversation did not finish within the diagnostic budget");
+            }
+        }
+        if(snapshot.GetProperty("session").GetProperty("id").GetString()!=joined.GetProperty("session_id").GetString())throw new IOException("Native replay returned another session");
+        var replay=new List<JsonElement>();long cursor=0;
+        for(int page=0;page<256;page++) {
+            snapshot=await World(new{op="confluence",action="read",after=cursor});
+            replay.AddRange(snapshot.GetProperty("events").EnumerateArray().Select(e=>e.Clone()));cursor=snapshot.GetProperty("cursor").GetInt64();
+            if(cursor>=snapshot.GetProperty("session").GetProperty("cursor").GetInt64())break;
+        }
+        if(submittedRequest is {} submitted&&!replay.Any(e=>e.GetProperty("request_id").GetString()==submitted.ToString()&&e.GetProperty("type").GetString()=="message.delta"))throw new IOException("Native participant message has no authoritative streamed response");
+        if(input.TryGetProperty("hold_seconds",out var hold)) {
+            int seconds=hold.GetInt32();if(seconds is <0 or >60)throw new IOException("Bounded observation period required");
+            var until=DateTime.UtcNow.AddSeconds(seconds);
+            while(DateTime.UtcNow<until){await Task.Delay(1000);snapshot=await World(new{op="confluence",action="read",after=cursor});replay.AddRange(snapshot.GetProperty("events").EnumerateArray().Select(e=>e.Clone()));cursor=snapshot.GetProperty("cursor").GetInt64();}
+        }
+        var references=snapshot.GetProperty("artifacts");JsonElement? artifact=null;
+        if(references.GetArrayLength()>0)artifact=await World(new{op="confluence",action="artifact",artifact_id=references[0].GetProperty("artifact_id").GetString()});
+        result=JsonSerializer.SerializeToElement(new{native_actor_id=client.Self.AgentID.ToString(),joined,snapshot,replayed_events=replay,artifact,scene_objects=sim.ObjectsPrimitives.Count,world_write_authority=false});
+    } else if(stage is "preview" or "apply") {
         using var handoff=JsonDocument.Parse(File.ReadAllBytes(input.GetProperty("handoff_file").GetString()!));
         result=await World(new{op="earth_bridge",action="preview",handoff=handoff.RootElement.GetProperty("token").GetString()});
         // Preview must not silently execute. A generic Apply cannot bypass FSIP.
