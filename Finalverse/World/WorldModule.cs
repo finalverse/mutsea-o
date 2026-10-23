@@ -114,7 +114,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     }
     void RevokeWorldSession(UUID agent)
     {
-        sessions.Remove(agent);lastRequest.Remove(agent);lastExperienceRequest.Remove(agent);
+        sessions.Remove(agent);confluenceLinks.Remove(agent);lastRequest.Remove(agent);lastExperienceRequest.Remove(agent);
         kernel.InvalidateSession(agent.ToString());content?.Invalidate(agent.ToString());
     }
     object? ContentSemantic(string id,string actor)
@@ -130,7 +130,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
     }
     void RegisterCaps(UUID agent,Caps caps)
     {
-        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); content?.Invalidate(agent.ToString()); sessions[agent]=session; }
+        Guid session=Guid.NewGuid(); lock(gate) { kernel.InvalidateSession(agent.ToString()); content?.Invalidate(agent.ToString()); confluenceLinks.Remove(agent);sessions[agent]=session; }
         caps.RegisterSimpleHandler("FinalverseWorld",new SimpleStreamHandler("/"+UUID.Random(),(request,response)=>
         {
             response.ContentType="application/json";
@@ -144,6 +144,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 while((n=request.InputStream.Read(buffer,0,buffer.Length))>0) { memory.Write(buffer,0,n);if(memory.Length>65536)throw new InvalidDataException("Request too large."); }
                 using var doc=JsonDocument.Parse(memory.ToArray(),new JsonDocumentOptions {MaxDepth=20});
                 var data=doc.RootElement;
+                if(data.GetProperty("op").GetString()=="confluence")
+                {
+                    operation="confluence";output=HumanConfluence(data,agent,session);
+                    response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output},Kernel.Json);response.StatusCode=200;return;
+                }
                 if(data.GetProperty("op").GetString()=="earth_bridge")
                 {
                     operation="earth_bridge";output=HumanEarthBridge(data,agent,session);

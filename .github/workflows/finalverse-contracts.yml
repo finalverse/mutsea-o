@@ -1,0 +1,21 @@
+name: Finalverse world contracts
+on:
+  pull_request:
+  push:
+    branches: [main, codex/confluence-v07]
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: WorldKernel authorization and receipt unit regressions
+        run: dotnet run --project tools/Finalverse.WorldTests/Finalverse.WorldTests.csproj -c Release
+      - name: Content and Earth bridge contract unit regressions
+        run: dotnet run --project tools/MutSea.ContentTests/MutSea.ContentTests.csproj -c Release
+      - name: Deterministic composer unit regressions
+        run: dotnet run --project tools/MutSea.ComposerTests/MutSea.ComposerTests.csproj -c Release

@@ -9,7 +9,7 @@ content and accountable AI world operations. The server/platform brand is
 
 [Platform website](https://mutsea.com) ·
 [Finalverse Mac preview](https://github.com/finalverse/final_viewer/releases/tag/v0.4.0-preview.3) ·
-[Native demo and getting started](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/getting-started.md)
+[Native demo and getting started](https://github.com/finalverse/desktop/blob/main/docs/finalverse/getting-started.md)
 
 **New and existing users:** [create or manage your account](https://mutsea.com/account/) with the
 same avatar name/password as the viewer. View your home/identity, edit web-profile
@@ -39,7 +39,7 @@ preferences, change your world password and generate private recovery codes.
 A real hosted-Lumi acceptance created 147 native parts after approval, retained
 exact transforms/ownership/semantics and memory across restarts, then removed
 the creation through Undo. Scene counts returned to the 423-part baseline.
-[Actual screenshots and limitations](https://github.com/finalverse/final_viewer/blob/main/docs/finalverse/demos.md).
+[Actual screenshots and limitations](https://github.com/finalverse/desktop/blob/main/docs/finalverse/demos.md).
 
 ## Build
 
@@ -125,5 +125,11 @@ database URLs, account files, capability URLs or session tokens. Prefer small,
 tested changes over subsystem replacement.
 
 ## World Library and Confluence
+
+The `codex/confluence-v07` integration branch adds a scoped canonical-session
+relay over the existing native capability and private Earth transport. See
+[Confluence continuity](docs/finalverse/confluence-continuity.md) for identity,
+permission, replay and local acceptance boundaries. No public service is
+silently upgraded by this source branch.
 
 [Live regions and acceptance](docs/mutsea/world-library-acceptance-20261018.md) · [Architecture and API boundaries](docs/mutsea/world-library.md) · [Operator acquisition/admission guide](docs/mutsea/world-library-operations.md). The source catalog records staged, rejected and deferred archives separately from live destinations. Creator recipes support private releases, free publishing and remix previews; payment checkout is not enabled. The current Mac preview.3 has a known repeated-teleport handoff race; see the acceptance record for the source fix and installer gate.
