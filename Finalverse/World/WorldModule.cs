@@ -55,6 +55,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         InitialiseComposer(config);
         InitialisePlanning(config);
         InitialiseEarthBridge(config);
+        InitialiseGeography(config);
     }
     public void AddRegion(Scene s)
     {
@@ -67,6 +68,7 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         StartWorlds(catalog);
         StartComposer(catalog);
         StartEarthBridge();
+        StartGeography();
         kernel.ContentSemantics=ContentSemantic;
         kernel.AvatarBinding=AvatarBinding;
         s.EventManager.OnRegisterCaps+=RegisterCaps;
@@ -79,11 +81,13 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
         s.EventManager.OnPrimsLoaded+=GenesisPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=PlacesPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=WorldsPrimsLoaded;
+        // Geographic ground is issued before any newcomer home is placed on it.
+        s.EventManager.OnPrimsLoaded+=GeographyPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=AccountsPrimsLoaded;
         s.EventManager.OnPrimsLoaded+=RegistrationPrimsLoaded;
     }
     public void RegionLoaded(Scene s) { if(enabled) StartCitizen(); }
-    public void RemoveRegion(Scene s) { StopRegistration();StopCitizen(); libraryStopped=true;if(enabled){s.EventManager.OnFrame-=LibraryImportTick;s.EventManager.OnPrimsLoaded-=QueueLibraryImport;s.EventManager.OnOarFileLoaded-=LibraryOarLoaded;s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnNewClient-=WorldClientOpened;s.EventManager.OnMakeRootAgent-=WorldRootOpened;s.EventManager.OnClientClosed-=WorldClientClosed;lock(gate){foreach(var client in worldClients.Values)client.OnLogout-=WorldClientLogout;worldClients.Clear();}s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;s.EventManager.OnPrimsLoaded-=RegistrationPrimsLoaded;} lock(gate)sessions.Clear(); }
+    public void RemoveRegion(Scene s) { StopRegistration();StopCitizen(); libraryStopped=true;if(enabled){s.EventManager.OnFrame-=LibraryImportTick;s.EventManager.OnPrimsLoaded-=QueueLibraryImport;s.EventManager.OnOarFileLoaded-=LibraryOarLoaded;s.EventManager.OnRegisterCaps-=RegisterCaps;s.EventManager.OnNewClient-=WorldClientOpened;s.EventManager.OnMakeRootAgent-=WorldRootOpened;s.EventManager.OnClientClosed-=WorldClientClosed;lock(gate){foreach(var client in worldClients.Values)client.OnLogout-=WorldClientLogout;worldClients.Clear();}s.EventManager.OnPrimsLoaded-=GenesisPrimsLoaded;s.EventManager.OnPrimsLoaded-=PlacesPrimsLoaded;s.EventManager.OnPrimsLoaded-=WorldsPrimsLoaded;s.EventManager.OnPrimsLoaded-=AccountsPrimsLoaded;s.EventManager.OnPrimsLoaded-=RegistrationPrimsLoaded;s.EventManager.OnPrimsLoaded-=GeographyPrimsLoaded;StopGeography();} lock(gate)sessions.Clear(); }
     public void Close() { StopRegistration();StopCitizen(); lock(gate)sessions.Clear(); }
     readonly Dictionary<UUID,MutSea.Framework.IClientAPI> worldClients=new();
     void WorldRootOpened(ScenePresence presence) => WorldClientOpened(presence.ControllingClient);
@@ -153,6 +157,11 @@ public sealed partial class WorldModule : INonSharedRegionModule, IWorld
                 {
                     operation="earth_bridge";output=HumanEarthBridge(data,agent,session);
                     response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output},Kernel.Json);response.StatusCode=200;return;
+                }
+                if(data.GetProperty("op").GetString() is {} geoOp&&geoOp.StartsWith("geo_",StringComparison.Ordinal))
+                {
+                    operation=geoOp is "geo_binding" or "geo_locate" or "geo_resolve" or "geo_entity" or "geo_enter"?geoOp:"invalid";output=HumanGeography(data,agent,session,geoOp);
+                    response.RawBuffer=JsonSerializer.SerializeToUtf8Bytes(new{ok=true,result=output});response.StatusCode=200;return;
                 }
                 if(data.GetProperty("op").GetString()=="plan")
                 {
