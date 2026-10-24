@@ -1,0 +1,29 @@
+PASS equator, pole and south-pole golden vectors (SpatialDB frames.rs)
+PASS PROJ cross-implementation vectors to 1 µm
+PASS geodetic round trips below a millimetre everywhere that matters (SpatialDB grid)
+PASS tangent frame origin and axes on the ellipsoid (SpatialDB east-up-south)
+PASS heading 0: +Y is north, +X is east; heading 90: +Y is east, +X is south
+PASS heading is the clockwise bearing of +Y measured at the anchor, for any heading
+PASS scale: one region metre is `scale` Earth metres in every direction
+PASS region <-> WGS84 round trips at hard places: antimeridian, near pole, south, high and low
+PASS inverse similarity is exact and the publication composition commutes
+PASS live ground resolution follows the vertical through the geographic point
+PASS RFC 8785 number serialization vectors
+PASS canonical JSON sorts names, escapes controls and keeps non-ASCII
+PASS binding version is deterministic, order-independent and content-bound
+PASS binding identity is stable per world and region and differs otherwise
+PASS validation accepts a sealed binding and rejects each tampering
+PASS heading 360 and non-positive scale are outside the contract
+PASS Earth Core projections carry exactly the validated members
+PASS correspondence resolves the most specific published feature and refuses foreign indexes
+PASS issue applies pinned terrain and water, survives restart, and is idempotent
+PASS a revision must directly supersede the active version; retirement restores the predecessor
+PASS terrain never replaces ground under live objects; retirement never overwrites later edits
+PASS forged inputs are refused before any mutation
+PASS a failed application is compensated; a failed compensation fences further issuance
+PASS entry evidence is per actor, bounded and bound to the active version
+PASS real binding validates against its pinned publication and terrain
+PASS real alignment: publication origin at the region centre, z = CGVD2013 there, grid-aligned heading
+PASS real terrain: MutSea ground reproduces the published triangles; heights are persistence fixed points
+PASS real correspondence: 42 buildings, 93 roads, 4 terrain tiles; every building centroid resolves to itself
+28 passed, 0 not run

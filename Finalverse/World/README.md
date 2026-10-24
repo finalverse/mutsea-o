@@ -270,6 +270,30 @@ Place rectangles may overlap in the catalog, because they include empty margins.
 
 **Running the simulator container.** The console reads stdin. Without `-it` (OpenStdin and TTY), it prints prompts in a tight loop, which floods the container log until the disk fills. Recreate the container only with `-it`, attached to both the database network and `bridge`, with the same volumes and user.
 
+## Geographic world binding
+
+A region can be bound to a real place: `mutsea.geographic-binding/v1` (`GeoBinding.cs`, `GeoBindingKernel.cs`, `GeoModule.cs`).
+
+```ini
+[FinalverseGeography]
+Enabled = true
+WorldId = <world UUID>
+Candidates = /config/geo                  ; operator-reviewed <version>.binding.json, .correspondence.json, .terrain.r32
+Issue = <region UUID>@<version>           ; or, alone: Retire = <region UUID>@<version>
+LoginURI = http://127.0.0.1:19070/
+```
+
+The binding is an exact f64 WGS84 similarity (anchor, heading, scale). It is pinned to one immutable SpatialDB publication and content-addressed by its RFC 8785 digest.
+
+- **Issuance** is operator-only and journaled in `<region>.geobinding.jsonl` with a terrain snapshot and compensation. It replaces ground only in a region without live objects.
+- **Discovery** at `/finalverse/geo/v1/worlds` and `/entry` is public and read-only.
+- **Session ops** `geo_binding`, `geo_locate`, `geo_resolve`, `geo_entity` and `geo_enter` are read-only.
+- **Mutation** still goes only through WorldKernel and WorldLine.
+
+`tools/Finalverse.GeoBind` derives candidates from a local publication copy. `tools/geo/geo_oracle.py` verifies them independently.
+
+**Old Montréal acceptance.** A 512 m var region bound to SpatialDB publication `ba323a8f…`, at heading 19.3155° and scale 1. Two native users entered through discovery, then created, observed, protected, reconnected and deleted objects across a restart. Contract: `docs/geography/world-binding.md`; evidence: `docs/geography/acceptance.md`.
+
 ## Newcomers (account → appearance)
 
 An operator can prepare new local accounts that arrive already wearing a chosen Genesis template:

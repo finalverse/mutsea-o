@@ -1,0 +1,278 @@
+{
+  "mode": "session",
+  "passed": 33,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "public discovery names one bound region and its immutable version",
+      "ok": true,
+      "detail": {
+        "version": "85476feff0e7a77d02d99635bcc81762f31e7f07070422657f55bec0ff155954",
+        "region": "Old Montreal"
+      }
+    },
+    {
+      "name": "discovery resolves a building to a standing place on a real street",
+      "ok": true,
+      "detail": {
+        "building": "Building roof-outline proxy CARTO-BAT-TOIT:67097",
+        "on": [
+          "Rue Saint-Paul Est",
+          "Terrain tile 1,1"
+        ]
+      }
+    },
+    {
+      "name": "two independent accounts authenticate concurrently over native login",
+      "ok": true,
+      "detail": {
+        "ada": "892270bb-a365-48ae-9d47-88986f8640f1",
+        "ben": "d956589d-e798-4147-b415-17912da78b11",
+        "ms": 4981
+      }
+    },
+    {
+      "name": "Ada arrives where discovery pointed, with a journaled receipt",
+      "ok": true,
+      "detail": {
+        "error_m": 0.324,
+        "arrival": {
+          "longitude_degrees": -73.55279054740122,
+          "latitude_degrees": 45.50686337896918,
+          "height_metres": -13.39481680933386
+        }
+      }
+    },
+    {
+      "name": "Ben arrives where discovery pointed, with a journaled receipt",
+      "ok": true,
+      "detail": {
+        "error_m": 0,
+        "arrival": {
+          "longitude_degrees": -73.55350350236435,
+          "latitude_degrees": 45.50720120298732,
+          "height_metres": -11.397083062678576
+        }
+      }
+    },
+    {
+      "name": "an entry for another binding version is refused",
+      "ok": true,
+      "detail": "HTTP 400: The geographic binding changed since discovery. Discover again."
+    },
+    {
+      "name": "the session sees the same binding discovery served, with terrain matching issuance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "live MutSea ground equals the issued heightmap at random geographic points",
+      "ok": true,
+      "detail": {
+        "points": 30,
+        "max_difference_m": 3.4960940809014573E-09
+      }
+    },
+    {
+      "name": "three objects committed concurrently by two users through WorldLine",
+      "ok": true,
+      "detail": {
+        "objects": [
+          "bc34880c-7f08-b2d4-f351-760701b8efdf",
+          "055a3870-3353-e94f-665d-b2959ebea928",
+          "bb311e4c-3d89-d197-cc12-f3220f8fae5f"
+        ],
+        "replanned_after_conflict": 1
+      }
+    },
+    {
+      "name": "a plan prepared before another user\u0027s commit is refused as stale (no lost update)",
+      "ok": true,
+      "detail": "HTTP 400: Scene changed after placement validation. Please plan again."
+    },
+    {
+      "name": "each user observes the other\u0027s newest object over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ada observes bc34880c at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ada observes 055a3870 at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ada observes bb311e4c at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ben observes bc34880c at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ben observes 055a3870 at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ben observes bb311e4c at its committed transform over UDP",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "a live object reports the published building it stands in",
+      "ok": true,
+      "detail": {
+        "geographic": {
+          "longitude_degrees": -73.55327788330038,
+          "latitude_degrees": 45.50691356031201,
+          "height_metres": -13.175027734600008
+        },
+        "on": [
+          "Building roof-outline proxy CARTO-BAT-TOIT:67097",
+          "Terrain tile 1,1"
+        ]
+      }
+    },
+    {
+      "name": "the published building lists the live object standing in it",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the street post resolves onto the published street it was placed on",
+      "ok": true,
+      "detail": [
+        "Rue Saint-Paul Est",
+        "Terrain tile 1,1"
+      ]
+    },
+    {
+      "name": "Ben cannot delete Ada\u0027s object through the World API",
+      "ok": true,
+      "detail": "HTTP 400: You can only edit your own unlinked, nonphysical objects."
+    },
+    {
+      "name": "Ben cannot move Ada\u0027s object through the World API",
+      "ok": true,
+      "detail": "HTTP 400: You can only edit your own unlinked, nonphysical objects."
+    },
+    {
+      "name": "Ben cannot commit Ada\u0027s prepared plan",
+      "ok": true,
+      "detail": "HTTP 400: Plan expired or belongs to another actor."
+    },
+    {
+      "name": "Ben cannot undo Ada\u0027s committed plan",
+      "ok": true,
+      "detail": "HTTP 400: Operation not found."
+    },
+    {
+      "name": "no client operation can issue or change a binding",
+      "ok": true,
+      "detail": "HTTP 400: Unknown World API operation."
+    },
+    {
+      "name": "Ben sees Ada\u0027s object natively before the attack",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "native UDP move and take-to-inventory by a non-owner change nothing",
+      "ok": true,
+      "detail": {
+        "post": [
+          318.6048583984375,
+          239.9690399169922,
+          17.513822555541992
+        ]
+      }
+    },
+    {
+      "name": "WorldLine records each owner\u0027s commits and none of the refused attempts",
+      "ok": true,
+      "detail": {
+        "ada_entries": 6,
+        "ben_entries": 4
+      }
+    },
+    {
+      "name": "Ada\u0027s previous World capability is refused after logout",
+      "ok": true,
+      "detail": "HTTP 200 (no World API response)"
+    },
+    {
+      "name": "Ada reconnects with the same identity and a new capability",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ada still sees her objects with their identities and owner after reconnecting",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "after reconnecting Ada deletes her marker through WorldLine; Ben observes the deletion",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the building no longer lists the deleted object",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "latency_ms": {
+    "geo_enter": {
+      "n": 2,
+      "median": 88.3,
+      "max": 88.3446
+    },
+    "geo_binding": {
+      "n": 1,
+      "median": 36.2,
+      "max": 36.2017
+    },
+    "geo_resolve": {
+      "n": 40,
+      "median": 5.6,
+      "max": 42.4428
+    },
+    "geo_entity": {
+      "n": 5,
+      "median": 5.7,
+      "max": 9.6565
+    },
+    "geo_locate": {
+      "n": 3,
+      "median": 5.9,
+      "max": 24.9242
+    },
+    "prepare": {
+      "n": 8,
+      "median": 8.2,
+      "max": 76.6918
+    },
+    "commit": {
+      "n": 2,
+      "median": 23.6,
+      "max": 23.636
+    },
+    "journal": {
+      "n": 2,
+      "median": 22.3,
+      "max": 22.3307
+    },
+    "inspect": {
+      "n": 1,
+      "median": 32.8,
+      "max": 32.8091
+    }
+  }
+}

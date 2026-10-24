@@ -1,0 +1,19 @@
+PASS binding version reproduces as SHA-256(JCS) in JavaScript
+PASS region_to_ecef equals the contract transform rotation error 1.11e-16
+PASS every control point reproduces through the JavaScript transform max 2.83e-9 m
+PASS Earth Core validateWorldBinding accepts the projection
+PASS Earth Core rejects heading_degrees=360
+PASS Earth Core rejects scale=0
+PASS Earth Core rejects version="x"
+PASS Earth Core rejects authority="spatialdb"
+PASS discovery lists the bound region
+PASS served world_binding equals the projection of the issued binding
+PASS served world_entry has the Earth Core shape and requires authorization
+PASS served entry anchor is the binding entry position
+PASS served region_to_ecef is the issued column-major matrix
+PASS discovery leaks no credential or capability
+PASS entry resolves inside the bound region
+PASS entry world_entry has the Earth Core shape
+PASS entry geographic and region-local positions agree
+PASS Earth Core accepts the return destination
+{"passed":18,"failed":0}

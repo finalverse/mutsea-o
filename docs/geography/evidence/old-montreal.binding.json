@@ -1,0 +1,464 @@
+{
+  "schema_version": "mutsea.geographic-binding/v1",
+  "binding_id": "e604a867-ab65-5b83-a6ae-fd8dd058d6ce",
+  "revision": 1,
+  "previous_version": null,
+  "authority": "mutsea",
+  "world_id": "46f08830-25e6-4b14-8ba3-af5f6ee4021f",
+  "region": {
+    "region_id": "0a6a35b7-4ce3-4a89-b461-180132741324",
+    "name": "Old Montreal",
+    "size_metres": [
+      512,
+      512
+    ]
+  },
+  "transform": {
+    "model": "wgs84-local-tangent-similarity/v1",
+    "datum": "wgs84",
+    "anchor": {
+      "longitude_degrees": -73.55767849652506,
+      "latitude_degrees": 45.505789448877024,
+      "height_metres": -31.511247952468693
+    },
+    "anchor_frame_axes": [
+      "east",
+      "north",
+      "up"
+    ],
+    "unit": "metre",
+    "heading_degrees": 19.315532505681574,
+    "scale": 1,
+    "region_to_ecef": [
+      0.9719027478064592,
+      0.040820970650146504,
+      -0.2318160847772084,
+      0,
+      0.12670287337416802,
+      0.739264710124237,
+      0.6613879876771706,
+      0,
+      0.19837195034828775,
+      -0.6721765666252487,
+      0.7133212688507955,
+      0,
+      1267397.6346977984,
+      -4294533.522226272,
+      4526897.704108379,
+      1
+    ],
+    "region_to_publication": [
+      0.9436941214065749,
+      4.004187966136219E-05,
+      0.3308192914860324,
+      0,
+      0.3308192899676692,
+      4.014548734548873E-05,
+      -0.9436941219344468,
+      0,
+      -5.1068188147623816E-05,
+      0.9999999983924938,
+      2.4638434210300098E-05,
+      0,
+      -326.2744594330434,
+      -19.090693570673466,
+      156.89548673620448,
+      1
+    ]
+  },
+  "vertical": {
+    "region_z": "Region \u002BZ: metres above the anchor tangent plane, offset so z equals CGVD2013 orthometric height at the publication origin.",
+    "approximates": "CGVD2013 orthometric height",
+    "geoid_undulation_metres": -31.500983968377113,
+    "geoid_model": "CGG2013a",
+    "geoid_grid_sha256": "afa759d121a21b0321ca41985782add1a9302fb4dfd726d90a3eba157e5a49a8",
+    "max_deviation_metres": 0.0376
+  },
+  "publication": {
+    "authority": "spatialdb",
+    "graph_id": "a2cbf7d5-4fff-5219-86a5-85e8fcde2752",
+    "version": "ba323a8fe864ee719baf7a0a22c8293cad1db3adcf6b658bc87f5d584595aa4d",
+    "root_sha256": "bf7be87789437a6d7904974942456160ad381630a7d5f3af54184a0e73f76368",
+    "root_entity_id": "a310bb7e-8570-5a48-b91a-93898fa989d9",
+    "address": "usap://spatialdb/entity/a310bb7e-8570-5a48-b91a-93898fa989d9",
+    "frame_id": "montreal-old-port-jacques-cartier.eus/01873c70f04efef3",
+    "frame_origin": {
+      "longitude_degrees": -73.55350350168884,
+      "latitude_degrees": 45.507201203216475,
+      "height_metres": -12.43081833422184
+    },
+    "frame_axes": [
+      "east",
+      "up",
+      "south"
+    ],
+    "geography_sha256": "5af9aaccb4d4192255ba8119bdd3ee0efa536b021397f0a76f1012c15ac08dda",
+    "license": "CC-BY-4.0 AND OGL-Canada-2.0"
+  },
+  "calibration": {
+    "method": "Publication origin fixed at the region centre with z = h - N; region \u002BY aligned to the published terrain grid north (mean of four tiles); scale 1 (true metres); solved by fixed-point iteration in f64.",
+    "tolerance_metres": 0.001,
+    "centre_residual_metres": 1.3170890159654386E-09,
+    "grid_alignment_residual_degrees": 0.00038972966784729576,
+    "published_corner_offset_metres": 5.357555285989929,
+    "control_points": [
+      {
+        "id": "publication-origin",
+        "role": "region_centre",
+        "geographic": {
+          "longitude_degrees": -73.55350350168884,
+          "latitude_degrees": 45.507201203216475,
+          "height_metres": -12.43081833422184
+        },
+        "publication_frame": [
+          0,
+          0,
+          0
+        ],
+        "region_local": [
+          256,
+          256.0000000009313,
+          19.070165635086596
+        ]
+      },
+      {
+        "id": "region-sw",
+        "role": "region_corner",
+        "geographic": {
+          "longitude_degrees": -73.55767849652506,
+          "latitude_degrees": 45.505789448877024,
+          "height_metres": -12.441082319244742
+        },
+        "publication_frame": [
+          -326.27543331185,
+          -0.020527967173602946,
+          156.89595659522584
+        ],
+        "region_local": [
+          0,
+          0,
+          19.070165634155273
+        ]
+      },
+      {
+        "id": "region-se",
+        "role": "region_corner",
+        "geographic": {
+          "longitude_degrees": -73.55149592751529,
+          "latitude_degrees": 45.5042655080966,
+          "height_metres": -12.420559674501419
+        },
+        "publication_frame": [
+          156.89595684831636,
+          -2.6524786985504534E-05,
+          326.2754338360744
+        ],
+        "region_local": [
+          512,
+          0,
+          19.070165634155273
+        ]
+      },
+      {
+        "id": "region-ne",
+        "role": "region_corner",
+        "geographic": {
+          "longitude_degrees": -73.54932829815947,
+          "latitude_degrees": 45.508612804598684,
+          "height_metres": -12.400026387535036
+        },
+        "publication_frame": [
+          326.2754333117631,
+          0.020527964733904724,
+          -156.89595659436236
+        ],
+        "region_local": [
+          512,
+          512,
+          19.070165634155273
+        ]
+      },
+      {
+        "id": "region-nw",
+        "role": "region_corner",
+        "geographic": {
+          "longitude_degrees": -73.55551128458232,
+          "latitude_degrees": 45.51013686153494,
+          "height_metres": -12.420506631955504
+        },
+        "publication_frame": [
+          -156.89595684840336,
+          2.652234728728331E-05,
+          -326.27543383521095
+        ],
+        "region_local": [
+          0,
+          512,
+          19.070165634155273
+        ]
+      },
+      {
+        "id": "published-sw",
+        "role": "published_corner",
+        "geographic": {
+          "longitude_degrees": -73.55761673447357,
+          "latitude_degrees": 45.50581032839508,
+          "height_metres": -13.204153132624924
+        },
+        "publication_frame": [
+          -321.4485778808593,
+          -0.7832973599433934,
+          154.5756072998047
+        ],
+        "region_local": [
+          3.787428242473709,
+          3.786486255631587,
+          18.30709257407687
+        ]
+      },
+      {
+        "id": "published-se",
+        "role": "published_corner",
+        "geographic": {
+          "longitude_degrees": -73.55152566385757,
+          "latitude_degrees": 45.5043089344004,
+          "height_metres": -25.621154572814703
+        },
+        "publication_frame": [
+          154.57156372070318,
+          -13.200319290161147,
+          321.4483642578124
+        ],
+        "region_local": [
+          508.2090675672648,
+          3.7857931709055492,
+          5.869872661109998
+        ]
+      },
+      {
+        "id": "published-ne",
+        "role": "published_corner",
+        "geographic": {
+          "longitude_degrees": -73.5493900128704,
+          "latitude_degrees": 45.50859189970073,
+          "height_metres": -21.60808099899441
+        },
+        "publication_frame": [
+          321.45233154296886,
+          -9.187225341796845,
+          -154.57208251953108
+        ],
+        "region_local": [
+          508.2168808930319,
+          508.21102894312776,
+          9.862715906113133
+        ]
+      },
+      {
+        "id": "published-nw",
+        "role": "published_corner",
+        "geographic": {
+          "longitude_degrees": -73.55548159543635,
+          "latitude_degrees": 45.51009346636963,
+          "height_metres": -16.22942064795643
+        },
+        "publication_frame": [
+          -154.57595825195307,
+          -3.808585643768266,
+          -321.45217895507784
+        ],
+        "region_local": [
+          3.7848422952537817,
+          508.21567011083897,
+          15.261553833485305
+        ]
+      },
+      {
+        "id": "feature-500e9e1d-9014-516c-819a-8a735700c2db",
+        "role": "feature",
+        "geographic": {
+          "longitude_degrees": -73.55327788256932,
+          "latitude_degrees": 45.50691356045657,
+          "height_metres": -14.150666640140116
+        },
+        "publication_frame": [
+          17.631756225383356,
+          -1.7199528825389265,
+          31.96900568227194
+        ],
+        "region_local": [
+          283.2148796390421,
+          231.66389328099055,
+          17.3501
+        ]
+      },
+      {
+        "id": "terrain-128-128",
+        "role": "terrain",
+        "geographic": {
+          "longitude_degrees": -73.55559102701802,
+          "latitude_degrees": 45.506495344546536,
+          "height_metres": -6.860124138183892
+        },
+        "publication_frame": [
+          -163.13800153432845,
+          5.568128192812743,
+          78.44811574067766
+        ],
+        "region_local": [
+          128,
+          128,
+          24.648557820132044
+        ]
+      },
+      {
+        "id": "terrain-384-128",
+        "role": "terrain",
+        "geographic": {
+          "longitude_degrees": -73.55249968447707,
+          "latitude_degrees": 45.50573336021112,
+          "height_metres": -17.4083063416183
+        },
+        "publication_frame": [
+          78.44823274606517,
+          -4.980059305467934,
+          163.1375942177161
+        ],
+        "region_local": [
+          384,
+          128,
+          14.0901195836853
+        ]
+      },
+      {
+        "id": "terrain-384-384",
+        "role": "terrain",
+        "geographic": {
+          "longitude_degrees": -73.55141592071939,
+          "latitude_degrees": 45.507907024823034,
+          "height_metres": -17.81417582463473
+        },
+        "publication_frame": [
+          163.13799222937763,
+          -5.385923497290374,
+          -78.44811125057569
+        ],
+        "region_local": [
+          384,
+          384,
+          13.673978146433466
+        ]
+      },
+      {
+        "id": "terrain-128-384",
+        "role": "terrain",
+        "geographic": {
+          "longitude_degrees": -73.55450736921328,
+          "latitude_degrees": 45.508669035001155,
+          "height_metres": -8.057616422884166
+        },
+        "publication_frame": [
+          -78.44820162373327,
+          4.370630617222282,
+          -163.13760923222122
+        ],
+        "region_local": [
+          128,
+          384,
+          23.44078299783963
+        ]
+      }
+    ]
+  },
+  "terrain": {
+    "derivation": "Each 1 m region vertical intersected with the finest published SpatialDB terrain triangles (exact f64 frame composition), rounded to MutSea\u0027s persisted 1 mm; samples outside the published lattice take the nearest published surface point.",
+    "source_assets": [
+      "eba26eb114114ee1f6f1e3dc326de6de946ce1ecf11d22e4d64511a6ea2725de",
+      "5b61fcd850af8351b0ca6ace83cc96480c2f22dd314e0c11c526fe67f37594d4",
+      "3b83a770eae8e48a18912b41bf7c0effafcdec2c1e461c6d79f30fda5ede057a",
+      "52977741ec0984265c70a80f513da2914ebd234bda77f1e6a7527cfc7f847b9c"
+    ],
+    "r32_sha256": "19b13676a8819c82c9b7b75d6134306b37f8955ff3c069a2765811e269f25946",
+    "grid": [
+      512,
+      512
+    ],
+    "spacing_metres": 1,
+    "minimum_metres": 5.853000164031982,
+    "maximum_metres": 29.39900016784668,
+    "water_height_metres": 5.6,
+    "extended_samples": 7119,
+    "max_extension_metres": 5.3556,
+    "max_surface_residual_metres": 0.18191,
+    "rms_surface_residual_metres": 0.00695,
+    "published_outline": [
+      [
+        3.7874,
+        3.7865
+      ],
+      [
+        508.2091,
+        3.7858
+      ],
+      [
+        508.2169,
+        508.211
+      ],
+      [
+        3.7848,
+        508.2157
+      ]
+    ]
+  },
+  "correspondence": {
+    "schema_version": "mutsea.geographic-correspondence/v1",
+    "sha256": "0edf55d8116620a63f46f4aec05c6da47f9128316e5338ee3d4f84f86b3a1ec3",
+    "feature_count": 139,
+    "method": "Finest published representation triangles of every geography feature projected onto the region plane (terrain tiles by lattice outline); slivers under 1e-4 m\u00B2 omitted."
+  },
+  "entry": {
+    "position": [
+      256,
+      256,
+      19.06999969482422
+    ],
+    "look_at": [
+      256,
+      268,
+      20.56999969482422
+    ]
+  },
+  "attribution": [
+    {
+      "source_id": "nrcan-dtm",
+      "provider": "Natural Resources Canada",
+      "license": "OGL-Canada-2.0",
+      "attribution": "Natural Resources Canada; Contains information licensed under the Open Government Licence \u2013 Canada; changes: extraction, resampling and reconstruction."
+    },
+    {
+      "source_id": "nrcan-dsm",
+      "provider": "Natural Resources Canada",
+      "license": "OGL-Canada-2.0",
+      "attribution": "Natural Resources Canada; Contains information licensed under the Open Government Licence \u2013 Canada; changes: extraction, resampling and reconstruction."
+    },
+    {
+      "source_id": "montreal-roofs",
+      "provider": "Ville de Montr\u00E9al; source photogrammetry \u00A9 Communaut\u00E9 m\u00E9tropolitaine de Montr\u00E9al",
+      "license": "CC-BY-4.0",
+      "attribution": "Ville de Montr\u00E9al; source photogrammetry \u00A9 Communaut\u00E9 m\u00E9tropolitaine de Montr\u00E9al; CC BY 4.0; changes: clipped outlines/centerlines and procedural reconstruction."
+    },
+    {
+      "source_id": "montreal-roads",
+      "provider": "Ville de Montr\u00E9al",
+      "license": "CC-BY-4.0",
+      "attribution": "Ville de Montr\u00E9al; CC BY 4.0; changes: clipped outlines/centerlines and procedural reconstruction."
+    },
+    {
+      "source_id": "nrcan-geoid",
+      "provider": "Canadian Geodetic Survey, Natural Resources Canada; GeoTIFF conversion OSGeo PROJ-data",
+      "license": "OGL-Canada-2.0",
+      "attribution": "Canadian Geodetic Survey, Natural Resources Canada; GeoTIFF conversion OSGeo PROJ-data; Contains information licensed under the Open Government Licence \u2013 Canada; changes: extraction, resampling and reconstruction."
+    }
+  ],
+  "version": "85476feff0e7a77d02d99635bcc81762f31e7f07070422657f55bec0ff155954"
+}
