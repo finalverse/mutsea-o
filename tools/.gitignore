@@ -1,0 +1,4 @@
+# These standalone geographic projects are authored inputs, not prebuild output.
+!Finalverse.GeoTests/Finalverse.GeoTests.csproj
+!Finalverse.GeoBind/Finalverse.GeoBind.csproj
+!Finalverse.GeoProbe/Finalverse.GeoProbe.csproj
