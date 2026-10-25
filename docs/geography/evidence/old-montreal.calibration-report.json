@@ -1,0 +1,74 @@
+{
+  "version": "85476feff0e7a77d02d99635bcc81762f31e7f07070422657f55bec0ff155954",
+  "binding_id": "e604a867-ab65-5b83-a6ae-fd8dd058d6ce",
+  "publication_root": "bf7be87789437a6d7904974942456160ad381630a7d5f3af54184a0e73f76368",
+  "cells": 277,
+  "subtree_documents": 72,
+  "features": 139,
+  "grid": {
+    "bearing_degrees": 19.31851070039563,
+    "conformal_residual_degrees": 0.00038973123491814476,
+    "tile_edge_true_metres": 252.21484963436325,
+    "projected_scale_factor": 1.0150076427741035
+  },
+  "solve": {
+    "anchor": {
+      "longitude_degrees": -73.55767849652506,
+      "latitude_degrees": 45.505789448877024,
+      "height_metres": -31.511247952468693
+    },
+    "heading_degrees": 19.315532505681574,
+    "centre_residual_metres": 1.3170890159654386E-09,
+    "alignment_residual_degrees": 0.00038972966784729576
+  },
+  "terrain": {
+    "minimum": 5.853000164031982,
+    "maximum": 29.39900016784668,
+    "water": 5.6,
+    "extended_samples": 7119,
+    "max_extension_metres": 5.355566343158714,
+    "bilinear_residual": {
+      "max": 0.18191388110794549,
+      "rms": 0.006951078441652898,
+      "samples": 20000
+    },
+    "integer_sample_residual_max": 0.0005025630361537026,
+    "tangent_plane_vs_h_minus_N_max": 0.030153010971844196
+  },
+  "outline": [
+    [
+      3.787428242473709,
+      3.786486255631587,
+      18.30709257407687
+    ],
+    [
+      508.2090675672648,
+      3.7857931709055492,
+      5.869872661109998
+    ],
+    [
+      508.2168808930319,
+      508.21102894312776,
+      9.862715906113133
+    ],
+    [
+      3.7848422952537817,
+      508.21567011083897,
+      15.261553833485305
+    ]
+  ],
+  "corner_offset_metres": 5.357555285989929,
+  "entry": {
+    "position": [
+      256,
+      256,
+      19.06999969482422
+    ],
+    "look_at": [
+      256,
+      268,
+      20.56999969482422
+    ]
+  },
+  "elapsed_ms": 462
+}

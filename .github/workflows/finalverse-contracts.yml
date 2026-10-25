@@ -19,3 +19,5 @@ jobs:
         run: dotnet run --project tools/MutSea.ContentTests/MutSea.ContentTests.csproj -c Release
       - name: Deterministic composer unit regressions
         run: dotnet run --project tools/MutSea.ComposerTests/MutSea.ComposerTests.csproj -c Release
+      - name: Geographic world binding contract regressions
+        run: dotnet run --project tools/Finalverse.GeoTests/Finalverse.GeoTests.csproj -c Release

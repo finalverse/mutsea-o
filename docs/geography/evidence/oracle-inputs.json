@@ -1,0 +1,14 @@
+{
+ "origin_orthometric_metres": 19.070165634155273,
+ "geoid_undulation_effective_metres": -31.500983968377113,
+ "geoid_variation_metres": 0.0074072349816560745,
+ "origin_reproduction_error": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "grid_north_bearing_degrees": 19.31879041487032,
+ "grid_conformal_residual_degrees": 4.851184627341354e-07,
+ "projected_scale_factor": 1.0150116079482612,
+ "geoid_grid_sha256": "afa759d121a21b0321ca41985782add1a9302fb4dfd726d90a3eba157e5a49a8"
+}

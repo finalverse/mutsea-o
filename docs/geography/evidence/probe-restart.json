@@ -1,0 +1,93 @@
+{
+  "mode": "restart",
+  "passed": 9,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "public discovery names one bound region and its immutable version",
+      "ok": true,
+      "detail": {
+        "version": "85476feff0e7a77d02d99635bcc81762f31e7f07070422657f55bec0ff155954",
+        "region": "Old Montreal"
+      }
+    },
+    {
+      "name": "the binding version survives the restart",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "both identities are unchanged after restart",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the restarted region re-validated the same binding and its terrain",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "persistent objects keep identity, owner and transform across restart",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the deleted marker stays deleted",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "the object\u0027s geographic position is unchanged across restart (\u003C 1 cm)",
+      "ok": true,
+      "detail": {
+        "geographic": {
+          "longitude_degrees": -73.5528153675401,
+          "latitude_degrees": 45.506878736556,
+          "height_metres": -13.984970993362367
+        }
+      }
+    },
+    {
+      "name": "WorldLine history survives restart",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "after restart Ada deletes her street post; Ben observes it gone",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "latency_ms": {
+    "geo_binding": {
+      "n": 1,
+      "median": 87.5,
+      "max": 87.4648
+    },
+    "inspect": {
+      "n": 2,
+      "median": 53.2,
+      "max": 53.1565
+    },
+    "geo_locate": {
+      "n": 1,
+      "median": 12.7,
+      "max": 12.7474
+    },
+    "journal": {
+      "n": 1,
+      "median": 40.4,
+      "max": 40.4157
+    },
+    "prepare": {
+      "n": 1,
+      "median": 39,
+      "max": 39.0457
+    },
+    "commit": {
+      "n": 1,
+      "median": 30.2,
+      "max": 30.1874
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+ "binding_version": "85476feff0e7a77d02d99635bcc81762f31e7f07070422657f55bec0ff155954",
+ "matrix_rotation_max_abs_error": 2.498001805406602e-16,
+ "matrix_translation_error_metres": 9.313225746154785e-10,
+ "control_point_max_error_metres": 2.603053084227151e-09,
+ "origin_region_local": [
+  255.99999999993918,
+  256.00000000083753,
+  19.0701656350991
+ ],
+ "origin_vs_region_centre_metres": 8.397365277159478e-10,
+ "origin_z_minus_orthometric_metres": 9.438281267648563e-10,
+ "grid_north_vs_region_y_degrees": 0.000318217238849487,
+ "dtm_samples": 7225,
+ "z_minus_orthometric": {
+  "max_abs": 0.030186131860569176,
+  "mean": -0.0031314914822783
+ },
+ "mutsea_ground_minus_source_dtm": {
+  "max_abs": 2.1350196249170423,
+  "rms": 0.08451665863680427,
+  "p95_abs": 0.12604709870445344,
+  "p99_abs": 0.33982210169962684
+ }
+}
